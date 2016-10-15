@@ -30,7 +30,7 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 #define TYPE_DOUBLE 1100
 #define TYPE_INT 1101
 
-// xmisov00\error.h
+// xmisov00/error.h
 #define ERR_LEXIKALNI_ANALYZA 1
 #define ERR_SYNTAKTICKA_ANALYZA 2
 #define ERR_SEM_NDEF_REDEF 3
