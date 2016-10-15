@@ -7,6 +7,7 @@ Jazykový interpret (anglicky) https://en.wikipedia.org/wiki/Interpreted_languag
 Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) <br>
 
 Makra: <br>
+xmatej25/scanner.h
 \#define BOOLEAN 1000 <br>
 \#define BRAK 1001 <br>
 \#define CLASS 1002 <br>
@@ -28,5 +29,10 @@ Makra: <br>
 \#define TYPE_DOUBLE 1100 <br>
 \#define TYPE_INT 1101 <br>
 
+xmatej52/error.h
+\#define MEM_ALLOCATE_ERROR -100
+
+
 Globalni promene: <br>
 zatim zadne
+
