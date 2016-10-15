@@ -49,7 +49,7 @@ int is_simple_ident(char *word, unsigned len) {
 	if ((word[0] != '$' && word[0] < 'A') || word[0] > 'z' || (word[0] > 'Z' && word[0] < 'a' && word[0] != '_'))
 		return 0;
 	for (unsigned i = 1; i < len; i++) {
-		if(word[i] == '$' || word[i] == '_' || (word[i] > '0' && word[i] < '9') || (word[i] > 'A' && word[i] < 'Z') || (word[i] > 'a' && word[i] < 'z'))
+		if(word[i] == '$' || word[i] == '_' || (word[i] >= '0' && word[i] <= '9') || (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= 'a' && word[i] <= 'z'))
 			continue;
 		else
 			return 0;
@@ -85,7 +85,7 @@ int is_full_ident(char *word, unsigned len) {
 
 // TODO neukoncujici zna */ --> bere se to jako chyba nebo je zbytek souboru komentar?
 int skip_comment(int comment_type, FILE *f) {
-	char c;
+	int c;
 	if (comment_type == LINE_COMMENT) {
 		while ((c = fgetc(f)) != EOF) {
 			if (c == '\n') return 0;
@@ -104,5 +104,4 @@ int skip_comment(int comment_type, FILE *f) {
 
 int run_scanner(FILE *f) {
 	return 0;
-
 }

@@ -35,4 +35,5 @@ int is_num_literal(char *word, unsigned len);
 int is_simple_ident(char *word, unsigned len);
 int is_full_ident(char *word, unsigned len);
 int skip_comment (int comment_type, FILE *f);
+int run_scanner(FILE *f);
 #endif
