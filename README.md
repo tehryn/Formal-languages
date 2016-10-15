@@ -36,3 +36,14 @@ xmatej52/error.h <br>
 Globalni promene: <br>
 zatim zadne
 
+# Informace:
+Pokud nastane neocekavana chyba (napriklad neprideleni pameti), volejte funkci void error(int err_id), kde err_id bude indentifikateor, prideleny pomoci makra. Napriklad: <br>
+
+```c
+  char *temp; 
+  temp = malloc(10);
+  if (temp == NULL)
+    error(MEM_ALLOCATE_ERROR);
+```
+
+Funkce error() ukonci program exitem s prislusnou navratovou hodnotou a vytiskne chybove hlaseni na stderr, tudis pred jejim volanim uvolnete jakokouliv alokovoanou pamet! Nebojte se pouzit goto, usnadni vam velmi praci, ale pouzivejte ho s rozvahou.
