@@ -30,16 +30,16 @@ xmatej25/scanner.h <br>
 \#define TYPE_INT 1101 <br>
 
 \xmisov00\error.h <br>
-\#define ERR_LEXIKALNI_ANALYZA 1
-\#define ERR_SYNTAKTICKA_ANALYZA 2
-\#define ERR_SEM_NDEF_REDEF 3
-\#define ERR_SEM_KOMPATIBILITA 4
-\#define ERR_SEM_OSTATNI 6
-\#define ERR_VSTUP_CISLO 7
-\#define ERR_NEINIC_PROM 8
-\#define ERR_DELENI_NULOU 9
-\#define ERR_OSTATNI 10
-\#define ERR_INTERPRET 99
+\#define ERR_LEXIKALNI_ANALYZA 1<br>
+\#define ERR_SYNTAKTICKA_ANALYZA 2<br>
+\#define ERR_SEM_NDEF_REDEF 3<br>
+\#define ERR_SEM_KOMPATIBILITA 4<br>
+\#define ERR_SEM_OSTATNI 6<br>
+\#define ERR_VSTUP_CISLO 7<br>
+\#define ERR_NEINIC_PROM 8<br>
+\#define ERR_DELENI_NULOU 9<br>
+\#define ERR_OSTATNI 10<br>
+\#define ERR_INTERPRET 99<br>
 
 Globalni promene: <br>
 xmatej25/scanner.c <br>
