@@ -29,12 +29,9 @@ xmatej25/scanner.h <br>
 \#define TYPE_DOUBLE 1100 <br>
 \#define TYPE_INT 1101 <br>
 
-xmatej52/error.h <br>
-\#define MEM_ALLOCATE_ERROR -100
-
-
 Globalni promene: <br>
-zatim zadne
+xmatej25/scanner.c <br>
+unsigned LINE_NUM;
 
 # Informace:
 Pokud nastane neocekavana chyba (napriklad neprideleni pameti), volejte funkci void error(int err_id), kde err_id bude indentifikateor, prideleny pomoci makra. Napriklad: <br>
