@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifndef ERROR
 #define ERROR
 
 
@@ -25,3 +26,5 @@ void error_msg(int err_number, char type_of_fault);
 //  type_of_fault: 
 //      'w' = warning
 //      'f' = fatal (with exit) */
+
+#endif

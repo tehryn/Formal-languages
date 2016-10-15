@@ -4,9 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef ERROR
-    #include "error.h"
-#endif
+#include "error.h"
 
 extern int ERR_RADEK;
 
@@ -49,7 +47,7 @@ void error_msg(int err_number, char type_of_fault)
             fprintf(stream, "Problem with intern fault.\n");
             break;
     }
-    
+
     if (type_of_fault == 'f')
         exit(err_number);
 }
