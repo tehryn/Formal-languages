@@ -5,8 +5,7 @@
 
 Jazykový interpret (anglicky) https://en.wikipedia.org/wiki/Interpreted_language <br>
 Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) <br>
-​
-51
+
 ```c
 // Makra: 
 // xmatej25/scanner.h 
@@ -46,9 +45,8 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 // Globalni promene:
 // xmatej25/scanner.c
 unsigned LINE_NUM;
-​
-51
 ```
+
 # Informace:
 Pokud nastane neocekavana chyba (napriklad neprideleni pameti), volejte funkci void error_msg(int err_number, char type_of_fault), kde err_num bude indentifikateor, prideleny pomoci makra a type_of_fault rika, zda chyba ukonci program (volanim exit(err_num)) ci ne. Napriklad: <br>
 
