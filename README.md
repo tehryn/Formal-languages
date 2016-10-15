@@ -29,6 +29,18 @@ xmatej25/scanner.h <br>
 \#define TYPE_DOUBLE 1100 <br>
 \#define TYPE_INT 1101 <br>
 
+\xmisov00\error.h <br>
+\#define ERR_LEXIKALNI_ANALYZA 1
+\#define ERR_SYNTAKTICKA_ANALYZA 2
+\#define ERR_SEM_NDEF_REDEF 3
+\#define ERR_SEM_KOMPATIBILITA 4
+\#define ERR_SEM_OSTATNI 6
+\#define ERR_VSTUP_CISLO 7
+\#define ERR_NEINIC_PROM 8
+\#define ERR_DELENI_NULOU 9
+\#define ERR_OSTATNI 10
+\#define ERR_INTERPRET 99
+
 Globalni promene: <br>
 xmatej25/scanner.c <br>
 unsigned LINE_NUM;
@@ -43,4 +55,4 @@ Pokud nastane neocekavana chyba (napriklad neprideleni pameti), volejte funkci v
     error_msg(ERR_INTERPRET, 'f');
 ```
 
-Funkce error_msg() ukonci program exitem s prislusnou navratovou hodnotou a vytiskne chybove hlaseni na stderr, tudis pred jejim volanim uvolnete jakokouliv alokovoanou pamet! Nebojte se pouzit goto, usnadni vam velmi praci, ale pouzivejte ho s rozvahou. Pokud m9sto znak 'f' poslete do funkce 'w' (nebo cokoliv jineho), vytiskne se pouze chybove hlaseni a program se neukonci.
+Funkce error_msg(err_num, 'f') ukonci program exitem s prislusnou navratovou hodnotou a vytiskne chybove hlaseni na stderr, tudiz pred jejim volanim uvolnete jakokouliv alokovoanou pamet! Nebojte se pouzit goto, usnadni vam velmi praci, ale pouzivejte ho s rozvahou. Pokud misto znak 'f' poslete do funkce 'w' (nebo cokoliv jineho), vytiskne se pouze chybove hlaseni a program se neukonci.
