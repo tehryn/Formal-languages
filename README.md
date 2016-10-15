@@ -29,7 +29,7 @@ xmatej25/scanner.h <br>
 \#define TYPE_DOUBLE 1100 <br>
 \#define TYPE_INT 1101 <br>
 
-\xmisov00\error.h <br>
+xmisov00\error.h <br>
 \#define ERR_LEXIKALNI_ANALYZA 1<br>
 \#define ERR_SYNTAKTICKA_ANALYZA 2<br>
 \#define ERR_SEM_NDEF_REDEF 3<br>
