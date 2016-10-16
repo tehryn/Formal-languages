@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
+#include <limits.h>
 #include "error.h"
 
 #define S_BOOLEAN 1000
@@ -26,8 +28,8 @@
 #define TYPE_DOUBLE 1100
 #define TYPE_INT 1101
 
-#define LINE_COMMENT 1200
-#define BLOCK_COMMENT 1201
+#define LINE_COMMENT 99998
+#define BLOCK_COMMENT 99999
 
 int get_meaning(char *word);
 int is_num_literal(char *word, unsigned len);
@@ -35,4 +37,5 @@ int is_num_literal(char *word, unsigned len);
 int is_simple_ident(char *word, unsigned len);
 int is_full_ident(char *word, unsigned len);
 int skip_comment (int comment_type, FILE *f);
+unsigned load_string(FILE *f, char *word, unsigned max);
 #endif

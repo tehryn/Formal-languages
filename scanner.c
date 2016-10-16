@@ -94,10 +94,29 @@ int skip_comment(int comment_type, FILE *f) {
 	else {
 		char expected;
 		while ((c = fgetc(f)) != EOF) {
-			if (c == '*') expected = 1;
+			if (c == '*') { 
+				expected = 1;
+				continue;
+			}
 			if (c == '/' && expected) return 0;
+			expected = 0;
 		}
 		error_msg(ERR_SYNTAKTICKA_ANALYZA, 'f');
 	}
-	return 1; // reached EOL
+	return 1; // reached EOF
+}
+
+unsigned load_string(FILE *f, char *word, unsigned max) {
+	int c, prev = -1;
+	unsigned i = 0;
+	while(((c = fgetc(f)) != EOF) && i < max) {
+		if (c == '"' && prev != '\\') {
+			word[i] = '\0';
+			return i;
+		}
+		word[i] = prev = c;
+		i++;
+	}
+	if (i == max && c != EOF) return max+1;
+	return UINT_MAX;
 }
