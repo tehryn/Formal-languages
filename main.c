@@ -1,12 +1,12 @@
 #include "scanner.h"
 
-#define MAX_LEN 100
+#define MAX_LEN 1000
 unsigned read_word(FILE *f, char *word, unsigned max) {
 	int c;
 	unsigned i = 0;
 	
 	while (((c = fgetc(f)) != EOF) && i < max) {
-		if (c == ' ' || c == '\t' || c == '\n'  || c == ';' || c == '{' || c == '}' || c == '(' || c == ')' || c == '"' || c == '*' || c == '/' || c == '+' || c == '-') {
+		if (c == ' ' || c == '\t' || c == '\n'  || c == ';' || c == '{' || c == '}' || c == '(' || c == ')' || c == '"' || c == '*' || c == '+' || c == '-' || c == '=' || c == ',' || c == '<' || c == '>') {
 			word[i] = '\0';
 			ungetc(c, f);
 			return i;
@@ -58,7 +58,7 @@ int main (int argc, char **argv) {
 		if (chars == LINE_COMMENT) {
 			chars = strlen(word);
 			check = skip_comment(LINE_COMMENT, f);
-			if (check == 1); //TODO
+			if (check == 1) {}//TODO
 		}
 		if (chars == BLOCK_COMMENT) {
 			chars = strlen(word);
@@ -78,11 +78,13 @@ int main (int argc, char **argv) {
 			temp = is_full_ident(word, chars);
 			printf(",\tfull ident %u", temp);
 			temp = is_num_literal(word, chars);
-			printf(",\tnum literal %u", temp);
+			printf(",\tnum literal %u\n", temp);
 		}
+		
 		c = fgetc(f);
-		if (c != EOF && chars)
-			printf(",\tended by '%c'\n", c);
+		if (c != EOF && !isspace(c)) {
+			printf("\t:\t%c\n", c);
+		}
 		if (c == '"') {
 			chars = load_string(f, word, MAX_LEN);
 			if (chars == MAX_LEN+1) {	
@@ -97,5 +99,6 @@ int main (int argc, char **argv) {
 	}
 	fclose(f);
 	free(word);
+	printf("\nKONEC\n");
 	return 0;
 }
