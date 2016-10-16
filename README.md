@@ -8,29 +8,29 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 
 ```c
 // Makra: 
-// xmatej25/scanner.h 
-#define BOOLEAN 1000 
-#define BRAK 1001 
-#define CLASS 1002 
-#define CONTINUE 1003 
-#define DO 1004 
-#define DOUBLE 1005 
-#define ELSE 1006 
-#define FALSE 1007 
-#define FOR 1008 
-#define IF 1009 
-#define INT 1010 
-#define RETURN 1011 
-#define STRING 1012 
-#define STATIC 1013 
-#define TRUE 1014
-#define VOID 1015
-#define WHILE 1016
+// scanner.h 
+#define S_BOOLEAN 1000
+#define S_BREAK 1001
+#define S_CLASS 1002
+#define S_CONTINUE 1003
+#define S_DO 1004
+#define S_DOUBLE 1005
+#define S_ELSE 1006 
+#define S_FALSE 1007
+#define S_FOR 1008
+#define S_IF 1009
+#define S_INT 1010
+#define S_RETURN 1011
+#define S_STRING 1012
+#define S_STATIC 1013
+#define S_TRUE 1014
+#define S_VOID 1015
+#define S_WHILE 1016
 
 #define TYPE_DOUBLE 1100
 #define TYPE_INT 1101
 
-// xmisov00/error.h
+// error.h
 #define ERR_LEXIKALNI_ANALYZA 1
 #define ERR_SYNTAKTICKA_ANALYZA 2
 #define ERR_SEM_NDEF_REDEF 3
@@ -44,7 +44,7 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 
 // Globalni promene:
 // xmatej25/scanner.c
-unsigned LINE_NUM;
+unsigned int LINE_NUM;
 ```
 
 # Informace:
