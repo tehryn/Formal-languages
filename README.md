@@ -30,6 +30,9 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 #define TYPE_DOUBLE 1100
 #define TYPE_INT 1101
 
+#define LINE_COMMENT 99998
+#define BLOCK_COMMENT 99999
+
 // error.h
 #define ERR_LEXIKALNI_ANALYZA 1
 #define ERR_SYNTAKTICKA_ANALYZA 2
@@ -41,6 +44,10 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 #define ERR_DELENI_NULOU 9
 #define ERR_OSTATNI 10
 #define ERR_INTERPRET 99
+
+// main.c - makra budou v knihovne parseru pote
+#define ERR_REACHED_MAX -100
+#define MAX_LEN 1000
 
 // Globalni promene:
 // xmatej25/scanner.c
