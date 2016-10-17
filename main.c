@@ -1,5 +1,5 @@
 #include "scanner.h"
-# define ERR_REACHED_MAX -100
+#define ERR_REACHED_MAX -100
 #define MAX_LEN 1000
 unsigned read_word(FILE *f, char *word, unsigned max, int *end_char) {
 	int c;
