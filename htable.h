@@ -16,17 +16,27 @@
  */
 typedef struct htab_int {
 	char  *key; // string ID
-	unsigned allocaded;
+	int allocaded;
 	int data; // number of matches of key
+	unsigned block_id;
 	struct htab_int *next; // next variable
 } htab_int;
 
 typedef struct htab_double {
 	char  *key; // string ID
-	unsigned allocaded;
+	int allocaded;
 	double data; // number of matches of key
+	unsigned block_id;
 	struct htab_int *next; // next variable
 } htab_double;
+
+typedef struct htab_string {
+	char  *key; // string ID
+	int allocaded;
+	double data; // number of matches of key
+	unsigned block_id;
+	struct htab_int *next; // next variable
+} htab_string;
 
 /*
   +--------------+
