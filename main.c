@@ -1,48 +1,7 @@
 #include "scanner.h"
-#define ERR_REACHED_MAX -100
 #define MAX_LEN 1000
-unsigned read_word(FILE *f, char *word, unsigned max, int *end_char) {
-	int c;
-	unsigned i = 0;
-	
-	while (((c = fgetc(f)) != EOF) && i < max) {
-		if (isspace(c)  || c == ';' || c == '{' || c == '}' || c == '(' || c == ')' || c == '"' || c == '*' || c == '+' || c == '-' || c == '=' || c == ',' || c == '<' || c == '>') {
-			word[i] = '\0';
-			*end_char = c;
-			return i;
-		}	
-	
-		if (c == '/') {
-			c = fgetc(f);
-			if (c == '/') {
-				word[i] = '\0';
-				*end_char = LINE_COMMENT;
-				return i;
-			}
-			else if (c == '*') {
-				word[i] = '\0';
-				*end_char = BLOCK_COMMENT;
-				return i;
-			}
-			else {
-				ungetc(c, f);
-				word[i] = '/';
-			}
-		}
-		
-		else {
-			word[i] = c;
-			i++;		
-		}
-	}
-	word[i] = '\0';
-	if (c == EOF) {
-		*end_char = EOF; 
-		return EOF;
-	}
-	*end_char = ERR_REACHED_MAX;	
-	return UINT_MAX;
-}
+
+unsigned LINE_NUM = 0;
 
 int main (int argc, char **argv) {
 	if (argc != 2) error_msg(ERR_OSTATNI,'f');
@@ -50,34 +9,22 @@ int main (int argc, char **argv) {
 	f = fopen(argv[1], "r");
 	if (f == NULL) error_msg(ERR_OSTATNI,'f');
 	char *word;
-	word = malloc(MAX_LEN);	
+	char *string;
+	if ((word = malloc(MAX_LEN)) == NULL) {
+		fclose(f);
+		error_msg(ERR_OSTATNI,'f');
+	}	
+	if ((string = malloc(MAX_LEN)) == NULL) {
+		free(word);
+		fclose(f);
+		error_msg(ERR_OSTATNI,'f');
+	}
 	unsigned chars = 1, temp;
 	int end_char = 0, check;
 	while (end_char != EOF) {
 		chars = read_word(f, word, MAX_LEN, &end_char);
-		if (!isspace(end_char)) {
-			if (end_char == EOF) { printf("\t:\tEOF\n"); break;}
-			else printf("\t:\t%c\n", end_char);
-		}
-		if (end_char == ERR_REACHED_MAX) {	
-			free(word);
-			fclose(f);
-			error_msg(ERR_OSTATNI, 'f');
-		}
-		if (end_char == LINE_COMMENT) {
-			check = skip_comment(LINE_COMMENT, f);
-			if (check == 1) {}//TODO
-		}
-		if (chars == BLOCK_COMMENT) {
-			check = skip_comment(LINE_COMMENT, f);
-			if (check == -1) {
-				free(word);
-				fclose(f);
-				error_msg(ERR_SYNTAKTICKA_ANALYZA, 'f');				
-			}
-		}
 		if (chars) {
-			printf("%s\t:", word);
+			printf("%u:\t%s\t:", LINE_NUM, word);
 			temp = get_meaning(word);
 			printf("\tkeyword %u", temp);
 			temp = is_simple_ident(word, chars);
@@ -85,23 +32,67 @@ int main (int argc, char **argv) {
 			temp = is_full_ident(word, chars);
 			printf(",\tfull ident %u", temp);
 			temp = is_num_literal(word, chars);
-			printf(",\tnum literal %u\t len %u\n", temp, chars);
+			printf(",\tnum literal %u\tlen %u\n", temp, chars);
 		}
-		
-		if (end_char == '"') {
-			chars = load_string(f, word, MAX_LEN);
-			if (chars == MAX_LEN+1) {	
+		switch (end_char) {
+			case '\n':
+				LINE_NUM++;
+			case '\t':
+			case '\r':
+			case ' ': 
+			break;
+			case LINE_COMMENT: 
+			case BLOCK_COMMENT:
+				check = skip_comment(end_char, f);
+				if (check == 1)
+					end_char = EOF;
+				else if (check == -1) {
+					free(word);
+					free(string);
+					fclose(f);
+					error_msg(ERR_SYNTAKTICKA_ANALYZA, 'f');
+				}
+				break;
+			case EOF: 
+				printf("%u:\t-----\t:\tEOF\n", LINE_NUM);
+				break;
+			case ';':
+			case '(':
+			case ')':
+			case '{':
+			case '}':
+			case '+':
+			case '-':
+			case '=':
+			case '*':
+			case '/':
+			case ',':
+			case '<':
+			case '>':
+				printf("%u:\t-----\t:\t%c\n", LINE_NUM, end_char);
+				break;
+			case '"':
+				check = load_string(f, string, MAX_LEN);
+				if (chars == MAX_LEN+1) {	
+					free(word);
+					fclose(f);
+					error_msg(ERR_OSTATNI, 'f');
+				}
+				printf("loaded string:\t'%s'\n", string);
+				break;
+			case ERR_REACHED_MAX:
 				free(word);
+				free(string);
 				fclose(f);
 				error_msg(ERR_OSTATNI, 'f');
-			}
-			printf("loaded string:\t'%s'\n", word);
+			default:
+				printf("\n\n\n\n\n FUCK FUCK FUCK FUCK\n Neznamy znak! znak == '%c' s hodnotou %i", end_char, end_char);
+				return 1;
 		}
-		
-				
 	}
 	fclose(f);
 	free(word);
+	free(string);
 	printf("\nKONEC\n");
 	return 0;
 }
