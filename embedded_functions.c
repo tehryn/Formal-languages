@@ -42,7 +42,6 @@ int readint()
     if (string == NULL)
 	{
 		fprintf(stderr, "ERROR: Couldn't read from STDIN. (func. readint)\n");
-		free(string);
 		return 0;
 	}
 
@@ -83,7 +82,6 @@ double readdouble()
 	if (string == NULL)
 	{
 		fprintf(stderr, "ERROR: Couldn't read from STDIN. (func. readdouble)\n");
-		free(string);
 		return 0.0;
 	}
 
