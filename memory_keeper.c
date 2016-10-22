@@ -22,6 +22,14 @@ static void *add_item(mem_list_t *L) {
 	return item;
 }
 
+static void *find_item(void *ptr, mem_list_t *L) {
+	if (L == NULL) return NULL;
+	mem_item_t *tmp = L->first;
+	while (tmp->ptr != ptr && tmp)
+		tmp = tmp->next;
+	return tmp;	
+}
+
 void * mem_alloc(void *ptr, size_t size, mem_list_t *L) {
 	mem_item_t *item = add_item(L);
 	if (item == NULL)
@@ -31,6 +39,22 @@ void * mem_alloc(void *ptr, size_t size, mem_list_t *L) {
 		item->size = 0;
 		return NULL;
 	}
+	item->size = size;
+	return item->ptr;
+}
+
+void * mem_realloc(void *ptr, size_t size, mem_list_t *L) {
+	mem_item_t *item = find_item(L);
+	if (item == NULL) return NULL;
+	
+	void *tmp = realloc(item->ptr, size)
+	if (tmp == NULL) {
+		free(item->ptr);
+		item->ptr = NULL;
+		item->size = 0;
+		return NULL
+	}
+	item->ptr = tmp;
 	item->size = size;
 	return item->ptr;
 }
