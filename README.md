@@ -55,6 +55,22 @@ unsigned int LINE_NUM;
 ```
 
 # Informace:
+Vzhledem k tomu, ze java (IFJ16 stoji na jave) ma vlastni spravu pameti a C ne, napsal jsem funkce pro spravu pameti. Funkce jsou primarne urceny pro vestavene funkce, kde by se meli pouzivat misto bezneho mallocu, reallocu a free, ale nic nam nebrani je pouzivat i jinde, znacne to usnadni praci s pameti. Aby jste videli, ze chovani je prakticky stejne, mate zde v kodu i puvodni funkce.
+```c
+//:
+void *malloc(size_t size);
+void *mem_alloc(void *ptr, size_t size, mem_list_t *L); // alokuje pamet, ulozi ukazatel na ni do seznamu L a vraci ukazatel na alokovanou pamet, stejne jako malloc
+
+void *realloc(void *ptr, size_t size);
+void *mem_realloc(void *ptr, size_t size, mem_list_t *L); // stejne jako realloc, akorat narozdil od nej pri neuspechu uvolni puvodne alokovanou pamet, tzn ze pokud alokace selze, uvolni i puvodni ukazatel
+
+void free(void *ptr);
+void free_memory(mem_list_t *L); // uvolni veskerou alokovanou pamet - veskere ukazatele v seznamu L
+
+// mem_list_t *L inicializujte pred pouzitim touto funkci:
+mem_list_t * mem_list_t_init(mem_list_t *L);
+```
+
 Pokud nastane neocekavana chyba (napriklad neprideleni pameti), volejte funkci void error_msg(int err_number, char type_of_fault), kde err_num bude indentifikateor, prideleny pomoci makra a type_of_fault rika, zda chyba ukonci program (volanim exit(err_num)) ci ne. Napriklad: <br>
 
 ```c
@@ -65,8 +81,6 @@ Pokud nastane neocekavana chyba (napriklad neprideleni pameti), volejte funkci v
 ```
 
 Funkce error_msg(err_num, 'f') ukonci program exitem s prislusnou navratovou hodnotou a vytiskne chybove hlaseni na stderr, tudiz pred jejim volanim uvolnete jakokouliv alokovoanou pamet! Nebojte se pouzit goto, usnadni vam velmi praci, ale pouzivejte ho s rozvahou. Pokud misto znak 'f' poslete do funkce 'w' (nebo cokoliv jineho), vytiskne se pouze chybove hlaseni a program se neukonci.
-
-Za dnešek jsem vytvořil základ syntaktické analýzi, už bude stači jen vymyslet stavový diagram a pokrýt všechny stavy, tedy to nejtěžší. Pokud někdo máte čas, byl bych rád kdyby odzkoušel funkce, které jsem naprogramoval. Testovací progrogra, úřeložíte příkazem make v kořenovém adresáři projektu a spustíte ./IFJ16 vstupni_soubor (netestuji pritomnost argumentu, takze pokud ho tam nedate, padne vam program na SEGSEGV (asi)). vstupni osubor si muzete sami napsat. Program se snazi rozeznat co by která slova mohla znamenat, určí to pro každé slovo v souboru co by mohlo být zač. Spusťte to a uvidíte, je to lehké na pochopení.
 
 # GIT:
 Nastavení gitu: <br>
