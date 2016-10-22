@@ -9,7 +9,7 @@
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -lm -g
 default: IFJ16
 
-IFJ16: main.c error.o scanner.o 
+IFJ16: main.c error.o scanner.o memory_keeper.o
 	gcc $(CFLAGS) -o IFJ16 $^
 
 %.o: %.c %.h

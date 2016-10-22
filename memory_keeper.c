@@ -1,6 +1,6 @@
 #include "memory_keeper.h"
 
-mem_list_t * mem_list_t_init(mem_list_t *L) {
+void mem_list_t_init(mem_list_t *L) {
 	L->first = NULL;
 }
 
@@ -9,17 +9,16 @@ static void *add_item(mem_list_t *L) {
 	if (new_item == NULL)
 		return NULL;
 		
-	new_item->size = size;
-	if (L->first == NUL) 
+	if (L->first == NULL) 
 		L->first = new_item;
 	
 	else {
 		mem_item_t *tmp = L->first;
 		while(tmp->next != NULL)
 			tmp = tmp->next;
-		tmp->next = item;
+		tmp->next = new_item;
 	}
-	return item;
+	return new_item;
 }
 
 static void *find_item(void *ptr, mem_list_t *L) {
@@ -30,7 +29,7 @@ static void *find_item(void *ptr, mem_list_t *L) {
 	return tmp;	
 }
 
-void * mem_alloc(void *ptr, size_t size, mem_list_t *L) {
+void * mem_alloc(size_t size, mem_list_t *L) {
 	mem_item_t *item = add_item(L);
 	if (item == NULL)
 		return NULL;
@@ -44,15 +43,15 @@ void * mem_alloc(void *ptr, size_t size, mem_list_t *L) {
 }
 
 void * mem_realloc(void *ptr, size_t size, mem_list_t *L) {
-	mem_item_t *item = find_item(L);
+	mem_item_t *item = find_item(ptr, L);
 	if (item == NULL) return NULL;
 	
-	void *tmp = realloc(item->ptr, size)
+	void *tmp = realloc(item->ptr, size);
 	if (tmp == NULL) {
 		free(item->ptr);
 		item->ptr = NULL;
 		item->size = 0;
-		return NULL
+		return NULL;
 	}
 	item->ptr = tmp;
 	item->size = size;

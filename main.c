@@ -1,21 +1,26 @@
 #include "scanner.h"
+#include "memory_keeper.h"
+#include "error.h"
 #define MAX_LEN 1000
 
 unsigned LINE_NUM = 0;
 
 int main (int argc, char **argv) {
+	mem_list_t L;
+	mem_list_t_init(&L);
+	
 	if (argc != 2) error_msg(ERR_OSTATNI,'f');
 	FILE *f;
 	f = fopen(argv[1], "r");
 	if (f == NULL) error_msg(ERR_OSTATNI,'f');
 	char *word;
 	char *string;
-	if ((word = malloc(MAX_LEN)) == NULL) {
+	if ((word = mem_alloc(MAX_LEN, &L)) == NULL) {
 		fclose(f);
 		error_msg(ERR_OSTATNI,'f');
 	}	
-	if ((string = malloc(MAX_LEN)) == NULL) {
-		free(word);
+	if ((string = mem_alloc(MAX_LEN, &L)) == NULL) {
+		free_memory(&L);
 		fclose(f);
 		error_msg(ERR_OSTATNI,'f');
 	}
