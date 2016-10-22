@@ -82,7 +82,7 @@ int is_full_ident(char *word, unsigned len) {
 }
 
 // TODO neukoncujici zna */ --> bere se to jako chyba nebo je zbytek souboru komentar?
-int skip_comment(int comment_type, FILE *f) {
+int skip_comment(unsigned comment_type, FILE *f) {
 	int c;
 	if (comment_type == LINE_COMMENT) {
 		while ((c = fgetc(f)) != EOF) {
