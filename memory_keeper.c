@@ -1,43 +1,47 @@
-#ifndef MEMORY
-#define MEMORY
-#include "error.h"
-#include <stdio.h>
-#include <stdlib.h>
-struct mem_item_t;
-struct mem_list_t;
-
-typedef struct mem_item_t {
-	void *ptr;
-	size_t size;
-	int used;
-	struct mem_item_t *next;
-} mem_item_t;
-
-typedef struct mem_list_t {
-	mem_item_t *first;
-}
+#include "memory_keeper.h"
 
 mem_list_t * mem_list_t_init(mem_list_t *L) {
 	L->first = NULL;
 }
 
-static void add_item(void *ptr, size_t size, mem_list_t *L) {
-	mem_item_t *tmp = L->first;
-	if (L->first == NULL) {
-		tmp = ptr;
-	}
+static void *add_item(mem_list_t *L) {
+	mem_item_t *new_item = malloc(sizeof(mem_item_t));
+	if (new_item == NULL)
+		return NULL;
+		
+	new_item->size = size;
+	if (L->first == NUL) 
+		L->first = new_item;
+	
 	else {
-		while (tmp->next != NULL)
+		mem_item_t *tmp = L->first;
+		while(tmp->next != NULL)
 			tmp = tmp->next;
-		tmp->next = ptr
+		tmp->next = item;
 	}
+	return item;
 }
 
 void * mem_alloc(void *ptr, size_t size, mem_list_t *L) {
-	ptr = malloc(size);
-	if (ptr == NULL)
+	mem_item_t *item = add_item(L);
+	if (item == NULL)
 		return NULL;
-	
-
+	item->ptr = malloc(size);
+	if (item->ptr == NULL) {
+		item->size = 0;
+		return NULL;
+	}
+	item->size = size;
+	return item->ptr;
 }
-#endif
+
+void free_memory(mem_list_t *L) {
+	if (L == NULL) return;
+	mem_item_t *tmp;
+	while(L->first) {
+		tmp = L->first->next;
+		free(L->first->ptr);
+		free(L->first);
+		L->first = tmp;
+	}
+}
