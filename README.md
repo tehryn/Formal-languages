@@ -29,9 +29,15 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 
 #define TYPE_DOUBLE 1100
 #define TYPE_INT 1101
+#define TYPE_STRING 1102
+#define TYPE_STATIC_DOUBLE 1103
+#define TYPE_STATIC_INT 1104
+#define TYPE_STATIC_STRING 1105
 
-#define LINE_COMMENT 99998
-#define BLOCK_COMMENT 99999
+#define LINE_COMMENT 1200
+#define BLOCK_COMMENT 1201
+
+#define ERR_REACHED_MAX -100
 
 // error.h
 #define ERR_LEXIKALNI_ANALYZA 1
@@ -45,12 +51,8 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 #define ERR_OSTATNI 10
 #define ERR_INTERPRET 99
 
-// main.c - makra budou v knihovne parseru pote
-#define ERR_REACHED_MAX -100
-#define MAX_LEN 1000
-
 // Globalni promene:
-// xmatej25/scanner.c
+// scanner.c
 unsigned int LINE_NUM;
 ```
 
@@ -59,7 +61,7 @@ Vzhledem k tomu, ze java (IFJ16 stoji na jave) ma vlastni spravu pameti a C ne, 
 ```c
 //:
 void *malloc(size_t size);
-void *mem_alloc(void *ptr, size_t size, mem_list_t *L); // alokuje pamet, ulozi ukazatel na ni do seznamu L a vraci ukazatel na alokovanou pamet, stejne jako malloc
+void *mem_alloc(size_t size, mem_list_t *L); // alokuje pamet, ulozi ukazatel na ni do seznamu L a vraci ukazatel na alokovanou pamet, stejne jako malloc
 
 void *realloc(void *ptr, size_t size);
 void *mem_realloc(void *ptr, size_t size, mem_list_t *L); // stejne jako realloc, akorat narozdil od nej pri neuspechu uvolni puvodne alokovanou pamet, tzn ze pokud alokace selze, uvolni i puvodni ukazatel
@@ -68,7 +70,7 @@ void free(void *ptr);
 void free_memory(mem_list_t *L); // uvolni veskerou alokovanou pamet - veskere ukazatele v seznamu L
 
 // mem_list_t *L inicializujte pred pouzitim touto funkci:
-mem_list_t * mem_list_t_init(mem_list_t *L);
+void mem_list_t_init(mem_list_t *L);
 ```
 
 Pokud nastane neocekavana chyba (napriklad neprideleni pameti), volejte funkci void error_msg(int err_number, char type_of_fault), kde err_num bude indentifikateor, prideleny pomoci makra a type_of_fault rika, zda chyba ukonci program (volanim exit(err_num)) ci ne. Napriklad: <br>
