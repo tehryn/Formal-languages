@@ -28,12 +28,13 @@ typedef struct htab_item {
 typedef struct htab_t {
 	unsigned (*hash_fun_ptr) (const char *str, unsigned htab_size); // pointer to hash function, &hash_function by default
 	unsigned htab_size; // number of lines
-	unsigned n; // real number of items 
+	unsigned number_items; // real number of items 
 	htab_item * ptr[]; // lines
 } htab_t;
 
 
 htab_t * htab_init(unsigned size);
+htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsigned htab_size));
 
 void htab_clear_items(htab_t * T);
 void htab_free_all(htab_t * T);
