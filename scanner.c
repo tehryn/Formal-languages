@@ -1,7 +1,9 @@
 #include "scanner.h"
 #include "error.h"
 
-int get_meaning(char *word) {
+unsigned LINE_NUM = 0;
+
+int is_keyword(char *word) {
 	if (word == NULL) return -1;
 	if (!strcmp(word, "boolean")) return S_BOOLEAN;
 	if (!strcmp(word, "break")) return S_BREAK;
@@ -21,6 +23,25 @@ int get_meaning(char *word) {
 	if (!strcmp(word, "void")) return S_VOID;
 	if (!strcmp(word, "while")) return S_WHILE;
 	return 0;
+}
+
+int is_special_char(char c) {
+	switch(c) {
+		case ';':
+		case '(':
+		case ')':
+		case '{':
+		case '}':
+		case '+':
+		case '-':
+		case '=':
+		case '*':
+		case '/':
+		case ',':
+		case '<':
+		case '>': return c;
+		default: return 0;
+	}
 }
 
 int is_num_literal(char *word, unsigned len) {
@@ -82,7 +103,7 @@ int is_full_ident(char *word, unsigned len) {
 }
 
 // TODO neukoncujici zna */ --> bere se to jako chyba nebo je zbytek souboru komentar?
-int skip_comment(unsigned comment_type, FILE *f) {
+int skip_comment(unsigned comment_type) {
 	int c;
 	if (comment_type == LINE_COMMENT) {
 		while ((c = fgetc(f)) != EOF) {
@@ -108,7 +129,7 @@ int skip_comment(unsigned comment_type, FILE *f) {
 	return 1; // reached EOF
 }
 
-unsigned load_string(FILE *f, char *word, unsigned max) {
+unsigned load_string(char *word, unsigned max) {
 	int c, prev = -1;
 	unsigned i = 0;
 	while(((c = fgetc(f)) != EOF) && i < max) {
@@ -119,49 +140,118 @@ unsigned load_string(FILE *f, char *word, unsigned max) {
 		word[i] = prev = c;
 		i++;
 	}
-	if (i == max && c != EOF) return max+1;
+	if (i == max && c != EOF) return max;
 	return UINT_MAX;
 }
 
-unsigned read_word(FILE *f, char *word, unsigned max, int *end_char) {
-	int c;
+token get_token() {
+	static char *word;
+	static size_t size = 0;
+	if (size == 0) {
+		word = malloc(S_SIZE);
+		if (word == NULL) {
+			//TODO
+		}
+		size = S_SIZE;
+	}
+	token new_token;
+	int c = 0;
 	unsigned i = 0;
-	
-	while (((c = fgetc(f)) != EOF) && i < max) {
-		if (isspace(c)  || c == ';' || c == '{' || c == '}' || c == '(' || c == ')' || c == '"' || c == '*' || c == '+' || c == '-' || c == '=' || c == ',' || c == '<' || c == '>') {
-			word[i] = '\0';
-			*end_char = c;
-			return i;
+	int token_found = 0;
+	while (!token_found && (c = fgetc(f)) != EOF) {
+		if (isspace(c)) {
+			if (i) // if i != 0 we found token
+				token_found = 1;
+			continue;
 		}	
-	
+		/* Are we at the begining of a comment? */
 		if (c == '/') {
 			c = fgetc(f);
 			if (c == '/') {
-				word[i] = '\0';
-				*end_char = (int)LINE_COMMENT;
-				return i;
+				skip_comment(LINE_COMMENT);
+				if (i) // if i != 0 we found token
+					token_found = 1;
+				continue;
 			}
 			else if (c == '*') {
-				word[i] = '\0';
-				*end_char = (int)BLOCK_COMMENT;
-				return i;
+				if (skip_comment(BLOCK_COMMENT) == -1) {
+					ERROR_CHECK = ERR_WRONG_COMMENT_SYNTAX;
+					continue;
+				}
+				if (i) // if i != 0 we found token
+					token_found = 1;
+					
 			}
 			else {
-				ungetc(c, f);
-				word[i] = '/';
+				/* we have to go back by 1 char */
+				if (fseek(f, -1, SEEK_CUR) != 0)
+					ERROR_CHECK = (int) ERR_FSEEK;
+				c = '/';
+			}	
+		}
+		/* Now we are not in comment nor in sequence of white chars so lets
+		 check special chars */
+		if (is_special_char(c)) {
+			if (i) { // if i != 0 we found token
+				/* we have to go back by 1 char */
+				if (fseek(f, -1, SEEK_CUR) != 0)
+					ERROR_CHECK = (int) ERR_FSEEK;
+				token_found = 1;
+				continue;
+			}
+			else {
+				new_token.id = c;
+				new_token.ptr = NULL;
+				return new_token;
 			}
 		}
-		
-		else {
+		if (i < size) { // Je bezpecne pristoupit na index i
 			word[i] = c;
-			i++;		
+			i++;
+		}
+		else { // nutna realokace pameti
+			char *tmp = word;
+			size *= 2; // preteceni???
+			tmp = realloc(word, size);
+			if (tmp == NULL) {
+				//TODO - dont forget to free word
+			}
+			else {
+				word = tmp;
+				word[i] = c;
+				i++;
+			}
 		}
 	}
-	word[i] = '\0';
-	if (c == EOF) {
-		*end_char = EOF; 
-		return i;
+	
+	if (i < size) { // Je bezpecne pristoupit na index i
+		word[i] = '\0';
 	}
-	*end_char = ERR_REACHED_MAX;	
-	return UINT_MAX;
+	else { // nutna realokace pameti
+		char *tmp = word;
+		size *= 2; // preteceni???
+		tmp = realloc(word, size);
+		if (tmp == NULL) {
+			//TODO - dont forget to free word
+		}
+		else {
+			word = tmp;
+			word[i] = '\0';
+		}
+	}
+		
+	// token found! but what did we find???
+	unsigned id = is_keyword(word);
+	if (id) {
+		new_token.id = id;
+		new_token.ptr = NULL;
+	}
+	/* Ok, we did not found key word... Did we found number?*/
+	id = is_num_literal(word, i);
+	if (id) {
+		new_token.id = id;
+		new_token.ptr = NULL;
+	}
+	// TODO
+	return new_token;
 }
