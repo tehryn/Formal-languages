@@ -39,6 +39,7 @@ void * mem_alloc(size_t size, mem_list_t *L) {
 		return NULL;
 	}
 	item->size = size;
+	item->next = NULL;
 	return item->ptr;
 }
 

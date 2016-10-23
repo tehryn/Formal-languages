@@ -6,6 +6,8 @@ FILE *f;
 int ERROR_CHECK = 0;
 
 int main (int argc, char **argv) {
+	mem_list_t l;
+	mem_list_t_init(&l);
 	if (argc != 2) {
 		// TODO
 	}
@@ -13,22 +15,25 @@ int main (int argc, char **argv) {
 	if (f == NULL) {
 		// TODO
 	}
-	token t = {1, NULL};
-	while (t.id) {
-		t = get_token();
-		if (t.ptr) {
+	token *t = mem_alloc(sizeof(token), &l);
+	t->id = 1;
+	while (t->id) {
+		t = mem_alloc(sizeof(token), &l);
+		*t = get_token();
+		if (t->ptr) {
 			printf("+-------------------\n");
-			printf("| token id: %u\n", t.id);
-			printf("| token ptr: %s\n", (char *)t.ptr);
+			printf("| token id: %u\n", t->id);
+			printf("| token ptr: %s\n", (char *)t->ptr);
 			printf("+-------------------\n");
 		}
 		else {
 			printf("+-------------------\n");
-			printf("| token id: %c (%i)\n", t.id, t.id);
+			printf("| token id: %c (%i)\n", t->id, t->id);
 			printf("| token ptr: NULL\n");
 			printf("+-------------------\n");
 		}
 	}
+	free_memory(&l);
 	fclose(f);
 	printf("\nKONEC\n");
 	return 0;
