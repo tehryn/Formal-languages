@@ -30,14 +30,23 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 #define TYPE_DOUBLE 1100
 #define TYPE_INT 1101
 #define TYPE_STRING 1102
-#define TYPE_STATIC_DOUBLE 1103
-#define TYPE_STATIC_INT 1104
-#define TYPE_STATIC_STRING 1105
+#define TYPE_BOOLEAN 1103
+#define TYPE_STATIC_DOUBLE 1104
+#define TYPE_STATIC_INT 1105
+#define TYPE_STATIC_STRING 1106
+#define TYPE_STATIC_BOOLEAN 1107
 
 #define LINE_COMMENT 1200
 #define BLOCK_COMMENT 1201
 
+#define SIMPLE_IDENT 1300
+#define FULL_IDENT 1301
+
 #define ERR_REACHED_MAX -100
+#define ERR_WRONG_COMMENT_SYNTAX -101
+#define ERR_FSEEK -102
+
+#define S_SIZE 16
 
 // error.h
 #define ERR_LEXIKALNI_ANALYZA 1
