@@ -5,15 +5,21 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
-typedef enum {
-    num_int = 1, num_double, string, boolean, static_int, static_double, static_string
-} data_type_t;
+/*
+#define TYPE_DOUBLE 1100 
+#define TYPE_INT 1101 
+#define TYPE_STRING 1102 
+#define TYPE_STATIC_DOUBLE 1103 
+#define TYPE_STATIC_INT 1104 
+#define TYPE_STATIC_STRING 1105
+#define TYPE_BOOLEAN 1106
+#define TYPE_STATIC_BOOLEAN 1107
+*/
 
 // --- STRUCTURES ---
 typedef struct htab_item {
 	char* key; // string ID
-	data_type_t data_type;
+	unsigned data_type;
 	void* data; // pointer to the place with data
 	unsigned scope; // block_id, if (scope == -1) not allocated
 	struct htab_item* next_item; // next variable
@@ -32,6 +38,6 @@ htab_t * htab_init(unsigned size, unsigned (*hash_fun)(const char * str, unsigne
 void htab_clear_items(htab_t * T);
 void htab_free_all(htab_t * T);
 
-htab_item* htab_find_add_item(htab_t * T, const char * key); // if not found - make a place for it
+htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned data_type); // if not found - make a place for it
 
 // int htab_set_item(htab_item * I, void* data, unsigned scope);
