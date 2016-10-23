@@ -2,102 +2,34 @@
 #include "memory_keeper.h"
 #include "error.h"
 #define MAX_LEN 1000
-
-unsigned LINE_NUM = 0;
+FILE *f;
+int ERROR_CHECK = 0;
 
 int main (int argc, char **argv) {
-	mem_list_t L;
-	mem_list_t_init(&L);
-	
-	if (argc != 2) error_msg(ERR_OSTATNI,'f');
-	FILE *f;
-	f = fopen(argv[1], "r");
-	if (f == NULL) error_msg(ERR_OSTATNI,'f');
-	char *word;
-	char *string;
-	if ((word = mem_alloc(MAX_LEN, &L)) == NULL) {
-		fclose(f);
-		error_msg(ERR_OSTATNI,'f');
-	}	
-	if ((string = mem_alloc(MAX_LEN, &L)) == NULL) {
-		free_memory(&L);
-		fclose(f);
-		error_msg(ERR_OSTATNI,'f');
+	if (argc != 2) {
+		// TODO
 	}
-	unsigned chars = 1, temp;
-	int end_char = 0, check;
-	while (end_char != EOF) {
-		chars = read_word(f, word, MAX_LEN, &end_char);
-		if (chars) {
-			printf("%u:\t%s\t:", LINE_NUM, word);
-			temp = get_meaning(word);
-			printf("\tkeyword %u", temp);
-			temp = is_simple_ident(word, chars);
-			printf(",\tsimple ident %u", temp);
-			temp = is_full_ident(word, chars);
-			printf(",\tfull ident %u", temp);
-			temp = is_num_literal(word, chars);
-			printf(",\tnum literal %u\tlen %u\n", temp, chars);
+	f = fopen(argv[1], "r");
+	if (f == NULL) {
+		// TODO
+	}
+	token t = {1, NULL};
+	while (t.id) {
+		t = get_token();
+		if (t.ptr) {
+			printf("+-------------------\n");
+			printf("| token id: %u\n", t.id);
+			printf("| token ptr: %s\n", (char *)t.ptr);
+			printf("+-------------------\n");
 		}
-		switch (end_char) {
-			case '\n':
-				LINE_NUM++;
-			case '\t':
-			case '\r':
-			case ' ': 
-			break;
-			case LINE_COMMENT: 
-			case BLOCK_COMMENT:
-				check = skip_comment(end_char, f);
-				if (check == 1)
-					end_char = EOF;
-				else if (check == -1) {
-					free(word);
-					free(string);
-					fclose(f);
-					error_msg(ERR_SYNTAKTICKA_ANALYZA, 'f');
-				}
-				break;
-			case EOF: 
-				printf("%u:\t-----\t:\tEOF\n", LINE_NUM);
-				break;
-			case ';':
-			case '(':
-			case ')':
-			case '{':
-			case '}':
-			case '+':
-			case '-':
-			case '=':
-			case '*':
-			case '/':
-			case ',':
-			case '<':
-			case '>':
-				printf("%u:\t-----\t:\t%c\n", LINE_NUM, end_char);
-				break;
-			case '"':
-				check = load_string(f, string, MAX_LEN);
-				if (chars == MAX_LEN+1) {	
-					free(word);
-					fclose(f);
-					error_msg(ERR_OSTATNI, 'f');
-				}
-				printf("loaded string:\t'%s'\n", string);
-				break;
-			case ERR_REACHED_MAX:
-				free(word);
-				free(string);
-				fclose(f);
-				error_msg(ERR_OSTATNI, 'f');
-			default:
-				printf("\n\n\n\n\n FUCK FUCK FUCK FUCK\n Neznamy znak! znak == '%c' s hodnotou %i", end_char, end_char);
-				return 1;
+		else {
+			printf("+-------------------\n");
+			printf("| token id: %c (%i)\n", t.id, t.id);
+			printf("| token ptr: NULL\n");
+			printf("+-------------------\n");
 		}
 	}
 	fclose(f);
-	free(word);
-	free(string);
 	printf("\nKONEC\n");
 	return 0;
 }
