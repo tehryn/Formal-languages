@@ -71,8 +71,26 @@ void htab_free_all(htab_t * T)
 htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsigned data_type)
 {
 	unsigned index = T->hash_fun_ptr(key, t->htab_size);
+	htab_item * item = T->ptr[index];
+
+	if (item == NULL)
+	{
+		T->ptr[index] = _add_item(const char * key, unsigned scope, unsigned data_type);
+		return T->ptr[index];
+	}
+	
 	// TODO
+	htab_item * item_next = T->ptr[index]->next_item;
+	if (!strcmp(item->key, key)) // porovnani scope ???
+		return item;
+	else
+		item = item->next_item;
 }
+htab_item* _add_item(const char * key, unsigned scope, unsigned data_type)
+{
+	// TODO - proste malloc a nastaveni
+}
+
 
 /*
 void htab_foreach(htab_t *t, void (*func)(char*, unsigned)) {
