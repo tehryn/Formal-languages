@@ -33,7 +33,7 @@ typedef struct htab_t {
 } htab_t;
 
 
-htab_t * htab_init(unsigned size, unsigned (*hash_fun)(const char * str, unsigned htab_size));
+htab_t * htab_init(unsigned size);
 
 void htab_clear_items(htab_t * T);
 void htab_free_all(htab_t * T);
