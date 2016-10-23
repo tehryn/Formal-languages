@@ -2,6 +2,7 @@
 #include "error.h"
 
 unsigned LINE_NUM = 0;
+extern FILE *f;
 
 int is_keyword(char *word) {
 	if (word == NULL) return -1;
@@ -129,24 +130,34 @@ int skip_comment(unsigned comment_type) {
 	return 1; // reached EOF
 }
 
-unsigned load_string(char *word, unsigned max) {
+char *load_string(char *word, unsigned *max) {
 	int c, prev = -1;
 	unsigned i = 0;
-	while(((c = fgetc(f)) != EOF) && i < max) {
+	while(((c = fgetc(f)) != EOF)) {
 		if (c == '"' && prev != '\\') {
 			word[i] = '\0';
-			return i;
+			return word;
 		}
 		word[i] = prev = c;
 		i++;
+		if (i >= *max) { // predpoklad dalsiho zapisu -> nutna realokace pameti
+			char *tmp = word;
+			*max *= 2; // preteceni ???
+			tmp = realloc(word, *max);
+			if (tmp == NULL) {
+				*max = 0;
+				free(word);
+				return NULL;
+			}
+			word = tmp;
+		}
 	}
-	if (i == max && c != EOF) return max;
-	return UINT_MAX;
+	return NULL;
 }
 
 token get_token() {
 	static char *word;
-	static size_t size = 0;
+	static unsigned size = 0;
 	if (size == 0) {
 		word = malloc(S_SIZE);
 		if (word == NULL) {
@@ -180,14 +191,36 @@ token get_token() {
 				}
 				if (i) // if i != 0 we found token
 					token_found = 1;
-					
+				continue;	
 			}
 			else {
 				/* we have to go back by 1 char */
 				if (fseek(f, -1, SEEK_CUR) != 0)
 					ERROR_CHECK = (int) ERR_FSEEK;
-				c = '/';
+				c = '/'; // and also set c to prev value
 			}	
+		}
+		
+		if (c == '"') {
+			if (i) {
+				if (fseek(f, -1, SEEK_CUR) != 0)
+					ERROR_CHECK = (int) ERR_FSEEK;
+				token_found = 1;
+				continue;
+			}
+			else {
+				word = load_string(word, &size);
+				if (word == NULL) {
+					if (size == 0) {
+						// TODO - realokace pameti selhala
+					}
+					// TODO - retezec nebyl validne ukoncen
+				}
+				
+				new_token.id = TYPE_STRING;
+				new_token.ptr = word;
+				return new_token;
+			}
 		}
 		/* Now we are not in comment nor in sequence of white chars so lets
 		 check special chars */
@@ -239,19 +272,38 @@ token get_token() {
 			word[i] = '\0';
 		}
 	}
-		
-	// token found! but what did we find???
-	unsigned id = is_keyword(word);
-	if (id) {
-		new_token.id = id;
-		new_token.ptr = NULL;
+	if (token_found) {	
+		// token found! but what did we find???
+		unsigned id = is_keyword(word);
+		if (id) {
+			new_token.id = id;
+			new_token.ptr = word;
+			//new_token.ptr = NULL;
+			return new_token;
+		}
+		/* Ok, we did not found key word... Did we found number?*/
+		id = is_num_literal(word, i);
+		if (id) {
+			new_token.id = id;
+			new_token.ptr = word;
+			return new_token;
+		}
+		id = is_full_ident(word, i);
+		if (id) {
+			new_token.id = FULL_IDENT;
+			new_token.ptr = word;
+			// new_token.ptr = najdi_polozku(word);
+			return new_token;
+		}
+		id = is_simple_ident(word, i);
+		if (id) {
+			new_token.id = SIMPLE_IDENT;
+			new_token.ptr = word;
+			// new_token.ptr = najdi_polozku(word);
+			return new_token;
+		}
 	}
-	/* Ok, we did not found key word... Did we found number?*/
-	id = is_num_literal(word, i);
-	if (id) {
-		new_token.id = id;
-		new_token.ptr = NULL;
-	}
-	// TODO
+	new_token.id = 0;
+	new_token.ptr = NULL;
 	return new_token;
 }
