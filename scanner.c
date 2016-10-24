@@ -1,8 +1,17 @@
+/**
+* Author: Matejka Jiri
+* Login: xmatej52
+* School: VUT FIT, BRNO
+* gcc version: 5.4.0 (ubuntu 16.04.2)
+* Date: TODO
+**/
 #include "scanner.h"
 #include "error.h"
 
-unsigned LINE_NUM = 0;
+unsigned LINE_NUM = 1;
 extern FILE *f;
+char *SCANNER_WORD;
+
 
 int is_keyword(char *word) {
 	if (word == NULL) return -1;
@@ -156,11 +165,11 @@ char *load_string(char *word, unsigned *max) {
 }
 
 token get_token() {
-	static char *word;
+//	static char *word;
 	static unsigned size = 0;
 	if (size == 0) {
-		word = malloc(S_SIZE);
-		if (word == NULL) {
+		SCANNER_WORD = malloc(S_SIZE);
+		if (SCANNER_WORD == NULL) {
 			//TODO
 		}
 		size = S_SIZE;
@@ -171,6 +180,8 @@ token get_token() {
 	int token_found = 0;
 	while (!token_found && (c = fgetc(f)) != EOF) {
 		if (isspace(c)) {
+			if (c == '\n')
+				LINE_NUM++;
 			if (i) // if i != 0 we found token
 				token_found = 1;
 			continue;
@@ -209,8 +220,8 @@ token get_token() {
 				continue;
 			}
 			else {
-				word = load_string(word, &size);
-				if (word == NULL) {
+				SCANNER_WORD = load_string(SCANNER_WORD, &size);
+				if (SCANNER_WORD == NULL) {
 					if (size == 0) {
 						// TODO - realokace pameti selhala
 					}
@@ -218,7 +229,7 @@ token get_token() {
 				}
 				
 				new_token.id = TYPE_STRING;
-				new_token.ptr = word;
+				new_token.ptr = SCANNER_WORD;
 				return new_token;
 			}
 		}
@@ -239,67 +250,67 @@ token get_token() {
 			}
 		}
 		if (i < size) { // Je bezpecne pristoupit na index i
-			word[i] = c;
+			SCANNER_WORD[i] = c;
 			i++;
 		}
 		else { // nutna realokace pameti
-			char *tmp = word;
+			char *tmp = SCANNER_WORD;
 			size *= 2; // preteceni???
-			tmp = realloc(word, size);
+			tmp = realloc(SCANNER_WORD, size);
 			if (tmp == NULL) {
 				//TODO - dont forget to free word
 			}
 			else {
-				word = tmp;
-				word[i] = c;
+				SCANNER_WORD = tmp;
+				SCANNER_WORD[i] = c;
 				i++;
 			}
 		}
 	}
 	
 	if (i < size) { // Je bezpecne pristoupit na index i
-		word[i] = '\0';
+		SCANNER_WORD[i] = '\0';
 	}
 	else { // nutna realokace pameti
-		char *tmp = word;
+		char *tmp = SCANNER_WORD;
 		size *= 2; // preteceni???
-		tmp = realloc(word, size);
+		tmp = realloc(SCANNER_WORD, size);
 		if (tmp == NULL) {
-			//TODO - dont forget to free word
+			//TODO - dont forget to free SCANNER_WORD
 		}
 		else {
-			word = tmp;
-			word[i] = '\0';
+			SCANNER_WORD = tmp;
+			SCANNER_WORD[i] = '\0';
 		}
 	}
 	if (token_found) {	
 		// token found! but what did we find???
-		unsigned id = is_keyword(word);
+		unsigned id = is_keyword(SCANNER_WORD);
 		if (id) {
 			new_token.id = id;
-			new_token.ptr = word;
+			new_token.ptr = SCANNER_WORD;
 			//new_token.ptr = NULL;
 			return new_token;
 		}
 		/* Ok, we did not found key word... Did we found number?*/
-		id = is_num_literal(word, i);
+		id = is_num_literal(SCANNER_WORD, i);
 		if (id) {
 			new_token.id = id;
-			new_token.ptr = word;
+			new_token.ptr = SCANNER_WORD;
 			return new_token;
 		}
-		id = is_full_ident(word, i);
+		id = is_full_ident(SCANNER_WORD, i);
 		if (id) {
 			new_token.id = FULL_IDENT;
-			new_token.ptr = word;
+			new_token.ptr = SCANNER_WORD;
 			// new_token.ptr = najdi_polozku(word);
 			return new_token;
 		}
-		id = is_simple_ident(word, i);
+		id = is_simple_ident(SCANNER_WORD, i);
 		if (id) {
 			new_token.id = SIMPLE_IDENT;
-			new_token.ptr = word;
-			// new_token.ptr = najdi_polozku(word);
+			new_token.ptr = SCANNER_WORD;
+			// new_token.ptr = najdi_polozku(SCANNER_WORD);
 			return new_token;
 		}
 	}
