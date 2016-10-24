@@ -1,3 +1,11 @@
+/**
+* Author: Matejka Jiri
+* Login: xmatej52
+* School: VUT FIT, BRNO
+* gcc version: 5.4.0 (ubuntu 16.04.2)
+* Date: 25. 10. 2016
+**/
+
 #include "memory_keeper.h"
 
 void mem_list_t_init(mem_list_t *L) {
@@ -12,12 +20,9 @@ static void *add_item(mem_list_t *L) {
 	if (L->first == NULL) 
 		L->first = new_item;
 	
-	else {
-		mem_item_t *tmp = L->first;
-		while(tmp->next != NULL)
-			tmp = tmp->next;
-		tmp->next = new_item;
-	}
+	else 
+		L->last->next = new_item;
+	L->last = new_item;
 	return new_item;
 }
 

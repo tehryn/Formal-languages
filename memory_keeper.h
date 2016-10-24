@@ -11,6 +11,7 @@ typedef struct mem_item_t {
 
 typedef struct mem_list_t {
 	mem_item_t *first;
+	mem_item_t *last;
 } mem_list_t;
 
 void mem_list_t_init(mem_list_t *L);
