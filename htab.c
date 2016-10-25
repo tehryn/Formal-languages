@@ -1,6 +1,6 @@
 #include "htab.h"
 #include "memory_keeper.h"
-
+#include "error.h"
 
 
 unsigned hash_function(const char *str, unsigned htab_size)
@@ -18,7 +18,10 @@ htab_t * htab_init(unsigned size)
 {
 	htab_t * htab;
 	if ((htab = malloc(sizeof(htab_t) + size * sizeof(htab_item*))) == NULL) 
+	{
+		fprintf(stderr, "Memory could not be allocated! (func. htab_init)");
 		return NULL;
+	}
 
 	htab->htab_size = size;
 	htab->hash_fun_ptr = &hash_function;
@@ -32,8 +35,10 @@ htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsign
 {
 	htab_t * htab;
 	if ((htab = malloc(sizeof(htab_t) + size * sizeof(htab_item*))) == NULL) 
+	{
+		fprintf(stderr, "Memory could not be allocated! (func. htab_init2)");
 		return NULL;
-
+	}
 	htab->htab_size = size;
 	htab->hash_fun_ptr = hash_fun;
 	htab->number_items = 0;
@@ -75,7 +80,7 @@ htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsi
 
 	if (item == NULL)
 	{
-		T->ptr[index] = _add_item(const char * key, unsigned scope, unsigned data_type);
+		T->ptr[index] = _add_item(key, scope, data_type);
 		return T->ptr[index];
 	}
 	
@@ -84,11 +89,31 @@ htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsi
 	if (!strcmp(item->key, key)) // porovnani scope ???
 		return item;
 	else
-		item = item->next_item;
+		item = item->next_item; // cyklit
+
 }
 htab_item* _add_item(const char * key, unsigned scope, unsigned data_type)
 {
-	// TODO - proste malloc a nastaveni
+	htab_item * item = malloc(sizeof(htab_item));
+	if (item == NULL)
+	{
+		fprintf(stderr, "Memory could not be allocated! (func. _add_item)");
+		return NULL;
+	}
+	
+	unsigned key_len = strlen(key);
+	item->key = malloc(sizeof(key_len));
+	if (key == NULL)
+	{
+		fprintf(stderr, "Memory could not be allocated! (func. _add_item)");
+		free_memory(item);
+		return NULL;
+	}
+
+	strncpy(item->key, key, key_len);
+	item->scope = scope;
+	item->data_type = data_type;
+	return item;
 }
 
 

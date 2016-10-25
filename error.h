@@ -1,26 +1,28 @@
 //  error.h
-//  Autor: Miroslava Misova, FIT
+//  IFJ project
+//  Last update: 2$.10.2016
+//  Author: Miroslava Misova, FIT 
 
 #ifndef ERROR
 #define ERROR
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 // --------MAKRA--------------
 
-#define ERR_LEXIKALNI_ANALYZA 1
-#define ERR_SYNTAKTICKA_ANALYZA 2
+#define ERR_WARNING 0
+#define ERR_LEXICAL_ANALYSIS 1
+#define ERR_SYNTACTIC_ANALYSIS 2
 #define ERR_SEM_NDEF_REDEF 3
-#define ERR_SEM_KOMPATIBILITA 4
-#define ERR_SEM_OSTATNI 6
-#define ERR_VSTUP_CISLO 7
-#define ERR_NEINIC_PROM 8
-#define ERR_DELENI_NULOU 9
-#define ERR_OSTATNI 10
-#define ERR_INTERPRET 99
+#define ERR_SEM_COMPATIBILITY 4
+#define ERR_SEM_OTHERS 6
+#define ERR_INPUT_NUMBER 7
+#define ERR_UNINICIALIZED_VAR 8
+#define ERR_DIVISION_ZERO 9
+#define ERR_OTHERS 10
+#define ERR_INTERN_FAULT 99
 
-void error_msg(int err_number, char type_of_fault);  
-//  type_of_fault: 
-//      'w' = warning
-//      'f' = fatal (with exit) */
+void error_msg(int err_number, const char *fmt, ...);  
+
 #endif
