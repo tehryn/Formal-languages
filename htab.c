@@ -81,7 +81,7 @@ htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsi
 	if (item == NULL)
 	{
 		T->ptr[index] = _add_item(key, scope, data_type);
-		return T->ptr[index];
+		return T->ptr[index]; // could be NULL
 	}
 	
 	// TODO
