@@ -58,9 +58,9 @@ void htab_clear_items(htab_t * T)
 		{
 			item = T->ptr[i];
 			T->ptr[i] = T->ptr[i]->next_item; //store next item
-			free_memory(item->key);
-			free_memory(item->data);
-			free_memory(item);
+			free(item->key);
+			free(item->data);
+			free(item);
 		}
 	}
 }
@@ -68,7 +68,7 @@ void htab_clear_items(htab_t * T)
 void htab_free_all(htab_t * T) 
 {
 	htab_clear_items(T);
-	free_memory(T);
+	free(T);
 }
 
 
@@ -106,7 +106,7 @@ htab_item* _add_item(const char * key, unsigned scope, unsigned data_type)
 	if (key == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. _add_item)");
-		free_memory(item);
+		free(item);
 		return NULL;
 	}
 
