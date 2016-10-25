@@ -80,19 +80,28 @@ htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsi
 
 	if (item == NULL)
 	{
-		T->ptr[index] = _add_item(key, scope, data_type);
+		T->ptr[index] = add_item(key, scope, data_type);
 		return T->ptr[index]; // could be NULL
 	}
 	
-	// TODO
-	htab_item * item_next = T->ptr[index]->next_item;
+	// item != NULL
+	while (item->next_item != NULL)
+	{
+		if (!strcmp(item->key, key)) // porovnani scope ???
+			return item; // nalezen
+		else
+			item = item->next_item; // cyklit
+	}
+	// jsme na poslednim prvku
 	if (!strcmp(item->key, key)) // porovnani scope ???
-		return item;
+		return item; // nalezen
 	else
-		item = item->next_item; // cyklit
-
+	{
+		item->next_item = add_item(key, scope, data_type);
+		return item->next_item;
+	}
 }
-htab_item* _add_item(const char * key, unsigned scope, unsigned data_type)
+htab_item* add_item(const char * key, unsigned scope, unsigned data_type)
 {
 	htab_item * item = malloc(sizeof(htab_item));
 	if (item == NULL)
@@ -113,6 +122,7 @@ htab_item* _add_item(const char * key, unsigned scope, unsigned data_type)
 	strncpy(item->key, key, key_len);
 	item->scope = scope;
 	item->data_type = data_type;
+	item->next_item = NULL;
 	return item;
 }
 
