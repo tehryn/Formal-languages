@@ -106,7 +106,7 @@ htab_item* add_item(const char * key, unsigned scope, unsigned data_type)
 	htab_item * item = malloc(sizeof(htab_item));
 	if (item == NULL)
 	{
-		fprintf(stderr, "Memory could not be allocated! (func. _add_item)");
+		fprintf(stderr, "Memory could not be allocated! (func. add_item)");
 		return NULL;
 	}
 	
@@ -114,7 +114,7 @@ htab_item* add_item(const char * key, unsigned scope, unsigned data_type)
 	item->key = malloc(sizeof(key_len));
 	if (key == NULL)
 	{
-		fprintf(stderr, "Memory could not be allocated! (func. _add_item)");
+		fprintf(stderr, "Memory could not be allocated! (func. add_item)");
 		free(item);
 		return NULL;
 	}
