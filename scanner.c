@@ -91,8 +91,9 @@ int is_full_ident(char *word, unsigned len) {
 	char *temp;
 	unsigned i, j;
 	temp = malloc(len);
-	if (temp == NULL)
-		error_msg(ERR_INTERPRET, 'f');
+	if (temp == NULL) {
+		return -1;
+	}
 	for (i = 0; word[i] != '.' && i<len; i++)
 		temp[i] = word[i];
 	if (i == len || !is_simple_ident(temp, i-1)) {
@@ -197,8 +198,11 @@ token get_token() {
 			}
 			else if (c == '*') {
 				if (skip_comment(BLOCK_COMMENT) == -1) {
-					ERROR_CHECK = ERR_WRONG_COMMENT_SYNTAX;
-					continue;
+					ERROR_CHECK = (int) ERR_WRONG_COMMENT_SYNTAX;
+					fprintf(stderr, "In line %d expected '*/' (endless comment)\n", LINE_NUM);
+					new_token.id = -1;
+					new_token.ptr = NULL;
+					return new_token;
 				}
 				if (i) // if i != 0 we found token
 					token_found = 1;
@@ -206,16 +210,26 @@ token get_token() {
 			}
 			else {
 				/* we have to go back by 1 char */
-				if (fseek(f, -1, SEEK_CUR) != 0)
+				if (fseek(f, -1, SEEK_CUR) != 0) {
 					ERROR_CHECK = (int) ERR_FSEEK;
+					fprintf(stderr, "Can't set offset in file!\n");
+					new_token.id = -1;
+					new_token.ptr = NULL;
+					return new_token;
+				}
 				c = '/'; // and also set c to prev value
 			}	
 		}
 		
 		if (c == '"') {
 			if (i) {
-				if (fseek(f, -1, SEEK_CUR) != 0)
+				if (fseek(f, -1, SEEK_CUR) != 0) {
 					ERROR_CHECK = (int) ERR_FSEEK;
+					fprintf(stderr, "Can't set offset in file!\n");
+					new_token.id = -1;
+					new_token.ptr = NULL;
+					return new_token;
+				}
 				token_found = 1;
 				continue;
 			}
@@ -223,9 +237,15 @@ token get_token() {
 				SCANNER_WORD = load_string(SCANNER_WORD, &size);
 				if (SCANNER_WORD == NULL) {
 					if (size == 0) {
-						// TODO - realokace pameti selhala
+						fprintf(stderr, "Memory reallocation failed\n");
+						new_token.id = -1;
+						new_token.ptr = NULL;
+						return new_token;
 					}
-					// TODO - retezec nebyl validne ukoncen
+					fprintf(stderr, "In line %d expected '\"' (endless String)\n", LINE_NUM);
+					new_token.id = -1;
+					new_token.ptr = NULL;
+					return new_token;
 				}
 				
 				new_token.id = TYPE_STRING;
@@ -238,8 +258,13 @@ token get_token() {
 		if (is_special_char(c)) {
 			if (i) { // if i != 0 we found token
 				/* we have to go back by 1 char */
-				if (fseek(f, -1, SEEK_CUR) != 0)
+				if (fseek(f, -1, SEEK_CUR) != 0) {
 					ERROR_CHECK = (int) ERR_FSEEK;
+					fprintf(stderr, "Can't set offset in file!\n");
+					new_token.id = -1;
+					new_token.ptr = NULL;
+					return new_token;
+				}
 				token_found = 1;
 				continue;
 			}
@@ -258,7 +283,10 @@ token get_token() {
 			size *= 2; // preteceni???
 			tmp = realloc(SCANNER_WORD, size);
 			if (tmp == NULL) {
-				//TODO - dont forget to free word
+				fprintf(stderr, "Memory reallocation failed\n");
+				new_token.id = -1;
+				new_token.ptr = NULL;
+				return new_token;
 			}
 			else {
 				SCANNER_WORD = tmp;
@@ -276,7 +304,10 @@ token get_token() {
 		size *= 2; // preteceni???
 		tmp = realloc(SCANNER_WORD, size);
 		if (tmp == NULL) {
-			//TODO - dont forget to free SCANNER_WORD
+			fprintf(stderr, "Memory reallocation failed\n");
+			new_token.id = -1;
+			new_token.ptr = NULL;
+			return new_token;
 		}
 		else {
 			SCANNER_WORD = tmp;
@@ -285,7 +316,7 @@ token get_token() {
 	}
 	if (token_found) {	
 		// token found! but what did we find???
-		unsigned id = is_keyword(SCANNER_WORD);
+		int id = is_keyword(SCANNER_WORD);
 		if (id) {
 			new_token.id = id;
 			new_token.ptr = SCANNER_WORD;
@@ -300,6 +331,12 @@ token get_token() {
 			return new_token;
 		}
 		id = is_full_ident(SCANNER_WORD, i);
+		if (id == -1) {
+			fprintf(stderr, "Memory reallocation failed\n");
+			new_token.id = -1;
+			new_token.ptr = NULL;
+			return new_token;			
+		}
 		if (id) {
 			new_token.id = FULL_IDENT;
 			new_token.ptr = SCANNER_WORD;
@@ -313,6 +350,9 @@ token get_token() {
 			// new_token.ptr = najdi_polozku(SCANNER_WORD);
 			return new_token;
 		}
+		fprintf(stderr, "Invalid char on line %d\n", LINE_NUM);
+		new_token.id = -1;
+		new_token.ptr = NULL;
 	}
 	new_token.id = 0;
 	new_token.ptr = NULL;

@@ -18,10 +18,8 @@ int main (int argc, char **argv) {
 		// TODO
 	}
 	token *t = mem_alloc(sizeof(token), &l);
-	t->id = 1;
-	while (t->id) {
-		t = mem_alloc(sizeof(token), &l);
-		*t = get_token();
+	*t = get_token();
+	while (t->id > 0) {
 		if (t->ptr) {
 			printf("+-------------------\n");
 			printf("| line num: %d\n", LINE_NUM);
@@ -36,6 +34,8 @@ int main (int argc, char **argv) {
 			printf("| token ptr: NULL\n");
 			printf("+-------------------\n");
 		}
+		t = mem_alloc(sizeof(token), &l);
+		*t = get_token();
 	}
 	free_memory(&l);
 	free(SCANNER_WORD);
