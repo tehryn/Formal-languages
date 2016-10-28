@@ -1,6 +1,7 @@
 #include "scanner.h"
 #include "memory_keeper.h"
 #include "error.h"
+#include "str_prcs.c"
 #define MAX_LEN 1000
 FILE *f;
 int ERROR_CHECK = 0;
@@ -19,8 +20,9 @@ int main (int argc, char **argv) {
 	}
 	token *t = mem_alloc(sizeof(token), &l);
 	*t = get_token();
+	char temp[1024];
 	while (t->id > 0) {
-		if (t->ptr) {
+/*		if (t->ptr) {
 			printf("+-------------------\n");
 			printf("| line num: %d\n", LINE_NUM);
 			printf("| token id: %u\n", t->id);
@@ -33,6 +35,23 @@ int main (int argc, char **argv) {
 			printf("| token id: %c (%i)\n", t->id, t->id);
 			printf("| token ptr: NULL\n");
 			printf("+-------------------\n");
+		}
+*/
+		memset(temp, 0, 1024);
+		switch(t->id) {
+			case TYPE_DOUBLE:
+				memcpy(temp, t->ptr, strlen(t->ptr));
+				printf("convert to double: %s = %lf\n", temp, *((double *) string_process(t->id, (char *)t->ptr)));
+				break;
+			case TYPE_INT: 
+				memcpy(temp, t->ptr, strlen(t->ptr));
+				printf("convert to int: %s = %i\n", temp, *((int *) string_process(t->id, (char *)t->ptr)));
+				break;
+			case TYPE_STRING:
+				memcpy(temp, t->ptr, strlen(t->ptr));
+				printf("convert to string: %s = %s\n", temp, (char *) string_process(t->id, (char *)t->ptr));
+				break;
+			default: break;
 		}
 		t = mem_alloc(sizeof(token), &l);
 		*t = get_token();

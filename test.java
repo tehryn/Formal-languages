@@ -1,3 +1,4 @@
+"ahoj \042 \245 \""
 /* Program 1: Vypocet faktorialu (iterativne) */
 class Main {
 	static void run() {
@@ -20,3 +21,8 @@ class Main {
 		}
 	}
 }
+
+e25
+2e5
+2.5348e3
+"ahoj \042 \245 \""
