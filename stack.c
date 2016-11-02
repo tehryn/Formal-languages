@@ -45,5 +45,3 @@ htab_t *stack_t_get_item(stack_t *stack, unsigned bactrack) {
 		return NULL;
 	return &stack->data[idx];
 }
-
-

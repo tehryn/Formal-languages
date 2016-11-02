@@ -15,7 +15,7 @@ void* string_process(int id, char* str)
     char *eptr;
     if (id == TYPE_INT)
         {
-            int *number = malloc(sizeof(int));
+            int *number = (int *) malloc(sizeof(int));
             if (!number) return NULL;
             if (str[0]=='0') //jestlize cislo zacina nulou, jedna se o cislo v osmickove soustave, v opacnem pripade v desitkove
                 *number = strtol(str,&eptr,8);
@@ -25,7 +25,7 @@ void* string_process(int id, char* str)
         }
     else if (id == TYPE_DOUBLE)
         {
-            double *number = malloc(sizeof(double));
+            double *number = (double *) malloc(sizeof(double));
             if (!number) return NULL;
             *number = strtod(str,&eptr);
             return (void*)number;

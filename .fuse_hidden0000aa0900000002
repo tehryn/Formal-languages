@@ -1,0 +1,77 @@
+/* Ahoj */
+"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+	Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+/* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. */
+// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+// a ted trocha programovani
+while(1)
+{
+	printf("1");
+}
+
+for(int i = false; slunce sviti; i=i+2)
+{
+	chlorofil();	
+}
+
+bool vecer = true;
+if(vecer)
+{
+	vycurat();
+	pomodlit();
+	spat();
+}
+
+/*
+trocha matematiky
+*/
+
+a+b
+a + b
+a^3
+a/b-3
+a/(b - 3)
+y = ln(x)
+
+int pole[5]={0,1,2,3,4};
+int pole2[]={0,1,2,3,4};
+int tabulka[3][4]={{1,2,3,4},{5,6,7,8},{9,10,11,12}};
+
+tabulka[i][j] = i*4 + j + 1;
+
+void vypis(double x[], double y[][10], int k,int m)
+
+{
+
+int i,j ;
+
+for(i = 0; i<k;i++) printf("%lf\n",x[i]);
+
+ 
+
+for(i = 0; i<m;i++)
+
+   for(i = 0; i<10; i++)
+
+       printf("%lf\n",y[i][j]);
+
+}
+
+void vypis_point(double * x, double **y, int k,int m, int n)
+
+{
+
+int i,j ;
+
+for(i = 0; i<k;i++) printf("%lf\n",x[i]);
+
+ 
+
+for(i = 0; i<m;i++)
+
+   for(i = 0; i<n; i++)
+
+       printf("%lf\n",y[i][j]);
+
+}

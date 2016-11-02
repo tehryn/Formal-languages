@@ -36,6 +36,7 @@ int is_keyword(char *word) {
 }
 
 int is_special_char(char c) {
+	int state = 0;
 	switch(c) {
 		case ';':
 		case '(':
@@ -44,19 +45,37 @@ int is_special_char(char c) {
 		case '}':
 		case '+':
 		case '-':
-		case '=':
 		case '*':
 		case '/':
-		case ',':
-		case '<':
-		case '>': return c;
+		case ',': return c;
+		case '=': state = 1; break;
+		case '<': state = 2; break;
+		case '>': state = 3; break;
+		case '!': state = 4; break;
 		default: return 0;
 	}
+	int prev = c;
+	c = fgetc(f);
+		if( c == '=') {
+			switch (state) {
+				case 1: return S_EQUAL;
+				case 2: return S_LESS_EQUAL;
+				case 3: return S_GREATER_EQUAL;
+				case 4: return S_NOT_EQUAL;
+				default: fprintf (stderr, "\n\n\n vsichni tu umreme!!!!!\n\n\n");
+			}
+		}
+		else {
+			ungetc(c, f);
+			return prev;
+		}
+		return 0;
 }
 
 int is_num_literal(char *word, unsigned len) {
 	if (word == NULL || len == 0) return -1;
 	int e = 0, dot = 0;
+	if (!isdigit(word[0])) return 0;
 	for (unsigned i = 0; i<len; i++) {
 		if (word[i] == 'e' || word[i] == 'E') {
 			if (e) return 0;
@@ -66,10 +85,11 @@ int is_num_literal(char *word, unsigned len) {
 			if (dot || e) return 0;
 			dot = 1;
 		}
-		else if ((word[i] < '0' || word[i] > '9') && word[i] != 'e')
+		else if ((!isdigit(word[i])) && word[i] != 'e')
 			return 0;
 	}
-	if (dot) return TYPE_DOUBLE;
+	if(!isdigit(word[len-1])) return 0;
+	if (dot || e) return TYPE_DOUBLE;
 	return TYPE_INT;
 }
 
@@ -78,7 +98,7 @@ int is_simple_ident(char *word, unsigned len) {
 	if ((word[0] != '$' && word[0] < 'A') || word[0] > 'z' || (word[0] > 'Z' && word[0] < 'a' && word[0] != '_'))
 		return 0;
 	for (unsigned i = 1; i < len; i++) {
-		if(word[i] == '$' || word[i] == '_' || (word[i] >= '0' && word[i] <= '9') || (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= 'a' && word[i] <= 'z'))
+		if(word[i] == '$' || word[i] == '_' || isdigit(word[i]) || (word[i] >= 'A' && word[i] <= 'Z') || (word[i] >= 'a' && word[i] <= 'z'))
 			continue;
 		else
 			return 0;
@@ -90,7 +110,7 @@ int is_full_ident(char *word, unsigned len) {
 	if (word == NULL || len < 3) return 0;
 	char *temp;
 	unsigned i, j;
-	temp = malloc(len);
+	temp = (char *) malloc(len);
 	if (temp == NULL) {
 		return -1;
 	}
@@ -128,7 +148,7 @@ int skip_comment(unsigned comment_type) {
 		char expected = 0;
 		while ((c = fgetc(f)) != EOF) {
 			if (c == '\n') LINE_NUM++;
-			if (c == '*') { 
+			if (c == '*') {
 				expected = 1;
 				continue;
 			}
@@ -148,12 +168,14 @@ char *load_string(char *word, unsigned *max) {
 			word[i] = '\0';
 			return word;
 		}
+		if (c == '\n')
+			return NULL;
 		word[i] = prev = c;
 		i++;
 		if (i >= *max) { // predpoklad dalsiho zapisu -> nutna realokace pameti
 			char *tmp = word;
 			*max *= 2; // preteceni ???
-			tmp = realloc(word, *max);
+			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
 				*max = 0;
 				free(word);
@@ -169,7 +191,7 @@ token get_token() {
 //	static char *word;
 	static unsigned size = 0;
 	if (size == 0) {
-		SCANNER_WORD = malloc(S_SIZE);
+		SCANNER_WORD = (char *) malloc(S_SIZE);
 		if (SCANNER_WORD == NULL) {
 			//TODO
 		}
@@ -186,7 +208,7 @@ token get_token() {
 			if (i) // if i != 0 we found token
 				token_found = 1;
 			continue;
-		}	
+		}
 		/* Are we at the begining of a comment? */
 		if (c == '/') {
 			c = fgetc(f);
@@ -206,7 +228,7 @@ token get_token() {
 				}
 				if (i) // if i != 0 we found token
 					token_found = 1;
-				continue;	
+				continue;
 			}
 			else {
 				/* we have to go back by 1 char */
@@ -218,9 +240,9 @@ token get_token() {
 					return new_token;
 				}
 				c = '/'; // and also set c to prev value
-			}	
+			}
 		}
-		
+
 		if (c == '"') {
 			if (i) {
 				if (fseek(f, -1, SEEK_CUR) != 0) {
@@ -242,12 +264,12 @@ token get_token() {
 						new_token.ptr = NULL;
 						return new_token;
 					}
-					fprintf(stderr, "In line %d expected '\"' (endless String)\n", LINE_NUM);
+					fprintf(stderr, "ERROR: line: %u: expected \" at the end of string\n", LINE_NUM);
 					new_token.id = -1;
 					new_token.ptr = NULL;
 					return new_token;
 				}
-				
+
 				new_token.id = TYPE_STRING;
 				new_token.ptr = SCANNER_WORD;
 				return new_token;
@@ -281,7 +303,7 @@ token get_token() {
 		else { // nutna realokace pameti
 			char *tmp = SCANNER_WORD;
 			size *= 2; // preteceni???
-			tmp = realloc(SCANNER_WORD, size);
+			tmp = (char *) realloc(SCANNER_WORD, size);
 			if (tmp == NULL) {
 				fprintf(stderr, "Memory reallocation failed\n");
 				new_token.id = -1;
@@ -294,15 +316,15 @@ token get_token() {
 				i++;
 			}
 		}
-	}
-	
+	} // konec while
+
 	if (i < size) { // Je bezpecne pristoupit na index i
 		SCANNER_WORD[i] = '\0';
 	}
 	else { // nutna realokace pameti
 		char *tmp = SCANNER_WORD;
 		size *= 2; // preteceni???
-		tmp = realloc(SCANNER_WORD, size);
+		tmp = (char *) realloc(SCANNER_WORD, size);
 		if (tmp == NULL) {
 			fprintf(stderr, "Memory reallocation failed\n");
 			new_token.id = -1;
@@ -314,7 +336,7 @@ token get_token() {
 			SCANNER_WORD[i] = '\0';
 		}
 	}
-	if (token_found) {	
+	if (token_found) {
 		// token found! but what did we find???
 		int id = is_keyword(SCANNER_WORD);
 		if (id) {
@@ -335,7 +357,7 @@ token get_token() {
 			fprintf(stderr, "Memory reallocation failed\n");
 			new_token.id = -1;
 			new_token.ptr = NULL;
-			return new_token;			
+			return new_token;
 		}
 		if (id) {
 			new_token.id = FULL_IDENT;
@@ -350,9 +372,10 @@ token get_token() {
 			// new_token.ptr = najdi_polozku(SCANNER_WORD);
 			return new_token;
 		}
-		fprintf(stderr, "Invalid char on line %d\n", LINE_NUM);
+		fprintf(stderr, "ERROR: line: %u: '%s' is not valide identifikator, numeric constant nor keyword\n", LINE_NUM, SCANNER_WORD);
 		new_token.id = -1;
 		new_token.ptr = NULL;
+		return new_token;
 	}
 	new_token.id = 0;
 	new_token.ptr = NULL;

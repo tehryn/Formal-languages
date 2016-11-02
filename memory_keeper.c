@@ -9,7 +9,7 @@
 #include "memory_keeper.h"
 
 void mem_list_t_init(mem_list_t *L) {
-	L->first = NULL;
+	L->first = L->last = NULL;
 }
 
 static void *add_item(mem_list_t *L) {

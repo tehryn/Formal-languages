@@ -2,7 +2,6 @@
 #include "memory_keeper.h"
 #include "error.h"
 #include "str_prcs.c"
-#define MAX_LEN 1000
 FILE *f;
 int ERROR_CHECK = 0;
 
@@ -18,7 +17,8 @@ int main (int argc, char **argv) {
 	if (f == NULL) {
 		// TODO
 	}
-	token *t = mem_alloc(sizeof(token), &l);
+
+	token *t = (token *) mem_alloc(sizeof(token), &l);
 	*t = get_token();
 	while (t->id > 0) {
 /*		if (t->ptr) {
@@ -41,10 +41,10 @@ int main (int argc, char **argv) {
 				printf("+-------------------\n");
 				printf("| convert to double: %s\n", (char *)t->ptr);
 				printf("| - - - - - - - - - \n");
-				printf("| vysledek: %lf\n", *((double *) string_process(t->id, (char *)t->ptr)));
+				printf("| vysledek: %f\n", *((double *) string_process(t->id, (char *)t->ptr)));
 				printf("+-------------------\n");
 				break;
-			case TYPE_INT: 
+			case TYPE_INT:
 				printf("+-------------------\n");
 				printf("| convert to int: %s\n", (char *)t->ptr);
 				printf("| - - - - - - - - - \n");
@@ -60,7 +60,8 @@ int main (int argc, char **argv) {
 				break;
 			default: break;
 		}
-		t = mem_alloc(sizeof(token), &l);
+
+		t = (token *) mem_alloc(sizeof(token), &l);
 		*t = get_token();
 	}
 	free_memory(&l);

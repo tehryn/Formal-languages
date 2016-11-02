@@ -1,4 +1,4 @@
-"1234567890123\0"
+"ahoj \042 \245 \""
 /* Program 1: Vypocet faktorialu (iterativne) */
 class Main {
 	static void run() {

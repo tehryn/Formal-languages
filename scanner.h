@@ -37,6 +37,11 @@
 #define LINE_COMMENT 1200
 #define BLOCK_COMMENT 1201
 
+#define S_EQUAL 1202
+#define S_LESS_EQUAL 1203
+#define S_GREATER_EQUAL 1204
+#define S_NOT_EQUAL 1205
+
 #define SIMPLE_IDENT 1300
 #define FULL_IDENT 1301
 
@@ -64,8 +69,12 @@ typedef struct token {
 @pre Word is ended by char '\0'
 @return If word represents key word, return id of specific key word, otherwise return 0
 */
-int get_meaning(char *word);
+int is_keyword(char *word);
 
+/**
+TODO
+*/
+int is_special_char(char c);
 /** Detect if input string is numeric literal or not
 @param word String (or array of chars) for detection
 @param len length of word (without '\0', if there is)

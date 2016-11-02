@@ -1,4 +1,3 @@
-"1234567890123\0"
 /* Program 1: Vypocet faktorialu (iterativne) */
 class Main {
 	static void run() {
@@ -10,7 +9,7 @@ class Main {
 		if (a < 0) { // nacitani zaporneho cisla nemusite podporovat
 			ifj16.print("Faktorial nelze spocitat!\n");
 		}
-		else {
+		else {/*
 			vysl = 1;
 
 			while (a > 0) {
@@ -21,8 +20,3 @@ class Main {
 		}
 	}
 }
-
-e25
-2e5
-2.5348e3
-"ahoj \042 \245 \""
