@@ -17,7 +17,7 @@ unsigned hash_function(const char *str, unsigned htab_size)
 htab_t * htab_init(unsigned size)
 {
 	htab_t * htab;
-	if ((htab = malloc(sizeof(htab_t) + size * sizeof(htab_item*))) == NULL)
+	if ((htab = (htab_t *) malloc(sizeof(htab_t) + size * sizeof(htab_item*))) == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. htab_init)");
 		return NULL;
@@ -34,7 +34,7 @@ htab_t * htab_init(unsigned size)
 htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsigned htab_size))
 {
 	htab_t * htab;
-	if ((htab = malloc(sizeof(htab_t) + size * sizeof(htab_item*))) == NULL)
+	if ((htab = (htab_t *) malloc(sizeof(htab_t) + size * sizeof(htab_item*))) == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. htab_init2)");
 		return NULL;
@@ -75,7 +75,7 @@ void htab_free_all(htab_t * T)
 
 htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsigned data_type)
 {
-	unsigned index = T->hash_fun_ptr(key, t->htab_size);
+	unsigned index = T->hash_fun_ptr(key, T->htab_size);
 	htab_item * item = T->ptr[index];
 
 	if (item == NULL)
@@ -103,7 +103,7 @@ htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsi
 }
 htab_item* add_item(const char * key, unsigned scope, unsigned data_type)
 {
-	htab_item * item = malloc(sizeof(htab_item));
+	htab_item * item = (htab_item *) malloc(sizeof(htab_item));
 	if (item == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. add_item)");
@@ -111,7 +111,7 @@ htab_item* add_item(const char * key, unsigned scope, unsigned data_type)
 	}
 
 	unsigned key_len = strlen(key);
-	item->key = malloc(sizeof(key_len));
+	item->key = (char *) malloc(sizeof(key_len));
 	if (key == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. add_item)");

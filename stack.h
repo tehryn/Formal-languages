@@ -7,7 +7,7 @@
 #define STACK
 #include <stdio.h>
 #include <stdlib.h>
-#include "htable.h"
+#include "htab.h"
 #define STACK_INIT_SIZE 16
 
 /**
@@ -22,7 +22,7 @@ typedef struct stack_t {
 /**
 
 */
-stack_t *stack_t_init(stack_t *stack; size_t size);
+stack_t *stack_t_init(stack_t *stack, size_t size);
 
 /**
 

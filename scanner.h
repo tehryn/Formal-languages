@@ -13,7 +13,7 @@
 #define S_CONTINUE 1003
 #define S_DO 1004
 #define S_DOUBLE 1005
-#define S_ELSE 1006 
+#define S_ELSE 1006
 #define S_FALSE 1007
 #define S_FOR 1008
 #define S_IF 1009

@@ -8,20 +8,21 @@
 #include "stack.h"
 
 
-stack_t *stack_t_init(stack_t *stack; size_t size) {
-	stack->data = malloc(sizeof(htab_t * size));
-	if (stack->data = NULL)
+stack_t *stack_t_init(stack_t *stack, size_t size) {
+	stack->data = (htab_t *) malloc(sizeof(htab_t)*size);
+	if (stack->data == NULL)
 		return NULL;
 	stack->size = size;
 	stack->top = -1;
+	return stack;
 }
 
 int stack_t_push(stack_t *stack, htab_t table) {
 	stack->top++;
-	if ((unsigned)stack->top >= size) {
-		stack_t *tmp = stack->data;
+	if ((unsigned)stack->top >= stack->size) {
+		htab_t *tmp = stack->data;
 		stack->size *= 2;
-		tmp = realloc(stack->data, stack_size);
+		tmp =(htab_t *) realloc(stack->data, stack->size);
 		if (tmp == NULL) {
 			stack->size /= 2;
 			return 0;
@@ -40,7 +41,7 @@ int stack_t_pop(stack_t *stack) {
 }
 
 htab_t *stack_t_get_item(stack_t *stack, unsigned bactrack) {
-	int idx = s->top - bactrack;
+	int idx = stack->top - bactrack;
 	if (idx < 0)
 		return NULL;
 	return &stack->data[idx];

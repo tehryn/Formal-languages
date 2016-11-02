@@ -1,7 +1,7 @@
 //  error.h
 //  IFJ project
 //  Last update: 2$.10.2016
-//  Author: Miroslava Misova, FIT 
+//  Author: Miroslava Misova, FIT
 
 #ifndef ERROR
 #define ERROR
@@ -23,6 +23,6 @@
 #define ERR_OTHERS 10
 #define ERR_INTERN_FAULT 99
 
-void error_msg(int err_number, const char *fmt, ...);  
+void error_msg(int err_number, const char *fmt, ...);
 
 #endif

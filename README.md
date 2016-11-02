@@ -7,15 +7,15 @@ Jazykový interpret (anglicky) https://en.wikipedia.org/wiki/Interpreted_languag
 Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) <br>
 
 ```c
-// Makra: 
-// scanner.h 
+// Makra:
+// scanner.h
 #define S_BOOLEAN 1000
 #define S_BREAK 1001
 #define S_CLASS 1002
 #define S_CONTINUE 1003
 #define S_DO 1004
 #define S_DOUBLE 1005
-#define S_ELSE 1006 
+#define S_ELSE 1006
 #define S_FALSE 1007
 #define S_FOR 1008
 #define S_IF 1009
@@ -85,7 +85,7 @@ void mem_list_t_init(mem_list_t *L);
 Pokud nastane neocekavana chyba (napriklad neprideleni pameti), volejte funkci void error_msg(int err_number, char type_of_fault), kde err_num bude indentifikateor, prideleny pomoci makra a type_of_fault rika, zda chyba ukonci program (volanim exit(err_num)) ci ne. Napriklad: <br>
 
 ```c
-  char *temp; 
+  char *temp;
   temp = malloc(10);
   if (temp == NULL)
     error_msg(ERR_INTERPRET, 'f');

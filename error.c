@@ -1,7 +1,7 @@
 //  error.c
 //  IFJ project
 //  Last update: 2$.10.2016
-//  Author: Miroslava Misova, FIT 
+//  Author: Miroslava Misova, FIT
 
 #include <stdio.h>
 #include <stdlib.h>

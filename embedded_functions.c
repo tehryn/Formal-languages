@@ -196,5 +196,3 @@ char * shellsort(char * str)
 	arr[num]='\0';
     return arr;
 }
-
-

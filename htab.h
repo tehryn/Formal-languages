@@ -40,5 +40,5 @@ void htab_clear_items(htab_t * T);
 void htab_free_all(htab_t * T);
 
 htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsigned data_type); // if not found - make a place for it
-htab_item* add_item(const char * key, unsigned scope, unsigned data_type)
+htab_item* add_item(const char * key, unsigned scope, unsigned data_type);
 // int htab_set_item(htab_item * I, void* data, unsigned scope);
