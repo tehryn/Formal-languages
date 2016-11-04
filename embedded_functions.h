@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include "garbage_collector.h"
 
 char * readstring(mem_list_t *L);
 int readint( mem_list_t *L );
