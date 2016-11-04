@@ -3,26 +3,36 @@
 
 char * readstring()
 {
-    char * string = malloc(sizeof(char));
+    char * tmp = NULL;
+    char * string = (char *)malloc(sizeof(char));
     if (string==NULL)
     {
         fprintf(stderr, "ERROR: Memory could not be allocated! (func. readstring)\n");
         return NULL;
     }
 
-	int size = 1;
+    int size = 1;
+    int index = 0;
     int c = getc(stdin);
 
     while (c != EOF && c != '\n')
     {
-        string[size-1]=c;
-        size += 1;
-        string = realloc(string, size);
-        if (string==NULL)
-        {
-            fprintf(stderr, "ERROR: Memory could not be allocated!  (func. readstring)\n");
-            return NULL;
+        string[index]=c;
+        index += 1;
+
+        if (index == size)
+	{
+            size *= 2;
+            tmp = (char *)realloc(string, size);
+            if (tmp==NULL)
+            {
+                fprintf(stderr, "ERROR: Memory could not be allocated!  (func. readstring)\n");
+                return string;
+            }
+            else
+                string = tmp;
         }
+
         c = getc(stdin);
     }
 
