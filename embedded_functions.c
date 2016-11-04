@@ -1,10 +1,11 @@
 #include "embedded_functions.h"
+#include "garbage_collector.h"
 
 
-char * readstring()
+char * readstring(mem_list_t *L)
 {
     char * tmp = NULL;
-    char * string = (char *)malloc(sizeof(char));
+    char * string = (char *)mem_alloc(sizeof(char), L);
     if (string==NULL)
     {
         fprintf(stderr, "ERROR: Memory could not be allocated! (func. readstring)\n");
@@ -23,7 +24,7 @@ char * readstring()
         if (index == size)
 	{
             size *= 2;
-            tmp = (char *)realloc(string, size);
+            tmp = (char *)mem_realloc(string, size, L);
             if (tmp==NULL)
             {
                 fprintf(stderr, "ERROR: Memory could not be allocated!  (func. readstring)\n");
@@ -42,13 +43,13 @@ char * readstring()
 
 
 
-int readint()
+int readint(mem_list_t *L)
 {
     char * string=NULL;
     long int n1=0;
     char * err=NULL;
 
-    string = readstring();
+    string = readstring(L);
     if (string == NULL)
 	{
 		fprintf(stderr, "ERROR: Couldn't read from STDIN. (func. readint)\n");
@@ -82,13 +83,13 @@ int readint()
 
 
 
-double readdouble()
+double readdouble(mem_list_t *L)
 {
     char * string=NULL;
     double n1=0;
     char * err=NULL;
 
-    string = readstring();
+    string = readstring(L);
 	if (string == NULL)
 	{
 		fprintf(stderr, "ERROR: Couldn't read from STDIN. (func. readdouble)\n");
@@ -127,11 +128,11 @@ int length(char * string)
 
 
 
-char * substring(char * s, int i, int n)
+char * substring(char * s, int i, int n, mem_list_t *L)
 {
     char * string=NULL;
 
-    string = malloc(sizeof(char)*(n+1));
+    string = mem_alloc(sizeof(char)*(n+1), L);
     if (string==NULL)
     {
         fprintf(stderr, "ERROR: Memory could not be allocated! (func. substring)\n");
@@ -149,11 +150,11 @@ char * substring(char * s, int i, int n)
 
 
 
-char * shellsort(char * str)
+char * shellsort(char * str, mem_list_t *L)
 {
     int num = strlen(str);
     char * arr=NULL;
-    arr=(char *)malloc( sizeof(char)*(num+1) );
+    arr=(char *)mem_alloc( sizeof(char)*(num+1), L);
     if (arr==NULL)
     {
         fprintf(stderr, "ERROR: not enough memory!\n");
