@@ -5,7 +5,7 @@ int stack_int_create ( struct t_stack_int ** stack, int n )
 {
 	*stack = (struct t_stack_int*)malloc(sizeof(struct t_stack_int) + n*sizeof(int) );	// flexible array member
 
-	if (stack == NULL)
+	if (*stack == NULL)
 		return -1;
 
 	(*stack)->top = -1;
@@ -26,16 +26,18 @@ int stack_int_resize ( struct t_stack_int** stack, int new_size )
 
 	if (tmp == NULL)
 		return -1;
-	else
-		(*stack)->size = new_size;
+	
+	*stack = tmp;
+	(*stack)->size = new_size;
 	
 	return 0;
 }
 
 
-void stack_int_destroy( struct t_stack_int * stack )
+void stack_int_destroy( struct t_stack_int ** stack )
 {
-	free(stack);
+	free(*stack);
+	*stack=NULL;
 	return;
 }
 
