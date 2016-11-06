@@ -3,14 +3,14 @@
 
 #include <stdlib.h>
 #include <stdarg.h>
-#inlclude "garbage_collector.h"
+#include "garbage_collector.h"
 
-struct t_stack_int
+typedef struct t_stack_int
 {
 	int top;
 	int size;
-	int data[];
-} ;
+	int *data; // array
+} stack_int_t;
 
 
 int stack_int_create ( struct t_stack_int ** stack, int n );
