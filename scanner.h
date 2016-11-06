@@ -6,50 +6,62 @@
 #include <ctype.h>
 #include <limits.h>
 #include "error.h"
+#define ERR_WRONG_COMMENT_SYNTAX -100
+#define ERR_FSEEK -101
+#define S_SIZE 32
+/*! TODO */
+enum {
+S_BOOLEAN = 1, /*!< Keyword boolean */
+S_BREAK, /*!< Keyword break */
+S_CLASS, /*!< Keyword class */
+S_CONTINUE, /*!< Keyword continue */
+S_DO, /*!< Keyword do */
+S_DOUBLE, /*!< Keyword double */
+S_ELSE, /*!< Keyword else */
+S_FALSE, /*!< Keyword false */
+S_FOR, /*!< Keyword for */
+S_IF, /*!< Keyword if */
+S_INT, /*!< Keyword int */
+S_RETURN, /*!< Keyword return */
+S_STRING, /*!< Keyword String */
+S_STATIC, /*!< Keyword static */
+S_TRUE, /*!< Keyword true */
+S_VOID, /*!< Keyword void */
+S_WHILE, /*!< Keyword while */
 
-#define S_BOOLEAN 1000
-#define S_BREAK 1001
-#define S_CLASS 1002
-#define S_CONTINUE 1003
-#define S_DO 1004
-#define S_DOUBLE 1005
-#define S_ELSE 1006
-#define S_FALSE 1007
-#define S_FOR 1008
-#define S_IF 1009
-#define S_INT 1010
-#define S_RETURN 1011
-#define S_STRING 1012
-#define S_STATIC 1013
-#define S_TRUE 1014
-#define S_VOID 1015
-#define S_WHILE 1016
+TYPE_DOUBLE, /*!< data type double */
+TYPE_INT, /*!< data type int */
+TYPE_STRING, /*!< data type String */
+TYPE_BOOLEAN, /*!< data type boolean */
+TYPE_STATIC_DOUBLE, /*!< data type static double */
+TYPE_STATIC_INT, /*!< data type static int */
+TYPE_STATIC_STRING, /*!< data type static String */
+TYPE_STATIC_BOOLEAN, /*!< data type static boolean */
+// TODO [static]? void
 
-#define TYPE_DOUBLE 1100
-#define TYPE_INT 1101
-#define TYPE_STRING 1102
-#define TYPE_BOOLEAN 1103
-#define TYPE_STATIC_DOUBLE 1104
-#define TYPE_STATIC_INT 1105
-#define TYPE_STATIC_STRING 1106
-#define TYPE_STATIC_BOOLEAN 1107
+LINE_COMMENT, /*!< identifikator of one line comment */
+BLOCK_COMMENT, /*!< identifikator of block comment */
 
-#define LINE_COMMENT 1200
-#define BLOCK_COMMENT 1201
+SIMPLE_IDENT, /*!< stands for simple identifikator */
+FULL_IDENT, /*!< stands for full identifikator */
 
-#define S_EQUAL 1202
-#define S_LESS_EQUAL 1203
-#define S_GREATER_EQUAL 1204
-#define S_NOT_EQUAL 1205
-
-#define SIMPLE_IDENT 1300
-#define FULL_IDENT 1301
-
-#define ERR_REACHED_MAX -100
-#define ERR_WRONG_COMMENT_SYNTAX -101
-#define ERR_FSEEK -102
-
-#define S_SIZE 16
+S_EQUAL, /*!< stands for == */
+S_LESS_EQUAL, /*!< stands for <= */
+S_GREATER_EQUAL, /*!< stands for >= */
+S_NOT_EQUAL, /*!< stands for != */
+S_LEFT_PARE, /*!< stands for ( */
+S_RIGHT_PARE, /*!< stands for ) */
+S_LEFT_BRACE, /*!< stands for { */
+S_RIGHT_BRACE, /*!< stands for } */
+S_COMMA, /*!< stands for , */
+S_SEMICOMMA, /*!< stands for ; */
+S_PLUS, /*!< stands for + */
+S_MINUS, /*!< stands for - */
+S_DIV, /*!< stands for / */
+S_MUL, /*!< stands for * */
+S_ASSIGNMENT, /*!< stands for = */
+S_EOF /*!< stands for EOF */
+};
 
 extern unsigned LINE_NUM;
 extern int ERROR_CHECK;
@@ -71,8 +83,10 @@ typedef struct token {
 */
 int is_keyword(char *word);
 
-/**
-TODO
+/** Detect if input char represents some of special chars like =, +, ;, ..., also detect if there is >=, ==, != ot <= in file
+@param c input char
+@pre global variable f is already opened file
+@return if input is special char, return its value (set by enum) otherwise return 0
 */
 int is_special_char(char c);
 /** Detect if input string is numeric literal or not
@@ -117,7 +131,9 @@ int skip_comment (unsigned comment_type);
 char * load_string(char *word, unsigned *max);
 
 /**
-TODO
+@pre global variable f is already opened file
+@post token.id > 0 (otherwise memory could not be allocated or offset coulnd not be set)
+@return token, where token.id is identifikator and token.ptr is string (or poiter to NULL if string is not needed)
 */
 token get_token();
 #endif
