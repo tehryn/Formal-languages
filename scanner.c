@@ -189,14 +189,17 @@ char *load_string(char *word, unsigned *max) {
 token get_token() {
 //	static char *word;
 	static unsigned size = 0;
+	token new_token;
 	if (size == 0) {
 		SCANNER_WORD = (char *) malloc(S_SIZE);
 		if (SCANNER_WORD == NULL) {
-			//TODO
+			fprintf(stderr, "Memory allocation failed");
+			new_token.id = -1;
+			new_token.ptr = NULL;
+			return new_token;
 		}
 		size = S_SIZE;
 	}
-	token new_token;
 	int c = 0;
 	unsigned i = 0;
 	int token_found = 0;
@@ -359,14 +362,14 @@ token get_token() {
 			return new_token;
 		}
 		if (id) {
-			new_token.id = FULL_IDENT;
+			new_token.id = S_FULL_IDENT;
 			new_token.ptr = SCANNER_WORD;
 			// new_token.ptr = najdi_polozku(word);
 			return new_token;
 		}
 		id = is_simple_ident(SCANNER_WORD, i);
 		if (id) {
-			new_token.id = SIMPLE_IDENT;
+			new_token.id = S_SIMPLE_IDENT;
 			new_token.ptr = SCANNER_WORD;
 			// new_token.ptr = najdi_polozku(SCANNER_WORD);
 			return new_token;

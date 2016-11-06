@@ -29,7 +29,7 @@ typedef struct htab_t {
 	unsigned (*hash_fun_ptr) (const char *str, unsigned htab_size); // pointer to hash function, &hash_function by default
 	unsigned htab_size; // number of lines
 	unsigned number_items; // real number of items
-	htab_item * ptr[]; // lines
+	htab_item **ptr; // lines
 } htab_t;
 
 

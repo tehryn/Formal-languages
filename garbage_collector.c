@@ -6,7 +6,7 @@
 * Date: 25. 10. 2016
 **/
 
-#include "memory_keeper.h"
+#include "garbage_collector.h"
 
 void mem_list_t_init(mem_list_t *L) {
 	L->first = L->last = NULL;

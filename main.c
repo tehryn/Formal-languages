@@ -1,5 +1,5 @@
 #include "scanner.h"
-#include "memory_keeper.h"
+#include "garbage_collector.h"
 #include "error.h"
 #include "str_prcs.c"
 FILE *f;

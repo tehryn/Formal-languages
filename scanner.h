@@ -6,9 +6,16 @@
 #include <ctype.h>
 #include <limits.h>
 #include "error.h"
+
+/*! TODO */
 #define ERR_WRONG_COMMENT_SYNTAX -100
+
+/*! TODO */
 #define ERR_FSEEK -101
+
+/*! TODO */
 #define S_SIZE 32
+
 /*! TODO */
 enum {
 S_BOOLEAN = 1, /*!< Keyword boolean */
@@ -39,11 +46,11 @@ TYPE_STATIC_STRING, /*!< data type static String */
 TYPE_STATIC_BOOLEAN, /*!< data type static boolean */
 // TODO [static]? void
 
-LINE_COMMENT, /*!< identifikator of one line comment */
 BLOCK_COMMENT, /*!< identifikator of block comment */
+LINE_COMMENT, /*!< identifikator of one line comment */
 
-SIMPLE_IDENT, /*!< stands for simple identifikator */
-FULL_IDENT, /*!< stands for full identifikator */
+S_SIMPLE_IDENT, /*!< stands for simple identifikator */
+S_FULL_IDENT, /*!< stands for full identifikator */
 
 S_EQUAL, /*!< stands for == */
 S_LESS_EQUAL, /*!< stands for <= */
@@ -63,8 +70,13 @@ S_ASSIGNMENT, /*!< stands for = */
 S_EOF /*!< stands for EOF */
 };
 
+/** @var TODO*/
 extern unsigned LINE_NUM;
+
+/** @var TODO*/
 extern int ERROR_CHECK;
+
+/** @var TODO*/
 extern FILE* f;
 
 /** Structure that represents token

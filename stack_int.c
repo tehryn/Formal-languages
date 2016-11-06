@@ -1,43 +1,43 @@
-#inlclude "stack_int.h"
+#include "stack_int.h"
 
 
-int stack_int_create ( struct t_stack_int ** stack, int n )		
+int stack_int_create ( struct t_stack_int * stack, int n )
 {
-	*stack = (struct t_stack_int*)malloc(sizeof(struct t_stack_int) + n*sizeof(int) );	// flexible array member
+	stack->data = (int *) malloc(n * sizeof(int));
 
-	if (*stack == NULL)
+	if (stack->data == NULL)
 		return -1;
 
-	(*stack)->top = -1;
-	(*stack)->size = n;
+	stack->top = -1;
+	stack->size = n;
 
 	return 0;
 }
 
 
-int stack_int_resize ( struct t_stack_int** stack, int new_size )
+static int stack_int_resize ( struct t_stack_int* stack, int new_size )
 {
-	struct t_stack_int * tmp = NULL;
-	
-	if (new_size <= (*stack)->size)
+	int * tmp = NULL;
+
+	if (new_size <= stack->size)
 		return 1;
 
-	tmp = (struct t_stack_int*)realloc(*stack, (sizeof(struct t_stack_int) + new_size*sizeof(int)) );
+	tmp = (int *) realloc(stack->data, (new_size * sizeof(int) ));
 
 	if (tmp == NULL)
 		return -1;
-	
-	*stack = tmp;
-	(*stack)->size = new_size;
-	
+
+	stack->data = tmp;
+	stack->size = new_size;
+
 	return 0;
 }
 
 
-void stack_int_destroy( struct t_stack_int ** stack )
+void stack_int_destroy( struct t_stack_int * stack )
 {
-	free(*stack);
-	*stack=NULL;
+	free(stack->data);
+	stack->data = NULL;
 	return;
 }
 
@@ -50,35 +50,41 @@ int stack_int_push(struct t_stack_int* stack, int num, ...)
 
 	for (int i = 0; i < num; i++)
 	{
-
-		if (stack->top < (stack->size-1) )
+		if (stack->top >= (stack->size-1) )
 		{
-			stack->top += 1;
-			stack->data[stack->top] = va_arg(valist, int);
+			if(stack_int_resize(stack, stack->size*2) < 0) return -1;
 		}
-		else
-			return 1;
+		stack->top += 1;
+		stack->data[stack->top] = va_arg(valist, int);
 	}
-
 	va_end(valist);
+
 
 	return 0;
 }
 
 
-int stack_int_pop(struct t_stack_int* stack, int* var)
+int stack_int_pop(struct t_stack_int* stack)
 {
 
 	if (stack->top < 0)
-		return 1;
+		return -1;
 
-	*var = stack->data[stack->top];
 	stack->top -= 1;
 
 	return 0;
 }
 
+int stack_int_top(struct t_stack_int* stack, int* var)
+{
 
+	if (stack->top < 0)
+		return -1;
+
+	*var = stack->data[stack->top];
+
+	return 0;
+}
 
 // decrements stack pointer by parameter "n"
 // if parameter "n" is -1, stack pointer is set to -1 (equivalent to initialized state)
@@ -92,7 +98,7 @@ int stack_int_clean(struct t_stack_int* stack, int n)
 	}
 
 	if (n < -1)
-		return 1;
+		return -1;
 
 	stack->top = (stack->top-n < -1)? -1 : stack->top-n;
 	return 0;
@@ -109,4 +115,3 @@ int stack_int_is_full( struct t_stack_int * stack )
 {
 	return (stack->top == (stack->size-1));
 }
-

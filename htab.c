@@ -1,5 +1,5 @@
 #include "htab.h"
-#include "memory_keeper.h"
+#include "garbage_collector.h"
 #include "error.h"
 
 
