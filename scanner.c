@@ -38,23 +38,22 @@ int is_keyword(char *word) {
 int is_special_char(char c) {
 	int state = 0;
 	switch(c) {
-		case ';':
-		case '(':
-		case ')':
-		case '{':
-		case '}':
-		case '+':
-		case '-':
-		case '*':
-		case '/':
-		case ',': return c;
+		case ';': return S_SEMICOMMA;
+		case '(': return S_LEFT_PARE;
+		case ')': return S_RIGHT_PARE;
+		case '{': return S_LEFT_BRACE;
+		case '}': return S_RIGHT_BRACE;
+		case '+': return S_PLUS;
+		case '-': return S_MINUS;
+		case '*': return S_MUL;
+		case '/': return S_DIV;
+		case ',': return S_COMMA;
 		case '=': state = 1; break;
 		case '<': state = 2; break;
 		case '>': state = 3; break;
 		case '!': state = 4; break;
 		default: return 0;
 	}
-	int prev = c;
 	c = fgetc(f);
 		if( c == '=') {
 			switch (state) {
@@ -62,12 +61,12 @@ int is_special_char(char c) {
 				case 2: return S_LESS_EQUAL;
 				case 3: return S_GREATER_EQUAL;
 				case 4: return S_NOT_EQUAL;
-				default: fprintf (stderr, "\n\n\n vsichni tu umreme!!!!!\n\n\n");
+				default: fprintf (stderr, "\n\n\n Well, this should have not happend (%u: %s)\n\n\n", __LINE__, __FILE__);
 			}
 		}
 		else {
 			ungetc(c, f);
-			return prev;
+			return S_ASSIGNMENT;
 		}
 		return 0;
 }
@@ -222,7 +221,7 @@ token get_token() {
 				if (skip_comment(BLOCK_COMMENT) == -1) {
 					ERROR_CHECK = (int) ERR_WRONG_COMMENT_SYNTAX;
 					fprintf(stderr, "In line %d expected '*/' (endless comment)\n", LINE_NUM);
-					new_token.id = -1;
+					new_token.id = 0;
 					new_token.ptr = NULL;
 					return new_token;
 				}
@@ -265,7 +264,7 @@ token get_token() {
 						return new_token;
 					}
 					fprintf(stderr, "ERROR: line: %u: expected \" at the end of string\n", LINE_NUM);
-					new_token.id = -1;
+					new_token.id = 0;
 					new_token.ptr = NULL;
 					return new_token;
 				}
@@ -373,11 +372,11 @@ token get_token() {
 			return new_token;
 		}
 		fprintf(stderr, "ERROR: line: %u: '%s' is not valide identifikator, numeric constant nor keyword\n", LINE_NUM, SCANNER_WORD);
-		new_token.id = -1;
+		new_token.id = 0;
 		new_token.ptr = NULL;
 		return new_token;
 	}
-	new_token.id = 0;
+	new_token.id = S_EOF;
 	new_token.ptr = NULL;
 	return new_token;
 }
