@@ -1,7 +1,9 @@
 #include "scanner.h"
 #include "garbage_collector.h"
 #include "error.h"
-#include "str_prcs.c"
+#include "str_prcs.c" // TODO knihovna
+#include "parser.h"
+
 FILE *f;
 int ERROR_CHECK = 0;
 
@@ -19,8 +21,11 @@ int main (int argc, char **argv) {
 	}
 
 	token *t = (token *) mem_alloc(sizeof(token), &l);
-	*t = get_token();
-	while (t->id > 0) {
+do {
+
+// testing parser
+		analyze_syntax();
+// testing scanner
 /*		if (t->ptr) {
 			printf("+-------------------\n");
 			printf("| line num: %d\n", LINE_NUM);
@@ -36,6 +41,8 @@ int main (int argc, char **argv) {
 			printf("+-------------------\n");
 		}
 */
+// testing string_process
+/*
 		switch(t->id) {
 			case TYPE_DOUBLE:
 				printf("+-------------------\n");
@@ -60,10 +67,10 @@ int main (int argc, char **argv) {
 				break;
 			default: break;
 		}
-
+*/
 		t = (token *) mem_alloc(sizeof(token), &l);
 		*t = get_token();
-	}
+	} while (t->id > 0);
 	free_memory(&l);
 	free(SCANNER_WORD);
 	fclose(f);
