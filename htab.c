@@ -1,6 +1,5 @@
 #include "htab.h"
 #include "garbage_collector.h"
-#include "error.h"
 
 
 unsigned hash_function(const char *str, unsigned htab_size)
@@ -72,41 +71,27 @@ void htab_free_all(htab_t * T)
 }
 
 
-
-htab_item* htab_find_add_item(htab_t * T, const char * key, unsigned scope, unsigned data_type)
+htab_item * htab_find_item(htab_t * T, const char * key) // NULL if not there
 {
 	unsigned index = T->hash_fun_ptr(key, T->htab_size);
 	htab_item * item = T->ptr[index];
 
-	if (item == NULL)
+	while (item != NULL)
 	{
-		T->ptr[index] = add_item(key, scope, data_type);
-		return T->ptr[index]; // could be NULL
-	}
-
-	// item != NULL
-	while (item->next_item != NULL)
-	{
-		if (!strcmp(item->key, key)) // porovnani scope ???
-			return item; // nalezen
+		if (!strcmp(item->key, key))
+			return item; // nalezeno
 		else
 			item = item->next_item; // cyklit
 	}
-	// jsme na poslednim prvku
-	if (!strcmp(item->key, key)) // porovnani scope ???
-		return item; // nalezen
-	else
-	{
-		item->next_item = add_item(key, scope, data_type);
-		return item->next_item;
-	}
+	return NULL; // nenalezeno
 }
-htab_item* add_item(const char * key, unsigned scope, unsigned data_type)
+
+htab_item * malloc_item(const char * key)
 {
 	htab_item * item = (htab_item *) malloc(sizeof(htab_item));
 	if (item == NULL)
 	{
-		fprintf(stderr, "Memory could not be allocated! (func. add_item)");
+		fprintf(stderr, "Memory could not be allocated! (func. htab_insert_item)");
 		return NULL;
 	}
 
@@ -114,28 +99,33 @@ htab_item* add_item(const char * key, unsigned scope, unsigned data_type)
 	item->key = (char *) malloc(sizeof(key_len));
 	if (key == NULL)
 	{
-		fprintf(stderr, "Memory could not be allocated! (func. add_item)");
+		fprintf(stderr, "Memory could not be allocated! (func. htab_insert_item)");
 		free(item);
 		return NULL;
 	}
 
 	strncpy(item->key, key, key_len);
-	item->scope = scope;
-	item->data_type = data_type;
 	item->next_item = NULL;
 	return item;
 }
 
 
-/*
-void htab_foreach(htab_t *t, void (*func)(char*, unsigned)) {
-	htab_listitem *item;
-	for (unsigned i = 0; i < t->htab_size; i++) {
-		item = t->ptr[i];
-		while (item != NULL) {
-			func(item->key, item->data);
-			item = item->next;
-		}
+htab_item * htab_insert_item(htab_t * T, const char * key)
+{
+	unsigned index = T->hash_fun_ptr(key, T->htab_size);
+	htab_item * item = T->ptr[index];
+
+	if (item == NULL)
+	{
+		T->ptr[index] = malloc_item(key);
+		return T->ptr[index]; // could be NULL
 	}
+
+	// item != NULL
+	while (item->next_item != NULL)
+		item = item->next_item;
+
+	// jsme na poslednim prvku
+	item->next_item = malloc_item(key);
+	return item->next_item; // could be NULL
 }
-*/
