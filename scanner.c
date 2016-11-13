@@ -293,7 +293,7 @@ token get_token() {
 				continue;
 			}
 			else {
-				new_token.id = c;
+				new_token.id = is_special_char(c);
 				new_token.ptr = NULL;
 				return new_token;
 			}
