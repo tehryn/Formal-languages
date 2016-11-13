@@ -6,7 +6,7 @@
 
 FILE *f;
 int ERROR_CHECK = 0;
-
+int expr_analyze(token * t, stack_int_t *s) {return 0;}
 extern char* SCANNER_WORD;
 
 int main (int argc, char **argv) {
@@ -20,7 +20,10 @@ int main (int argc, char **argv) {
 		// TODO
 	}
 // testing parser
-	analyze_syntax();
+	switch (analyze_syntax()) {
+		case -1: printf("failed \n"); break;
+		default: printf("%s\n", "succes");
+	}
 //	token *t = (token *) mem_alloc(sizeof(token), &l);
 //do {
 // testing scanner
@@ -66,9 +69,10 @@ int main (int argc, char **argv) {
 			default: break;
 		}
 */
-//		t = (token *) mem_alloc(sizeof(token), &l);
-//		*t = get_token();
-//	} while (t->id > 0);
+/*		t = (token *) mem_alloc(sizeof(token), &l);
+		*t = get_token();
+	} while (t->id > 0 && t->id != S_EOF);
+*/
 	free_memory(&l);
 	free(SCANNER_WORD);
 	fclose(f);
