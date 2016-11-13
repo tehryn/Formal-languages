@@ -19,12 +19,10 @@ int main (int argc, char **argv) {
 	if (f == NULL) {
 		// TODO
 	}
-
-	token *t = (token *) mem_alloc(sizeof(token), &l);
-do {
-
 // testing parser
-		analyze_syntax();
+	analyze_syntax();
+//	token *t = (token *) mem_alloc(sizeof(token), &l);
+//do {
 // testing scanner
 /*		if (t->ptr) {
 			printf("+-------------------\n");
@@ -68,9 +66,9 @@ do {
 			default: break;
 		}
 */
-		t = (token *) mem_alloc(sizeof(token), &l);
-		*t = get_token();
-	} while (t->id > 0);
+//		t = (token *) mem_alloc(sizeof(token), &l);
+//		*t = get_token();
+//	} while (t->id > 0);
 	free_memory(&l);
 	free(SCANNER_WORD);
 	fclose(f);
