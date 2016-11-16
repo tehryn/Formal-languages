@@ -6,7 +6,14 @@
 
 FILE *f;
 int ERROR_CHECK = 0;
-int expr_analyze(token * t, stack_int_t *s) {return 0;}
+int expr_analyze(token * t, stack_int_t *s)
+{
+	if (t.id == S_RIGHT_PARE || t.id == S_RIGHT_BRACE || t.id == S_SEMICOMMA)
+		return -1;
+	else
+		return 0;
+}
+
 extern char* SCANNER_WORD;
 
 int main (int argc, char **argv) {
