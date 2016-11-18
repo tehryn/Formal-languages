@@ -1,6 +1,19 @@
 #include "scanner.h"
 #include "stack_int.h"
 
+#define ERR_LEXICAL_ANALYSIS 1
+#define ERR_SYNTACTIC_ANALYSIS 2
+#define ERR_SEM_NDEF_REDEF 3
+#define ERR_SEM_COMPATIBILITY 4
+#define ERR_SEM_OTHERS 6
+#define ERR_INPUT_NUMBER 7
+#define ERR_UNINICIALIZED_VAR 8
+#define ERR_DIVISION_ZERO 9
+#define ERR_OTHERS 10
+#define ERR_INTERN_FAULT 99
+
+
+
 // cases in switch in funtion process_token
 enum {
   P_START = S_EOF + 1,
@@ -26,6 +39,6 @@ enum {
 };
 
 // it eats tokens and says if syntax analysis success or not
-int analyze_syntax();
+int parser();
 
-int process_token(token t, stack_int_t *s);
+int analysis(token t, stack_int_t *s);
