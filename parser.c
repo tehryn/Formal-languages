@@ -4,13 +4,13 @@
 
 extern int expr_analyze(token * t, stack_int_t *s); // potrebuji, aby mi zmenila token, muze pouzivat stack
 
-int parser()
+int parser() 
 {
 	stack_int_t s;
 
 	int parser_return;
 
-	if (stack_int_create(&s, 64) < 0)
+	if (stack_int_create(&s, 64) < 0) 
 	{
 		fprintf(stderr, "Intern fault. Memory allocation of stack failed.\n");
 		return ERR_INTERN_FAULT;
@@ -35,7 +35,7 @@ int analysis (stack_int_t *s)
 	bool main_existance = false; // if class Main exists in whole input file
 	bool main_run_existance = false; // if function run exist in function Main
 	char * class_name = NULL; // TODO - pro pripad, ze budu chtit ukladat nazvy trid - zatim neudelano
-
+	
 	int type = 0; // t.id should not be 0
 	bool void_existance = false; // if true - control no existance of void variable and return with no expr. in void function
 	bool token_got = false; // variable for P_EXPR - if the token have been read
@@ -43,9 +43,109 @@ int analysis (stack_int_t *s)
 	while (!stack_int_top(s, &on_top)) // stack_int_top == -1 if stack is empty
 	{
 
-		switch (on_top)
+		switch (on_top) 
 		{
-			// ======================== P_CLASS ========================
+			// ======================== SYMBOLS =============================
+			
+			case S_LEFT_BRACE:
+				stack_int_pop(s);
+
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id <= 0)
+						return ERR_LEXICAL_ANALYSIS;
+				}
+				token_got = true;
+
+				if (t.id == S_LEFT_BRACE) // '{'
+				{
+					token_got = false;
+					break;
+				}
+
+				fprintf(stderr, "PARSER: On line %u expected '{'.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+
+			case S_LEFT_PARE:
+				stack_int_pop(s);
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id <= 0)
+						return ERR_LEXICAL_ANALYSIS;
+				}
+				token_got = true;
+
+				if (t.id == S_LEFT_PARE) // '('
+				{
+					token_got = false;
+					break;
+				}
+
+				fprintf(stderr, "PARSER: On line %u expected '('.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+
+			case S_RIGHT_BRACE:
+				stack_int_pop(s);
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id <= 0)
+						return ERR_LEXICAL_ANALYSIS;
+				}
+				token_got = true;
+
+				if (t.id == S_RIGHT_BRACE) // '}'
+				{
+					token_got = false;
+					break;
+				}
+
+				fprintf(stderr, "PARSER: On line %u expected '}'.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+
+			case S_RIGHT_PARE:
+				stack_int_pop(s);
+
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id <= 0)
+						return ERR_LEXICAL_ANALYSIS;
+				}
+				token_got = true;
+
+				if (t.id == S_RIGHT_PARE) // ')'
+				{
+					token_got = false;
+					break;
+				}
+
+				fprintf(stderr, "PARSER: On line %u expected ')'.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+
+			case S_SEMICOMMA:
+				stack_int_pop(s);
+
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id <= 0)
+						return ERR_LEXICAL_ANALYSIS;
+				}
+				token_got = true;
+
+				if (t.id == S_SEMICOMMA) // ';'
+				{
+					token_got = false;
+					break;
+				}
+
+				fprintf(stderr, "PARSER: On line %u expected ';'.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+
+			// ======================== P_CLASS =============================
 			case P_CLASS:
 				stack_int_pop(s);
 
@@ -155,7 +255,7 @@ int analysis (stack_int_t *s)
 					break; // goto P_CLASS
 				}
 
-				if (t.id == S_STATIC)
+				if (t.id == S_STATIC) 
 				{
 					t = get_token();
 					if (t.id <= 0)
@@ -172,17 +272,17 @@ int analysis (stack_int_t *s)
 						type = S_INT;
 						void_existance = false;
 					}
-					else if (t.id == S_DOUBLE)
+					else if (t.id == S_DOUBLE) 
 					{
 						type = S_DOUBLE;
 						void_existance = false;
 					}
-					else if (t.id == S_STRING)
+					else if (t.id == S_STRING) 
 					{
 						type = S_STRING;
 						void_existance = false;
 					}
-					else if (t.id == S_BOOLEAN)
+					else if (t.id == S_BOOLEAN) 
 					{
 						type = S_BOOLEAN;
 						void_existance = false;
@@ -217,7 +317,7 @@ int analysis (stack_int_t *s)
 				fprintf (stderr, "PARSER: On line %u expected static function, static variable definition or '}'\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-			// ======================== P_DEF ========================
+			// ======================== P_DEF ===============================
 
 			case P_DEF:
 				stack_int_pop(s);
@@ -237,7 +337,7 @@ int analysis (stack_int_t *s)
 					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC_BODY_H2, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break;
 				}
@@ -253,11 +353,11 @@ int analysis (stack_int_t *s)
 				{
 					// TODO ? - ukladat nejake dalsi informace do tabulky?
 					// TODO - porovnani typu expr a typu promenne
-					token_got = false;
+					token_got = false;					
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto P_EXPR
 				}
@@ -265,7 +365,7 @@ int analysis (stack_int_t *s)
 				fprintf(stderr, "PARSER: On line %u expected definition of function, semicomma ';' or assignment to variable.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-			// ======================== P_DEF_ARGUMENTS ========================
+			// ======================== P_DEF_ARGUMENTS =====================
 
 			case P_DEF_ARGUMENTS:
 				stack_int_pop(s);
@@ -287,11 +387,11 @@ int analysis (stack_int_t *s)
 
 				if (t.id == S_INT)
 					type = S_INT;
-				else if (t.id == S_DOUBLE)
+				else if (t.id == S_DOUBLE) 
 					type = S_DOUBLE;
-				else if (t.id == S_STRING)
+				else if (t.id == S_STRING) 
 					type = S_STRING;
-				else if (t.id == S_BOOLEAN)
+				else if (t.id == S_BOOLEAN) 
 					type = S_BOOLEAN;
 				else
 				{
@@ -320,8 +420,7 @@ int analysis (stack_int_t *s)
 				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-
-			// ======================== P_DEF_ARGUMENTS2 ========================
+			// ======================== P_DEF_ARGUMENTS2 ====================
 
 			case P_DEF_ARGUMENTS2:
 				stack_int_pop(s);
@@ -354,11 +453,11 @@ int analysis (stack_int_t *s)
 
 				if      (t.id == S_INT)
 					type = S_INT;
-				else if (t.id == S_DOUBLE)
+				else if (t.id == S_DOUBLE) 
 					type = S_DOUBLE;
-				else if (t.id == S_STRING)
+				else if (t.id == S_STRING) 
 					type = S_STRING;
-				else if (t.id == S_BOOLEAN)
+				else if (t.id == S_BOOLEAN) 
 					type = S_BOOLEAN;
 				else
 				{
@@ -387,8 +486,7 @@ int analysis (stack_int_t *s)
 				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-
-			// ======================== P_FUNC_BODY ========================
+			// ======================== P_FUNC_BODY =========================
 
 			case P_FUNC_BODY:
 				stack_int_pop(s);
@@ -407,7 +505,7 @@ int analysis (stack_int_t *s)
 					if (stack_int_push(s, 1, P_GUIDANCE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_GUIDANCE
 				}
@@ -418,7 +516,7 @@ int analysis (stack_int_t *s)
 					if (stack_int_push(s, 1, P_GUIDANCE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_GUIDANCE
 				}
@@ -429,7 +527,7 @@ int analysis (stack_int_t *s)
 					if (stack_int_push(s, 1, P_RETURN_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_RETURN_EXPR
 				}
@@ -440,7 +538,7 @@ int analysis (stack_int_t *s)
 					if (stack_int_push(s, 5, P_ELSE_EXISTANCE, P_IF_ELSE_SECTION, S_RIGHT_PARE, P_EXPR, S_LEFT_PARE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_LEFT_PARE
 				}
@@ -451,20 +549,20 @@ int analysis (stack_int_t *s)
 					if (stack_int_push(s, 6, S_RIGHT_BRACE, P_FUNC_BODY_H1, S_LEFT_BRACE, S_RIGHT_PARE, P_EXPR, S_LEFT_PARE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_LEFT_PARE
 				}
 
 				// it must be definition of local variable (no other rules)
-
+				
 				if      (t.id == S_INT)
 					type = S_INT;
-				else if (t.id == S_DOUBLE)
+				else if (t.id == S_DOUBLE) 
 					type = S_DOUBLE;
-				else if (t.id == S_STRING)
+				else if (t.id == S_STRING) 
 					type = S_STRING;
-				else if (t.id == S_BOOLEAN)
+				else if (t.id == S_BOOLEAN) 
 					type = S_BOOLEAN;
 				else
 				{
@@ -492,7 +590,7 @@ int analysis (stack_int_t *s)
 				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-			// ------------------------ P_VAR_EXPR -------------------------------------
+			// ======================== P_VAR_EXPR ==========================
 
 			case P_VAR_EXPR:
 				stack_int_pop(s);
@@ -516,7 +614,7 @@ int analysis (stack_int_t *s)
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_EXPR
 				}
@@ -524,8 +622,8 @@ int analysis (stack_int_t *s)
 				fprintf(stderr, "PARSER: On line %u after variable must be ';' or assignment.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-			// ------------------------- P_GUIDANCE -----------------------------------
-
+			// ======================== P_GUIDANCE ==========================
+			
 			case P_GUIDANCE:
 				stack_int_pop(s);
 
@@ -537,13 +635,13 @@ int analysis (stack_int_t *s)
 				}
 				token_got = true;
 
-				if (t.id == S_LEFT_PARE) // '('
+				if (t.id == S_LEFT_PARE) // '(' 
 				{
 					token_got = false;
 					if (stack_int_push(s, 3, S_SEMICOMMA, S_RIGHT_PARE, P_USE_ARGUMENTS) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_USE_ARGUMENTS
 				}
@@ -553,13 +651,13 @@ int analysis (stack_int_t *s)
 					token_got = false;
 					break; // just stack_int_pop(s);
 				}
-				if (t.id == S_ASSIGNMENT) // '=' TODO - porovnani prirazeni (stejny datovy typ)
+				if (t.id == S_ASSIGNMENT) // '=' TODO - porovnani prirazeni (stejny datovy typ) 
 				{
 					token_got = false;
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_EXPR
 				}
@@ -567,7 +665,7 @@ int analysis (stack_int_t *s)
 				fprintf(stderr, "PARSER: On line %u expected '(', ';' or assignment.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-			// --------------------- P_USE_ARGUMENTS ----------------------------------
+			// ======================== P_USE_ARGUMENTS =====================
 
 			case P_USE_ARGUMENTS:
 				stack_int_pop(s);
@@ -590,11 +688,11 @@ int analysis (stack_int_t *s)
 				if (stack_int_push(s, 2, P_USE_ARGUMENTS2, P_EXPR) < 0) // TODO - porovnani typu expr - pocotadlo argumentu?
 				{
 					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-					return ERR_INTERN_FAULT;
+					return ERR_INTERN_FAULT;	
 				}
 				break; // goto case P_EXPR
 
-			// ------------------- P_USE_ARGUMENTS2 ------------------------------------
+			// ======================== P_USE_ARGUMENTS2 ====================
 
 			case P_USE_ARGUMENTS2:
 				stack_int_pop(s);
@@ -609,11 +707,11 @@ int analysis (stack_int_t *s)
 
 				if(t.id == S_COMMA)
 				{
-					token_got = false;
+					token_got = false;					
 					if (stack_int_push(s, 2, P_USE_ARGUMENTS2, P_EXPR) < 0) // TODO - porovnani typu expr - pocotadlo argumentu?
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto case P_EXPR
 				}
@@ -624,11 +722,11 @@ int analysis (stack_int_t *s)
 					stack_int_pop(s);
 					break; // just stack pop
 				}
-
+				
 				fprintf(stderr, "PARSER: On line %u expected ')' or ','.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-			// ------------------- P_RETURN_EXPR --------------------------------
+			// ======================== P_RETURN_EXPR =======================
 
 			case P_RETURN_EXPR: // TODO - porovnat s typem vystupu funkce
 				stack_int_pop(s);
@@ -645,15 +743,15 @@ int analysis (stack_int_t *s)
 					token_got = false;
 					break; // just stack_int_pop(s);
 				}
-
+				
 				if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 				{
 					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-					return ERR_INTERN_FAULT;
+					return ERR_INTERN_FAULT;	
 				}
 				break; // goto case P_EXPR
-
-			// --------------- P_ELSE_EXISTANCE --------------------------------
+			
+			// ======================== P_ELSE_EXISTANCE ====================
 
 			case P_ELSE_EXISTANCE:
 				stack_int_pop(s);
@@ -671,7 +769,7 @@ int analysis (stack_int_t *s)
 					if (stack_int_push(s, 1, P_IF_ELSE_SECTION) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return -1;
+						return ERR_INTERN_FAULT;	
 					}
 					break; // goto P_IF_ELSE_SECTION
 				}
@@ -680,6 +778,98 @@ int analysis (stack_int_t *s)
 					token_got = true;
 					break; // else is not there - goto FUNC_BODY
 				}
+
+			// ======================== P_IF_ELSE_SECTION ===================
+			
+			case P_IF_ELSE_SECTION:
+				stack_int_pop(s);
+
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id <= 0)
+						return ERR_LEXICAL_ANALYSIS;
+				}
+				token_got = true;
+				
+				if (t.id == S_LEFT_BRACE) // '{'
+				{
+					token_got = false;
+					if (stack_int_push(s, 2, S_RIGHT_BRACE, P_FUNC_BODY_H1) < 0)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+						return ERR_INTERN_FAULT;	
+					}
+					break; // goto P_FUNC_BODY_H1
+				}
+
+				if (stack_int_push(s, 1, P_FUNC_BODY_H2) < 0)
+				{
+					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+					return ERR_INTERN_FAULT;	
+				}
+				break; // goto case P_FUNC_BODY_H2
+
+			// ======================== P_FUNC_BODY_H1 ======================
+			
+			case P_FUNC_BODY_H1:
+				stack_int_pop(s);
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id <= 0)
+						return ERR_LEXICAL_ANALYSIS;
+				}
+				token_got = true;
+
+				if (t.id == S_RIGHT_BRACE) // '}'
+				{	
+					token_got = false;
+					stack_int_pop(s);
+					break; // goto S_RIGHT_BRACE
+				}
+
+				if (stack_int_push(s, 2, P_FUNC_BODY_H1, P_FUNC_BODY) < 0)
+				{
+					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+					return ERR_INTERN_FAULT;	
+				}
+				break; // goto case P_FUNC_BODY
+			
+			// ======================== P_FUNC_BODY_H2 ======================
+			
+			case P_FUNC_BODY_H2:
+				stack_int_pop(s);
+
+				if (stack_int_push(s, 1, P_FUNC_BODY) < 0)
+				{
+					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+					return ERR_INTERN_FAULT;	
+				}
+				break; // goto case P_FUNC_BODY
+			
+			// ======================== P_EXPR ==============================
+
+			case P_EXPR:
+				stack_int_pop(s);
+
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id <= 0)
+						return ERR_LEXICAL_ANALYSIS;
+				}
+				token_got = true;
+
+				int expr_return = expr_analyze(&t, s)
+				if (expr_return != 0)
+					return expr_return; 
+				break;
+
+			case default:
+				fprintf(stderr, "Intern fault. Unexpected situation.\n");
+				return ERR_INTERN_FAULT;
+
 		}
 	}
 
