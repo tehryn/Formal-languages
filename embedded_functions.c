@@ -1,6 +1,6 @@
 #include "embedded_functions.h"
 #include "garbage_collector.h"
-
+#include "error.h"
 
 char * readstring(mem_list_t *L)
 {
