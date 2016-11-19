@@ -30,6 +30,7 @@ unsigned int LINE_NUM;
 char *SCANNER_WORD;
 
 //enum
+//scanner.h
 enum {
 S_BOOLEAN = 1, /*!< Keyword boolean */
 S_BREAK, /*!< Keyword break */
@@ -81,6 +82,30 @@ S_DIV, /*!< stands for / */
 S_MUL, /*!< stands for * */
 S_ASSIGNMENT, /*!< stands for = */
 S_EOF /*!< stands for EOF */
+};
+
+//parser.h
+enum {
+  P_START = S_EOF + 1,
+  P_CLASS,
+  P_CLASS_BODY,
+  P_TYPE,
+  P_DEF,
+  P_DEF_ARGUMENTS,
+  P_DEF_ARGUMENTS2,
+  P_IDENT,
+  P_FUNC_BODY,
+  P_VAR_EXPR,
+  P_GUIDANCE,
+  P_USE_ARGUMENTS,
+  P_USE_ARGUMENTS2,
+  P_RETURN_EXPR,
+  P_ELSE_EXISTANCE,
+  P_IF_ELSE_SECTION,
+  P_FUNC_BODY_H1,
+  P_FUNC_BODY_H2,
+//  P_BOOL_TYPE,
+  P_EXPR
 };
 ```
 
