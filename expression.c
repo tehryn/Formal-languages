@@ -235,5 +235,5 @@ void expression_fatal_error(struct stack_expresion* s1, struct stack_expresion* 
 	free(s2->arr);
 	s2->arr=NULL;
 	
-	error_msg(ERR_LEXIKALNI_ANALYZA, "ERROR: expression process failure.\n");
+	error_msg(ERR_LEXICAL_ANALYSIS, "ERROR: expression process failure.\n");
 }
