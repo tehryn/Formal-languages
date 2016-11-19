@@ -142,10 +142,16 @@ int skip_comment (unsigned comment_type);
 */
 char * load_string(char *word, unsigned *max);
 
-/**
+/** Retrive token from source code
 @pre global variable f is already opened file
 @post token.id > 0 (otherwise memory could not be allocated or offset coulnd not be set)
 @return token, where token.id is identifikator and token.ptr is string (or poiter to NULL if string is not needed)
 */
 token get_token();
+
+/** Set offset of file at begining
+@return In case of error, return -1
+@post return value is not -1
+*/
+int reset();
 #endif
