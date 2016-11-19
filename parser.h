@@ -41,4 +41,4 @@ enum {
 // it eats tokens and says if syntax analysis success or not
 int parser();
 
-int analysis(token t, stack_int_t *s);
+int analysis(stack_int_t *s);

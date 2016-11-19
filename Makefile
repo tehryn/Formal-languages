@@ -1,5 +1,5 @@
 #
-# Author: Jiri mMatejka
+# Author: Jiri Matejka
 # Login: xmatej52
 # School: VUT FIT, Brno
 # Date: 22-4-2016
@@ -9,8 +9,8 @@
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -lm -g
 default: IFJ16
 
-IFJ16: main.c error.o scanner.o garbage_collector.o parser.o stack_int.o
-	gcc $(CFLAGS) -o IFJ16 $^
+IFJ16: main.o error.o scanner.o garbage_collector.o parser.o stack_int.o htab.o stack.o
+	g++ $(CFLAGS) -o IFJ16 $^
 
 %.o: %.c %.h
 	gcc $(CFLAGS) -c $< -o $@

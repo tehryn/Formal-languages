@@ -3,12 +3,14 @@
 #include "error.h"
 #include "str_prcs.c" // TODO knihovna
 #include "parser.h"
+#include "htab.h"
 
 FILE *f;
 int ERROR_CHECK = 0;
 int expr_analyze(token * t, stack_int_t *s)
 {
-	if (t.id == S_RIGHT_PARE || t.id == S_RIGHT_BRACE || t.id == S_SEMICOMMA)
+	(void) s;
+	if (t->id == S_RIGHT_PARE || t->id == S_RIGHT_BRACE || t->id == S_SEMICOMMA)
 		return -1;
 	else
 		return 0;
@@ -27,11 +29,20 @@ int main (int argc, char **argv) {
 		// TODO
 	}
 // testing parser
-	switch (analyze_syntax()) {
+/*	switch (analyze_syntax()) {
 		case -1: printf("failed \n"); break;
 		default: printf("%s\n", "succes");
 	}
+*/
 //	token *t = (token *) mem_alloc(sizeof(token), &l);
+	// testing htab
+	char line[11];
+	htab_t *table;
+	table = htab_init(1001);
+		while(fgets(line, 10, stdin) != NULL) {
+			htab_insert_item(table, line);
+		}
+		htab_free_all(table);
 //do {
 // testing scanner
 /*		if (t->ptr) {
