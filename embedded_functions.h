@@ -6,6 +6,9 @@
 #include <string.h>
 #include <limits.h>
 #include "garbage_collector.h"
+#define max(a,b) ((a)   > (b) ? a : b)
+#define NO_OF_CHARS 256
+
 
 char * readstring(mem_list_t *L);
 int readint( mem_list_t *L );
@@ -13,5 +16,8 @@ double readdouble(mem_list_t *L);
 int length(char * string);
 char * substring(char * s, int i, int n, mem_list_t *L);
 char * shellsort(char * str, mem_list_t *L);
+int find( char *s,  char *search);
+void computeMatchJumps(char *string, unsigned int str_size, int match_jump[]);
+void computeJumps( char *string, unsigned int str_size, int charjump[]);
 
 #endif 	// embedded_functions_h_INCLUDED
