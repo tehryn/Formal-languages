@@ -144,7 +144,7 @@ char * load_string(char *word, unsigned *max);
 
 /** Retrive token from source code
 @pre global variable f is already opened file
-@post token.id > 0 (otherwise memory could not be allocated or offset coulnd not be set)
+@post token.id > 0 ( 0 in case of lexical error, otherwise error while setting offset or allocating memory)
 @return token, where token.id is identifikator and token.ptr is string (or poiter to NULL if string is not needed)
 */
 token get_token();
