@@ -198,7 +198,7 @@ int stack_expression_push ( struct stack_expresion* s, token t )
 			return 1;
 		else
 		{
-			free(s->arr);
+			//free(s->arr);
 			s->arr=new_arr;
 		}
 	}
