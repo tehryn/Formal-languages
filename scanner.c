@@ -115,7 +115,7 @@ int is_full_ident(char *word, unsigned len) {
 	}
 	for (i = 0; word[i] != '.' && i<len; i++)
 		temp[i] = word[i];
-	if (i == len || !is_simple_ident(temp, i-1)) {
+	if (i == len || !is_simple_ident(temp, i)) {
 		free(temp);
 		return 0;
 	}
@@ -124,7 +124,7 @@ int is_full_ident(char *word, unsigned len) {
 		temp[j] = word[i];
 		j++;
 	}
-	if (!is_simple_ident(temp, j-1)) {
+	if (!is_simple_ident(temp, j)) {
 		free(temp);
 		return 0;
 	}
