@@ -8,7 +8,7 @@ char * readstring(mem_list_t *L)
     char * string = (char *)mem_alloc(sizeof(char), L);
     if (string==NULL)
     {
-        fprintf(stderr, "ERROR: Memory could not be allocated! (func. readstring)\n");
+        error_msg(99, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
         return NULL;
     }
 
@@ -27,8 +27,9 @@ char * readstring(mem_list_t *L)
             tmp = (char *)mem_realloc(string, size, L);
             if (tmp==NULL)
             {
-                fprintf(stderr, "ERROR: Memory could not be allocated!  (func. readstring)\n");
-                return string;
+                //free(string);
+		error_msg(99, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
+		return NULL;
             }
             else
                 string = tmp;
@@ -52,32 +53,35 @@ int readint(mem_list_t *L)
     string = readstring(L);
     if (string == NULL)
 	{
-		fprintf(stderr, "ERROR: Couldn't read from STDIN. (func. readint)\n");
+		//free(string);
+		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readint)\n");	// code 7 -> read number error
 		return 0;
 	}
 
     n1 = strtol(string, &err, 10);
     if (*err != 0)
 	{
-		fprintf(stderr, "ERROR: Invalid integer value, invalid symbol: \"%c\". (func. readint)\n", *err);
-        free(string);
+		//free(string);
+		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readint)\n");	// code 7 -> read number error
 		return 0;
-    }
+    	}
 
+/*
 	if (n1 > (long int)(INT_MAX))
-    {
-        fprintf(stderr, "ERROR: number is greater than INT-MAX.\n");
-        free(string);
+	{
+		//free(string);
+		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readint)\n");	// code 7 -> read number error
 		return 0;
-    }
+	}
 	else if (n1 < (long int)(INT_MIN))
-    {
-        fprintf(stderr, "ERROR: number is lesser than INT-MIN.\n");
-        free(string);
+	{
+		//free(string);
+		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readint)\n");	// code 7 -> read number error
 		return 0;
-    }
+	}
+*/
 
-    free(string);
+    	//free(string);
 	return (int) n1;
 }
 
@@ -92,19 +96,19 @@ double readdouble(mem_list_t *L)
     string = readstring(L);
 	if (string == NULL)
 	{
-		fprintf(stderr, "ERROR: Couldn't read from STDIN. (func. readdouble)\n");
+		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readdouble)\n");
 		return 0.0;
 	}
 
     n1 = strtod(string, &err);
     if (*err != 0)
     {
-        fprintf(stderr, "ERROR: invalid double value, invalid symbol: \"%c\". (func. readdouble)\n", *err);
-        free(string);
-		return 0.0;
+	free(string);
+        error_msg(7, "ERROR: Number value could not be read from stdin, invalid symbol: \"%c\". (func. readdouble)\n", *err);
+	return 0.0;
     }
 
-    free(string);
+    //free(string);
 	return n1;
 }
 
@@ -113,6 +117,7 @@ double readdouble(mem_list_t *L)
 int length(char * string)
 {
     int len=0;
+/*
     for (len = 0; ; len++)
     {
         if (len==INT_MAX)
@@ -123,6 +128,9 @@ int length(char * string)
         if (string[len]=='\0')
             break;
     }
+*/
+	while (string[len]!='\0')
+		len++;
     return len;
 }
 
@@ -135,10 +143,17 @@ char * substring(char * s, int i, int n, mem_list_t *L)
     string = mem_alloc(sizeof(char)*(n+1), L);
     if (string==NULL)
     {
-        fprintf(stderr, "ERROR: Memory could not be allocated! (func. substring)\n");
+        error_msg(99, "ERROR: Memory could not be allocated. (func. substring)\n");	// code 99 -> internal error
         return NULL;
     }
 
+	// strlen ???
+	if ( (i+n) > length(s) )
+	{
+		error_msg(10, "ERROR: Substring exceeds input string. (func. substring)\n");	// code 10 -> substring error
+		return NULL;
+	}
+	
     string[n]='\0';
     int j = 0;
     for ( j=0; j<n; j++)
