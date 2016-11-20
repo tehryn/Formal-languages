@@ -1,15 +1,13 @@
-#
 # Author: Jiri Matejka
 # Login: xmatej52
 # School: VUT FIT, Brno
-# Date: 22-4-2016
-# Module: IJC-DU2 hash_function.c
-# gcc version 4.9.2 (Debian 4.9.2-10)
-#
+# Date: TODO
+# Module: IFJ-MAKEFILE
+# Make version: GNU Make 4.1
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -lm -g
 default: IFJ16
 
-IFJ16: main.o error.o scanner.o garbage_collector.o parser.o stack_int.o htab.o stack.o
+IFJ16: main.o error.o scanner.o garbage_collector.o parser.o stack_int.o htab.o stack.o expression.o
 	g++ $(CFLAGS) -o IFJ16 $^
 
 %.o: %.c %.h

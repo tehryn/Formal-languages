@@ -45,18 +45,19 @@ int main (int argc, char **argv) {
 #ifdef TEST_TABLE
 	char line[10], prev[10] = {0,};
 	htab_t *table;
-	table = htab_init(1001);
-		while(fgets(line, 10, stdin) != NULL) {
+	table = htab_init(17);
+		while(fgets(line, 10, f) != NULL) {
 			line[9] = '\0';
 			printf("+-------------------\n");
-			printf("| lookig for: %s\n", prev);
+			printf("| lookig for: [%s]\n", prev);
 			if (htab_find_item(table, prev)) {
-				printf("| returned: %s\n", htab_find_item(table, prev)->key);
+				printf("| returned: [%s]\n", htab_find_item(table, prev)->key);
 				if (!strcmp(htab_find_item(table, prev)->key, prev))
 					printf("| result: MATCH\n");
 				else
 					printf("| result: ERROR\n");
 			}
+			else printf("| returned nil\n| result: MATCH\n");
 			printf("+-------------------\n");
 			strcpy(prev, line);
 			htab_insert_item(table, line);
