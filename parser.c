@@ -1,8 +1,6 @@
 #include "parser.h"
-#include <stdbool.h>    // bool
-#include <string.h>
 
-extern int expr_analyze(token * t, stack_int_t *s); // potrebuji, aby mi zmenila token, muze pouzivat stack
+extern int expr_analyze(token * t); // potrebuji, aby mi zmenila token
 
 int parser()
 {
@@ -33,7 +31,7 @@ int analysis (stack_int_t *s)
 	token t;
 	int on_top;
 	bool main_existance = false; // if class Main exists in whole input file
-	bool main_run_existance = false; // if function run exist in function Main
+	bool main_run_existance = true; // if function run exist in function Main - TODO
 	char * class_name = NULL; // TODO - pro pripad, ze budu chtit ukladat nazvy trid - zatim neudelano
 
 	int type = 0; // t.id should not be 0
@@ -53,8 +51,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -72,8 +72,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -91,8 +93,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -111,8 +115,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -131,8 +137,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -152,8 +160,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -169,16 +179,26 @@ int analysis (stack_int_t *s)
 						return 0;
 					else
 					{
-						fprintf(stderr, "Semantic fauilt. Class Main does not exist or it exists but has no function run.\n");
+						if (!main_existance)
+							fprintf(stderr, "Semantic fauilt. Class Main does not exist.\n");
+						else
+							fprintf(stderr, "Semantic fauilt. Class Main has no function run.\n");
 						return ERR_SEM_NDEF_REDEF;
 					}
 				}
 
 				if (t.id == S_CLASS)
 				{
-					t = get_token();
-					if (t.id <= 0)
-						return ERR_LEXICAL_ANALYSIS;
+					token_got = false;
+					
+					if (token_got == false)
+					{
+						t = get_token();
+						if (t.id == 0)
+							return ERR_LEXICAL_ANALYSIS;
+						else if (t.id < 0)
+							return ERR_INTERN_FAULT;
+					}
 					token_got = true;
 
 					if(t.id == S_SIMPLE_IDENT)
@@ -200,11 +220,13 @@ int analysis (stack_int_t *s)
 							main_existance = true;
 
 						// TODO - pridat class_name do tabulky symbolu pro tridy
-						if(token_got == false)
+						if (token_got == false)
 						{
 							t = get_token();
-							if (t.id <= 0)
+							if (t.id == 0)
 								return ERR_LEXICAL_ANALYSIS;
+							else if (t.id < 0)
+								return ERR_INTERN_FAULT;
 						}
 						token_got = true;
 
@@ -237,8 +259,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -257,9 +281,15 @@ int analysis (stack_int_t *s)
 
 				if (t.id == S_STATIC)
 				{
-					t = get_token();
-					if (t.id <= 0)
-						return ERR_LEXICAL_ANALYSIS;
+					token_got = false;
+					if (token_got == false)
+					{
+						t = get_token();
+						if (t.id == 0)
+							return ERR_LEXICAL_ANALYSIS;
+						else if (t.id < 0)
+							return ERR_INTERN_FAULT;
+					}
 					token_got = true;
 
 					if      (t.id == S_VOID)
@@ -292,10 +322,16 @@ int analysis (stack_int_t *s)
 						fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
 						return ERR_SYNTACTIC_ANALYSIS;
 					}
+					token_got = false;
 
-					t = get_token();
-					if (t.id <= 0)
-						return ERR_LEXICAL_ANALYSIS;
+					if (token_got == false)
+					{
+						t = get_token();
+						if (t.id == 0)
+							return ERR_LEXICAL_ANALYSIS;
+						else if (t.id < 0)
+							return ERR_INTERN_FAULT;
+					}
 					token_got = true;
 
 					if (t.id == S_SIMPLE_IDENT)
@@ -325,8 +361,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -334,7 +372,7 @@ int analysis (stack_int_t *s)
 				{
 					// TODO ? - ukladat nejake dalsi informace do tabulky?
 					token_got = false;
-					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC_BODY_H2, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
+					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC_BODY_H1, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
@@ -373,15 +411,17 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
 				if (t.id == S_RIGHT_PARE) // ')' - no arguments
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // goto case S_RIGHT_PARE
 				}
 
@@ -398,10 +438,16 @@ int analysis (stack_int_t *s)
 					fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
+				token_got = false;
 
-				t = get_token();
-				if (t.id <= 0)
-					return ERR_LEXICAL_ANALYSIS;
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
 				token_got = true;
 
 				if (t.id == S_SIMPLE_IDENT)
@@ -428,15 +474,17 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
 				if (t.id == S_RIGHT_PARE) // ')' - no other arguments
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // goto case S_RIGHT_PARE
 				}
 				else if (t.id != S_COMMA) // ',' - other arguments
@@ -446,9 +494,14 @@ int analysis (stack_int_t *s)
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
 
-				t = get_token();
-				if (t.id <= 0)
-					return ERR_LEXICAL_ANALYSIS;
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
 				token_got = true;
 
 				if      (t.id == S_INT)
@@ -464,10 +517,16 @@ int analysis (stack_int_t *s)
 					fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
+				token_got = false;
 
-				t = get_token();
-				if (t.id <= 0)
-					return ERR_LEXICAL_ANALYSIS;
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
 				token_got = true;
 
 				if (t.id == S_SIMPLE_IDENT)
@@ -494,8 +553,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -569,10 +630,16 @@ int analysis (stack_int_t *s)
 					fprintf (stderr, "PARSER: On line %u unexpected function body.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
+				token_got = false;
 
-				t = get_token();
-				if (t.id <= 0)
-					return ERR_LEXICAL_ANALYSIS;
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
 				token_got = true;
 
 				if (t.id == S_SIMPLE_IDENT)
@@ -598,8 +665,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -630,8 +699,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -673,15 +744,17 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
 				if (t.id == S_RIGHT_PARE) // ')' - no arguments
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // just stack pop
 				}
 
@@ -700,8 +773,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -718,8 +793,8 @@ int analysis (stack_int_t *s)
 
 				if(t.id == S_RIGHT_PARE) // ')' - no other arguments
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // just stack pop
 				}
 
@@ -733,8 +808,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -758,8 +835,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -787,8 +866,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -817,15 +898,17 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
 				if (t.id == S_RIGHT_BRACE) // '}'
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // goto S_RIGHT_BRACE
 				}
 
@@ -856,15 +939,18 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
 				int expr_return;
-				expr_return = expr_analyze(&t, s);
+				expr_return = skip_expr(&t);
 				if (expr_return != 0)
 					return expr_return;
+				token_got = true;
 				break;
 
 			default:
@@ -875,4 +961,96 @@ int analysis (stack_int_t *s)
 	}
 
 	return ERR_SYNTACTIC_ANALYSIS;
+}
+
+int skip_expr(token * t)
+{
+	// token je nacteny
+	// TODO - S_COMMA
+	int number_pares = 0;
+	int pocet_zpracovanych_tokenu = 0;
+	bool token_got = true;
+	do {
+		if (token_wanted(t))
+		{
+			token_got = false;
+		}
+		else // special situation
+		{
+			if (t->id == S_LEFT_PARE)
+			{
+				number_pares++;
+				token_got = false;
+			}
+
+
+			else if (t->id == S_RIGHT_PARE && pocet_zpracovanych_tokenu == 0)
+			{
+				fprintf(stderr, "PARSER: On line %u expected expresion.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+			}
+			else if (t->id == S_RIGHT_PARE && number_pares > 0)
+			{
+				number_pares--;
+				token_got = false;
+			}
+			else if (t->id == S_RIGHT_PARE)
+				return 0;
+
+
+			else if (t->id == S_SEMICOMMA && pocet_zpracovanych_tokenu == 0) 
+			{
+				fprintf(stderr, "PARSER: On line %u expected expresion.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+			}
+			else if (t->id == S_SEMICOMMA) return 0;
+
+			else if (t->id == S_COMMA && number_pares > 0) ;
+
+			else
+			{
+				fprintf(stderr, "PARSER: On line %u unexpected word, symbol, or EOF in expresion.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+			}
+		}
+		pocet_zpracovanych_tokenu++;
+
+		if (token_got == false)
+		{
+			*t = get_token();
+			if (t->id == 0)
+				return ERR_LEXICAL_ANALYSIS;
+			else if (t->id < 0)
+				return ERR_INTERN_FAULT;
+		}
+		token_got = true;
+	} while (1);
+
+	return 0;
+}
+
+// Krystof Michal
+bool token_wanted(token * t)
+{
+	if (t->id == S_TRUE) return true;
+	else if (t->id == S_FALSE) return true;
+	else if (t->id == TYPE_DOUBLE) return true;
+	else if (t->id == TYPE_INT) return true;
+	else if (t->id == TYPE_STRING) return true;
+	else if (t->id == TYPE_BOOLEAN) return true;
+	else if (t->id == S_SIMPLE_IDENT) return true;
+	else if (t->id == S_FULL_IDENT) return true;
+	else if (t->id == S_EQUAL) return true;
+	else if (t->id == S_LESS_EQUAL) return true;
+	else if (t->id == S_GREATER_EQUAL) return true;
+	else if (t->id == S_NOT_EQUAL) return true;
+	else if (t->id == S_PLUS) return true;
+	else if (t->id == S_MINUS) return true;
+	else if (t->id == S_DIV) return true;
+	else if (t->id == S_MUL) return true;
+	else if (t->id == S_OR) return true;
+	else if (t->id == S_AND) return true;
+	else if (t->id == S_LESS) return true;
+	else if (t->id == S_GREATER) return true;
+	else return false;
 }

@@ -1,5 +1,7 @@
 #include "scanner.h"
 #include "stack_int.h"
+#include <string.h>
+#include <stdbool.h>    // bool
 
 #define ERR_LEXICAL_ANALYSIS 1
 #define ERR_SYNTACTIC_ANALYSIS 2
@@ -16,29 +18,33 @@
 
 // cases in switch in funtion process_token
 enum {
-  P_START = S_EOF + 1,
-  P_CLASS,
-  P_CLASS_BODY,
-  P_TYPE,
-  P_DEF,
-  P_DEF_ARGUMENTS,
-  P_DEF_ARGUMENTS2,
-  P_IDENT,
-  P_FUNC_BODY,
-  P_VAR_EXPR,
-  P_GUIDANCE,
-  P_USE_ARGUMENTS,
-  P_USE_ARGUMENTS2,
-  P_RETURN_EXPR,
-  P_ELSE_EXISTANCE,
-  P_IF_ELSE_SECTION,
-  P_FUNC_BODY_H1,
-  P_FUNC_BODY_H2,
+  P_START = S_EOF + 1, //50
+  P_CLASS, //51
+  P_CLASS_BODY, //52
+  P_TYPE, //53
+  P_DEF, //54
+  P_DEF_ARGUMENTS, //55
+  P_DEF_ARGUMENTS2, //56
+  P_IDENT, //57
+  P_FUNC_BODY, //58
+  P_VAR_EXPR, //59
+  P_GUIDANCE, //60
+  P_USE_ARGUMENTS, //61
+  P_USE_ARGUMENTS2, //62
+  P_RETURN_EXPR, //63
+  P_ELSE_EXISTANCE, //64
+  P_IF_ELSE_SECTION, //65
+  P_FUNC_BODY_H1, //66
+  P_FUNC_BODY_H2, //67
 //  P_BOOL_TYPE,
-  P_EXPR
+  P_EXPR //68
 };
 
 // it eats tokens and says if syntax analysis success or not
 int parser();
 
 int analysis(stack_int_t *s);
+
+int skip_expr(token * t);
+
+bool token_wanted(token * t);

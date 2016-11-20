@@ -9,60 +9,104 @@ Jazykový interpret (česky) https://cs.wikipedia.org/wiki/Interpret_(software) 
 ```c
 // Makra:
 // scanner.h
-#define S_BOOLEAN 1000
-#define S_BREAK 1001
-#define S_CLASS 1002
-#define S_CONTINUE 1003
-#define S_DO 1004
-#define S_DOUBLE 1005
-#define S_ELSE 1006
-#define S_FALSE 1007
-#define S_FOR 1008
-#define S_IF 1009
-#define S_INT 1010
-#define S_RETURN 1011
-#define S_STRING 1012
-#define S_STATIC 1013
-#define S_TRUE 1014
-#define S_VOID 1015
-#define S_WHILE 1016
-
-#define TYPE_DOUBLE 1100
-#define TYPE_INT 1101
-#define TYPE_STRING 1102
-#define TYPE_BOOLEAN 1103
-#define TYPE_STATIC_DOUBLE 1104
-#define TYPE_STATIC_INT 1105
-#define TYPE_STATIC_STRING 1106
-#define TYPE_STATIC_BOOLEAN 1107
-
-#define LINE_COMMENT 1200
-#define BLOCK_COMMENT 1201
-
-#define SIMPLE_IDENT 1300
-#define FULL_IDENT 1301
-
-#define ERR_REACHED_MAX -100
-#define ERR_WRONG_COMMENT_SYNTAX -101
-#define ERR_FSEEK -102
-
 #define S_SIZE 16
 
 // error.h
-#define ERR_LEXIKALNI_ANALYZA 1
-#define ERR_SYNTAKTICKA_ANALYZA 2
+#define ERR_WARNING 0
+#define ERR_LEXICAL_ANALYSIS 1
+#define ERR_SYNTACTIC_ANALYSIS 2
 #define ERR_SEM_NDEF_REDEF 3
-#define ERR_SEM_KOMPATIBILITA 4
-#define ERR_SEM_OSTATNI 6
-#define ERR_VSTUP_CISLO 7
-#define ERR_NEINIC_PROM 8
-#define ERR_DELENI_NULOU 9
-#define ERR_OSTATNI 10
-#define ERR_INTERPRET 99
+#define ERR_SEM_COMPATIBILITY 4
+#define ERR_SEM_OTHERS 6
+#define ERR_INPUT_NUMBER 7
+#define ERR_UNINICIALIZED_VAR 8
+#define ERR_DIVISION_ZERO 9
+#define ERR_OTHERS 10
+#define ERR_INTERN_FAULT 99
 
 // Globalni promene:
 // scanner.c
 unsigned int LINE_NUM;
+char *SCANNER_WORD;
+
+//enum
+//scanner.h
+enum {
+S_BOOLEAN = 1, /*!< Keyword boolean */
+S_BREAK, /*!< Keyword break */
+S_CLASS, /*!< Keyword class */
+S_CONTINUE, /*!< Keyword continue */
+S_DO, /*!< Keyword do */
+S_DOUBLE, /*!< Keyword double */
+S_ELSE, /*!< Keyword else */
+S_FALSE, /*!< Keyword false */
+S_FOR, /*!< Keyword for */
+S_IF, /*!< Keyword if */
+S_INT, /*!< Keyword int */
+S_RETURN, /*!< Keyword return */
+S_STRING, /*!< Keyword String */
+S_STATIC, /*!< Keyword static */
+S_TRUE, /*!< Keyword true */
+S_VOID, /*!< Keyword void */
+S_WHILE, /*!< Keyword while */
+
+TYPE_DOUBLE, /*!< data type double */
+TYPE_INT, /*!< data type int */
+TYPE_STRING, /*!< data type String */
+TYPE_BOOLEAN, /*!< data type boolean */
+TYPE_STATIC_DOUBLE, /*!< data type static double */
+TYPE_STATIC_INT, /*!< data type static int */
+TYPE_STATIC_STRING, /*!< data type static String */
+TYPE_STATIC_BOOLEAN, /*!< data type static boolean */
+// TODO [static]? void
+
+BLOCK_COMMENT, /*!< identifikator of block comment */
+LINE_COMMENT, /*!< identifikator of one line comment */
+
+S_SIMPLE_IDENT, /*!< stands for simple identifikator */
+S_FULL_IDENT, /*!< stands for full identifikator */
+
+S_EQUAL, /*!< stands for == */
+S_LESS_EQUAL, /*!< stands for <= */
+S_GREATER_EQUAL, /*!< stands for >= */
+S_NOT_EQUAL, /*!< stands for != */
+S_LEFT_PARE, /*!< stands for ( */
+S_RIGHT_PARE, /*!< stands for ) */
+S_LEFT_BRACE, /*!< stands for { */
+S_RIGHT_BRACE, /*!< stands for } */
+S_COMMA, /*!< stands for , */
+S_SEMICOMMA, /*!< stands for ; */
+S_PLUS, /*!< stands for + */
+S_MINUS, /*!< stands for - */
+S_DIV, /*!< stands for / */
+S_MUL, /*!< stands for * */
+S_ASSIGNMENT, /*!< stands for = */
+S_EOF /*!< stands for EOF */
+};
+
+//parser.h
+enum {
+  P_START = S_EOF + 1,
+  P_CLASS,
+  P_CLASS_BODY,
+  P_TYPE,
+  P_DEF,
+  P_DEF_ARGUMENTS,
+  P_DEF_ARGUMENTS2,
+  P_IDENT,
+  P_FUNC_BODY,
+  P_VAR_EXPR,
+  P_GUIDANCE,
+  P_USE_ARGUMENTS,
+  P_USE_ARGUMENTS2,
+  P_RETURN_EXPR,
+  P_ELSE_EXISTANCE,
+  P_IF_ELSE_SECTION,
+  P_FUNC_BODY_H1,
+  P_FUNC_BODY_H2,
+//  P_BOOL_TYPE,
+  P_EXPR
+};
 ```
 
 # Informace:
