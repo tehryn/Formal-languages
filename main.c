@@ -82,9 +82,45 @@ do {
 		else {
 			printf("+-------------------\n");
 			printf("| line num: %d\n", LINE_NUM);
-			if (t->id == S_EQAL)
+			if (t->id == S_EQUAL)
 				printf("| token id: ==\n");
-			else if (..)
+			else if (t->id == S_LESS_EQUAL)
+				printf("| token id: <=\n");
+			else if (t->id == S_GREATER_EQUAL)
+				printf("| token id: >=\n");
+			else if (t->id == S_LESS)
+				printf("| token id: <\n");
+			else if (t->id == S_GREATER)
+				printf("| token id: >\n");
+			else if (t->id == S_OR)
+				printf("| token id: ||\n");
+			else if (t->id == S_AND)
+				printf("| token id: &&\n");
+			else if (t->id == S_NOT_EQUAL)
+				printf("| token id: !=\n");	
+			else if (t->id == S_LEFT_PARE)
+				printf("| token id: (\n");
+			else if (t->id == S_RIGHT_PARE)
+				printf("| token id: )\n");
+			else if (t->id == S_LEFT_BRACE)
+				printf("| token id: {\n");
+			else if (t->id == S_RIGHT_BRACE)
+				printf("| token id: }\n");
+			else if (t->id == S_COMMA)
+				printf("| token id: ,\n");
+			else if (t->id == S_SEMICOMMA)
+				printf("| token id: ;\n");
+			else if (t->id == S_PLUS)
+				printf("| token id: +\n");
+			else if (t->id == S_MINUS)
+				printf("| token id: -\n");
+			else if (t->id == S_DIV)
+				printf("| token id: /\n");
+			else if (t->id == S_MUL)
+				printf("| token id: *\n");
+			else if (t->id == S_ASSIGNMENT)
+				printf("| token id: =\n");
+			else if (t->id == S_EOF)
 				printf("| token id: EOF\n");
 			printf("| token ptr: NULL\n");
 			printf("+-------------------\n");
