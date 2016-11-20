@@ -182,7 +182,7 @@ int analysis (stack_int_t *s)
 						if (!main_existance)
 							fprintf(stderr, "Semantic fauilt. Class Main does not exist.\n");
 						else
-							fprintf(stderr, "Semantic fauilt. Class Main has no function run.\n")
+							fprintf(stderr, "Semantic fauilt. Class Main has no function run.\n");
 						return ERR_SEM_NDEF_REDEF;
 					}
 				}
