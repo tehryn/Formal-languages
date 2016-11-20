@@ -1005,7 +1005,7 @@ int skip_expr(token * t)
 				return ERR_INTERN_FAULT;
 
 		}
-	} while (number_pares >= 0)
+	} while (number_pares >= 0);
 
 	return 0;
 }
