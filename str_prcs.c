@@ -26,11 +26,11 @@ void* string_process(int id, char* str)
         }
     else
         {
-            int input=0, output=0, octal;
+            int octal = 0;
             size_t len = strlen(str);
 //input a output sleduji retezec - input jej projede cely, jestlize narazi na specialni pripad, probehne prislusna akce, output dostane vysledek
 //octal slouzi jako pomocna promena pri prevodu cisla v osmickove soustave z retezce do desitkove soutavy
-            for (unsigned i = 0, j = 0; i < str; i++ )
+            for (unsigned i = 0, j = 0; i < len; i++ )
                 {
                     if (str[i] == '\\') {
                         if ((i+1) < len) {
