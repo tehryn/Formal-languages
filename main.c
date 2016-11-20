@@ -48,7 +48,7 @@ int main (int argc, char **argv) {
 	char line[10], prev[10] = {0,};
 	htab_t *table;
 	table = htab_init(1001);
-		while(fgets(line, 10, stdin) != NULL) {
+		while(fgets(line, 10, f) != NULL) {
 			line[9] = '\0';
 			printf("+-------------------\n");
 			printf("| lookig for: %s\n", prev);
@@ -66,14 +66,12 @@ int main (int argc, char **argv) {
 		htab_free_all(table);
 #endif
 
+// testing scanner
 #ifdef TEST_SCANNER
 token *t;
 do {
 	t = (token *) mem_alloc(sizeof(token), &l);
 	*t = get_token();
-// testing scanner
-#ifdef TEST_TOKEN
-
 		if (t->ptr) {
 			printf("+-------------------\n");
 			printf("| line num: %d\n", LINE_NUM);
@@ -91,36 +89,6 @@ do {
 			printf("| token ptr: NULL\n");
 			printf("+-------------------\n");
 		}
-#endif
-
-// testing string_process
-#ifdef TEST_STR_PRCS
-
-		switch(t->id) {
-			case TYPE_DOUBLE:
-				printf("+-------------------\n");
-				printf("| convert to double: %s\n", (char *)t->ptr);
-				printf("| - - - - - - - - - \n");
-				printf("| vysledek: %f\n", *((double *) string_process(t->id, (char *)t->ptr)));
-				printf("+-------------------\n");
-				break;
-			case TYPE_INT:
-				printf("+-------------------\n");
-				printf("| convert to int: %s\n", (char *)t->ptr);
-				printf("| - - - - - - - - - \n");
-				printf("| vysledek: %i\n", *((int *) string_process(t->id, (char *)t->ptr)));
-				printf("+-------------------\n");
-				break;
-			case TYPE_STRING:
-				printf("+-------------------\n");
-				printf("| convert string: [%s]\n", (char *)t->ptr);
-				printf("| - - - - - - - - - \n");
-				printf("| vysledek: [%s]\n", ((char *) string_process(t->id, (char *)t->ptr)));
-				printf("+-------------------\n");
-				break;
-			default: break;
-		}
-#endif
 	} while (t->id > 0 && t->id != S_EOF);
 #endif
 	free_memory(&l);
