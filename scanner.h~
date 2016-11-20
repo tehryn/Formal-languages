@@ -55,10 +55,10 @@ S_FULL_IDENT, /*!< stands for full identifikator */
 S_EQUAL, /*!< stands for == */
 S_LESS_EQUAL, /*!< stands for <= */
 S_GREATER_EQUAL, /*!< stands for >= */
-S_LESS, /*!< stands for < */
-S_GREATER, /*!< stands for > */
-S_OR, /*!< stands for || */
-S_AND, /*!< stands for && */
+S_LESS, /*!< stands for > */
+S_GREATER,
+S_OR,
+S_AND,
 S_NOT_EQUAL, /*!< stands for != */
 S_LEFT_PARE, /*!< stands for ( */
 S_RIGHT_PARE, /*!< stands for ) */

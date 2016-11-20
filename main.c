@@ -5,14 +5,16 @@
 #include "parser.h"
 #include "htab.h"
 //#define TEST_PARSER
-#define TEST_TABLE
+//#define TEST_TABLE
 
-//#define TEST_SCANNER // dont forget to enable TEST_TOKEN or TEST_STR_PRCS
-//#define TEST_TOKEN
+#define TEST_SCANNER // dont forget to enable TEST_TOKEN or TEST_STR_PRCS
+#define TEST_TOKEN
 //#define TEST_STR_PRCS
 
 FILE *f;
+
 int ERROR_CHECK = 0;
+
 int expr_analyze(token * t, stack_int_t *s)
 {
 	(void) s;
