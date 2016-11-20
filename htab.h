@@ -19,8 +19,8 @@
 // --- STRUCTURES ---
 typedef struct htab_item {
 	char* key; // string ID
-	unsigned data_type;
-	int func_var; // 0 - not defined, 1 - variable, 2 - function
+	unsigned data_type; // 0 - not defined
+	unsigned func_var; // 0 - not defined, 1 - variable, 2 - function
 	void* data; // pointer to the place with data
 	struct htab_item* next_item; // next variable
 } htab_item;
