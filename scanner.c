@@ -220,6 +220,7 @@ token get_token() {
 	int c = 0;
 	unsigned i = 0;
 	int token_found = 0;
+	int spec = 0;
 	while (!token_found && (c = fgetc(f)) != EOF) {
 		if (isspace(c)) {
 			if (c == '\n')
@@ -296,7 +297,7 @@ token get_token() {
 		}
 		/* Now we are not in comment nor in sequence of white chars so lets
 		 check special chars */
-		if (is_special_char(c)) {
+		if ((spec = is_special_char(c)) != 0) {
 			if (i) { // if i != 0 we found token
 				/* we have to go back by 1 char */
 				if (fseek(f, -1, SEEK_CUR) != 0) {
@@ -310,7 +311,7 @@ token get_token() {
 				continue;
 			}
 			else {
-				new_token.id = is_special_char(c);
+				new_token.id = spec;
 				new_token.ptr = NULL;
 				return new_token;
 			}
@@ -381,14 +382,12 @@ token get_token() {
 		if (id) {
 			new_token.id = S_FULL_IDENT;
 			new_token.ptr = SCANNER_WORD;
-			// new_token.ptr = najdi_polozku(word);
 			return new_token;
 		}
 		id = is_simple_ident(SCANNER_WORD, i);
 		if (id) {
 			new_token.id = S_SIMPLE_IDENT;
 			new_token.ptr = SCANNER_WORD;
-			// new_token.ptr = najdi_polozku(SCANNER_WORD);
 			return new_token;
 		}
 		fprintf(stderr, "ERROR: line: %u: '%s' is not valide identifikator, numeric constant nor keyword\n", LINE_NUM, SCANNER_WORD);
