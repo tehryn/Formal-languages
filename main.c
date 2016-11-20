@@ -73,6 +73,7 @@ do {
 	*t = get_token();
 // testing scanner
 #ifdef TEST_TOKEN
+
 		if (t->ptr) {
 			printf("+-------------------\n");
 			printf("| line num: %d\n", LINE_NUM);
@@ -83,7 +84,10 @@ do {
 		else {
 			printf("+-------------------\n");
 			printf("| line num: %d\n", LINE_NUM);
-			printf("| token id: special_char: (%i)\n", t->id);
+			if (t->id == S_EQAL)
+				printf("| token id: ==\n");
+			else if (..)
+				printf("| token id: EOF\n");
 			printf("| token ptr: NULL\n");
 			printf("+-------------------\n");
 		}
@@ -109,9 +113,9 @@ do {
 				break;
 			case TYPE_STRING:
 				printf("+-------------------\n");
-				printf("| convert string: %s\n", (char *)t->ptr);
+				printf("| convert string: [%s]\n", (char *)t->ptr);
 				printf("| - - - - - - - - - \n");
-				printf("| vysledek: %s\n", ((char *) string_process(t->id, (char *)t->ptr)));
+				printf("| vysledek: [%s]\n", ((char *) string_process(t->id, (char *)t->ptr)));
 				printf("+-------------------\n");
 				break;
 			default: break;
