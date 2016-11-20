@@ -420,8 +420,8 @@ int analysis (stack_int_t *s)
 
 				if (t.id == S_RIGHT_PARE) // ')' - no arguments
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // goto case S_RIGHT_PARE
 				}
 
@@ -483,8 +483,8 @@ int analysis (stack_int_t *s)
 
 				if (t.id == S_RIGHT_PARE) // ')' - no other arguments
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // goto case S_RIGHT_PARE
 				}
 				else if (t.id != S_COMMA) // ',' - other arguments
@@ -753,8 +753,8 @@ int analysis (stack_int_t *s)
 
 				if (t.id == S_RIGHT_PARE) // ')' - no arguments
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // just stack pop
 				}
 
@@ -793,8 +793,8 @@ int analysis (stack_int_t *s)
 
 				if(t.id == S_RIGHT_PARE) // ')' - no other arguments
 				{
-					token_got = false;
-					stack_int_pop(s);
+					//token_got = false;
+					//stack_int_pop(s);
 					break; // just stack pop
 				}
 
@@ -907,7 +907,7 @@ int analysis (stack_int_t *s)
 
 				if (t.id == S_RIGHT_BRACE) // '}'
 				{
-					token_got = false;
+					//token_got = false;
 					//stack_int_pop(s);
 					break; // goto S_RIGHT_BRACE
 				}
