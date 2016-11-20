@@ -1,28 +1,17 @@
 #include "scanner.h"
 #include "garbage_collector.h"
 #include "error.h"
-#include "str_prcs.c" // TODO knihovna
 #include "parser.h"
 #include "htab.h"
-//#define TEST_PARSER
+#define TEST_PARSER
 //#define TEST_TABLE
 
-#define TEST_SCANNER // dont forget to enable TEST_TOKEN or TEST_STR_PRCS
-#define TEST_TOKEN
-//#define TEST_STR_PRCS
+//#define TEST_SCANNER
+//#define TEST_TOKEN
 
 FILE *f;
 
 int ERROR_CHECK = 0;
-
-int expr_analyze(token * t, stack_int_t *s)
-{
-	(void) s;
-	if (t->id == S_RIGHT_PARE || t->id == S_RIGHT_BRACE || t->id == S_SEMICOMMA)
-		return -1;
-	else
-		return 0;
-}
 
 extern char* SCANNER_WORD;
 
@@ -38,9 +27,9 @@ int main (int argc, char **argv) {
 	}
 // testing
 #ifdef TEST_PARSER
-	switch (analyze_syntax()) {
-		case -1: printf("failed \n"); break;
-		default: printf("%s\n", "succes");
+	switch (parser()) {
+		case 0: printf("OK \n"); break;
+		default: printf("%s\n", "ERROR");
 	}
 #endif
 // testing htab
@@ -76,7 +65,12 @@ do {
 			printf("+-------------------\n");
 			printf("| line num: %d\n", LINE_NUM);
 			printf("| token id: %u\n", t->id);
-			printf("| token ptr: %s\n", (char *)t->ptr);
+			if (t->id == TYPE_INT)
+				printf("| token ptr: %i\n", *((int *)t->ptr));
+			else if (t->id == TYPE_DOUBLE)
+				printf("| token ptr: %f\n", *((double *)t->ptr));
+			else
+				printf("| token ptr: %s\n", (char *)t->ptr);
 			printf("+-------------------\n");
 		}
 		else {
@@ -122,6 +116,8 @@ do {
 				printf("| token id: =\n");
 			else if (t->id == S_EOF)
 				printf("| token id: EOF\n");
+			else
+				printf("WTF\n");
 			printf("| token ptr: NULL\n");
 			printf("+-------------------\n");
 		}

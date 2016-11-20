@@ -91,6 +91,34 @@ int is_special_char(char c) {
 
 int is_num_literal(char *word, unsigned len) {
 	if (word == NULL || len == 0) return -1;
+	int e = 0, dot = 0, sign = 0;
+	if (!isdigit(word[0])) return 0;
+	for (unsigned i = 1; i < len; i++) {
+		if (sign && (word[i] == '+' || word[i] == '-')) {
+			sign = 0;
+			continue;
+		}
+		sign = 0;
+		if (word[i] == 'e' || word[i] == 'E') {
+			if (e) return 0;
+			sign = 1;
+			dot = e = 1;
+		}
+		else if (word[i] == '.') {
+			if (dot) return 0;
+			dot = 1;
+		}
+		else if ((!isdigit(word[i]))) {
+			return 0;
+		}
+	}
+	if(!isdigit(word[len-1])) return 0;
+	if (dot) return TYPE_DOUBLE;
+	return TYPE_INT;
+}
+/*
+int is_num_literal(char *word, unsigned len) {
+	if (word == NULL || len == 0) return -1;
 	int e = 0, dot = 0;
 	if (!isdigit(word[0])) return 0;
 	for (unsigned i = 0; i<len; i++) {
@@ -109,7 +137,7 @@ int is_num_literal(char *word, unsigned len) {
 	if (dot || e) return TYPE_DOUBLE;
 	return TYPE_INT;
 }
-
+*/
 int is_simple_ident(char *word, unsigned len) {
 	if (word == NULL || len == 0) return 0;
 	if ((word[0] != '$' && word[0] < 'A') || word[0] > 'z' || (word[0] > 'Z' && word[0] < 'a' && word[0] != '_'))
@@ -221,6 +249,8 @@ token get_token() {
 	unsigned i = 0;
 	int token_found = 0;
 	int spec = 0;
+	int skip = 0;
+	void *number;
 	while (!token_found && (c = fgetc(f)) != EOF) {
 		if (isspace(c)) {
 			if (c == '\n')
@@ -262,7 +292,7 @@ token get_token() {
 				c = '/'; // and also set c to prev value
 			}
 		}
-
+		
 		if (c == '"') {
 			if (i) {
 				if (fseek(f, -1, SEEK_CUR) != 0) {
@@ -290,14 +320,33 @@ token get_token() {
 					return new_token;
 				}
 
+				
+				if (string_process(TYPE_STRING, SCANNER_WORD) == NULL) {
+					new_token.id = -1;
+					new_token.ptr = NULL;
+					return new_token;					
+				}
 				new_token.id = TYPE_STRING;
 				new_token.ptr = SCANNER_WORD;
 				return new_token;
 			}
 		}
+
+		if (i && (c == '-' || c == '+')) {
+			if (isdigit(fgetc(f))) {
+					skip = 1;
+			}
+			if (fseek(f, -1, SEEK_CUR) != 0) {
+				ERROR_CHECK = (int) ERR_FSEEK;
+				fprintf(stderr, "Can't set offset in file!\n");
+				new_token.id = -1;
+				new_token.ptr = NULL;
+				return new_token;
+			}
+		}
 		/* Now we are not in comment nor in sequence of white chars so lets
 		 check special chars */
-		if ((spec = is_special_char(c)) != 0) {
+		if (!skip && ((spec = is_special_char(c)) != 0)) {
 			if (i) { // if i != 0 we found token
 				/* we have to go back by 1 char */
 				if (fseek(f, -1, SEEK_CUR) != 0) {
@@ -368,8 +417,16 @@ token get_token() {
 		/* Ok, we did not found key word... Did we found number?*/
 		id = is_num_literal(SCANNER_WORD, i);
 		if (id) {
+			
+			number = string_process(id, SCANNER_WORD);
+			if (number == NULL) {
+				fprintf(stderr, "Memory allocation failed\n");
+				new_token.id = -1;
+				new_token.ptr = NULL;
+			}
+			
 			new_token.id = id;
-			new_token.ptr = SCANNER_WORD;
+			new_token.ptr = number;
 			return new_token;
 		}
 		id = is_full_ident(SCANNER_WORD, i);

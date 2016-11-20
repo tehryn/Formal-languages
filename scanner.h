@@ -6,7 +6,7 @@
 #include <ctype.h>
 #include <limits.h>
 #include "error.h"
-
+#include "str_prcs.h"
 /*! TODO */
 #define ERR_WRONG_COMMENT_SYNTAX -100
 
@@ -18,60 +18,60 @@
 
 /*! TODO */
 enum {
-S_BOOLEAN = 1, /*!< Keyword boolean */
-S_BREAK, /*!< Keyword break */
-S_CLASS, /*!< Keyword class */
-S_CONTINUE, /*!< Keyword continue */
-S_DO, /*!< Keyword do */
-S_DOUBLE, /*!< Keyword double */
-S_ELSE, /*!< Keyword else */
-S_FALSE, /*!< Keyword false */
-S_FOR, /*!< Keyword for */
-S_IF, /*!< Keyword if */
-S_INT, /*!< Keyword int */
-S_RETURN, /*!< Keyword return */
-S_STRING, /*!< Keyword String */
-S_STATIC, /*!< Keyword static */
-S_TRUE, /*!< Keyword true */
-S_VOID, /*!< Keyword void */
-S_WHILE, /*!< Keyword while */
+S_BOOLEAN = 1, /*!< Keyword boolean */ //1
+S_BREAK, /*!< Keyword break */ //2
+S_CLASS, /*!< Keyword class */ //3
+S_CONTINUE, /*!< Keyword continue */ //4
+S_DO, /*!< Keyword do */ //5
+S_DOUBLE, /*!< Keyword double */ //6
+S_ELSE, /*!< Keyword else */ //7
+S_FALSE, /*!< Keyword false */ //8
+S_FOR, /*!< Keyword for */ //9
+S_IF, /*!< Keyword if */ //10
+S_INT, /*!< Keyword int */ //11
+S_RETURN, /*!< Keyword return */ //12 
+S_STRING, /*!< Keyword String */ //13
+S_STATIC, /*!< Keyword static */ //14
+S_TRUE, /*!< Keyword true */ //15
+S_VOID, /*!< Keyword void */ //16
+S_WHILE, /*!< Keyword while */ //17
 
-TYPE_DOUBLE, /*!< data type double */
-TYPE_INT, /*!< data type int */
-TYPE_STRING, /*!< data type String */
-TYPE_BOOLEAN, /*!< data type boolean */
-TYPE_STATIC_DOUBLE, /*!< data type static double */
-TYPE_STATIC_INT, /*!< data type static int */
-TYPE_STATIC_STRING, /*!< data type static String */
-TYPE_STATIC_BOOLEAN, /*!< data type static boolean */
+TYPE_DOUBLE, /*!< data type double */ //18
+TYPE_INT, /*!< data type int */ //19
+TYPE_STRING, /*!< data type String */ //20
+TYPE_BOOLEAN, /*!< data type boolean */ //21
+TYPE_STATIC_DOUBLE, /*!< data type static double */ //22
+TYPE_STATIC_INT, /*!< data type static int */ //23
+TYPE_STATIC_STRING, /*!< data type static String */ //24
+TYPE_STATIC_BOOLEAN, /*!< data type static boolean */ //25
 // TODO [static]? void
 
-BLOCK_COMMENT, /*!< identifikator of block comment */
-LINE_COMMENT, /*!< identifikator of one line comment */
+BLOCK_COMMENT, /*!< identifikator of block comment */ //26
+LINE_COMMENT, /*!< identifikator of one line comment */ //27
 
-S_SIMPLE_IDENT, /*!< stands for simple identifikator */
-S_FULL_IDENT, /*!< stands for full identifikator */
+S_SIMPLE_IDENT, /*!< stands for simple identifikator */ //28
+S_FULL_IDENT, /*!< stands for full identifikator */ //29
 
-S_EQUAL, /*!< stands for == */
-S_LESS_EQUAL, /*!< stands for <= */
-S_GREATER_EQUAL, /*!< stands for >= */
-S_LESS, /*!< stands for < */
-S_GREATER, /*!< stands for > */
-S_OR, /*!< stands for || */
-S_AND, /*!< stands for && */
-S_NOT_EQUAL, /*!< stands for != */
-S_LEFT_PARE, /*!< stands for ( */
-S_RIGHT_PARE, /*!< stands for ) */
-S_LEFT_BRACE, /*!< stands for { */
-S_RIGHT_BRACE, /*!< stands for } */
-S_COMMA, /*!< stands for , */
-S_SEMICOMMA, /*!< stands for ; */
-S_PLUS, /*!< stands for + */
-S_MINUS, /*!< stands for - */
-S_DIV, /*!< stands for / */
-S_MUL, /*!< stands for * */
-S_ASSIGNMENT, /*!< stands for = */
-S_EOF /*!< stands for EOF */
+S_EQUAL, /*!< stands for == */ //30
+S_LESS_EQUAL, /*!< stands for <= */ //31
+S_GREATER_EQUAL, /*!< stands for >= */ //32
+S_LESS, /*!< stands for < */ //33
+S_GREATER, /*!< stands for > */ //34
+S_OR, /*!< stands for || */ //35
+S_AND, /*!< stands for && */ //36
+S_NOT_EQUAL, /*!< stands for != */ //37
+S_LEFT_PARE, /*!< stands for ( */ //38
+S_RIGHT_PARE, /*!< stands for ) */ //39
+S_LEFT_BRACE, /*!< stands for { */ //40
+S_RIGHT_BRACE, /*!< stands for } */ //41
+S_COMMA, /*!< stands for , */ //42
+S_SEMICOMMA, /*!< stands for ; */ //43
+S_PLUS, /*!< stands for + */ //44
+S_MINUS, /*!< stands for - */ //45
+S_DIV, /*!< stands for / */ //46
+S_MUL, /*!< stands for * */ //47
+S_ASSIGNMENT, /*!< stands for = */ //48
+S_EOF /*!< stands for EOF */ //49
 };
 
 /** @var TODO*/

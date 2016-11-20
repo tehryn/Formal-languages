@@ -28,9 +28,10 @@ void* string_process(int id, char* str)
         {
             int octal = 0;
             size_t len = strlen(str);
+            unsigned j = 0;
 //input a output sleduji retezec - input jej projede cely, jestlize narazi na specialni pripad, probehne prislusna akce, output dostane vysledek
 //octal slouzi jako pomocna promena pri prevodu cisla v osmickove soustave z retezce do desitkove soutavy
-            for (unsigned i = 0, j = 0; i < len; i++ )
+            for (unsigned i = 0; i < len; i++)
                 {
                     if (str[i] == '\\') {
                         if ((i+1) < len) {
@@ -40,20 +41,26 @@ void* string_process(int id, char* str)
                                 i++;
                                 continue;
                             }
-                            esle if (str[i+1] == '"') {
+                            else if (str[i+1] == '"') {
                                 str[j] = '"';
                                 j++;
                                 i++;
                                 continue;
                             }
                             else if (str[i+1] == '\'') {
-                                str[i] = '\'';
+                                str[j] = '\'';
+                                j++;
+                                i++;
+                                continue;
+                            }
+                            else if (str[i+1] == '\\') {
+                                str[j] = '\\';
                                 j++;
                                 i++;
                                 continue;
                             }
                             else if (str[i+1] == 't') {
-                                str[i] = '\t';
+                                str[j] = '\t';
                                 j++;
                                 i++;
                                 continue;
@@ -61,17 +68,18 @@ void* string_process(int id, char* str)
                             else if ((i+3) < len) {
                                 if (isdigit(str[i+1]) && isdigit(str[i+2]) && isdigit(str[i+3]) && str[i+1]<='3' && str[i+2]<='7' && str[i+3]<='7') {
                                     octal = (str[i+1] - '0')*64 + (str[i+2] - '0')*8 + (str[i+3] - '0');
-                                    str[i] = octal;
+                                    str[j] = octal;
                                     j++;
                                     i+=3;
                                     continue;
                                 }
                             }
                         }
-                        str[j] = str[i];
-                        j++;
                     }
+                    str[j] = str[i];
+                    j++;
                 }
+            str[j] = '\0';
             return (void*)str;
         }
 }
