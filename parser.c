@@ -31,7 +31,7 @@ int analysis (stack_int_t *s)
 	token t;
 	int on_top;
 	bool main_existance = false; // if class Main exists in whole input file
-	bool main_run_existance = false; // if function run exist in function Main
+	bool main_run_existance = true; // if function run exist in function Main - TODO
 	char * class_name = NULL; // TODO - pro pripad, ze budu chtit ukladat nazvy trid - zatim neudelano
 
 	int type = 0; // t.id should not be 0
@@ -179,7 +179,10 @@ int analysis (stack_int_t *s)
 						return 0;
 					else
 					{
-						fprintf(stderr, "Semantic fauilt. Class Main does not exist or it exists but has no function run.\n");
+						if (!main_existance)
+							fprintf(stderr, "Semantic fauilt. Class Main does not exist.\n");
+						else
+							fprintf(stderr, "Semantic fauilt. Class Main has no function run.\n")
 						return ERR_SEM_NDEF_REDEF;
 					}
 				}
