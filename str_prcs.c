@@ -33,61 +33,50 @@ void* string_process(int id, char* str)
     else
         {
             int input=0, output=0, octal;
+            size_t len = strlen(str);
 //input a output sleduji retezec - input jej projede cely, jestlize narazi na specialni pripad, probehne prislusna akce, output dostane vysledek
 //octal slouzi jako pomocna promena pri prevodu cisla v osmickove soustave z retezce do desitkove soutavy
-            while (str[input] != '\0')
+            for (unsigned i = 0, j = 0; i < str; i++ )
                 {
-                    if (str[input] == '\\')//vsechny escape sekvence zacinaji znakem '\'
-                        {
-                            input++; //zjisitme, zda a ktera escape sekvence nastala
-                            switch(str[input])
-                                {
-                                    case '"':
-                                        str[output++] = '\"';
-                                        input++;
-                                        break;
-                                    case 'n':
-                                        str[output++] = '\n';
-                                        input++;
-                                        break;
-                                    case 't':
-                                        str[output++] = '\t';
-                                        input++;
-                                        break;
-                                    case '\\':
-                                        str[output++] = '\\';
-                                        input++;
-                                        break;
-                                    default:
-                                        /*
-                                        if (str[input]>='0'&&str[input]<='3'&&str[input+1]>='0'&&str[input+1]<='7'&&str[input+2]>='0'&&str[input+2]<='7')
-                                            {
-                                                octal=(str[input]-'0')*64+(str[input+1]-'0')*8+(str[input+2]-'0');
-                                                */
-                                        if (str[input]>='0' && str[input]<='3') //kontrola, zda je za znakem '\' trojmistne cislo v povolenem rozsahu provedena tak, aby nebyla prekrocena hranice stringu
-                                            if (str[input+1]>='0' && str[input+1]<='7')
-                                                if (str[input+2]>='0' && str[input+2]<='7')
-                                                    octal = (str[input]-'0')*64 + (str[input+1]-'0')*8 + (str[input+2]-'0');
-                                                else
-                                                    break;
-                                            else
-                                                break;
-                                        else
-                                            break;
-                                        if (octal == 0)
-                                            {
-                                                str[output++] = '\\';
-                                                break;
-                                            }
-                                        else
-                                            {
-                                                str[output++] = octal;
-                                                input += 3;
-                                                break;
-                                            }
+                    if (str[i] == '\\') {
+                        if ((i+1) < len) {
+                            if (str[i+1] == 'n') {
+                                str[j] = '\n';
+                                j++;
+                                i++;
+                                continue;
+                            }
+                            esle if (str[i+1] == '"') {
+                                str[j] = '"';
+                                j++;
+                                i++;
+                                continue;
+                            }
+                            else if (str[i+1] == '\'') {
+                                str[i] = '\'';
+                                j++;
+                                i++;
+                                continue;
+                            }
+                            else if (str[i+1] == 't') {
+                                str[i] = '\t';
+                                j++;
+                                i++;
+                                continue;
+                            }
+                            else if ((i+3) < len) {
+                                if (isdigit(str[i+1]) && isdigit(str[i+2]) && isdigit(str[i+3]) && str[i+1]<='3' && str[i+2]<='7' && str[i+3]<='7') {
+                                    octal = (str[i+1] - '0')*64 + (str[i+2] - '0')*8 + (str[i+3] - ''0');
+                                    str[i] = octal;
+                                    j++;
+                                    i+=3;
+                                    continue;
                                 }
+                            }
                         }
-                    str[output++] = str[input++];
+                        str[j] = str[i];
+                        j++;
+                    }
                 }
             return (void*)str;
         }
