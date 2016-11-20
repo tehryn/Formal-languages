@@ -963,6 +963,27 @@ int skip_expr(token * t)
 {
 	
 }
+#ifdef 0
+TYPE_DOUBLE, /*!< data type double */
+TYPE_INT, /*!< data type int */
+TYPE_STRING, /*!< data type String */
+TYPE_BOOLEAN, /*!< data type boolean */
+
+S_SIMPLE_IDENT, /*!< stands for simple identifikator */
+S_FULL_IDENT, /*!< stands for full identifikator */
+
+S_EQUAL, /*!< stands for == */
+S_LESS_EQUAL, /*!< stands for <= */
+S_GREATER_EQUAL, /*!< stands for >= */
+S_NOT_EQUAL, /*!< stands for != */
+
+
+
+S_PLUS, /*!< stands for + */
+S_MINUS, /*!< stands for - */
+S_DIV, /*!< stands for / */
+S_MUL, /*!< stands for * */
+#endif
 
 bool token_wanted(token * t)
 {
