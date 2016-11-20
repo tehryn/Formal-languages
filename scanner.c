@@ -52,6 +52,20 @@ int is_special_char(char c) {
 		case '<': state = 2; break;
 		case '>': state = 3; break;
 		case '!': state = 4; break;
+		case '|':
+			c = fgetc(f);
+			if (c == '|') return S_OR;
+			else {
+				ungetc(c, f);
+				return 0;
+			}
+		case '&':
+			c = fgetc(f);
+			if (c == '&') return S_AND;
+			else {
+				ungetc(c, f);
+				return 0;
+			} 
 		default: return 0;
 	}
 	c = fgetc(f);
