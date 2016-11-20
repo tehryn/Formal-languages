@@ -908,7 +908,7 @@ int analysis (stack_int_t *s)
 				if (t.id == S_RIGHT_BRACE) // '}'
 				{
 					token_got = false;
-					stack_int_pop(s);
+					//stack_int_pop(s);
 					break; // goto S_RIGHT_BRACE
 				}
 
