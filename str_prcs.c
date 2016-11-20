@@ -60,7 +60,7 @@ void* string_process(int id, char* str)
                             }
                             else if ((i+3) < len) {
                                 if (isdigit(str[i+1]) && isdigit(str[i+2]) && isdigit(str[i+3]) && str[i+1]<='3' && str[i+2]<='7' && str[i+3]<='7') {
-                                    octal = (str[i+1] - '0')*64 + (str[i+2] - '0')*8 + (str[i+3] - ''0');
+                                    octal = (str[i+1] - '0')*64 + (str[i+2] - '0')*8 + (str[i+3] - '0');
                                     str[i] = octal;
                                     j++;
                                     i+=3;
