@@ -372,7 +372,7 @@ int analysis (stack_int_t *s)
 				{
 					// TODO ? - ukladat nejake dalsi informace do tabulky?
 					token_got = false;
-					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC_BODY_H2, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
+					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC_BODY_H1, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
