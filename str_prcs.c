@@ -3,13 +3,7 @@
 //  Last update: 28.10.2016
 //  Author: Krystof Michal, FIT
 //  Login: xmicha64
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "scanner.h"
-//#define TYPE_DOUBLE 1100
-//#define TYPE_INT 1101
-//#define TYPE_STRING 1102
+#include "str_prcs.h"
 void* string_process(int id, char* str)
 {
     char *eptr;
