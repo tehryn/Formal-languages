@@ -1,5 +1,7 @@
 #include "scanner.h"
 #include "stack_int.h"
+#include <string.h>
+#include <stdbool.h>    // bool
 
 #define ERR_LEXICAL_ANALYSIS 1
 #define ERR_SYNTACTIC_ANALYSIS 2
@@ -42,3 +44,7 @@ enum {
 int parser();
 
 int analysis(stack_int_t *s);
+
+int skip_expr(token * t);
+
+bool token_wanted(token * t);

@@ -1,8 +1,6 @@
 #include "parser.h"
-#include <stdbool.h>    // bool
-#include <string.h>
 
-extern int expr_analyze(token * t, stack_int_t *s); // potrebuji, aby mi zmenila token, muze pouzivat stack
+extern int expr_analyze(token * t); // potrebuji, aby mi zmenila token
 
 int parser()
 {
@@ -946,7 +944,7 @@ int analysis (stack_int_t *s)
 				token_got = true;
 
 				int expr_return;
-				expr_return = expr_analyze(&t, s);
+				expr_return = expr_analyze(&t);
 				if (expr_return != 0)
 					return expr_return;
 				break;
@@ -959,4 +957,16 @@ int analysis (stack_int_t *s)
 	}
 
 	return ERR_SYNTACTIC_ANALYSIS;
+}
+
+int skip_expr(token * t)
+{
+	
+}
+
+bool token_wanted(token * t)
+{
+	if      (t->id == S_TRUE) return true;
+	else if (t->id == S_FALSE) return true;
+	else return false;
 }
