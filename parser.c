@@ -950,6 +950,7 @@ int analysis (stack_int_t *s)
 				expr_return = skip_expr(&t);
 				if (expr_return != 0)
 					return expr_return;
+				token_got = true;
 				break;
 
 			default:
@@ -968,20 +969,33 @@ int skip_expr(token * t)
 	// TODO - S_COMMA
 	int number_pares = 0;
 	int pocet_zpracovanych_tokenu = 0;
+	bool token_got = true;
 	do {
 		if (token_wanted(t))
-			pocet_zpracovanych_tokenu++;
-		else
 		{
-			if (t->id == S_LEFT_PARE) number_pares++;
+			token_got = false;
+		}
+		else // special situation
+		{
+			if (t->id == S_LEFT_PARE)
+			{
+				number_pares++;
+				token_got = false;
+			}
 
-			else if (t->id == S_RIGHT_PARE && pocet_zpracovanych_tokenu == 0) 
+
+			else if (t->id == S_RIGHT_PARE && pocet_zpracovanych_tokenu == 0)
+			{
+				fprintf(stderr, "PARSER: On line %u expected expresion.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+			}
+			else if (t->id == S_RIGHT_PARE && number_pares > 0)
 			{
 				number_pares--;
-				fprintf(stderr, "PARSER: On line %u expected expresion.\n", LINE_NUM);
-				return ERR_SYNTACTIC_ANALYSIS; 
+				token_got = false;
 			}
-			else if (t->id == S_RIGHT_PARE) number_pares--;
+			else if (t->id == S_RIGHT_PARE)
+				return 0;
 
 
 			else if (t->id == S_SEMICOMMA && pocet_zpracovanych_tokenu == 0) 
@@ -991,24 +1005,26 @@ int skip_expr(token * t)
 			}
 			else if (t->id == S_SEMICOMMA) return 0;
 
-			else if (t->id == S_COMMA && number_pares > 0) 42;
+			else if (t->id == S_COMMA && number_pares > 0) ;
 
 			else
 			{
 				fprintf(stderr, "PARSER: On line %u unexpected word, symbol, or EOF in expresion.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 			}
-
-			pocet_zpracovanych_tokenu++;
-
-			*t = get_token();
-			if (t->id == 0)
-				return ERR_LEXICAL_ANALYSIS;
-			else if (t->id < 0)
-				return ERR_INTERN_FAULT;
-
 		}
-	} while (number_pares >= 0);
+		pocet_zpracovanych_tokenu++;
+
+		if (token_got == false)
+		{
+			t = get_token();
+			if (t.id == 0)
+				return ERR_LEXICAL_ANALYSIS;
+			else if (t.id < 0)
+				return ERR_INTERN_FAULT;
+		}
+		token_got = true;
+	} while (1);
 
 	return 0;
 }
