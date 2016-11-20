@@ -1017,10 +1017,10 @@ int skip_expr(token * t)
 
 		if (token_got == false)
 		{
-			t = get_token();
-			if (t.id == 0)
+			*t = get_token();
+			if (t->id == 0)
 				return ERR_LEXICAL_ANALYSIS;
-			else if (t.id < 0)
+			else if (t->id < 0)
 				return ERR_INTERN_FAULT;
 		}
 		token_got = true;
@@ -1048,5 +1048,9 @@ bool token_wanted(token * t)
 	else if (t->id == S_MINUS) return true;
 	else if (t->id == S_DIV) return true;
 	else if (t->id == S_MUL) return true;
+	else if (t->id == S_OR) return true;
+	else if (t->id == S_AND) return true;
+	else if (t->id == S_LESS) return true;
+	else if (t->id == S_GREATER) return true;
 	else return false;
 }
