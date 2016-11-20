@@ -53,8 +53,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -72,8 +74,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -91,8 +95,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -111,8 +117,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -131,8 +139,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -152,8 +162,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -176,9 +188,16 @@ int analysis (stack_int_t *s)
 
 				if (t.id == S_CLASS)
 				{
-					t = get_token();
-					if (t.id <= 0)
-						return ERR_LEXICAL_ANALYSIS;
+					token_got = false;
+					
+					if (token_got == false)
+					{
+						t = get_token();
+						if (t.id == 0)
+							return ERR_LEXICAL_ANALYSIS;
+						else if (t.id < 0)
+							return ERR_INTERN_FAULT;
+					}
 					token_got = true;
 
 					if(t.id == S_SIMPLE_IDENT)
@@ -200,11 +219,13 @@ int analysis (stack_int_t *s)
 							main_existance = true;
 
 						// TODO - pridat class_name do tabulky symbolu pro tridy
-						if(token_got == false)
+						if (token_got == false)
 						{
 							t = get_token();
-							if (t.id <= 0)
+							if (t.id == 0)
 								return ERR_LEXICAL_ANALYSIS;
+							else if (t.id < 0)
+								return ERR_INTERN_FAULT;
 						}
 						token_got = true;
 
@@ -237,8 +258,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -257,9 +280,15 @@ int analysis (stack_int_t *s)
 
 				if (t.id == S_STATIC)
 				{
-					t = get_token();
-					if (t.id <= 0)
-						return ERR_LEXICAL_ANALYSIS;
+					token_got = false;
+					if (token_got == false)
+					{
+						t = get_token();
+						if (t.id == 0)
+							return ERR_LEXICAL_ANALYSIS;
+						else if (t.id < 0)
+							return ERR_INTERN_FAULT;
+					}
 					token_got = true;
 
 					if      (t.id == S_VOID)
@@ -292,10 +321,16 @@ int analysis (stack_int_t *s)
 						fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
 						return ERR_SYNTACTIC_ANALYSIS;
 					}
+					token_got = false;
 
-					t = get_token();
-					if (t.id <= 0)
-						return ERR_LEXICAL_ANALYSIS;
+					if (token_got == false)
+					{
+						t = get_token();
+						if (t.id == 0)
+							return ERR_LEXICAL_ANALYSIS;
+						else if (t.id < 0)
+							return ERR_INTERN_FAULT;
+					}
 					token_got = true;
 
 					if (t.id == S_SIMPLE_IDENT)
@@ -325,8 +360,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -373,8 +410,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -398,10 +437,16 @@ int analysis (stack_int_t *s)
 					fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
+				token_got = false;
 
-				t = get_token();
-				if (t.id <= 0)
-					return ERR_LEXICAL_ANALYSIS;
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
 				token_got = true;
 
 				if (t.id == S_SIMPLE_IDENT)
@@ -428,8 +473,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -446,9 +493,14 @@ int analysis (stack_int_t *s)
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
 
-				t = get_token();
-				if (t.id <= 0)
-					return ERR_LEXICAL_ANALYSIS;
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
 				token_got = true;
 
 				if      (t.id == S_INT)
@@ -464,10 +516,16 @@ int analysis (stack_int_t *s)
 					fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
+				token_got = false;
 
-				t = get_token();
-				if (t.id <= 0)
-					return ERR_LEXICAL_ANALYSIS;
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
 				token_got = true;
 
 				if (t.id == S_SIMPLE_IDENT)
@@ -494,8 +552,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -569,10 +629,16 @@ int analysis (stack_int_t *s)
 					fprintf (stderr, "PARSER: On line %u unexpected function body.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
+				token_got = false;
 
-				t = get_token();
-				if (t.id <= 0)
-					return ERR_LEXICAL_ANALYSIS;
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
 				token_got = true;
 
 				if (t.id == S_SIMPLE_IDENT)
@@ -598,8 +664,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -630,8 +698,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -673,8 +743,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -700,8 +772,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -733,8 +807,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -758,8 +834,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -787,8 +865,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -817,8 +897,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
@@ -856,8 +938,10 @@ int analysis (stack_int_t *s)
 				if (token_got == false)
 				{
 					t = get_token();
-					if (t.id <= 0)
+					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
 				}
 				token_got = true;
 
