@@ -1,18 +1,12 @@
 class Main {
 	static void run() {
-		boolean a;
-		if (a) {
-			a = a && b;
-		}
-		else {
-			a = 3;
-		}
-		while (true) {
-			a = b;
-		}
+		if (a) {}
+		else if (b) {}
+		else if (b()) {}
+		print();
 	}
-	static int a;
-	
+	static int b = "\\"; // HAHAHAHAHA - chyba!!!!
+	static void b; // HAHAHAHA dalsi!
 }
 //"\\\\\\a"
 //"\042\042\042\042\042\042\042\042"

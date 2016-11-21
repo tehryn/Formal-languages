@@ -29,7 +29,7 @@ S_FALSE, /*!< Keyword false */ //8
 S_FOR, /*!< Keyword for */ //9
 S_IF, /*!< Keyword if */ //10
 S_INT, /*!< Keyword int */ //11
-S_RETURN, /*!< Keyword return */ //12 
+S_RETURN, /*!< Keyword return */ //12
 S_STRING, /*!< Keyword String */ //13
 S_STATIC, /*!< Keyword static */ //14
 S_TRUE, /*!< Keyword true */ //15

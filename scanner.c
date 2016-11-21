@@ -65,7 +65,7 @@ int is_special_char(char c) {
 			else {
 				ungetc(c, f);
 				return 0;
-			} 
+			}
 		default: return 0;
 	}
 	c = fgetc(f);
@@ -116,28 +116,7 @@ int is_num_literal(char *word, unsigned len) {
 	if (dot) return TYPE_DOUBLE;
 	return TYPE_INT;
 }
-/*
-int is_num_literal(char *word, unsigned len) {
-	if (word == NULL || len == 0) return -1;
-	int e = 0, dot = 0;
-	if (!isdigit(word[0])) return 0;
-	for (unsigned i = 0; i<len; i++) {
-		if (word[i] == 'e' || word[i] == 'E') {
-			if (e) return 0;
-			e = 1;
-		}
-		if (word[i] == '.') {
-			if (dot || e) return 0;
-			dot = 1;
-		}
-		else if ((!isdigit(word[i])) && word[i] != 'e')
-			return 0;
-	}
-	if(!isdigit(word[len-1])) return 0;
-	if (dot || e) return TYPE_DOUBLE;
-	return TYPE_INT;
-}
-*/
+
 int is_simple_ident(char *word, unsigned len) {
 	if (word == NULL || len == 0) return 0;
 	if ((word[0] != '$' && word[0] < 'A') || word[0] > 'z' || (word[0] > 'Z' && word[0] < 'a' && word[0] != '_'))
@@ -205,20 +184,21 @@ int skip_comment(unsigned comment_type) {
 }
 
 char *load_string(char *word, unsigned *max) {
-	int c, prev = -1;
+	int c, prev = -1, pre_prev = -1;
 	unsigned i = 0;
 	while(((c = fgetc(f)) != EOF)) {
-		if (c == '"' && prev != '\\') {
+		if (c == '"' && !(prev == '\\' && pre_prev != '\\')) {
 			word[i] = '\0';
 			return word;
 		}
 		if (c == '\n')
 			return NULL;
+		pre_prev = prev;
 		word[i] = prev = c;
 		i++;
 		if (i >= *max) { // predpoklad dalsiho zapisu -> nutna realokace pameti
 			char *tmp = word;
-			*max *= 2; // preteceni ???
+			*max *= 2; // preteceni ??? TODO - tolik pameti asi mit k dispozici nemuzeme...
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
 				*max = 0;
@@ -292,7 +272,7 @@ token get_token() {
 				c = '/'; // and also set c to prev value
 			}
 		}
-		
+
 		if (c == '"') {
 			if (i) {
 				if (fseek(f, -1, SEEK_CUR) != 0) {
@@ -320,11 +300,11 @@ token get_token() {
 					return new_token;
 				}
 
-				
+
 				if (string_process(TYPE_STRING, SCANNER_WORD) == NULL) {
 					new_token.id = -1;
 					new_token.ptr = NULL;
-					return new_token;					
+					return new_token;
 				}
 				new_token.id = TYPE_STRING;
 				new_token.ptr = SCANNER_WORD;
@@ -417,14 +397,14 @@ token get_token() {
 		/* Ok, we did not found key word... Did we found number?*/
 		id = is_num_literal(SCANNER_WORD, i);
 		if (id) {
-			
+
 			number = string_process(id, SCANNER_WORD);
 			if (number == NULL) {
 				fprintf(stderr, "Memory allocation failed\n");
 				new_token.id = -1;
 				new_token.ptr = NULL;
 			}
-			
+
 			new_token.id = id;
 			new_token.ptr = number;
 			return new_token;
