@@ -5,7 +5,7 @@
 * gcc version: 5.4.0 (ubuntu 16.04.2)
 * Date: TODO
 **/
-#include "stack.h"
+#include "structures.h"
 
 
 int stack_htab_init(stack_htab *stack) {
@@ -25,7 +25,7 @@ int stack_htab_push(stack_htab *stack, htab_t table) {
 	if ((unsigned)stack->top >= stack->size) {
 		htab_t *tmp = stack->data;
 		stack->size *= 2;
-		tmp =(htab_t *) realloc(stack->data, stack->size);
+		tmp =(htab_t *) realloc(stack->data, stack->size*sizeof(htab_t));
 		if (tmp == NULL) {
 			stack->size /= 2;
 			return 1;
@@ -77,7 +77,7 @@ int array_htab_insert(array_htab *array, htab_t htab) {
 	if (array->idx >= array->size) {
 		array_htab *tmp;
 		array->size *= 2;
-		tmp = (array_htab *) realloc(array, array->size);
+		tmp = (array_htab *) realloc(array, array->size*sizeof(htab_t));
 		if (tmp == NULL) {
 			array->size /= 2;
 			return 1;
@@ -88,10 +88,19 @@ int array_htab_insert(array_htab *array, htab_t htab) {
 	return 0;
 }
 
+htab_t* array_htab_get_item(array_htab *array, unsigned idx) {
+	if (idx >= array->idx) {
+		return NULL;
+	}
+	else {
+		return &(array->data[idx]);
+	}
+}
+
 void array_htab_destroy(array_htab *array) {
 	if (array != NULL) {
 		for (unsigned i = 0; i < array->idx; i++) {
-			htab_clear_items(&array->data[i]);
+			htab_free_all(&(array->data[i]));
 		}
 		free(array->data);
 	}

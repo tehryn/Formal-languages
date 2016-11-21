@@ -1,6 +1,7 @@
 // Miroslava Misova
 // zatim nepropojeno s htab.c
-
+#ifndef HASH_TABLE
+#define HASH_TABLE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,3 +42,4 @@ void htab_free_all(htab_t * T);
 
 htab_item * htab_find_item(htab_t * T, const char * key); // NULL if not there
 htab_item * htab_insert_item(htab_t * T, const char * key); // NULL if failed
+#endif

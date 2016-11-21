@@ -3,8 +3,10 @@
 #include "error.h"
 #include "parser.h"
 #include "htab.h"
-#define TEST_PARSER
+#include "structures.h"
+//#define TEST_PARSER
 //#define TEST_TABLE
+#define TEST_STRUCTURES
 
 //#define TEST_SCANNER
 //#define TEST_TOKEN
@@ -19,13 +21,52 @@ int main (int argc, char **argv) {
 	mem_list_t l;
 	mem_list_t_init(&l);
 	if (argc != 2) {
-		// TODO
+		fprintf(stderr, "Invalid arguments\n");
+		return 1;
 	}
 	f = fopen(argv[1], "r");
 	if (f == NULL) {
-		// TODO
+		fprintf(stderr, "Invalid file\n");
+		return 1;
 	}
-// testing
+#ifdef TEST_STRUCTURES
+	htab_t* table;
+	htab_t *tables[19];
+	array_htab array;
+	stack_htab stack;
+	stack_htab_init(&stack);
+	array_htab_init(&array);
+	const char *chars[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s"}; //19
+		for (int i = 0; i < 19; i++) {
+			tables[i] = htab_init(7);
+			htab_insert_item(tables[i], chars[i]);
+			stack_htab_push(&stack, *tables[i]);
+			array_htab_insert(&array, *tables[i]);
+		}
+		printf("======--ARRAY--======\n");
+		for (int i = 0; i < 19; i++) {
+			table = array_htab_get_item(&array, i);
+			if (htab_find_item(table, chars[i]) != NULL) {
+				printf("| Succes\n");
+			}
+			else {
+				printf("| ERROR\n");
+			}
+		}
+		printf("======--STACK--======\n");
+		for (int i = 0; i < 19; i++) {
+			table = stack_htab_get_item(&stack, i);
+			if (htab_find_item(table, chars[18-i]) != NULL) {
+				printf("| Succes\n");
+			}
+			else {
+				printf("| ERROR\n");
+			}
+		}
+		array_htab_destroy(&array);
+#endif
+
+// testing Parser
 #ifdef TEST_PARSER
 	switch (parser()) {
 		case 0: printf("OK \n"); break;
@@ -36,13 +77,8 @@ int main (int argc, char **argv) {
 #ifdef TEST_TABLE
 	char line[10], prev[10] = {0,};
 	htab_t *table;
-<<<<<<< HEAD
 	table = htab_init(17);
-=======
-	table = htab_init(1001);
->>>>>>> c92e5866aecc1d266543e7cb810c0d1dc38ea537
 		while(fgets(line, 10, f) != NULL) {
-			line[9] = '\0';
 			printf("+-------------------\n");
 			printf("| lookig for: [%s]\n", prev);
 			if (htab_find_item(table, prev)) {
@@ -96,7 +132,7 @@ do {
 			else if (t->id == S_AND)
 				printf("| token id: &&\n");
 			else if (t->id == S_NOT_EQUAL)
-				printf("| token id: !=\n");	
+				printf("| token id: !=\n");
 			else if (t->id == S_LEFT_PARE)
 				printf("| token id: (\n");
 			else if (t->id == S_RIGHT_PARE)

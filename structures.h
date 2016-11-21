@@ -5,16 +5,24 @@
 * gcc version: 5.4.0 (ubuntu 16.04.2)
 * Date: TODO
 **/
-#ifndef STACK
-#define STACK
+#ifndef STRUCTURES
+#define STRUCTURES
 #include <stdio.h>
 #include <stdlib.h>
 #include "htab.h"
+
+/**
+ * TODO
+ */
 #define STACK_INIT_SIZE 16
+
+/**
+ * TODO
+ */
 #define ARRAY_INIT_SIZE 64
 
 /**
- *
+ * TODO
  */
 typedef struct stack_htab {
 	int top;
@@ -22,7 +30,9 @@ typedef struct stack_htab {
 	htab_t *data;
 } stack_htab;
 
-
+/**
+ * TODO
+ */
 typedef struct array_htab {
 	unsigned idx;
 	size_t size;
@@ -81,7 +91,15 @@ int array_htab_init(array_htab *array);
 int array_htab_insert(array_htab *array, htab_t htab);
 
 /**
- * Free all memory allocated by array
+ * Retrive specific item from array
+ * @param  array Array with items
+ * @param  idx   Index in array
+ * @return       Pointer to specific item or NULL if item on index is not inicializated
+ */
+htab_t* array_htab_get_item(array_htab *array, unsigned idx);
+
+/**
+ * Free all memory allocated by array and all items in hash tables
  * @param array Array that shall be freed
  */
 void array_htab_destroy(array_htab *array);
