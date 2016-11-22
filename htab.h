@@ -1,5 +1,5 @@
 // Miroslava Misova
-// zatim nepropojeno s htab.c
+
 #ifndef HASH_TABLE
 #define HASH_TABLE
 #include <stdio.h>
