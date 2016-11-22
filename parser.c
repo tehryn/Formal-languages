@@ -20,6 +20,9 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 
+	htab_t * hash_table;
+	htab_init(unsigned size);
+
 	parser_return = analysis(&s);
 
 	stack_int_destroy(&s);
@@ -607,7 +610,7 @@ int analysis (stack_int_t *s)
 				if(t.id == S_WHILE)
 				{
 					token_got = false;
-					if (stack_int_push(s, 6, S_RIGHT_BRACE, P_FUNC_BODY_H1, S_LEFT_BRACE, S_RIGHT_PARE, P_EXPR, S_LEFT_PARE) < 0)
+					if (stack_int_push(s, 4, P_IF_ELSE_SECTION, S_RIGHT_PARE, P_EXPR, S_LEFT_PARE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
