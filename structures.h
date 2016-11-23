@@ -27,7 +27,7 @@
 typedef struct stack_htab {
 	int top;
 	size_t size;
-	htab_t *data;
+	htab_t **data;
 } stack_htab;
 
 /**
@@ -36,7 +36,7 @@ typedef struct stack_htab {
 typedef struct array_htab {
 	unsigned idx;
 	size_t size;
-	htab_t *data;
+	htab_t **data;
 } array_htab;
 
 /**
@@ -49,23 +49,23 @@ int stack_htab_init(stack_htab *stack);
 /**
  * Push new item into stack. Reallocate itself if stack is full
  * @param  stack Stack where item will be pushed
- * @param  table Hash table that will be pushed into stack
+ * @param  table Pointer to hash table that will be pushed into stack
  * @return       0 on succes 1 if reallocation failed (memory will not be freed)
  */
-int stack_htab_push(stack_htab *stack, htab_t table);
+int stack_htab_push(stack_htab *stack, htab_t *table);
 
 /**
  * Delete item on top
  * @param  stack Stack where item will be deleted
- * @return       0 on succes if stack is already empty (before pop), return 1
+ * @return       pointer to poped table on succes if stack is already empty (before pop), return NULL
  */
-int stack_htab_pop(stack_htab *stack);
+htab_t *stack_htab_pop(stack_htab *stack);
 
 /**
  * Retrive specific item from stack
  * @param  stack    Stack with items
  * @param  bactrack How far from top item is stored
- * @return          Pointer to specific item
+ * @return          Pointer to specific item or NULL if bactrack is too big
  */
 htab_t *stack_htab_get_item(stack_htab *stack, unsigned bactrack);
 
@@ -85,10 +85,10 @@ int array_htab_init(array_htab *array);
 /**
  * Insert item into array and also reallocate memory if array is full
  * @param  array Array where item will be inserted
- * @param  htab  Item (hash table) that will be inserted
+ * @param  htab  Item (pointer to hash table) that will be inserted
  * @return       0 on succes, 1 when reallocation failed
  */
-int array_htab_insert(array_htab *array, htab_t htab);
+int array_htab_insert(array_htab *array, htab_t *htab);
 
 /**
  * Retrive specific item from array
@@ -99,7 +99,7 @@ int array_htab_insert(array_htab *array, htab_t htab);
 htab_t* array_htab_get_item(array_htab *array, unsigned idx);
 
 /**
- * Free all memory allocated by array and all items in hash tables
+ * Free all memory allocated by array and all memory allocated by all hash tables in array
  * @param array Array that shall be freed
  */
 void array_htab_destroy(array_htab *array);

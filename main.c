@@ -40,8 +40,8 @@ int main (int argc, char **argv) {
 		for (int i = 0; i < 19; i++) {
 			tables[i] = htab_init(7);
 			htab_insert_item(tables[i], chars[i]);
-			stack_htab_push(&stack, *tables[i]);
-			array_htab_insert(&array, *tables[i]);
+			stack_htab_push(&stack, tables[i]);
+			array_htab_insert(&array, tables[i]);
 		}
 		printf("======--ARRAY--======\n");
 		for (int i = 0; i < 19; i++) {
@@ -64,6 +64,7 @@ int main (int argc, char **argv) {
 			}
 		}
 		array_htab_destroy(&array);
+		stack_htab_destroy(&stack);
 #endif
 
 // testing Parser
