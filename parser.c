@@ -574,7 +574,7 @@ int analysis (stack_int_t *s)
 					type = S_BOOLEAN;
 				else
 				{
-					if (stack_int_push(s, 2, P_FUNC, P_FUNC_BODY_H1) < 0)
+					if (stack_int_push(s, 2, P_FUNC, P_FUNC_BODY_H2) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
@@ -680,6 +680,7 @@ int analysis (stack_int_t *s)
 					}
 					break; // goto case P_LEFT_PARE
 				}
+				
 				if (t.id == S_INT || t.id == S_DOUBLE || t.id == S_STRING || t.id == S_BOOLEAN)
 				{
 					fprintf (stderr, "PARSER: On line %u cannot be a definition of variable or function.\n", LINE_NUM);
@@ -942,17 +943,6 @@ int analysis (stack_int_t *s)
 					//token_got = false;
 					//stack_int_pop(s);
 					break; // goto S_RIGHT_BRACE
-				}
-				
-				if (t.id == S_INT || t.id == S_DOUBLE || t.id == S_STRING || t.id == S_BOOLEAN)
-				{
-					if(stack_int_top(s, &on_top))
-					{
-						fprintf(stderr, "PARSER: Unexpected situation.\n");
-						return ERR_SYNTACTIC_ANALYSIS;
-					}
-					if (on_top == P_FUNC)
-						break; // goto P_FUNC
 				}
 
 				if (stack_int_push(s, 2, P_FUNC_BODY_H1, P_FUNC_BODY) < 0)
