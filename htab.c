@@ -109,9 +109,11 @@ htab_item * malloc_item(const char * key)
 
 	strncpy(item->key, key, key_len);
 	item->data_type = 0;
-	item->func_var = 0;
-	item->next_item = NULL;
+	item->func_or_var = 0;
 	item->data = NULL;
+	item->initialized = 0;
+	item->next_item = NULL;
+
 	return item;
 }
 

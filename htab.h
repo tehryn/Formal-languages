@@ -19,10 +19,11 @@
 
 // --- STRUCTURES ---
 typedef struct htab_item {
-	char* key; // string ID
-	unsigned data_type; // 0 - not defined
-	unsigned func_var; // 0 - not defined, 1 - variable, 2 - function
-	void* data; // pointer to the place with data
+	char* key; 				// string ID
+	unsigned data_type; 	// 0 - not defined, data type for variable or returns type of function
+	unsigned func_or_var; 	// 0 - not defined, 1 - variable, 2 - function
+	void* data; 			// pointer to the place with data, for function it is int* (int array of data_types of parametres)
+	unsigned initialized; 	// 0 - not initialized, 1 - initialized
 	struct htab_item* next_item; // next variable
 } htab_item;
 
