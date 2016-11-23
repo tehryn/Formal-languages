@@ -4,6 +4,7 @@
 #include "scanner.h"
 #include "stack_int.h"
 #include "htab.h"
+#include "structures.h"
 #include <string.h>
 #include <stdbool.h>    // bool
 
@@ -46,7 +47,7 @@ enum {
 // it eats tokens and says if syntax analysis success or not
 int parser();
 
-int analysis(stack_int_t *s);
+int analysis(stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols);
 
 int skip_expr(token * t);
 

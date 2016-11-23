@@ -58,7 +58,7 @@ void htab_clear_items(htab_t * T)
 		while (T->ptr[i] != NULL)
 		{
 			item = T->ptr[i];
-			T->ptr[i] = T->ptr[i]->next_item; //store next item
+			T->ptr[i] = T->ptr[i]->next_item; // store next item
 			free(item->key);
 			free(item->data);
 			free(item);

@@ -20,16 +20,42 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 
-	htab_t * hash_table;
-	htab_init(HTAB_SIZE);
+	htab_t * TableSymbols;
+	TableSymbols = htab_init(HTAB_SIZE);
+	if (TableSymbols == NULL)
+	{
+		stack_int_destroy(&s);
+		fprintf(stderr, "Intern fault. Parser cannot malloc hash table.\n");
+		return ERR_INTERN_FAULT;
+	}
 
-	parser_return = analysis(&s);
+	stack_htab Stack_of_TableSymbols;
+	if (stack_htab_init(& Stack_of_TableSymbols) != 0)
+	{
+		htab_free_all(TableSymbols);
+		stack_int_destroy(&s);
+		fprintf(stderr, "Intern fault. Parser cannot malloc stack of hash tables.\n");
+		return ERR_INTERN_FAULT;
+	}
 
+	if (stack_htab_push(& Stack_of_TableSymbols, TableSymbols) != 0)
+	{
+		htab_free_all(TableSymbols);
+		stack_int_destroy(&s);
+		fprintf(stderr, "Intern fault. Parser cannot realloc stack of hash tables.\n");
+		return ERR_INTERN_FAULT;
+	}
+
+	// table = stack_htab_get_item(&stack, bactrack);
+
+	parser_return = analysis(&s, 1);
+	
+	htab_free_all(TableSymbols);
 	stack_int_destroy(&s);
 	return parser_return;
 }
 
-int analysis (stack_int_t *s)
+int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols)
 {
 	token t;
 	int on_top;
