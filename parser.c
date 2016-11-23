@@ -572,15 +572,16 @@ int analysis (stack_int_t *s)
 					type = S_STRING;
 				else if (t.id == S_BOOLEAN)
 					type = S_BOOLEAN;
+				else if (t.id == S_RIGHT_BRACE) // no other stafs in function
+					break;
 				else
-				{
-					if (stack_int_push(s, 2, P_FUNC, P_FUNC_BODY_H2) < 0)
+				{ // P_FUNC_BODY
+					if (stack_int_push(s, 2, P_FUNC, P_FUNC_BODY) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
 					}
-
-					break;
+					break; // goto P_FUNC_BODY
 				}
 				token_got = false;
 
