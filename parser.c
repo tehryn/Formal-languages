@@ -918,12 +918,12 @@ int analysis (stack_int_t *s)
 					break; // goto P_FUNC_BODY_H1
 				}
 
-				if (stack_int_push(s, 1, P_FUNC_BODY_H2) < 0)
+				if (stack_int_push(s, 1, P_FUNC_BODY) < 0)
 				{
 					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 					return ERR_INTERN_FAULT;
 				}
-				break; // goto case P_FUNC_BODY_H2
+				break; // goto case P_FUNC_BODY
 
 			// ======================== P_FUNC_BODY_H1 ======================
 
@@ -947,18 +947,6 @@ int analysis (stack_int_t *s)
 				}
 
 				if (stack_int_push(s, 2, P_FUNC_BODY_H1, P_FUNC_BODY) < 0)
-				{
-					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-					return ERR_INTERN_FAULT;
-				}
-				break; // goto case P_FUNC_BODY
-
-			// ======================== P_FUNC_BODY_H2 ======================
-
-			case P_FUNC_BODY_H2:
-				stack_int_pop(s);
-
-				if (stack_int_push(s, 1, P_FUNC_BODY) < 0)
 				{
 					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 					return ERR_INTERN_FAULT;
