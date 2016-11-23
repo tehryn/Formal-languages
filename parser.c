@@ -578,6 +578,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					fprintf(stderr, "PARSER: On line %u expected ')' or ','.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
+				
+				token_got = false;
 
 				if (token_got == false)
 				{
