@@ -4,9 +4,9 @@
 #include "parser.h"
 #include "htab.h"
 #include "structures.h"
-//#define TEST_PARSER
+#define TEST_PARSER
 //#define TEST_TABLE
-#define TEST_STRUCTURES
+//#define TEST_STRUCTURES
 
 //#define TEST_SCANNER
 //#define TEST_TOKEN

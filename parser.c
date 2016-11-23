@@ -21,7 +21,7 @@ int parser()
 	}
 
 	htab_t * hash_table;
-	htab_init(unsigned size);
+	htab_init(HTAB_SIZE);
 
 	parser_return = analysis(&s);
 
@@ -193,7 +193,7 @@ int analysis (stack_int_t *s)
 				if (t.id == S_CLASS)
 				{
 					token_got = false;
-					
+
 					if (token_got == false)
 					{
 						t = get_token();
@@ -549,7 +549,7 @@ int analysis (stack_int_t *s)
 				return ERR_SYNTACTIC_ANALYSIS;
 
 			// ======================== P_FUNC ==============================
-			
+
 			case P_FUNC:
 				stack_int_pop(s);
 
@@ -601,7 +601,7 @@ int analysis (stack_int_t *s)
 					}
 					break; // goto P_VAR_EXPR
 				}
-				
+
 				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
@@ -678,7 +678,7 @@ int analysis (stack_int_t *s)
 
 				fprintf (stderr, "PARSER: On line %u unexpected function body.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
-				
+
 			// ======================== P_VAR_EXPR ==========================
 
 			case P_VAR_EXPR:
@@ -1022,7 +1022,7 @@ int skip_expr(token * t)
 				return 0;
 
 
-			else if (t->id == S_SEMICOMMA && pocet_zpracovanych_tokenu == 0) 
+			else if (t->id == S_SEMICOMMA && pocet_zpracovanych_tokenu == 0)
 			{
 				fprintf(stderr, "PARSER: On line %u expected expresion.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;

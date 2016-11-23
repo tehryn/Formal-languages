@@ -1,4 +1,4 @@
-#ifndef PARSER 
+#ifndef PARSER
 #define PARSER
 
 #include "scanner.h"
@@ -18,7 +18,7 @@
 #define ERR_OTHERS 10
 #define ERR_INTERN_FAULT 99
 
-
+#define HTAB_SIZE 7
 
 // cases in switch in funtion process_token
 enum {
