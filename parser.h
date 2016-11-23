@@ -1,5 +1,9 @@
+#ifndef PARSER 
+#define PARSER
+
 #include "scanner.h"
 #include "stack_int.h"
+#include "htab.h"
 #include <string.h>
 #include <stdbool.h>    // bool
 
@@ -26,6 +30,7 @@ enum {
   P_DEF_ARGUMENTS, //55
   P_DEF_ARGUMENTS2, //56
   P_IDENT, //57
+  P_FUNC,
   P_FUNC_BODY, //58
   P_VAR_EXPR, //59
   P_GUIDANCE, //60
@@ -48,3 +53,4 @@ int analysis(stack_int_t *s);
 int skip_expr(token * t);
 
 bool token_wanted(token * t);
+#endif
