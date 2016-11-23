@@ -8,6 +8,7 @@ int parser()
 
 	int parser_return;
 
+	// vytvoreni a naplneni zasobniku na stavy
 	if (stack_int_create(&s, 64) < 0)
 	{
 		fprintf(stderr, "Intern fault. Memory allocation of stack failed.\n");
@@ -20,6 +21,7 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 
+	// vytvoreni a inicializace tabulky symbolu (hash. table)
 	htab_t * TableSymbols;
 	TableSymbols = htab_init(HTAB_SIZE);
 	if (TableSymbols == NULL)
@@ -28,7 +30,7 @@ int parser()
 		fprintf(stderr, "Intern fault. Parser cannot malloc hash table.\n");
 		return ERR_INTERN_FAULT;
 	}
-
+	// zasobnik tabulek symbolu a naplneni prvni tabulkou na static promenne a funkce
 	stack_htab Stack_of_TableSymbols;
 	if (stack_htab_init(& Stack_of_TableSymbols) != 0)
 	{
@@ -40,16 +42,19 @@ int parser()
 
 	if (stack_htab_push(& Stack_of_TableSymbols, TableSymbols) != 0)
 	{
+		stack_htab_destroy(& Stack_of_TableSymbols);
 		htab_free_all(TableSymbols);
 		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot realloc stack of hash tables.\n");
 		return ERR_INTERN_FAULT;
 	}
 
-	// table = stack_htab_get_item(&stack, bactrack);
-
 	parser_return = analysis(&s, 1);
-	
+
+
+
+
+	stack_htab_destroy(& Stack_of_TableSymbols);
 	htab_free_all(TableSymbols);
 	stack_int_destroy(&s);
 	return parser_return;
@@ -58,14 +63,24 @@ int parser()
 int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols)
 {
 	token t;
-	int on_top;
-	bool main_existance = false; // if class Main exists in whole input file
-	bool main_run_existance = true; // if function run exist in function Main - TODO
-	char * class_name = NULL; // TODO - pro pripad, ze budu chtit ukladat nazvy trid - zatim neudelano
-
-	int type = 0; // t.id should not be 0
-	bool void_existance = false; // if true - control no existance of void variable and return with no expr. in void function
 	bool token_got = false; // variable for P_EXPR - if the token have been read
+
+	int on_top; // top of the stack_int - zasobnik stavu
+
+	bool main_existance = false; // if class Main exists in whole input file - TODO
+	bool main_run_existance = true; // if function run exist in function Main - TODO
+
+	char * class_name = NULL; // pro vyrobu full_ident
+	int class_name_strlen = 0;
+	char * func_var_name = NULL; // pro ukladani do tabulky
+	int func_var_name_strlen = 0;
+
+	int type = 0; // t.id data_type is not 0
+	
+	bool void_existance = false; // if true - control no existance of void variable and return with no expr. in void function
+	
+
+	htab_t * TableSymbols = NULL; // TODO - for later use
 
 	while (!stack_int_top(s, &on_top)) // stack_int_top == -1 if stack is empty
 	{
@@ -236,7 +251,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						// make a copy of class name
 						if (class_name != NULL)	// TODO ? - just realloc
 							free(class_name);
-						int class_name_strlen = strlen((char*) t.ptr) + 1; // '\0'
+						class_name_strlen = strlen((char*) t.ptr) + 1; // '\0'
 						class_name = (char *) malloc(class_name_strlen); // * sizeof(char) = 1
 						if (class_name == NULL)
 						{
@@ -245,10 +260,11 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						class_name = strncpy(class_name, (char*)t.ptr, class_name_strlen);
 
+						printf("MACKA:%s\n", class_name);
+
 						if (strcmp(class_name,"Main") == 0)
 							main_existance = true;
 
-						// TODO - pridat class_name do tabulky symbolu pro tridy
 						if (token_got == false)
 						{
 							t = get_token();
@@ -367,6 +383,25 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
 						// data_type = type;
+						if (runtime == 1)
+						{
+							//TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
+							
+							if (func_var_name != NULL)
+								free (func_var_name);
+
+							printf("MACKA:%s\n", (char*) t.ptr);
+
+							func_var_name_strlen = class_name_strlen + strlen((char*) t.ptr) + 1; // with '\0' + '.'
+							func_var_name = (char *) malloc(func_var_name_strlen); // * sizeof(char) = 1
+							func_var_name = strncpy(func_var_name, class_name, class_name_strlen);
+							func_var_name[class_name_strlen-1] = '.';
+							func_var_name[class_name_strlen] = strncpy( func_var_name[class_name_strlen-1], (char *)t.ptr, (func_var_name_strlen - class_name_strlen - 1) );
+							func_var_name[func_var_name_strlen-1]= '\0';
+
+							printf("MACKA:%s\n", func_var_name);
+						}
+						
 						token_got = false;
 						if (stack_int_push(s, 2, P_CLASS_BODY, P_DEF) < 0)
 						{
@@ -636,7 +671,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				
 				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
-
 
 			// ======================== P_FUNC_BODY =========================
 
