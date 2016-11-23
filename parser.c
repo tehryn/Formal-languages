@@ -49,7 +49,7 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 
-	parser_return = analysis(&s, 1);
+	parser_return = analysis(&s, 1, Stack_of_TableSymbols);
 
 
 
@@ -76,9 +76,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 	int func_var_name_strlen = 0;
 
 	int type = 0; // t.id data_type is not 0
-	
+
 	bool void_existance = false; // if true - control no existance of void variable and return with no expr. in void function
-	
+
 
 	htab_t * TableSymbols = NULL; // TODO - for later use
 
@@ -234,7 +234,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				if (t.id == S_CLASS)
 				{
 					token_got = false;
-					
+
 					if (token_got == false)
 					{
 						t = get_token();
@@ -386,7 +386,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						if (runtime == 1)
 						{
 							//TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
-							
+
 							if (func_var_name != NULL)
 								free (func_var_name);
 
@@ -396,12 +396,12 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							func_var_name = (char *) malloc(func_var_name_strlen); // * sizeof(char) = 1
 							func_var_name = strncpy(func_var_name, class_name, class_name_strlen);
 							func_var_name[class_name_strlen-1] = '.';
-							func_var_name[class_name_strlen] = strncpy( func_var_name[class_name_strlen-1], (char *)t.ptr, (func_var_name_strlen - class_name_strlen - 1) );
+							func_var_name[class_name_strlen] = strncpy( &func_var_name[class_name_strlen-1], (char *)t.ptr, (func_var_name_strlen - class_name_strlen - 1) );
 							func_var_name[func_var_name_strlen-1]= '\0';
 
 							printf("MACKA:%s\n", func_var_name);
 						}
-						
+
 						token_got = false;
 						if (stack_int_push(s, 2, P_CLASS_BODY, P_DEF) < 0)
 						{
@@ -610,7 +610,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				return ERR_SYNTACTIC_ANALYSIS;
 
 			// ======================== P_FUNC ==============================
-			
+
 			case P_FUNC:
 				stack_int_pop(s);
 
@@ -668,7 +668,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					break; // goto P_VAR_EXPR
 				}
-				
+
 				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
@@ -741,7 +741,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					break; // goto case P_LEFT_PARE
 				}
-				
+
 				if (t.id == S_INT || t.id == S_DOUBLE || t.id == S_STRING || t.id == S_BOOLEAN)
 				{
 					fprintf (stderr, "PARSER: On line %u cannot be a definition of variable or function.\n", LINE_NUM);
@@ -750,7 +750,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				fprintf (stderr, "PARSER: On line %u unexpected function body.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
-				
+
 			// ======================== P_VAR_EXPR ==========================
 
 			case P_VAR_EXPR:
@@ -1080,7 +1080,7 @@ int skip_expr(token * t)
 				return 0;
 
 
-			else if (t->id == S_SEMICOMMA && pocet_zpracovanych_tokenu == 0) 
+			else if (t->id == S_SEMICOMMA && pocet_zpracovanych_tokenu == 0)
 			{
 				fprintf(stderr, "PARSER: On line %u expected expresion.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;

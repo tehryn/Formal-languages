@@ -1,4 +1,4 @@
-#ifndef PARSER 
+#ifndef PARSER
 #define PARSER
 
 #include "scanner.h"

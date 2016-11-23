@@ -29,12 +29,11 @@ void* string_process(int id, char* str)
             int octal = 0;
             size_t len = strlen(str);
             unsigned j = 0;
-//input a output sleduji retezec - input jej projede cely, jestlize narazi na specialni pripad, probehne prislusna akce, output dostane vysledek
-//octal slouzi jako pomocna promena pri prevodu cisla v osmickove soustave z retezce do desitkove soutavy
             for (unsigned i = 0; i < len; i++)
                 {
-                    if (str[i] == '\\') {
-                        if ((i+1) < len) {
+                    if (str[i] == '\\')  {
+/*                        if ((i+1) < len) {
+
                             if (str[i+1] == 'n') {
                                 str[j] = '\n';
                                 j++;
@@ -65,14 +64,15 @@ void* string_process(int id, char* str)
                                 i++;
                                 continue;
                             }
-                            else if ((i+3) < len) {
-                                if (isdigit(str[i+1]) && isdigit(str[i+2]) && isdigit(str[i+3]) && str[i+1]<='3' && str[i+2]<='7' && str[i+3]<='7') {
-                                    octal = (str[i+1] - '0')*64 + (str[i+2] - '0')*8 + (str[i+3] - '0');
-                                    str[j] = octal;
-                                    j++;
-                                    i+=3;
-                                    continue;
-                                }
+                        }
+*/
+                        if ((i+3) < len) {
+                            if (isdigit(str[i+1]) && isdigit(str[i+2]) && isdigit(str[i+3]) && str[i+1]<='3' && str[i+2]<='7' && str[i+3]<='7') {
+                                octal = (str[i+1] - '0')*64 + (str[i+2] - '0')*8 + (str[i+3] - '0');
+                                str[j] = octal;
+                                j++;
+                                i+=3;
+                                continue;
                             }
                         }
                     }
