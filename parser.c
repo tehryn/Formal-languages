@@ -375,7 +375,7 @@ int analysis (stack_int_t *s)
 				{
 					// TODO ? - ukladat nejake dalsi informace do tabulky?
 					token_got = false;
-					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC_BODY_H1, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
+					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
@@ -548,6 +548,64 @@ int analysis (stack_int_t *s)
 				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
+			// ======================== P_FUNC ==============================
+			
+			case P_FUNC:
+				stack_int_pop(s);
+
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
+				token_got = true;
+
+				// definition of local variable
+				if      (t.id == S_INT)
+					type = S_INT;
+				else if (t.id == S_DOUBLE)
+					type = S_DOUBLE;
+				else if (t.id == S_STRING)
+					type = S_STRING;
+				else if (t.id == S_BOOLEAN)
+					type = S_BOOLEAN;
+				else
+				{
+					fprintf (stderr, "PARSER: On line %u unexpected function body.\n", LINE_NUM);
+					return ERR_SYNTACTIC_ANALYSIS;
+				}
+				token_got = false;
+
+				if (token_got == false)
+				{
+					t = get_token();
+					if (t.id == 0)
+						return ERR_LEXICAL_ANALYSIS;
+					else if (t.id < 0)
+						return ERR_INTERN_FAULT;
+				}
+				token_got = true;
+
+				if (t.id == S_SIMPLE_IDENT)
+				{
+					// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
+					// data_type = type;
+					token_got = false;
+					if (stack_int_push(s, 2, P_FUNC,P_VAR_EXPR) < 0)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+						return ERR_INTERN_FAULT;
+					}
+					break; // goto P_VAR_EXPR
+				}
+				
+				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+
+
 			// ======================== P_FUNC_BODY =========================
 
 			case P_FUNC_BODY:
@@ -618,48 +676,9 @@ int analysis (stack_int_t *s)
 					break; // goto case P_LEFT_PARE
 				}
 
-				// it must be definition of local variable (no other rules)
-
-				if      (t.id == S_INT)
-					type = S_INT;
-				else if (t.id == S_DOUBLE)
-					type = S_DOUBLE;
-				else if (t.id == S_STRING)
-					type = S_STRING;
-				else if (t.id == S_BOOLEAN)
-					type = S_BOOLEAN;
-				else
-				{
-					fprintf (stderr, "PARSER: On line %u unexpected function body.\n", LINE_NUM);
+				fprintf (stderr, "PARSER: On line %u unexpected function body.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
-				}
-				token_got = false;
-
-				if (token_got == false)
-				{
-					t = get_token();
-					if (t.id == 0)
-						return ERR_LEXICAL_ANALYSIS;
-					else if (t.id < 0)
-						return ERR_INTERN_FAULT;
-				}
-				token_got = true;
-
-				if (t.id == S_SIMPLE_IDENT)
-				{
-					// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
-					// data_type = type;
-					token_got = false;
-					if (stack_int_push(s, 1, P_VAR_EXPR) < 0)
-					{
-						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
-					}
-					break; // goto P_VAR_EXPR
-				}
-				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
-				return ERR_SYNTACTIC_ANALYSIS;
-
+				
 			// ======================== P_VAR_EXPR ==========================
 
 			case P_VAR_EXPR:
@@ -914,6 +933,8 @@ int analysis (stack_int_t *s)
 					//stack_int_pop(s);
 					break; // goto S_RIGHT_BRACE
 				}
+				if (t.id == S_INT || t.id == S_DOUBLE || t.id == S_STRING || t.id == S_BOOLEAN)
+					break;
 
 				if (stack_int_push(s, 2, P_FUNC_BODY_H1, P_FUNC_BODY) < 0)
 				{
