@@ -17,15 +17,6 @@ int ERROR_CHECK = 0;
 
 extern char* SCANNER_WORD;
 
-char *join_strings(char *str1, char *str2) {
-	size_t len[2] = {strlen(str1), strlen(str2)};
-	char *result = (char *) malloc(len[0] + len[1] + 2);
-	strcpy(result, str1);
-	result[len[0]] = '.';
-	strcpy(&result[len[0]+1], str2);
-	return result;
-}
-
 int main (int argc, char **argv) {
 	mem_list_t l;
 	mem_list_t_init(&l);
