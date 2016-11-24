@@ -684,7 +684,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
 					// data_type = type;
 					token_got = false;
-					if (stack_int_push(s, 2, P_FUNC,P_VAR_EXPR) < 0)
+					if (stack_int_push(s, 2, P_FUNC, P_VAR_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
@@ -825,8 +825,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_LEFT_PARE) // '('
 				{
-					token_got = false;
-					if (stack_int_push(s, 3, S_SEMICOMMA, S_RIGHT_PARE, P_USE_ARGUMENTS) < 0)
+					//token_got = false;
+					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
