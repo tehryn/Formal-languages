@@ -1110,7 +1110,7 @@ int skip_expr(token * t)
 			}
 			else if (t->id == S_SEMICOMMA) return 0;
 
-			else if (t->id == S_COMMA && number_pares > 0) ;
+			else if (t->id == S_COMMA && number_pares > 0) token_got = false;
 
 			else
 			{
