@@ -7,11 +7,39 @@
 #define TEST_PARSER
 //#define TEST_TABLE
 //#define TEST_STRUCTURES
-
 //#define TEST_SCANNER
-//#define TEST_TOKEN
 
 FILE *f;
+
+/*
+(fprintf[ ]*\(stderr, ["])([a-z| |\.|:|%|'|{|\\|(|}|)|;|_|]+["])(,[ ]*LINE_NUM\))
+$1 In %s on line %u: $2, __FILE__, __LINE__$3
+ */
+
+/**
+ * Make simple ident from full ident
+ * @param  str Pointer to full ident
+ * @return     Pointer to new string. If input string is full ident, new string \
+ *             equal to a string after first dot otherwise return copy of input string
+ * @post       Return value is not NULL
+ */
+char *full_ident2simple(char *str) {
+	unsigned i = 0;
+	while (str[i] && str[i++] != '.');
+	if (!str[i]) {
+		char *result = (char *) malloc(strlen(str)+1);
+		if (result == NULL) {
+			return NULL;
+		}
+		return strcpy(result, str);
+	}
+	size_t size = strlen(&str[i]) + 1;
+	char *result = (char *) malloc(size);
+	if (result == NULL) {
+		return NULL;
+	}
+	return strcpy(result, &str[i]);
+}
 
 int ERROR_CHECK = 0;
 

@@ -8,6 +8,8 @@
 #include "scanner.h"
 #include "error.h"
 
+#define SPEC_CHAR_FSEEK(spec) (((spec) == S_EQUAL || (spec) == S_LESS_EQUAL || (spec) == S_GREATER_EQUAL || (spec) == S_NOT_EQUAL)?-2:-1)
+
 unsigned LINE_NUM = 1;
 extern FILE *f;
 char *SCANNER_WORD;
@@ -182,34 +184,7 @@ int skip_comment(unsigned comment_type) {
 	}
 	return 1; // reached EOF
 }
-/*
-char *load_string(char *word, unsigned *max) {
-	int c, prev = -1, pre_prev = -1;
-	unsigned i = 0;
-	while(((c = fgetc(f)) != EOF)) {
-		if (c == '"' && !(prev == '\\' && pre_prev != '\\')) {
-			word[i] = '\0';
-			return word;
-		}
-		if (c == '\n')
-			return NULL;
-		pre_prev = prev;
-		word[i] = prev = c;
-		i++;
-		if (i >= *max) { // predpoklad dalsiho zapisu -> nutna realokace pameti
-			char *tmp = word;
-			*max *= 2; // preteceni ??? TODO - tolik pameti asi mit k dispozici nemuzeme...
-			tmp = (char *) realloc(word, *max);
-			if (tmp == NULL) {
-				*max = 0;
-				return NULL;
-			}
-			word = tmp;
-		}
-	}
-	return NULL;
-}
-*/
+
 static char *write_back(char *word, int *num, unsigned *idx, unsigned *max, int *check) {
 	for (unsigned i = 0; num[i] != '\0'; i++) {
 		if (*idx >= *max) { // predpoklad dalsiho zapisu -> nutna realokace pameti
@@ -217,6 +192,7 @@ static char *write_back(char *word, int *num, unsigned *idx, unsigned *max, int 
 			*max *= 2; // preteceni ??? TODO - tolik pameti asi mit k dispozici nemuzeme...
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
+				free(word);
 				*max = 0;
 				return NULL;
 			}
@@ -262,7 +238,10 @@ char *load_string(char *word, unsigned *max) {
 						c = (num[0] - '0')*64 + (num[1] - '0')*8 + (num[2] - '0');
 					}
 					else {
-						write_back(word, num, &i, max, &check);
+						word = write_back(word, num, &i, max, &check);
+						if (word == NULL) {
+							return NULL;
+						}
 						if (check == EOF) {
 							break;
 						}
@@ -270,7 +249,10 @@ char *load_string(char *word, unsigned *max) {
 				}
 				else {
 					num[2] = '\0';
-					write_back(word, num, &i, max, &check);
+					word = write_back(word, num, &i, max, &check);
+					if (word == NULL) {
+						return NULL;
+					}
 					if (check == EOF) {
 						break;
 					}
@@ -290,6 +272,7 @@ char *load_string(char *word, unsigned *max) {
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
 				*max = 0;
+				free(word);
 				return NULL;
 			}
 			word = tmp;
@@ -412,8 +395,8 @@ token get_token() {
 		 check special chars */
 		if (!skip && ((spec = is_special_char(c)) != 0)) {
 			if (i) { // if i != 0 we found token
-				/* we have to go back by 1 char */
-				if (fseek(f, -1, SEEK_CUR) != 0) {
+				/* we have to go back by 1 or 2 chars */
+				if (fseek(f, SPEC_CHAR_FSEEK(spec), SEEK_CUR) != 0) {
 					ERROR_CHECK = (int) ERR_FSEEK;
 					fprintf(stderr, "Can't set offset in file!\n");
 					new_token.id = -1;
@@ -439,6 +422,8 @@ token get_token() {
 			tmp = (char *) realloc(SCANNER_WORD, size);
 			if (tmp == NULL) {
 				fprintf(stderr, "Memory reallocation failed\n");
+				free(SCANNER_WORD);
+				SCANNER_WORD = NULL;
 				new_token.id = -1;
 				new_token.ptr = NULL;
 				return new_token;
@@ -459,6 +444,8 @@ token get_token() {
 		size *= 2; // preteceni???
 		tmp = (char *) realloc(SCANNER_WORD, size);
 		if (tmp == NULL) {
+			free(SCANNER_WORD);
+			SCANNER_WORD = NULL;
 			fprintf(stderr, "Memory reallocation failed\n");
 			new_token.id = -1;
 			new_token.ptr = NULL;
