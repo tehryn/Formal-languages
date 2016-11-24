@@ -5,6 +5,8 @@ extern int expr_analyze(token * t); // potrebuji, aby mi zmenila token
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
 	char *result = (char *) malloc(len[0] + len[1] + 2);
+	if (result == NULL)
+		return NULL;
 	strcpy(result, str1);
 	result[len[0]] = '.';
 	strcpy(&result[len[0]+1], str2);
@@ -76,20 +78,22 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 	int on_top; // top of the stack_int - zasobnik stavu
 
-	bool main_existance = false; // if class Main exists in whole input file - TODO
-	bool main_run_existance = true; // if function run exist in function Main - TODO
+	bool main_existance = false; // if class Main exists in whole input file - TODO nebude potreba
+	bool main_run_existance = true; // if function run exist in function Main - TODO nebude potreba
 
 	char * class_name = NULL; // pro vyrobu full_ident
 	int class_name_strlen = 0;
 	char * func_var_name = NULL; // pro ukladani do tabulky
 
-	int type = 0; // t.id data_type is not 0
+	unsigned type = 0; // t.id data_type is not 0
 
-	bool void_existance = false; // if true - control no existance of void variable and return with no expr. in void function
-
+	bool void_existance = false; // if true - control no existance of void variable and return with no expr. in void function - TODO asi nebude potreba
 
 	htab_t * TableSymbols = NULL; // TODO - for later use
 	htab_item * TableItem = NULL;
+
+	int number_arguments = 0; // arguments of function
+	int number_allocated_arguments = 0;
 
 	while (!stack_int_top(s, &on_top)) // stack_int_top == -1 if stack is empty
 	{
@@ -269,8 +273,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						class_name = strncpy(class_name, (char*)t.ptr, class_name_strlen);
 
-						printf("MACKA:%s\n", class_name);
-
 						if (strcmp(class_name,"Main") == 0)
 							main_existance = true;
 
@@ -393,18 +395,20 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
 						// data_type = type;
 						if (runtime == 1)
-						{
-							// TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
+						{ // putting a function or variable into hash. table
+							TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
 
-							if (func_var_name != NULL)
-								free (func_var_name);
+							func_var_name == NULL;
 
-							printf("MACKA:%s\n", (char*) t.ptr);
 							func_var_name = join_strings(class_name, (char*) t.ptr);
-
+							if (func_var_name == NULL)
+							{
+								fprintf(stderr, "Intern fault. Parser cannot join strings.\n");
+								return ERR_INTERN_FAULT;
+							}
 							printf("MACKA:%s\n", func_var_name);
 
-							/*
+							
 							TableItem = htab_find_item(TableSymbols, func_var_name);
 							if (TableItem == NULL)
 							{
@@ -412,7 +416,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 							else
 							{
-								fprintf(stderr, "PARSER: % has been already defined.\n");
+								fprintf(stderr, "PARSER: %s has been already defined.\n", func_var_name);
 								return ERR_SEM_NDEF_REDEF;
 							}
 							if(TableItem == NULL)
@@ -420,7 +424,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 								fprintf(stderr, "Intern fault. Parser cannot insert item into Table of symbols (malloc problem).\n");
 								return ERR_INTERN_FAULT;
 							}
-							*/
+
+							TableItem->key = func_var_name; // TODO func_var_name = NULL; na konec argumentu
+							TableItem->data_type = type;
 						}
 
 						token_got = false;
@@ -455,8 +461,11 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_LEFT_PARE) // scanner: '(' - function
 				{
-					// TODO ? - ukladat nejake dalsi informace do tabulky?
 					token_got = false;
+
+					if (runtime == 1)
+						TableItem->func_or_var = 2; // function
+					
 					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -467,16 +476,22 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SEMICOMMA) // scanner: ';' -> just variable without inicialisation
 				{
-					// TODO ? - ukladat nejake dalsi informace do tabulky?
 					token_got = false;
+
+					if (runtime == 1)
+						TableItem->func_or_var = 1; // variable
+
 					break; // goto P_CLASS_BODY
 				}
 
 				if (t.id == S_ASSIGNMENT) // scanner: '=' -> variable with inicialization
 				{
-					// TODO ? - ukladat nejake dalsi informace do tabulky?
 					// TODO - porovnani typu expr a typu promenne
 					token_got = false;
+					
+					if (runtime == 1)
+						TableItem->func_or_var = 1 // variable
+					
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -505,9 +520,36 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_RIGHT_PARE) // ')' - no arguments
 				{
-					//token_got = false;
-					//stack_int_pop(s);
+					if (runtime == 1)
+					{
+						TableItem->data = (void*) malloc(1 * sizeof(int));
+						if (TableItem->data == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
+							return ERR_INTERN_FAULT;
+						}
+						((int*)TableItem->data)[0] = S_EOF;
+					}
 					break; // goto case S_RIGHT_PARE
+				}
+
+				if (runtime == 1) // it will be first argument
+				{
+					number_arguments++;
+
+					number_allocated_arguments += 4;
+
+					TableItem->data = (void*) malloc(number_allocated_arguments * sizeof(int)); // 4 for beginning
+					if (TableItem->data == NULL)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
+						return ERR_INTERN_FAULT;
+					}
+
+					((int*)TableItem->data)[0] = S_EOF;
+					((int*)TableItem->data)[1] = S_EOF;
+					((int*)TableItem->data)[2] = S_EOF;
+					((int*)TableItem->data)[3] = S_EOF;
 				}
 
 				if (t.id == S_INT)
@@ -525,6 +567,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				token_got = false;
 
+				if (runtime == 1)
+					((int*)TableItem->data)[number_arguments-1] = type;
+
 				if (token_got == false)
 				{
 					t = get_token();
@@ -537,7 +582,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SIMPLE_IDENT)
 				{
-					// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
+					// TODO - vlozit t.ptr do hash. tabulky lokalnich promennych - runtime 2
 					// data_type = type;
 					token_got = false;
 					if (stack_int_push(s, 1, P_DEF_ARGUMENTS2) < 0)
@@ -579,6 +624,36 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
 				
+				if (runtime == 1) // it will be first argument
+				{
+					number_arguments++;
+					if(number_arguments >= number_allocated_arguments-1) // -1 for ending symbol
+					{
+						number_allocated_arguments += 4;
+
+						int * tmp_ptr = NULL;
+						tmp_ptr = (int*) realloc(TableItem->data, number_allocated_arguments * sizeof(int)); // 4 for beginning
+						if (tmp_ptr == NULL)
+						{
+							free(TableItem->data); // TODO - garbage_collector?
+							fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
+							return ERR_INTERN_FAULT;
+						}
+						TableItem->data = (void*) tmp_ptr;
+
+						((int*)TableItem->data)[number_arguments-1] = S_EOF;
+						((int*)TableItem->data)[number_arguments+0] = S_EOF;
+						((int*)TableItem->data)[number_arguments+1] = S_EOF;
+						((int*)TableItem->data)[number_arguments+2] = S_EOF; // TODO - control SIGSEGV?
+
+					}
+
+					// TODO - for DEBUG
+					for (int i=0; i<number_arguments; i++)
+						printf("%i ", ((int*)TableItem->data)[i]);
+					printf("\n");
+				}
+
 				token_got = false;
 
 				if (token_got == false)
@@ -604,6 +679,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
+
+				if (runtime == 1)
+					((int*)TableItem->data)[number_arguments-1] = type;
+
 				token_got = false;
 
 				if (token_got == false)
@@ -618,7 +697,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SIMPLE_IDENT)
 				{
-					// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
+					// TODO - vlozit t.ptr do hash. tabulky pro lokalni promenne - runtime 2
 					// data_type = type;
 					token_got = false;
 					if (stack_int_push(s, 1, P_DEF_ARGUMENTS2) < 0)
@@ -937,13 +1016,24 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = false;
 					break; // just stack_int_pop(s);
 				}
-
-				if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
+				if (!void_existance)
 				{
-					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-					return ERR_INTERN_FAULT;
+					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+						return ERR_INTERN_FAULT;
+					}
+					break; // goto case P_EXPR
 				}
-				break; // goto case P_EXPR
+				else
+				{
+					if (stack_int_push(s, 1, S_SEMICOMMA) < 0)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+						return ERR_INTERN_FAULT;
+					}
+					break; // goto case S_SEMICOMMA
+				}	
 
 			// ======================== P_ELSE_EXISTANCE ====================
 
