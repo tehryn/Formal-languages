@@ -62,6 +62,7 @@ void htab_clear_items(htab_t * T)
 			free(item->key);
 			free(item->data);
 			free(item);
+			item = NULL;
 		}
 	}
 }
