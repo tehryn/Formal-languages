@@ -5,6 +5,8 @@ extern int expr_analyze(token * t); // potrebuji, aby mi zmenila token
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
 	char *result = (char *) malloc(len[0] + len[1] + 2);
+	if (result == NULL)
+		return NULL;
 	strcpy(result, str1);
 	result[len[0]] = '.';
 	strcpy(&result[len[0]+1], str2);
@@ -401,7 +403,11 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 							printf("MACKA:%s\n", (char*) t.ptr);
 							func_var_name = join_strings(class_name, (char*) t.ptr);
-
+							if (func_var_name == NULL)
+							{
+								fprintf(stderr, "Intern fault. Parser cannot join strings.\n");
+								return ERR_INTERN_FAULT;
+							}
 							printf("MACKA:%s\n", func_var_name);
 
 							/*
