@@ -66,7 +66,7 @@ int parser()
 
 	parser_return = analysis(&s, 1, Stack_of_TableSymbols);
 
-	parser_return = analysis(&s, 2, Stack_of_TableSymbols);
+//	parser_return = analysis(&s, 2, Stack_of_TableSymbols);
 
 
 	stack_htab_destroy(& Stack_of_TableSymbols);
@@ -206,7 +206,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				return ERR_SYNTACTIC_ANALYSIS;
 
 			// ======================== P_CLASS =============================
-			
+
 			case P_CLASS:
 				stack_int_pop(s);
 
@@ -239,7 +239,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					if (runtime == 1)
 						TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
-					
+
 					TableItem = htab_find_item(TableSymbols, "Main.run");
 					if (TableItem == NULL || TableItem->data_type != S_VOID)
 					{

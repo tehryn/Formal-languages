@@ -97,10 +97,7 @@ int main (int argc, char **argv) {
 
 // testing Parser
 #ifdef TEST_PARSER
-	switch (parser()) {
-		case 0: printf("OK \n"); break;
-		default: printf("%s\n", "ERROR");
-	}
+	printf("Navratova hodnota parseru je: %i", parser());
 #endif
 // testing htab
 #ifdef TEST_TABLE
