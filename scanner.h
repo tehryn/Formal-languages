@@ -6,7 +6,6 @@
 #include <ctype.h>
 #include <limits.h>
 #include "error.h"
-#include "str_prcs.h"
 /*! TODO */
 #define ERR_WRONG_COMMENT_SYNTAX -100
 

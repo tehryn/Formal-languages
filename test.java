@@ -5,7 +5,7 @@ class Main {
 		else if (b()) {}
 		print();
 	}
-	static int b = "\\"; // HAHAHAHAHA - chyba!!!!
+//	static int b = "\\"; // HAHAHAHAHA - chyba!!!!
 	static void b; // HAHAHAHA dalsi!
 }
 //"\\\\\\a"

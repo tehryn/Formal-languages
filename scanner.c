@@ -187,9 +187,9 @@ int skip_comment(unsigned comment_type) {
 
 static char *write_back(char *word, int *num, unsigned *idx, unsigned *max, int *check) {
 	for (unsigned i = 0; num[i] != '\0'; i++) {
-		if (*idx >= *max) { // predpoklad dalsiho zapisu -> nutna realokace pameti
+		if (*idx >= *max) {
 			char *tmp = word;
-			*max *= 2; // preteceni ??? TODO - tolik pameti asi mit k dispozici nemuzeme...
+			*max *= 2;
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
 				free(word);
@@ -266,9 +266,9 @@ char *load_string(char *word, unsigned *max) {
 		else if (c == '"') {
 			c = '\0';
 		}
-		if (i >= *max) { // predpoklad dalsiho zapisu -> nutna realokace pameti
+		if (i >= *max) {
 			char *tmp = word;
-			*max *= 2; // preteceni ??? TODO - tolik pameti asi mit k dispozici nemuzeme...
+			*max *= 2;
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
 				*max = 0;
@@ -282,6 +282,39 @@ char *load_string(char *word, unsigned *max) {
 			return word;
 		}
 	}
+	return NULL;
+}
+
+void *str2num(char *str, int type, int *valide) {
+	void *result = NULL;
+	valide = 0;
+	if (type == TYPE_INT) {
+		result = malloc(sizeof(int));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		if (sscanf(str, "%i", (int *)result) == EOF) {
+			free(result);
+			*valide = 2;
+			return NULL;
+		}
+		return result;
+	}
+	else if (type == TYPE_DOUBLE) {
+		result = malloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		if (sscanf(str, "%lf", (double *)result)) {
+			free(result);
+			*valide = 2;
+			return NULL;
+		}
+		return result;
+	}
+	*valide = 3;
 	return NULL;
 }
 
@@ -303,7 +336,7 @@ token get_token() {
 	int token_found = 0; // variable that sais if we found token or not
 	int spec = 0; // storing special characters like == or <=...
 	int skip = 0; // variable that sais if we should skip calling function that determinate special chars
-	void *number; // variable for storing return value of function str2num TODO
+	void *number; // variable for storing return value of function str2num
 	while (!token_found && (c = fgetc(f)) != EOF) { // reading stream until we reach its end or we found token
 		if (isspace(c)) { // if we found space
 			if (c == '\n')
@@ -464,14 +497,18 @@ token get_token() {
 		/* Ok, we did not found key word... Did we found number?*/
 		id = is_num_literal(SCANNER_WORD, i);
 		if (id) {
-
-			number = string_process(id, SCANNER_WORD);
-			if (number == NULL) {
+			int valide = 0;
+			number = str2num(SCANNER_WORD, id, &valide);
+			if (valide == 1) {
 				fprintf(stderr, "Memory allocation failed\n");
 				new_token.id = -1;
 				new_token.ptr = NULL;
 			}
-
+			else if (valide) {
+				fprintf(stderr, "in file: %s:%u Invalid use of function\n", __FILE__, __LINE__);
+				new_token.id = -1;
+				new_token.ptr = NULL;
+			}
 			new_token.id = id;
 			new_token.ptr = number;
 			return new_token;
