@@ -284,9 +284,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						class_name = strncpy(class_name, (char*)t.ptr, class_name_strlen);
 
-						if (strcmp(class_name,"Main") == 0)
-							main_existance = true;
-
 						if (token_got == false)
 						{
 							t = get_token();
