@@ -376,7 +376,7 @@ token get_token() {
 			}
 		}
 
-		if (is_num_literal(SCANNER_WORD, i-2) && (SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'e') && (c == '-' || c == '+')) {
+		if ( i && is_num_literal(SCANNER_WORD, i-2) && (SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'e') && (c == '-' || c == '+')) {
 			if (isdigit(fgetc(f))) {
 					skip = 1;
 			}

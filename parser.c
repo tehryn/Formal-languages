@@ -13,6 +13,10 @@ char *join_strings(char *str1, char *str2) {
 	return result;
 }
 
+char * class_name = NULL; // pro vyrobu full_ident
+int class_name_strlen = 0;
+char * func_var_name = NULL; // pro ukladani do tabulky
+
 int parser()
 {
 	stack_int_t s;
@@ -81,9 +85,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 	bool main_existance = false; // if class Main exists in whole input file - TODO nebude potreba
 	bool main_run_existance = true; // if function run exist in function Main - TODO nebude potreba
 
-	char * class_name = NULL; // pro vyrobu full_ident
-	int class_name_strlen = 0;
-	char * func_var_name = NULL; // pro ukladani do tabulky
+
 
 	unsigned type = 0; // t.id data_type is not 0
 
@@ -398,8 +400,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						{ // putting a function or variable into hash. table
 							TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
 
-							func_var_name = NULL; // FIXME to je ten tvuj zvlastni pocit kdyz zahazujes ukazatel?
-
+							if(func_var_name != NULL) // FIXME to je ten tvuj zvlastni pocit kdyz zahazujes ukazatel?
+								free(func_var_name);
 							func_var_name = join_strings(class_name, (char*) t.ptr);
 							if (func_var_name == NULL)
 							{
@@ -425,7 +427,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 								return ERR_INTERN_FAULT;
 							}
 
-							TableItem->key = func_var_name; // TODO func_var_name = NULL; na konec argumentu
 							TableItem->data_type = type;
 						}
 
@@ -529,6 +530,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_INTERN_FAULT;
 						}
 						((int*)TableItem->data)[0] = S_EOF;
+						number_arguments = 0;
+						number_allocated_arguments = 0;
 					}
 					break; // goto case S_RIGHT_PARE
 				}
@@ -551,6 +554,11 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					((int*)TableItem->data)[2] = S_EOF;
 					((int*)TableItem->data)[3] = S_EOF;
 				}
+
+				// TODO - for DEBUG
+				printf("++%i++\n", number_arguments);
+				for (int i=0; i<number_arguments; i++)
+					printf("%i ", ((int*)TableItem->data)[i]);
 
 				if (t.id == S_INT)
 					type = S_INT;
@@ -615,6 +623,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					//token_got = false;
 					//stack_int_pop(s);
+					number_arguments = 0;
+					number_allocated_arguments = 0;
 					break; // goto case S_RIGHT_PARE
 				}
 				else if (t.id != S_COMMA) // ',' - other arguments
@@ -649,6 +659,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					// TODO - for DEBUG
+					printf("--%i--\n", number_arguments);
 					for (int i=0; i<number_arguments; i++)
 						printf("%i ", ((int*)TableItem->data)[i]);
 					printf("\n");

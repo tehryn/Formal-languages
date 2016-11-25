@@ -101,7 +101,7 @@ htab_item * malloc_item(const char * key)
 
 	unsigned key_len = strlen(key) + 1;
 	item->key = (char *) malloc(key_len);
-	if (key == NULL)
+	if (item->key == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. htab_insert_item)");
 		free(item);
