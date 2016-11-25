@@ -14,6 +14,8 @@
 
 /*! TODO */
 #define S_SIZE 32
+/*! TODO */
+#define reset_scanner() (fseek(f, 0, SEEK_SET))
 
 /*! TODO */
 enum {
@@ -160,10 +162,4 @@ void *str2num(char *str, int type, int *valide);
 @return token, where token.id is identifikator and token.ptr is string (or poiter to NULL if string is not needed)
 */
 token get_token();
-
-/** Set offset of file at begining
-@return In case of error, return -1
-@pre Global variable f is already opened file
-*/
-int reset();
 #endif

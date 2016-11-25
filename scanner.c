@@ -543,7 +543,3 @@ token get_token() {
 	new_token.ptr = NULL;
 	return new_token;
 }
-
-int reset() {
-	return fseek(f, 0, SEEK_SET);
-}
