@@ -65,8 +65,15 @@ int parser()
 	}
 
 	parser_return = analysis(&s, 1, Stack_of_TableSymbols);
-
-//	parser_return = analysis(&s, 2, Stack_of_TableSymbols);
+	if( reset() == -1)
+	{
+		stack_htab_destroy(& Stack_of_TableSymbols);
+		htab_free_all(TableSymbols);
+		stack_int_destroy(&s);
+		fprintf(stderr, "SCANNER: Cannot reset tokens. \n");
+		return ERR_INTERN_FAULT;
+	}	
+	parser_return = analysis(&s, 2, Stack_of_TableSymbols);
 
 
 	stack_htab_destroy(& Stack_of_TableSymbols);
