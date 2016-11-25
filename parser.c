@@ -239,9 +239,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					if (runtime == 1)
 						TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
-					else
-						TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 1);
-
+					
 					TableItem = htab_find_item(TableSymbols, "Main.run");
 					if (TableItem == NULL || TableItem->data_type != S_VOID)
 					{
