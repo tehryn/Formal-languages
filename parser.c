@@ -651,10 +651,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						TableItem->data = (void*) tmp_ptr;
 
-						((int*)TableItem->data)[number_arguments-1] = S_EOF;
-						((int*)TableItem->data)[number_arguments+0] = S_EOF;
-						((int*)TableItem->data)[number_arguments+1] = S_EOF;
-						((int*)TableItem->data)[number_arguments+2] = S_EOF; // TODO - control SIGSEGV?
+						((int*)TableItem->data)[number_allocated_arguments -4] = S_EOF;
+						((int*)TableItem->data)[number_allocated_arguments -3] = S_EOF;
+						((int*)TableItem->data)[number_allocated_arguments -2] = S_EOF;
+						((int*)TableItem->data)[number_allocated_arguments -1] = S_EOF; // TODO - control SIGSEGV?
 
 					}
 
