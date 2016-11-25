@@ -15,7 +15,7 @@ char *join_strings(char *str1, char *str2) {
 
 char * class_name = NULL; // pro vyrobu full_ident
 int class_name_strlen = 0;
-char * func_var_name = NULL; // pro ukladani do tabulky
+char * static_func_var_name = NULL; // pro ukladani do tabulky
 
 int parser()
 {
@@ -411,27 +411,27 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						{ // putting a function or variable into hash. table
 							TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
 
-							if(func_var_name != NULL) // FIXME to je ten tvuj zvlastni pocit kdyz zahazujes ukazatel?
+							if(static_func_var_name != NULL) // FIXME to je ten tvuj zvlastni pocit kdyz zahazujes ukazatel?
 							{
-								free(func_var_name);
-								func_var_name = NULL;
+								free(static_func_var_name);
+								static_func_var_name = NULL;
 							}
-							func_var_name = join_strings(class_name, (char*) t.ptr);
-							if (func_var_name == NULL)
+							static_func_var_name = join_strings(class_name, (char*) t.ptr);
+							if (static_func_var_name == NULL)
 							{
 								fprintf(stderr, "Intern fault. Parser cannot join strings.\n");
 								return ERR_INTERN_FAULT;
 							}
 
 
-							TableItem = htab_find_item(TableSymbols, func_var_name);
+							TableItem = htab_find_item(TableSymbols, static_func_var_name);
 							if (TableItem == NULL)
 							{
-								TableItem = htab_insert_item(TableSymbols, func_var_name);
+								TableItem = htab_insert_item(TableSymbols, static_func_var_name);
 							}
 							else
 							{
-								fprintf(stderr, "PARSER: %s has been already defined.\n", func_var_name);
+								fprintf(stderr, "PARSER: %s has been already defined.\n", static_func_var_name);
 								return ERR_SEM_NDEF_REDEF;
 							}
 							if(TableItem == NULL)
@@ -511,7 +511,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = false;
 
 					if (runtime == 1)
+					{
 						TableItem->func_or_var = 1; // variable
+						TableItem->initialized = 1; // it will be initialized in P_EXPR
+					}
 
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
@@ -770,7 +773,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				else if (t.id == S_RIGHT_BRACE) // no other stafs in function
 					break;
 				else
-				{ // P_FUNC_BODY
+				{ // P_FUNC_BODY -> not definition of local variable
 					if (stack_int_push(s, 2, P_FUNC, P_FUNC_BODY) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1043,12 +1046,14 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				token_got = true;
 
-				if (t.id == S_SEMICOMMA) // ';' - void funkce?
+				TableItem = htab_find_item(TableSymbols, static_func_var_name);
+				if (TableItem == NULL)
 				{
-					token_got = false;
-					break; // just stack_int_pop(s);
+					fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+					return ERR_INTERN_FAULT;
 				}
-				if (!void_existance)
+
+				if (TableItem->data_type != S_VOID)
 				{
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
