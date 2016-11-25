@@ -82,9 +82,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 	int on_top; // top of the stack_int - zasobnik stavu
 
-	bool main_existance = false; // if class Main exists in whole input file - TODO nebude potreba
-	bool main_run_existance = true; // if function run exist in function Main - TODO nebude potreba
-
 	unsigned type = 0; // t.id data_type is not 0
 
 	htab_t * TableSymbols = NULL; // TODO - for later use
@@ -228,7 +225,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = false;
 					stack_int_top(s, &on_top); // if should be S_EOF
 					if (on_top != S_EOF)
+					{
+						fprintf(stderr, "On the top is not EOF.\n");
 						return ERR_SYNTACTIC_ANALYSIS;
+					}
 
 					stack_int_pop(s);
 
@@ -1174,7 +1174,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 		}
 	}
-
+	fprintf(stderr, "We are out of switch.\n");
 	return ERR_SYNTACTIC_ANALYSIS;
 }
 
