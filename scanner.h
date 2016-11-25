@@ -163,7 +163,7 @@ token get_token();
 
 /** Set offset of file at begining
 @return In case of error, return -1
-@post return value is not -1
+@pre Global variable f is already opened file
 */
 int reset();
 #endif
