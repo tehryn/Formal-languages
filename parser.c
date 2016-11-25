@@ -1223,7 +1223,13 @@ int skip_expr(token * t)
 				fprintf(stderr, "PARSER: On line %u expected expresion.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 			}
-			else if (t->id == S_SEMICOMMA) return 0;
+			else if (t->id == S_SEMICOMMA && number_pares != 0)
+			{
+				fprintf(stderr, "PARSER: On line %u is not enough pares.\n", LINE_NUM);
+				return ERR_SYNTACTIC_ANALYSIS;
+			}
+			else if (t->id == S_SEMICOMMA)
+				return 0;
 
 			else if (t->id == S_COMMA && number_pares > 0) token_got = false;
 
