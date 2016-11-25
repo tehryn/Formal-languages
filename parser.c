@@ -65,7 +65,15 @@ int parser()
 	}
 
 	parser_return = analysis(&s, 1, Stack_of_TableSymbols);
-	if( reset_scanner() == -1)
+	if (parser_return != 0)
+	{
+		stack_htab_destroy(& Stack_of_TableSymbols);
+		htab_free_all(TableSymbols);
+		stack_int_destroy(&s);
+		return parser_return;
+	}
+	
+	if(reset_scanner() == -1)
 	{
 		stack_htab_destroy(& Stack_of_TableSymbols);
 		htab_free_all(TableSymbols);
@@ -73,6 +81,12 @@ int parser()
 		fprintf(stderr, "SCANNER: Cannot reset tokens. \n");
 		return ERR_INTERN_FAULT;
 	}
+	if (stack_int_push(&s, 2, S_EOF, P_CLASS) < 0)
+	{
+		fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+		return ERR_INTERN_FAULT;
+	}
+	
 	parser_return = analysis(&s, 2, Stack_of_TableSymbols);
 
 
