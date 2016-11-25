@@ -112,6 +112,7 @@ htab_item * malloc_item(const char * key)
 	item->data_type = 0;
 	item->func_or_var = 0;
 	item->data = NULL;
+	item->number_of_arguments = 0;
 	item->initialized = 0;
 	item->next_item = NULL;
 
