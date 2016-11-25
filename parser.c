@@ -404,10 +404,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					if (t.id == S_SIMPLE_IDENT)
 					{
-						// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
-						// data_type = type;
-						if (runtime == 1)
-						{ // putting a function or variable into hash. table
+						//if (runtime == 1)
+						//{ // putting a function or variable into hash. table
 							TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
 
 							if(static_func_var_name != NULL) // FIXME to je ten tvuj zvlastni pocit kdyz zahazujes ukazatel?
@@ -422,7 +420,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 								return ERR_INTERN_FAULT;
 							}
 
-
+						if (runtime == 1)
+						{	
 							TableItem = htab_find_item(TableSymbols, static_func_var_name);
 							if (TableItem == NULL)
 							{
@@ -643,8 +642,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_RIGHT_PARE) // ')' - no other arguments
 				{
-					//token_got = false;
-					//stack_int_pop(s);
 					number_arguments = 0;
 					number_allocated_arguments = 0;
 					break; // goto case S_RIGHT_PARE
@@ -769,7 +766,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					type = S_STRING;
 				else if (t.id == S_BOOLEAN)
 					type = S_BOOLEAN;
-				else if (t.id == S_RIGHT_BRACE) // no other stafs in function
+				else if (t.id == S_RIGHT_BRACE) // no other stuffs in function
 					break;
 				else
 				{ // P_FUNC_BODY -> not definition of local variable
@@ -794,7 +791,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SIMPLE_IDENT)
 				{
-					// TODO - vlozit t.ptr do hash. tabulky (pod full_ident? class_name+t.ptr)
+					// TODO - vlozit t.ptr do hash. tabulky lokalnich promennych
 					// data_type = type;
 					token_got = false;
 					if (stack_int_push(s, 2, P_FUNC, P_VAR_EXPR) < 0)
@@ -938,7 +935,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_LEFT_PARE) // '('
 				{
-					//token_got = false;
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -983,8 +979,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_RIGHT_PARE) // ')' - no arguments
 				{
-					//token_got = false;
-					//stack_int_pop(s);
 					break; // just stack pop
 				}
 
@@ -1023,8 +1017,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if(t.id == S_RIGHT_PARE) // ')' - no other arguments
 				{
-					//token_got = false;
-					//stack_int_pop(s);
 					break; // just stack pop
 				}
 
@@ -1150,8 +1142,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_RIGHT_BRACE) // '}'
 				{
-					//token_got = false;
-					//stack_int_pop(s);
 					break; // goto S_RIGHT_BRACE
 				}
 
@@ -1197,7 +1187,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 int skip_expr(token * t)
 {
 	// token je nacteny
-	// TODO - S_COMMA
 	int number_pares = 0;
 	int pocet_zpracovanych_tokenu = 0;
 	bool token_got = true;
