@@ -286,10 +286,9 @@ char *load_string(char *word, unsigned *max) {
 }
 
 token get_token() {
-//	static char *word;
-	static unsigned size = 0;
-	token new_token;
-	if (size == 0) {
+	static unsigned size = 0; // size of SCANNER_WORD
+	token new_token; // return value
+	if (size == 0) { // if SCANNER_WORD is not allocated - allocate
 		SCANNER_WORD = (char *) malloc(S_SIZE);
 		if (SCANNER_WORD == NULL) {
 			fprintf(stderr, "Memory allocation failed");
@@ -297,16 +296,16 @@ token get_token() {
 			new_token.ptr = NULL;
 			return new_token;
 		}
-		size = S_SIZE;
+		size = S_SIZE; // setting size into default value
 	}
-	int c = 0;
-	unsigned i = 0;
-	int token_found = 0;
-	int spec = 0;
-	int skip = 0;
-	void *number;
-	while (!token_found && (c = fgetc(f)) != EOF) {
-		if (isspace(c)) {
+	int c = 0; // for storing chars from stream
+	unsigned i = 0; // for indexing SCANNER_WORD
+	int token_found = 0; // variable that sais if we found token or not
+	int spec = 0; // storing special characters like == or <=...
+	int skip = 0; // variable that sais if we should skip calling function that determinate special chars
+	void *number; // variable for storing return value of function str2num TODO
+	while (!token_found && (c = fgetc(f)) != EOF) { // reading stream until we reach its end or we found token
+		if (isspace(c)) { // if we found space
 			if (c == '\n')
 				LINE_NUM++;
 			if (i) // if i != 0 we found token
@@ -316,17 +315,16 @@ token get_token() {
 		/* Are we at the begining of a comment? */
 		if (c == '/') {
 			c = fgetc(f);
-			if (c == '/') {
-				skip_comment(LINE_COMMENT);
+			if (c == '/') { // if true, we found comment section
+				skip_comment(LINE_COMMENT); // skips line comment
 				if (i) // if i != 0 we found token
 					token_found = 1;
 				continue;
 			}
-			else if (c == '*') {
-				if (skip_comment(BLOCK_COMMENT) == -1) {
-					ERROR_CHECK = (int) ERR_WRONG_COMMENT_SYNTAX;
+			else if (c == '*') {  // if true, we found comment section
+				if (skip_comment(BLOCK_COMMENT) == -1) { // skips comment and also checks if we found end of commet as well
 					fprintf(stderr, "In line %d expected '*/' (endless comment)\n", LINE_NUM);
-					new_token.id = 0;
+					new_token.id = 0; // lexical error
 					new_token.ptr = NULL;
 					return new_token;
 				}
@@ -334,25 +332,24 @@ token get_token() {
 					token_found = 1;
 				continue;
 			}
-			else {
+			else { // we need to return readed char back to stream
 				/* we have to go back by 1 char */
 				if (fseek(f, -1, SEEK_CUR) != 0) {
-					ERROR_CHECK = (int) ERR_FSEEK;
 					fprintf(stderr, "Can't set offset in file!\n");
-					new_token.id = -1;
+					new_token.id = -1; // intern error
 					new_token.ptr = NULL;
 					return new_token;
 				}
-				c = '/'; // and also set c to prev value
+				c = '/'; // and also set c to previos value
 			}
 		}
 
-		if (c == '"') {
-			if (i) {
+		if (c == '"') { // if true, we found string
+			if (i) { // if we found token, we need to return by one char in stream
 				if (fseek(f, -1, SEEK_CUR) != 0) {
 					ERROR_CHECK = (int) ERR_FSEEK;
 					fprintf(stderr, "Can't set offset in file!\n");
-					new_token.id = -1;
+					new_token.id = -1; // Intern error
 					new_token.ptr = NULL;
 					return new_token;
 				}
@@ -379,12 +376,11 @@ token get_token() {
 			}
 		}
 
-		if (i && (c == '-' || c == '+')) {
+		if (is_num_literal(SCANNER_WORD, i-2) && (SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'e') && (c == '-' || c == '+')) {
 			if (isdigit(fgetc(f))) {
 					skip = 1;
 			}
 			if (fseek(f, -1, SEEK_CUR) != 0) {
-				ERROR_CHECK = (int) ERR_FSEEK;
 				fprintf(stderr, "Can't set offset in file!\n");
 				new_token.id = -1;
 				new_token.ptr = NULL;

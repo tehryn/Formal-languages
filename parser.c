@@ -398,7 +398,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						{ // putting a function or variable into hash. table
 							TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
 
-							func_var_name == NULL;
+							func_var_name = NULL; // FIXME to je ten tvuj zvlastni pocit kdyz zahazujes ukazatel?
 
 							func_var_name = join_strings(class_name, (char*) t.ptr);
 							if (func_var_name == NULL)
@@ -408,7 +408,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 							printf("MACKA:%s\n", func_var_name);
 
-							
+
 							TableItem = htab_find_item(TableSymbols, func_var_name);
 							if (TableItem == NULL)
 							{
@@ -465,7 +465,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					if (runtime == 1)
 						TableItem->func_or_var = 2; // function
-					
+
 					if (stack_int_push(s, 5, S_RIGHT_BRACE, P_FUNC, S_LEFT_BRACE, S_RIGHT_PARE, P_DEF_ARGUMENTS) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -488,10 +488,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					// TODO - porovnani typu expr a typu promenne
 					token_got = false;
-					
+
 					if (runtime == 1)
-						TableItem->func_or_var = 1 // variable
-					
+						TableItem->func_or_var = 1; // variable
+
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -623,7 +623,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					fprintf(stderr, "PARSER: On line %u expected ')' or ','.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
-				
+
 				if (runtime == 1) // it will be first argument
 				{
 					number_arguments++;
@@ -1033,7 +1033,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						return ERR_INTERN_FAULT;
 					}
 					break; // goto case S_SEMICOMMA
-				}	
+				}
 
 			// ======================== P_ELSE_EXISTANCE ====================
 
