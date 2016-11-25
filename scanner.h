@@ -143,7 +143,16 @@ int skip_comment (unsigned comment_type);
 @pre *max >= 1
 @return Loaded string, return sNULL when function reach EOF or returns NULL and set *max to zero, if reallocation fails
 */
-char * load_string(char *word, unsigned *max);
+char *load_string(char *word, unsigned *max);
+
+/**
+ * Convert string into double or integer (depends on type variable) and store it into new allocated space
+ * @param  str    String that represents number
+ * @param  type   Type of number that represent string (should be TYPE_INT or TYPE_DOUBLE)
+ * @param  valide Variable that will be set into 0 in case of succes, into 1 in case of error while allocating memory, into 2 in case of invalide string or into 3 in case of invalide type
+ * @return        Pointer into value that is result of conversion
+ */
+void *str2num(char *str, int type, int *valide);
 
 /** Retrive token from source code
 @pre global variable f is already opened file

@@ -14,7 +14,6 @@ unsigned LINE_NUM = 1;
 extern FILE *f;
 char *SCANNER_WORD;
 
-
 int is_keyword(char *word) {
 	if (word == NULL) return -1;
 	if (!strcmp(word, "boolean")) return S_BOOLEAN;
@@ -286,6 +285,10 @@ char *load_string(char *word, unsigned *max) {
 }
 
 void *str2num(char *str, int type, int *valide) {
+	if (str == NULL) {
+		*valide = 2;
+		return NULL;
+	}
 	void *result = NULL;
 	valide = 0;
 	if (type == TYPE_INT) {
