@@ -66,7 +66,7 @@ int parser()
 
 	parser_return = analysis(&s, 1, Stack_of_TableSymbols);
 
-
+	parser_return = analysis(&s, 2, Stack_of_TableSymbols);
 
 
 	stack_htab_destroy(& Stack_of_TableSymbols);
@@ -85,11 +85,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 	bool main_existance = false; // if class Main exists in whole input file - TODO nebude potreba
 	bool main_run_existance = true; // if function run exist in function Main - TODO nebude potreba
 
-
-
 	unsigned type = 0; // t.id data_type is not 0
-
-	bool void_existance = false; // if true - control no existance of void variable and return with no expr. in void function - TODO asi nebude potreba
 
 	htab_t * TableSymbols = NULL; // TODO - for later use
 	htab_item * TableItem = NULL;
@@ -241,17 +237,19 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						free(class_name);
 						class_name = NULL;
 					}
-
-					if (main_existance && main_run_existance) // everything is perfect, i can leave the function
-						return 0;
+					if (runtime == 1)
+						TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
 					else
+						TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 1);
+
+					TableItem = htab_find_item(TableSymbols, "Main.run");
+					if (TableItem == NULL || TableItem->data_type != S_VOID)
 					{
-						if (!main_existance)
-							fprintf(stderr, "Semantic fauilt. Class Main does not exist.\n");
-						else
-							fprintf(stderr, "Semantic fauilt. Class Main has no function run.\n");
+						fprintf(stderr, "Semantic fauilt. There is no function 'Main.run' or it is not void function.\n");
 						return ERR_SEM_NDEF_REDEF;
 					}
+					else
+						return 0;
 				}
 
 				if (t.id == S_CLASS)
@@ -362,30 +360,15 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = true;
 
 					if      (t.id == S_VOID)
-					{
 						type = S_VOID;
-						void_existance = true;
-					}
 					else if (t.id == S_INT)
-					{
 						type = S_INT;
-						void_existance = false;
-					}
 					else if (t.id == S_DOUBLE)
-					{
 						type = S_DOUBLE;
-						void_existance = false;
-					}
 					else if (t.id == S_STRING)
-					{
 						type = S_STRING;
-						void_existance = false;
-					}
 					else if (t.id == S_BOOLEAN)
-					{
 						type = S_BOOLEAN;
-						void_existance = false;
-					}
 					else
 					{
 						fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
