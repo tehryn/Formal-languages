@@ -213,6 +213,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				return ERR_SYNTACTIC_ANALYSIS;
 
 			// ======================== P_CLASS =============================
+			
 			case P_CLASS:
 				stack_int_pop(s);
 
@@ -234,6 +235,13 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						return ERR_SYNTACTIC_ANALYSIS;
 
 					stack_int_pop(s);
+
+					if (class_name != NULL)
+					{
+						free(class_name);
+						class_name = NULL;
+					}
+
 					if (main_existance && main_run_existance) // everything is perfect, i can leave the function
 						return 0;
 					else
@@ -265,7 +273,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						token_got = false;
 						// make a copy of class name
 						if (class_name != NULL)	// TODO ? - just realloc
+						{
 							free(class_name);
+							class_name = NULL;
+						}
 						class_name_strlen = strlen((char*) t.ptr) + 1; // '\0'
 						class_name = (char *) malloc(class_name_strlen); // * sizeof(char) = 1
 						if (class_name == NULL)
@@ -401,14 +412,16 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
 
 							if(func_var_name != NULL) // FIXME to je ten tvuj zvlastni pocit kdyz zahazujes ukazatel?
+							{
 								free(func_var_name);
+								func_var_name = NULL;
+							}
 							func_var_name = join_strings(class_name, (char*) t.ptr);
 							if (func_var_name == NULL)
 							{
 								fprintf(stderr, "Intern fault. Parser cannot join strings.\n");
 								return ERR_INTERN_FAULT;
 							}
-							printf("MACKA:%s\n", func_var_name);
 
 
 							TableItem = htab_find_item(TableSymbols, func_var_name);
@@ -437,7 +450,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_INTERN_FAULT;
 						}
 
-						break;
+						break; // goto case P_DEF
 					}
 					fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
@@ -480,7 +493,14 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = false;
 
 					if (runtime == 1)
+					{
 						TableItem->func_or_var = 1; // variable
+						if (TableItem->data_type == S_VOID)
+						{
+							fprintf(stderr, "PARSER: You cannot have a void variable.\n");
+							return ERR_SEM_NDEF_REDEF;
+						}
+					}
 
 					break; // goto P_CLASS_BODY
 				}
@@ -646,6 +666,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						if (tmp_ptr == NULL)
 						{
 							free(TableItem->data); // TODO - garbage_collector?
+							TableItem->data = NULL;
 							fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
 							return ERR_INTERN_FAULT;
 						}
