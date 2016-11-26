@@ -37,46 +37,46 @@ int parser()
 	}
 
 	// vytvoreni a inicializace tabulky symbolu (hash. table)
-	htab_t * TableSymbols;
-	TableSymbols = htab_init(HTAB_SIZE);
-	if (TableSymbols == NULL)
+	htab_t * global_table_symbols;
+	global_table_symbols = htab_init(HTAB_SIZE);
+	if (global_table_symbols == NULL)
 	{
 		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot malloc hash table.\n");
 		return ERR_INTERN_FAULT;
 	}
 	// zasobnik tabulek symbolu a naplneni prvni tabulkou na static promenne a funkce
-	stack_htab Stack_of_TableSymbols;
-	if (stack_htab_init(& Stack_of_TableSymbols) != 0)
+	stack_htab stack_of_table_symbols;
+	if (stack_htab_init(& stack_of_table_symbols) != 0)
 	{
-		htab_free_all(TableSymbols);
+		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot malloc stack of hash tables.\n");
 		return ERR_INTERN_FAULT;
 	}
 
-	if (stack_htab_push(& Stack_of_TableSymbols, TableSymbols) != 0)
+	if (stack_htab_push(& stack_of_table_symbols, global_table_symbols) != 0)
 	{
-		stack_htab_destroy(& Stack_of_TableSymbols);
-		htab_free_all(TableSymbols);
+		stack_htab_destroy(& stack_of_table_symbols);
+		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot realloc stack of hash tables.\n");
 		return ERR_INTERN_FAULT;
 	}
 
-	parser_return = analysis(&s, 1, Stack_of_TableSymbols);
+	parser_return = analysis(&s, 1, stack_of_table_symbols);
 	if (parser_return != 0)
 	{
-		stack_htab_destroy(& Stack_of_TableSymbols);
-		htab_free_all(TableSymbols);
+		stack_htab_destroy(& stack_of_table_symbols);
+		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
 		return parser_return;
 	}
 	
 	if(reset_scanner() == -1)
 	{
-		stack_htab_destroy(& Stack_of_TableSymbols);
-		htab_free_all(TableSymbols);
+		stack_htab_destroy(& stack_of_table_symbols);
+		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
 		fprintf(stderr, "SCANNER: Cannot reset tokens. \n");
 		return ERR_INTERN_FAULT;
@@ -87,10 +87,10 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 	
-	parser_return = analysis(&s, 2, Stack_of_TableSymbols);
+	parser_return = analysis(&s, 2, stack_of_table_symbols);
 
 
-	stack_htab_destroy(& Stack_of_TableSymbols);
+	stack_htab_destroy(& stack_of_table_symbols);
 	htab_free_all(TableSymbols);
 	stack_int_destroy(&s);
 	return parser_return;
@@ -551,6 +551,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_INTERN_FAULT;
 						}
 						((int*)TableItem->data)[0] = S_EOF;
+						TableItem->number_of_arguments = number_arguments;
 						number_arguments = 0;
 						number_allocated_arguments = 0;
 					}
@@ -642,8 +643,12 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_RIGHT_PARE) // ')' - no other arguments
 				{
-					number_arguments = 0;
-					number_allocated_arguments = 0;
+					if (runtime == 1)
+					{
+						TableItem->number_of_arguments = number_arguments;
+						number_arguments = 0;
+						number_allocated_arguments = 0;
+					}
 					break; // goto case S_RIGHT_PARE
 				}
 				else if (t.id != S_COMMA) // ',' - other arguments
