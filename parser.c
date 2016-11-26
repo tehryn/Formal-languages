@@ -437,7 +437,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 							else
 							{
-								fprintf(stderr, "PARSER:  On line %u %s has been already defined.\n", , LINE_NUM, static_func_var_name);
+								fprintf(stderr, "PARSER:  On line %u %s has been already defined.\n", LINE_NUM, static_func_var_name);
 								return ERR_SEM_NDEF_REDEF;
 							}
 							if(TableItem == NULL)
