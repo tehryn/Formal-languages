@@ -7,7 +7,11 @@
 **/
 #include "structures.h"
 
-
+/**
+ * Initialize stack
+ * @param  stack Stack for initialization
+ * @return       0 on succes, 1 when memory allocation failed
+ */
 int stack_htab_init(stack_htab *stack) {
 	stack->data = (htab_t **) malloc(sizeof(htab_t *)*STACK_HTAB_INIT_SIZE);
 	if (stack->data == NULL) {
@@ -20,6 +24,13 @@ int stack_htab_init(stack_htab *stack) {
 	return 0;
 }
 
+/**
+ * Push new item into stack. Reallocate itself if stack is full
+ * @param  stack Stack where item will be pushed
+ * @param  table Pointer to hash table that will be pushed into stack
+ * @return       0 on succes 1 if reallocation failed (memory will not be freed)
+ * @pre          Stack was inicializated
+ */
 int stack_htab_push(stack_htab *stack, htab_t *table) {
 	stack->top++;
 	if ((unsigned)stack->top >= stack->size) {
@@ -36,37 +47,48 @@ int stack_htab_push(stack_htab *stack, htab_t *table) {
 	return 0;
 }
 
+/**
+ * Delete item on top
+ * @param  stack Stack where item will be deleted
+ * @return       pointer to poped table on succes if stack is already empty (before pop), return NULL
+ * @pre          Stack was inicializated
+ */
 htab_t *stack_htab_pop(stack_htab *stack) {
 	if (stack->top < 0)
 		return NULL;
 	return stack->data[stack->top--];
 }
 
+/**
+ * Retrive specific item from stack
+ * @param  stack    Stack with items
+ * @param  bactrack How far from top item is stored
+ * @return          Pointer to specific item or NULL if bactrack is too big
+ * @pre             Stack was inicializated
+ */
 htab_t *stack_htab_get_item(stack_htab *stack, unsigned bactrack) {
 	int idx = stack->top - bactrack;
 	if (idx < 0)
 		return NULL;
 	return stack->data[idx];
 }
-/*
-bool found = false;
-unsigned i = 0;
-htab_t *table;
-htab_item *item;
-while (!found) {
-	table = stack_htab_get_item(&stack, bactrack);
-	if ((item = htab_find_item(table, key)) != NULL) {
-		found = true;
-	}
-}
- */
 
+/**
+ * Free all memory allocated by stack
+ * @param stack Stack that shall be freed
+ * @pre         Stack was inicializated
+ */
 void stack_htab_destroy (stack_htab *stack) {
 	if (stack != NULL) {
 		free(stack->data);
 	}
 }
 
+/**
+ * Initialize array
+ * @param  array array for initialization
+ * @return       0 on succes, 1 if memory allocation failed
+ */
 int array_htab_init(array_htab *array) {
 	if (array == NULL) {
 		return 1;
@@ -81,6 +103,13 @@ int array_htab_init(array_htab *array) {
 	return 0;
 }
 
+/**
+ * Insert item into array and also reallocate memory if array is full
+ * @param  array Array where item will be inserted
+ * @param  htab  Item (pointer to hash table) that will be inserted
+ * @return       0 on succes, 1 when reallocation failed
+ * @pre          Array was inicializated
+ */
 int array_htab_insert(array_htab *array, htab_t *htab) {
 	if (array == NULL) {
 		return 1;
@@ -99,6 +128,13 @@ int array_htab_insert(array_htab *array, htab_t *htab) {
 	return 0;
 }
 
+/**
+ * Retrive specific item from array
+ * @param  array Array with items
+ * @param  idx   Index in array
+ * @return       Pointer to specific item or NULL if item on index is not inicializated
+ * @pre          Array was inicializated
+ */
 htab_t* array_htab_get_item(array_htab *array, unsigned idx) {
 	if (idx >= array->idx) {
 		return NULL;
@@ -108,6 +144,11 @@ htab_t* array_htab_get_item(array_htab *array, unsigned idx) {
 	}
 }
 
+/**
+ * Free all memory allocated by array and all memory allocated by all hash tables in array
+ * @param array Array that shall be freed
+ * @pre         Array was inicializated
+ */
 void array_htab_destroy(array_htab *array) {
 	if (array != NULL) {
 		for (unsigned i = 0; i < array->idx; i++) {
@@ -139,10 +180,27 @@ int array_string_init(array_string *array) {
  * Make deep copy of string and insert copy into array
  * @param  array array where string will be inserted
  * @param  str   string that will be copied
- * @return       0 in case of succes, 1 in case of error while allocating memory
+ * @return       0 in case of succes, 1 in case of error while allocating memory (no memory will be freed)
  * @pre          Array was inicializated
  */
-int array_string_insert(array_string *array, char *str);
+int array_string_insert(array_string *array, char *str) {
+	if (array->idx >= array->size) {
+		array->size *= 2;
+		char **tmp = (char **) realloc(array->data, array->size);
+		if (tmp == NULL) {
+			array->size /= 2;
+			return 1;
+		}
+		array->data = tmp;
+	}
+	char *new_string = (char *) malloc(strlen(str) + 1);
+	if (new_string == NULL) {
+		return 1;
+	}
+	strcpy(new_string, str);
+	array->data[array->idx++] = new_string;
+	return 0;
+}
 
 /**
  * Find string in array
@@ -151,11 +209,23 @@ int array_string_insert(array_string *array, char *str);
  * @return       NULL is string was not found, pointer to string if string was found
  * @pre Array was inicializated
  */
-char *array_string_find(array_string *array, char *str);
+char *array_string_find(array_string *array, char *str) {
+	for (unsigned i = 0; i < array->idx; i++) {
+		if (!strcmp(str, array->data[i])) {
+			return array->data[i];
+		}
+	}
+	return NULL;
+}
 
 /**
  * Free all memory allocated by array
  * @param array Array that will be freed
  * @pre Array was inicializated
  */
-void array_string_destroy(array_string *array);
+void array_string_destroy(array_string *array) {
+	for (unsigned i = 0; i < array->idx; i++) {
+		free(array->data[i]);
+	}
+	free(array->data);
+}
