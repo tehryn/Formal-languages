@@ -1,6 +1,6 @@
 class Main {
-    static int hello() {
-        return 1+1;
+    static String hello() {
+        return "Hello";
     }
     static void run() {
         double b = hello();
