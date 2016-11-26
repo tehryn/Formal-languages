@@ -879,6 +879,28 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					// TODO - vlozit t.ptr do hash. tabulky lokalnich promennych
 					// data_type = type;
+					
+					if (runtime == 2)
+					{
+						TableItem = htab_find_item(LocalTableSymbols, t.ptr);
+						if (TableItem == NULL)
+						{
+							TableItem = htab_insert_item(LocalTableSymbols, t.ptr);
+						}
+						else
+						{
+							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", (char*)t.ptr);
+							return ERR_SEM_NDEF_REDEF;
+						}
+						if(TableItem == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot insert item into Table of symbols (malloc problem).\n");
+							return ERR_INTERN_FAULT;
+						}
+
+						TableItem->data_type = type;
+					}
+
 					token_got = false;
 					if (stack_int_push(s, 2, P_FUNC, P_VAR_EXPR) < 0)
 					{
