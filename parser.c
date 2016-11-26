@@ -69,7 +69,7 @@ int parser()
 	parser_return = analysis(&s, 1, stack_of_table_symbols);
 	if (parser_return != 0)
 	{
-		array_string_destroy(all_class_names);
+		array_string_destroy(&all_class_names);
 		stack_htab_destroy(& stack_of_table_symbols);
 		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
@@ -78,7 +78,7 @@ int parser()
 
 	if(reset_scanner() == -1)
 	{
-		array_string_destroy(all_class_names);
+		array_string_destroy(&all_class_names);
 		stack_htab_destroy(& stack_of_table_symbols);
 		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
@@ -87,7 +87,7 @@ int parser()
 	}
 	if (stack_int_push(&s, 2, S_EOF, P_CLASS) < 0)
 	{
-		array_string_destroy(all_class_names);
+		array_string_destroy(&all_class_names);
 		stack_htab_destroy(& stack_of_table_symbols);
 		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
@@ -97,7 +97,7 @@ int parser()
 
 	parser_return = analysis(&s, 2, stack_of_table_symbols);
 
-	array_string_destroy(all_class_names);
+	array_string_destroy(&all_class_names);
 	stack_htab_destroy(& stack_of_table_symbols);
 	htab_free_all(global_table_symbols);
 	stack_int_destroy(&s);
@@ -329,7 +329,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						class_name = strncpy(class_name, (char*)t.ptr, class_name_strlen);
 						if (array_string_find(&all_class_names, class_name) == NULL)
 						{
-							if(array_string_insert(array_string *array, char *str) != 0)
+							if(array_string_insert(&all_class_names, class_name) != 0)
 							{
 								fprintf(stderr, "Intern fault. Parser cannot insert class %s into array.\n", class_name);
 								return ERR_INTERN_FAULT;
