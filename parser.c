@@ -680,10 +680,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = false;
 					if (runtime == 2)
 					{
-						TableItem = htab_find_item(LocalTableSymbols, t.ptr);
+						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
 						if (TableItem == NULL)
 						{
-							TableItem = htab_insert_item(LocalTableSymbols, t.ptr);
+							TableItem = htab_insert_item(LocalTableSymbols, (char*)t.ptr);
 						}
 						else
 						{
@@ -821,10 +821,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					if (runtime == 2)
 					{
-						TableItem = htab_find_item(LocalTableSymbols, t.ptr);
+						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
 						if (TableItem == NULL)
 						{
-							TableItem = htab_insert_item(LocalTableSymbols, t.ptr);
+							TableItem = htab_insert_item(LocalTableSymbols, (char*)t.ptr);
 						}
 						else
 						{
@@ -909,10 +909,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					
 					if (runtime == 2)
 					{
-						TableItem = htab_find_item(LocalTableSymbols, t.ptr);
+						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
 						if (TableItem == NULL)
 						{
-							TableItem = htab_insert_item(LocalTableSymbols, t.ptr);
+							TableItem = htab_insert_item(LocalTableSymbols, (char*)t.ptr);
 						}
 						else
 						{
@@ -957,24 +957,112 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if(t.id == S_SIMPLE_IDENT)
 				{
-					token_got = false;
-					if (stack_int_push(s, 1, P_GUIDANCE) < 0)
+					if (runtime == 1)
 					{
-						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						token_got = false;
+						if (stack_int_push(s, 1, P_GUIDANCE) < 0)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+							return ERR_INTERN_FAULT;
+						}
+						break; // goto case P_GUIDANCE
 					}
-					break; // goto case P_GUIDANCE
+					if (runtime == 2)
+					{
+						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
+						if(TableItem!=NULL) // local variable
+						{
+							token_got = false;
+							if (stack_int_push(s, 1, P_GUIDANCE) < 0)
+							{
+								fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+								return ERR_INTERN_FAULT;
+							}
+							break; // goto case P_GUIDANCE
+						}
+						else
+						{
+							local_func_var_name = join_strings(class_name, (char*) t.ptr);
+							if (local_func_var_name == NULL)
+							{
+								fprintf(stderr, "Intern fault. Parser cannot join strings.\n");
+								return ERR_INTERN_FAULT;
+							}
+							TableItem = htab_find_item(GlobalTableSymbols, local_func_var_name);
+							if (TableItem == NULL)
+							{
+								fprintf(stderr, "PARSER:  On line %u variable or function %s has not been defined.\n", LINE_NUM, (char*)t.ptr);
+								return ERR_SEM_NDEF_REDEF;
+							}
+							else
+							{
+								if (TableItem->func_or_var == 2)
+								{
+									if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
+									{
+										fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+										return ERR_INTERN_FAULT;
+									}
+									break; // goto case P_EXPR
+								}
+								else
+								{
+									token_got = false;
+									if (stack_int_push(s, 1, P_GUIDANCE) < 0)
+									{
+										fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+										return ERR_INTERN_FAULT;
+									}
+									break; // goto case P_GUIDANCE
+								}
+							}
+						}
+					}
 				}
 
 				if(t.id == S_FULL_IDENT)
 				{
-					token_got = false;
-					if (stack_int_push(s, 1, P_GUIDANCE) < 0)
+					if (runtime == 1)
 					{
-						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						token_got = false;
+						if (stack_int_push(s, 1, P_GUIDANCE) < 0)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+							return ERR_INTERN_FAULT;
+						}
+						break; // goto case P_GUIDANCE
 					}
-					break; // goto case P_GUIDANCE
+					if (runtime == 2)
+					{
+						TableItem = htab_find_item(GlobalTableSymbols, (char*) t.id);
+						if (TableItem == NULL)
+						{
+							fprintf(stderr, "PARSER:  On line %u variable or function %s has not been defined.\n", LINE_NUM, (char*)t.ptr);
+							return ERR_SEM_NDEF_REDEF;
+						}
+						else
+						{
+							if (TableItem->func_or_var == 2)
+							{
+								if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
+								{
+									fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+									return ERR_INTERN_FAULT;
+								}
+								break; // goto case P_EXPR
+							}
+							else
+							{
+								token_got = false;
+								if (stack_int_push(s, 1, P_GUIDANCE) < 0)
+								{
+									fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
+									return ERR_INTERN_FAULT;
+								}
+								break; // goto case P_GUIDANCE
+							}
+						}
+					}
 				}
 
 				if(t.id == S_RETURN)
@@ -996,6 +1084,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
 					}
+					if (runtime == 2) // because of expr.
+						TableItem = NULL;
 					break; // goto case P_LEFT_PARE
 				}
 
@@ -1007,6 +1097,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
 					}
+					if(runtime == 2) // because of expr.
+						TableItem = NULL;
 					break; // goto case P_LEFT_PARE
 				}
 
@@ -1068,7 +1160,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				token_got = true;
 
-				if (t.id == S_LEFT_PARE) // '('
+				if (t.id == S_LEFT_PARE) // '(' // in runtime 2, this if will be not opened (expr_analyze)
 				{
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
@@ -1078,7 +1170,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					break; // goto case P_USE_ARGUMENTS
 				}
 
-				if (t.id == S_SEMICOMMA) // ';'
+				if (t.id == S_SEMICOMMA) // ';' - in runtime 2 nothing hapened with variable
 				{
 					token_got = false;
 					break; // just stack_int_pop(s);
@@ -1091,7 +1183,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
 					}
-					break; // goto case P_EXPR
+					break; // goto case P_EXPR, in runtime 2 - TableItem has been inicialized
 				}
 
 				fprintf(stderr, "PARSER: On line %u expected '(', ';' or assignment.\n", LINE_NUM);
@@ -1179,7 +1271,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					return ERR_INTERN_FAULT;
 				}
 
-				if (TableItem->data_type != S_VOID)
+				if (TableItem->data_type != S_VOID) // TODO - porovnani navratu funkce - TableItem je inicializovany na funkci ve ktere jsem
 				{
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
@@ -1190,12 +1282,13 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				else
 				{
-					if (stack_int_push(s, 1, S_SEMICOMMA) < 0)
+					if (t.id != S_SEMICOMMA)
 					{
-						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
+						fprintf(stderr, "PARSER:  On line %u expected semicomma after return in void function.\n", LINE_NUM);
+						return ERR_SEM_NDEF_REDEF;
 					}
-					break; // goto case S_SEMICOMMA
+					token_got = false;
+					break;
 				}
 
 			// ======================== P_ELSE_EXISTANCE ====================
@@ -1303,9 +1396,31 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				token_got = true;
 
 				int expr_return;
-				expr_return = skip_expr(&t);
-				if (expr_return != 0)
-					return expr_return;
+				if (runtime == 1)
+				{
+					expr_return = skip_expr(&t);
+					if (expr_return != 0)
+						return expr_return;
+				}
+				if (runtime == 2)
+				{
+					int expected_expr_data_type = 0;
+					if (TableItem == NULL)
+						expected_expr_data_type = S_BOOLEAN;
+					else
+						expected_expr_data_type = TableItem.data_type;
+
+					token *postfix_token_array;
+					int token_count, expr_data_type;
+					expr_return = expr_analyze(t, &t, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
+					free(postfix_token_array); // TODO ukladat
+
+					if (expected_expr_data_type != expr_data_type)
+					{
+						fprintf(stderr, "PARSER: On line %u unexpected data type of expresion.\n", LINE_NUM);
+						return ERR_SEM_COMPATIBILITY;
+					}
+				}
 				token_got = true;
 				break;
 
