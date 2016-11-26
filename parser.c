@@ -1,6 +1,5 @@
 #include "parser.h"
-
-extern int expr_analyze(token * t); // potrebuji, aby mi zmenila token
+#include "expression.h"
 
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
@@ -1034,7 +1033,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					if (runtime == 2)
 					{
-						TableItem = htab_find_item(GlobalTableSymbols, (char*) t.id);
+						TableItem = htab_find_item(GlobalTableSymbols, (char*) t.ptr);
 						if (TableItem == NULL)
 						{
 							fprintf(stderr, "PARSER:  On line %u variable or function %s has not been defined.\n", LINE_NUM, (char*)t.ptr);
@@ -1408,7 +1407,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if (TableItem == NULL)
 						expected_expr_data_type = S_BOOLEAN;
 					else
-						expected_expr_data_type = TableItem.data_type;
+						expected_expr_data_type = (int) TableItem->data_type;
 
 					token *postfix_token_array;
 					int token_count, expr_data_type;
