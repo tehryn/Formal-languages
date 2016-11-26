@@ -46,6 +46,7 @@ int ERROR_CHECK = 0;
 extern char* SCANNER_WORD;
 
 int main (int argc, char **argv) {
+	int return_value = 0;
 	mem_list_t l;
 	mem_list_t_init(&l);
 	if (argc != 2) {
@@ -54,7 +55,7 @@ int main (int argc, char **argv) {
 	}
 	f = fopen(argv[1], "r");
 	if (f == NULL) {
-		fprintf(stderr, "Invalid file\n");
+		fprintf(stderr, "Invalid file %s\n", argv[1]);
 		return 1;
 	}
 #ifdef TEST_STRUCTURES
@@ -97,7 +98,7 @@ int main (int argc, char **argv) {
 
 // testing Parser
 #ifdef TEST_PARSER
-	printf("Navratova hodnota parseru je: %i", parser());
+	return_value = parser();
 #endif
 // testing htab
 #ifdef TEST_TABLE
@@ -193,6 +194,5 @@ do {
 	free_memory(&l);
 	free(SCANNER_WORD);
 	fclose(f);
-	printf("\nKONEC\n");
-	return 0;
+	return return_value;
 }
