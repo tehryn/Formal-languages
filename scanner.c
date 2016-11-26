@@ -265,6 +265,11 @@ char *load_string(char *word, unsigned *max) {
 		else if (c == '"') {
 			c = '\0';
 		}
+		else if (c == '\n') {
+			*max = -1;
+			free(word);
+			return 0;
+		}
 		if (i >= *max) {
 			char *tmp = word;
 			*max *= 2;
@@ -383,7 +388,6 @@ token get_token() {
 		if (c == '"') { // if true, we found string
 			if (i) { // if we found token, we need to return by one char in stream
 				if (fseek(f, -1, SEEK_CUR) != 0) {
-					ERROR_CHECK = (int) ERR_FSEEK;
 					fprintf(stderr, "Can't set offset in file!\n");
 					new_token.id = -1; // Intern error
 					new_token.ptr = NULL;
@@ -429,7 +433,6 @@ token get_token() {
 			if (i) { // if i != 0 we found token
 				/* we have to go back by 1 or 2 chars */
 				if (fseek(f, SPEC_CHAR_FSEEK(spec), SEEK_CUR) != 0) {
-					ERROR_CHECK = (int) ERR_FSEEK;
 					fprintf(stderr, "Can't set offset in file!\n");
 					new_token.id = -1;
 					new_token.ptr = NULL;

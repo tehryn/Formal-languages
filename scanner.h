@@ -79,9 +79,6 @@ S_EOF /*!< stands for EOF */ //49
 extern unsigned LINE_NUM;
 
 /** @var TODO*/
-extern int ERROR_CHECK;
-
-/** @var TODO*/
 extern FILE* f;
 
 /** Structure that represents token
