@@ -16,6 +16,7 @@ char *join_strings(char *str1, char *str2) {
 char * class_name = NULL; // pro vyrobu full_ident
 int class_name_strlen = 0;
 char * static_func_var_name = NULL; // pro ukladani do tabulky
+char * local_func_var_name = NULL; // pro ukladani do tabulky
 
 int parser()
 {
@@ -105,11 +106,21 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 	unsigned type = 0; // t.id data_type is not 0
 
-	htab_t * TableSymbols = NULL; // TODO - for later use
+	htab_t * GlobalTableSymbols = NULL;
+	GlobalTableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
+	if (GlobalTableSymbols == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parset cannot get hash. table from stack.\n");
+		return ERR_INTERN_FAULT;
+	}
+
+	htab_t * LocalTableSymbols = NULL;
+
 	htab_item * TableItem = NULL;
 
 	int number_arguments = 0; // arguments of function
 	int number_allocated_arguments = 0;
+	unsigned func_or_var = 0;
 
 	while (!stack_int_top(s, &on_top)) // stack_int_top == -1 if stack is empty
 	{
@@ -258,10 +269,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						free(class_name);
 						class_name = NULL;
 					}
-					if (runtime == 1)
-						TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
 
-					TableItem = htab_find_item(TableSymbols, "Main.run");
+
+					TableItem = htab_find_item(GlobalTableSymbols, "Main.run");
 					if (TableItem == NULL || TableItem->data_type != S_VOID)
 					{
 						fprintf(stderr, "Semantic fauilt. There is no function 'Main.run' or it is not void function.\n");
@@ -404,28 +414,25 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					if (t.id == S_SIMPLE_IDENT)
 					{
-						//if (runtime == 1)
-						//{ // putting a function or variable into hash. table
-							TableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
-
-							if(static_func_var_name != NULL) // FIXME to je ten tvuj zvlastni pocit kdyz zahazujes ukazatel?
-							{
-								free(static_func_var_name);
-								static_func_var_name = NULL;
-							}
-							static_func_var_name = join_strings(class_name, (char*) t.ptr);
-							if (static_func_var_name == NULL)
-							{
-								fprintf(stderr, "Intern fault. Parser cannot join strings.\n");
-								return ERR_INTERN_FAULT;
-							}
+						// save a name of statick function or variable
+						if(static_func_var_name != NULL)
+						{
+							free(static_func_var_name);
+							static_func_var_name = NULL;
+						}
+						static_func_var_name = join_strings(class_name, (char*) t.ptr);
+						if (static_func_var_name == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot join strings.\n");
+							return ERR_INTERN_FAULT;
+						}
 
 						if (runtime == 1)
 						{
-							TableItem = htab_find_item(TableSymbols, static_func_var_name);
+							TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
 							if (TableItem == NULL)
 							{
-								TableItem = htab_insert_item(TableSymbols, static_func_var_name);
+								TableItem = htab_insert_item(GlobalTableSymbols, static_func_var_name);
 							}
 							else
 							{
@@ -439,6 +446,34 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 
 							TableItem->data_type = type;
+						}
+						if (runtime == 2)
+						{
+							TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+							if (TableItem == NULL)
+							{
+								fprintf(stderr, "Intern fault. Parser cannot find item of hash. table which should be there.\n");
+								return ERR_INTERN_FAULT;
+							}
+
+							func_or_var = TableItem->func_or_var;
+
+							if (func_or_var == 2) // function
+							{
+								LocalTableSymbols = htab_init(HTAB_SIZE);
+								if (LocalTableSymbols == NULL)
+								{
+									fprintf(stderr, "Intern fault. Parser cannot malloc local hash table.\n");
+									return ERR_INTERN_FAULT;
+								}
+
+								if (stack_htab_push(& Stack_of_TableSymbols, LocalTableSymbols) != 0)
+								{
+									htab_free_all(LocalTableSymbols);
+									fprintf(stderr, "Intern fault. Parser cannot push local hash. table into stack of hash tables.\n");
+									return ERR_INTERN_FAULT;
+								}
+							}
 						}
 
 						token_got = false;
@@ -556,7 +591,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						printf("++%i++\n", number_arguments);
 						for (int i=0; i<number_allocated_arguments; i++)
 							printf("%i ", ((int*)TableItem->data)[i]);
-						printf("\n");
+						//printf("\n");
 
 						number_arguments = 0;
 						number_allocated_arguments = 0;
@@ -614,9 +649,28 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SIMPLE_IDENT)
 				{
-					// TODO - vlozit t.ptr do hash. tabulky lokalnich promennych - runtime 2
-					// data_type = type;
 					token_got = false;
+					if (runtime == 2)
+					{
+						TableItem = htab_find_item(LocalTableSymbols, t.ptr);
+						if (TableItem == NULL)
+						{
+							TableItem = htab_insert_item(LocalTableSymbols, t.ptr);
+						}
+						else
+						{
+							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", t.ptr);
+							return ERR_SEM_NDEF_REDEF;
+						}
+						if(TableItem == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot insert item into Table of symbols (malloc problem).\n");
+							return ERR_INTERN_FAULT;
+						}
+
+						TableItem->data_type = type;
+					}
+
 					if (stack_int_push(s, 1, P_DEF_ARGUMENTS2) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -737,8 +791,27 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SIMPLE_IDENT)
 				{
-					// TODO - vlozit t.ptr do hash. tabulky pro lokalni promenne - runtime 2
-					// data_type = type;
+					if (runtime == 2)
+					{
+						TableItem = htab_find_item(LocalTableSymbols, t.ptr);
+						if (TableItem == NULL)
+						{
+							TableItem = htab_insert_item(LocalTableSymbols, t.ptr);
+						}
+						else
+						{
+							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", t.ptr);
+							return ERR_SEM_NDEF_REDEF;
+						}
+						if(TableItem == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot insert item into Table of symbols (malloc problem).\n");
+							return ERR_INTERN_FAULT;
+						}
+
+						TableItem->data_type = type;
+					}
+
 					token_got = false;
 					if (stack_int_push(s, 1, P_DEF_ARGUMENTS2) < 0)
 					{
@@ -776,7 +849,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				else if (t.id == S_BOOLEAN)
 					type = S_BOOLEAN;
 				else if (t.id == S_RIGHT_BRACE) // no other stuffs in function
+				{
+					htab_free_all(LocalTableSymbols);
 					break;
+				}
 				else
 				{ // P_FUNC_BODY -> not definition of local variable
 					if (stack_int_push(s, 2, P_FUNC, P_FUNC_BODY) < 0)
@@ -1046,7 +1122,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				token_got = true;
 
-				TableItem = htab_find_item(TableSymbols, static_func_var_name);
+				TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
 				if (TableItem == NULL)
 				{
 					fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");

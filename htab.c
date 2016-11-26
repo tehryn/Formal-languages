@@ -72,6 +72,7 @@ void htab_free_all(htab_t * T)
 	htab_clear_items(T);
 	free(T->ptr);
 	free(T);
+	T = NULL;
 }
 
 
