@@ -1,12 +1,36 @@
 class Main {
-	static void run() {
-		if (a) {}
-		else if (b) {}
-		else if (b()) {}
-		print();
+	static void ahoj() {
+		int b = 5;
 	}
-//	static int b = "\\"; // HAHAHAHAHA - chyba!!!!
-	static void b; // HAHAHAHA dalsi!
 }
-//"\\\\\\a"
-//"\042\042\042\042\042\042\042\042"
+
+class main {
+	static void run() {
+		int b = 5;
+	}
+}
+
+class Main {
+	static int run() {
+		int b = 0;
+		return b;
+	}
+}
+
+class Main {
+	static void run() {
+		int b = 5.5;
+	}
+}
+
+class Main {
+	static void run() {
+		int b = 5.0;
+	}
+}
+
+class Main {
+	static void run() {
+		int b = 5.5;
+	}
+}
