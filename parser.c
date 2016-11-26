@@ -91,7 +91,7 @@ int parser()
 
 
 	stack_htab_destroy(& stack_of_table_symbols);
-	htab_free_all(TableSymbols);
+	htab_free_all(global_table_symbols);
 	stack_int_destroy(&s);
 	return parser_return;
 }
