@@ -3,6 +3,6 @@ class Main {
         return 1+1;
     }
     static void run() {
-        double b = hello()
+        double b = hello();
     }
 }

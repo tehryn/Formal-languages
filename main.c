@@ -51,12 +51,12 @@ int main (int argc, char **argv) {
 	mem_list_t_init(&l);
 	if (argc != 2) {
 		fprintf(stderr, "Invalid arguments\n");
-		return 1;
+		return -1;
 	}
 	f = fopen(argv[1], "r");
 	if (f == NULL) {
 		fprintf(stderr, "Invalid file %s\n", argv[1]);
-		return 1;
+		return -1;
 	}
 #ifdef TEST_STRUCTURES
 	htab_t* table;

@@ -3,7 +3,7 @@ declare -a invalide_syntax=("err2.java" "err3.java" "err4.java" "err5.java" "err
 declare -a invalide_lexical=("err6.java" "err7.java")
 declare -a invalide_semantic_def=("err1.java" "err8.java" "err9.java" "err11.java" "err13.java" "err14.java" "err15.java" "err18.java" "err20.java" "err27.java")
 declare -a invalide_semantic_compat=("err12.java" "err16.java" "err17.java" "err19.java" "err21.java" "err22.java" "err23.java" "err24.java" "err25.java")
-declare -a invalide_semantic_other=("err30")
+declare -a invalide_semantic_other=("err30.java")
 
 for file in ${valide_tests[@]}
 do

@@ -295,7 +295,7 @@ void *str2num(char *str, int type, int *valide) {
 		return NULL;
 	}
 	void *result = NULL;
-	valide = 0;
+	*valide = 0;
 	if (type == TYPE_INT) {
 		result = malloc(sizeof(int));
 		if (result == NULL) {
@@ -315,7 +315,7 @@ void *str2num(char *str, int type, int *valide) {
 			*valide = 1;
 			return NULL;
 		}
-		if (sscanf(str, "%lf", (double *)result)) {
+		if (sscanf(str, "%lf", (double *)result) == EOF) {
 			free(result);
 			*valide = 2;
 			return NULL;
@@ -416,7 +416,7 @@ token get_token() {
 			}
 		}
 
-		if ( i && is_num_literal(SCANNER_WORD, i-2) && (SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'e') && (c == '-' || c == '+')) {
+		if ( i && is_num_literal(SCANNER_WORD, i-2) && (SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'E') && (c == '-' || c == '+')) {
 			if (isdigit(fgetc(f))) {
 					skip = 1;
 			}
@@ -447,6 +447,7 @@ token get_token() {
 				return new_token;
 			}
 		}
+		skip = 0;
 		if (i < size) { // Je bezpecne pristoupit na index i
 			SCANNER_WORD[i] = c;
 			i++;
@@ -494,6 +495,7 @@ token get_token() {
 	if (token_found) {
 		// token found! but what did we find???
 		int id = is_keyword(SCANNER_WORD);
+		int valide = 0;
 		if (id) {
 			new_token.id = id;
 			new_token.ptr = SCANNER_WORD;
@@ -503,7 +505,6 @@ token get_token() {
 		/* Ok, we did not found key word... Did we found number?*/
 		id = is_num_literal(SCANNER_WORD, i);
 		if (id) {
-			int valide = 0;
 			number = str2num(SCANNER_WORD, id, &valide);
 			if (valide == 1) {
 				fprintf(stderr, "Memory allocation failed\n");
