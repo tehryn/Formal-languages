@@ -437,7 +437,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 							else
 							{
-								fprintf(stderr, "PARSER: %s has been already defined.\n", static_func_var_name);
+								fprintf(stderr, "PARSER:  On line %u %s has been already defined.\n", , LINE_NUM, static_func_var_name);
 								return ERR_SEM_NDEF_REDEF;
 							}
 							if(TableItem == NULL)
@@ -660,7 +660,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						else
 						{
-							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", (char*)t.ptr);
+							fprintf(stderr, "PARSER: On line %u %s has been already defined in this function.\n", LINE_NUM, (char*)t.ptr);
 							return ERR_SEM_NDEF_REDEF;
 						}
 						if(TableItem == NULL)
@@ -801,7 +801,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						else
 						{
-							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", (char*)t.ptr);
+							fprintf(stderr, "PARSER: On line %u %s has been already defined in this function.\n", LINE_NUM, (char*)t.ptr);
 							return ERR_SEM_NDEF_REDEF;
 						}
 						if(TableItem == NULL)
@@ -889,7 +889,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						else
 						{
-							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", (char*)t.ptr);
+							fprintf(stderr, "PARSER: On line %u %s has been already defined in this function.\n", LINE_NUM, (char*)t.ptr);
 							return ERR_SEM_NDEF_REDEF;
 						}
 						if(TableItem == NULL)
