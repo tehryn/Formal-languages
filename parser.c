@@ -17,6 +17,7 @@ char * class_name = NULL; // pro vyrobu full_ident
 int class_name_strlen = 0;
 char * static_func_var_name = NULL; // pro ukladani do tabulky
 char * local_func_var_name = NULL; // pro ukladani do tabulky
+array_string all_class_names;
 
 int parser()
 {
@@ -68,6 +69,7 @@ int parser()
 	parser_return = analysis(&s, 1, stack_of_table_symbols);
 	if (parser_return != 0)
 	{
+		array_string_destroy(all_class_names);
 		stack_htab_destroy(& stack_of_table_symbols);
 		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
@@ -76,6 +78,7 @@ int parser()
 
 	if(reset_scanner() == -1)
 	{
+		array_string_destroy(all_class_names);
 		stack_htab_destroy(& stack_of_table_symbols);
 		htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
@@ -84,13 +87,17 @@ int parser()
 	}
 	if (stack_int_push(&s, 2, S_EOF, P_CLASS) < 0)
 	{
+		array_string_destroy(all_class_names);
+		stack_htab_destroy(& stack_of_table_symbols);
+		htab_free_all(global_table_symbols);
+		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 		return ERR_INTERN_FAULT;
 	}
 
 	parser_return = analysis(&s, 2, stack_of_table_symbols);
 
-
+	array_string_destroy(all_class_names);
 	stack_htab_destroy(& stack_of_table_symbols);
 	htab_free_all(global_table_symbols);
 	stack_int_destroy(&s);
@@ -106,6 +113,13 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 	int on_top; // top of the stack_int - zasobnik stavu
 
 	unsigned type = 0; // t.id data_type is not 0
+
+	
+	if (array_string_init(&all_class_names) != 0)
+	{
+		fprintf(stderr, "Intern fault. Parset cannot malloc place for string array.\n");
+		return ERR_INTERN_FAULT;
+	}
 
 	htab_t * GlobalTableSymbols = NULL;
 	GlobalTableSymbols = stack_htab_get_item(&Stack_of_TableSymbols, 0);
@@ -313,6 +327,19 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_INTERN_FAULT;
 						}
 						class_name = strncpy(class_name, (char*)t.ptr, class_name_strlen);
+						if (array_string_find(&all_class_names, class_name) == NULL)
+						{
+							if(array_string_insert(array_string *array, char *str) != 0)
+							{
+								fprintf(stderr, "Intern fault. Parser cannot insert class %s into array.\n", class_name);
+								return ERR_INTERN_FAULT;
+							}
+						}
+						else
+						{
+							fprintf(stderr, "PARSER:  On line %u class %s has been already defined.\n", LINE_NUM, class_name);
+							return ERR_SEM_NDEF_REDEF;
+						}
 
 						if (token_got == false)
 						{
