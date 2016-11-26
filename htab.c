@@ -69,10 +69,13 @@ void htab_clear_items(htab_t * T)
 
 void htab_free_all(htab_t * T)
 {
-	htab_clear_items(T);
-	free(T->ptr);
-	free(T);
-	T = NULL;
+	if (T != NULL)
+	{
+		htab_clear_items(T);
+		free(T->ptr);
+		free(T);
+		T = NULL;
+	}
 }
 
 
