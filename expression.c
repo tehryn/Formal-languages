@@ -49,7 +49,7 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 	int left_bracket_count=0, right_bracket_count=0;
 
 	token input_token, tmp_token;
-	input_token.id=-66;
+	input_token.id=-166;
 	if ( stack_expression_push(&tmp_exp_stack, input_token) != 0 )
 		FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
 	ma1[0]=tmp_exp_stack.arr;
@@ -295,7 +295,7 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 	*expr_data_type = e_type;
 
 	stack_expression_top(&tmp_exp_stack, &tmp_token);
-	while( tmp_token.id != -66)
+	while( tmp_token.id != -166)
 	{
 		stack_expression_pop(&tmp_exp_stack, &tmp_token);
 		if (stack_expression_push(&postfix_exp_stack, tmp_token) != 0)
