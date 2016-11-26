@@ -10,7 +10,7 @@ class Main {
 		fff.read2();
 		double z;
 		z=fff.foo();
-		int x;
+//		int x;
 		int y;
 		x=31/3;
 		y=x/2;

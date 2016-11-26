@@ -14,12 +14,17 @@
 /**
  * TODO
  */
-#define STACK_INIT_SIZE 16
+#define STACK_HTAB_INIT_SIZE 16
 
 /**
  * TODO
  */
-#define ARRAY_INIT_SIZE 64
+#define ARRAY_HTAB_INIT_SIZE 64
+
+/**
+ * TODO
+ */
+#define ARRAY_STRING_INIT_SIZE 8
 
 /**
  * TODO
