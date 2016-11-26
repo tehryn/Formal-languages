@@ -135,8 +135,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -158,8 +156,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				stack_int_pop(s);
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -181,8 +177,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				stack_int_pop(s);
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -205,8 +199,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -229,8 +221,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -255,8 +245,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -300,8 +288,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					if (token_got == false)
 					{
-						if (t.ptr != NULL)
-							free(t.ptr);
 						t = get_token();
 						if (t.id == 0)
 							return ERR_LEXICAL_ANALYSIS;
@@ -330,8 +316,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 						if (token_got == false)
 						{
-							if (t.ptr != NULL)
-								free(t.ptr);
 							t = get_token();
 							if (t.id == 0)
 								return ERR_LEXICAL_ANALYSIS;
@@ -368,8 +352,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -396,8 +378,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = false;
 					if (token_got == false)
 					{
-						if (t.ptr != NULL)
-							free(t.ptr);
 						t = get_token();
 						if (t.id == 0)
 							return ERR_LEXICAL_ANALYSIS;
@@ -519,8 +499,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -590,8 +568,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -664,8 +640,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -716,8 +690,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -781,8 +753,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -812,8 +782,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -864,8 +832,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -901,8 +867,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -934,8 +898,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1015,8 +977,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1051,8 +1011,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1097,8 +1055,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1126,8 +1082,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1161,8 +1115,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				stack_int_pop(s);
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1203,8 +1155,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				stack_int_pop(s);
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1236,8 +1186,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1270,8 +1218,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				stack_int_pop(s);
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1299,8 +1245,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (token_got == false)
 				{
-					if (t.ptr != NULL)
-						free(t.ptr);
 					t = get_token();
 					if (t.id == 0)
 						return ERR_LEXICAL_ANALYSIS;
@@ -1385,7 +1329,6 @@ int skip_expr(token * t)
 
 		if (token_got == false)
 		{
-			free(t->ptr);
 			*t = get_token();
 			if (t->id == 0)
 				return ERR_LEXICAL_ANALYSIS;
