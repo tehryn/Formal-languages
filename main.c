@@ -63,14 +63,17 @@ int main (int argc, char **argv) {
 	htab_t *tables[19];
 	array_htab array;
 	stack_htab stack;
+	array_string arr_str;
 	stack_htab_init(&stack);
 	array_htab_init(&array);
+	array_string_init(&arr_str);
 	const char *chars[] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s"}; //19
 		for (int i = 0; i < 19; i++) {
 			tables[i] = htab_init(7);
 			htab_insert_item(tables[i], chars[i]);
 			stack_htab_push(&stack, tables[i]);
 			array_htab_insert(&array, tables[i]);
+			array_string_insert(&arr_str, chars[i]);
 		}
 		printf("======--ARRAY--======\n");
 		for (int i = 0; i < 19; i++) {
@@ -92,6 +95,18 @@ int main (int argc, char **argv) {
 				printf("| ERROR\n");
 			}
 		}
+		printf("======--ARR_STR--======\n");
+		char *str;
+		for (int i = 0; i < 19; i++) {
+			str = array_string_find(&arr_str, chars[i]);
+			if (!strcmp(chars[i], str)) {
+				printf("| Succes\n");
+			}
+			else {
+				printf("| ERROR\n");
+			}
+		}
+		array_string_destroy(&arr_str);
 		array_htab_destroy(&array);
 		stack_htab_destroy(&stack);
 #endif

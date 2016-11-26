@@ -183,10 +183,10 @@ int array_string_init(array_string *array) {
  * @return       0 in case of succes, 1 in case of error while allocating memory (no memory will be freed)
  * @pre          Array was inicializated
  */
-int array_string_insert(array_string *array, char *str) {
+int array_string_insert(array_string *array, const char *str) {
 	if (array->idx >= array->size) {
 		array->size *= 2;
-		char **tmp = (char **) realloc(array->data, array->size);
+		char **tmp = (char **) realloc(array->data, array->size*sizeof(char *));
 		if (tmp == NULL) {
 			array->size /= 2;
 			return 1;
@@ -209,7 +209,7 @@ int array_string_insert(array_string *array, char *str) {
  * @return       NULL is string was not found, pointer to string if string was found
  * @pre Array was inicializated
  */
-char *array_string_find(array_string *array, char *str) {
+char *array_string_find(array_string *array, const char *str) {
 	for (unsigned i = 0; i < array->idx; i++) {
 		if (!strcmp(str, array->data[i])) {
 			return array->data[i];

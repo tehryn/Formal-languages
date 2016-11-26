@@ -141,7 +141,7 @@ int array_string_init(array_string *array);
  * @return       0 in case of succes, 1 in case of error while allocating memory
  * @pre          Array was inicializated
  */
-int array_string_insert(array_string *array, char *str);
+int array_string_insert(array_string *array, const char *str);
 
 /**
  * Find string in array
@@ -150,7 +150,7 @@ int array_string_insert(array_string *array, char *str);
  * @return       NULL is string was not found, pointer to string if string was found
  * @pre Array was inicializated
  */
-char *array_string_find(array_string *array, char *str);
+char *array_string_find(array_string *array, const char *str);
 
 /**
  * Free all memory allocated by array
