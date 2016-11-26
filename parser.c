@@ -72,7 +72,7 @@ int parser()
 		stack_int_destroy(&s);
 		return parser_return;
 	}
-	
+
 	if(reset_scanner() == -1)
 	{
 		stack_htab_destroy(& stack_of_table_symbols);
@@ -86,7 +86,7 @@ int parser()
 		fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 		return ERR_INTERN_FAULT;
 	}
-	
+
 	parser_return = analysis(&s, 2, stack_of_table_symbols);
 
 
@@ -421,7 +421,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 
 						if (runtime == 1)
-						{	
+						{
 							TableItem = htab_find_item(TableSymbols, static_func_var_name);
 							if (TableItem == NULL)
 							{
@@ -552,6 +552,12 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						((int*)TableItem->data)[0] = S_EOF;
 						TableItem->number_of_arguments = number_arguments;
+
+						printf("++%i++\n", number_arguments);
+						for (int i=0; i<number_allocated_arguments; i++)
+							printf("%i ", ((int*)TableItem->data)[i]);
+						printf("\n");
+
 						number_arguments = 0;
 						number_allocated_arguments = 0;
 					}
@@ -575,12 +581,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					((int*)TableItem->data)[1] = S_EOF;
 					((int*)TableItem->data)[2] = S_EOF;
 					((int*)TableItem->data)[3] = S_EOF;
-				}
 
-				// TODO - for DEBUG
-				printf("++%i++\n", number_arguments);
-				for (int i=0; i<number_arguments; i++)
-					printf("%i ", ((int*)TableItem->data)[i]);
+				}
 
 				if (t.id == S_INT)
 					type = S_INT;
@@ -646,6 +648,13 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if (runtime == 1)
 					{
 						TableItem->number_of_arguments = number_arguments;
+
+						// TODO - for DEBUG
+						printf("--%i--\n", number_arguments);
+						for (int i=0; i<number_allocated_arguments; i++)
+							printf("%i ", ((int*)TableItem->data)[i]);
+						printf("\n");
+
 						number_arguments = 0;
 						number_allocated_arguments = 0;
 					}
@@ -683,11 +692,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					}
 
-					// TODO - for DEBUG
-					printf("--%i--\n", number_arguments);
-					for (int i=0; i<number_arguments; i++)
-						printf("%i ", ((int*)TableItem->data)[i]);
-					printf("\n");
 				}
 
 				token_got = false;
