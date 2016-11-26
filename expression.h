@@ -36,6 +36,20 @@ struct stack_expresion
 	int top;
 };
 
+/*
+// t_in -> vstupni token
+// t_out -> ukazatel na token, kde bude ulozena hodnota posledniho tokenu
+// postfix_token_array -> ukazatel na pole tokenu, kde budou ulozeny jednotlive tokeny vyrazu ve formatu postfix
+// token_count -> ukazatel na int, kde bude ulozen pocet tokenu ve vyslednem poli tokenu
+// expr_data_type -> ukazatel na int, kde bude ulozena hodnota datoveho typu celeho vyrazu
+// global_table a local_table -> hash. tabulky
+// priklad volani:
+//	token t_in = get_token();
+//	token t_out;
+//	token *postfix_token_array;
+//	int token_count, expr_data_type;
+//	int expr_analyze(t_in, &t_out, &postfix_token_array, &token_count, &expr_data_type, global_table, local_table);
+*/
 int expr_analyze 			( token t_in, token *t_out, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...);
 int stack_expression_init 	( struct stack_expresion* s, int size );
 int stack_expression_destroy( struct stack_expresion* s );
