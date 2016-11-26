@@ -659,7 +659,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						else
 						{
-							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", t.ptr);
+							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", (char*)t.ptr);
 							return ERR_SEM_NDEF_REDEF;
 						}
 						if(TableItem == NULL)
@@ -800,7 +800,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						else
 						{
-							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", t.ptr);
+							fprintf(stderr, "PARSER: %s has been already defined in this function.\n", (char*)t.ptr);
 							return ERR_SEM_NDEF_REDEF;
 						}
 						if(TableItem == NULL)
