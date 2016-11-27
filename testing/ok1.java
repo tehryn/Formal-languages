@@ -16,6 +16,7 @@ class Main {
         str = "\n";
         ifj16.print(str + input1 + " * " input2 + " = " + proc_int.mul(input1, input2));
         ifj16.print(str + input2 +" * "+ input1 + " = " + proc_int.mul(input1, input2));
+        ifj16.print(str + input2 +" \\ "+ input1 + " = " + proc_int.div(input1, input2));
         ifj16.print("A ted neco odporneho\n");
         x = proc_int.add(input1,proc_int.mul(input1, proc_int.div(input1, proc_int.sub(input1, input2))));
         ifj16.print("Vysledek odporne operace c. 1 je pry " + x + "\n");
@@ -26,20 +27,20 @@ class Main {
         input1 = ifj16.readdouble();
         input2 = ifj16.readdouble();
         double y = proc_double.add(input3, input4);
-        str = "%f + %f = %f\012";
-        ifj16.print(str, input3, input4, y);
+        str = "HEY ";
+        ifj16.print(str + input3 + " + " + input4 + " = " + y);
         str = "%f\t*\t%f\t=\t%f\n";
-        ifj16.print(str, input3, input4, proc_double.mul(input3, input4));
-        str = "Co je dobre?\n%f\t-\t%f\t=\t%f\nnebo\n%f\t-\t%f\t=\t%f\n";
-        ifj16.print(str, input3, input4, proc_double.sub(input3, input4), input3, input4, proc_double.sub(input3, input4));
+        ifj16.print("nasobeni: " + input3 + " * " + input4 + " = " + proc_double.mul(input3, input4));
+        str = "Co je dobre?\n";
+        ifj16.print(str + input3 +" - "+ input4 +" = " + proc_double.sub(input3, input4) + " nebo " + input3 + " - " + input4 + "=" + proc_double.sub(input3, input4));
         str = "%f\t\\t%f\t=\t%f\n";
-        ifj16.print(str, input3, input4, proc_double.mul(input3, input4));
-        ifj16.print(str, input4, input3, proc_double.mul(input3, input4));
+        ifj16.print(input3 +" \\ "+ input4 + " = " + proc_double.div(input3, input4));
+        ifj16.print(input4 +" \\ "+ input3 + " = " + proc_double.div(input4, input3));
         ifj16.print("A ted neco odporneho\n");
         y = proc_double.add(input3,proc_double.mul(input3, proc_double.div(input3, proc_double.sub(input3, input4))));
-        ifj16.print("Vysledek odporne operace c. 1 je pry %f\n", y);
+        ifj16.print("Vysledek odporne operace c. 1 je pry " + y + "\n");
         y = proc_double.foo();
-        ifj16.print("Vysledek odporne operace c. 2 je pry %f\n", y);
+        ifj16.print("Vysledek odporne operace c. 2 je pry " + y +"\n");
         ifj16.print("A nyni seradime retezec:");
         str = "qwertyuioplkjhgfdsazxcvbnm,./;\'\'\"\\[]{}:!@#$%^&*()_+\t \n";
         ifj16.print("Na serazeni: \"%s\"\n", str);
@@ -48,8 +49,8 @@ class Main {
         ifj16.print("Zadej retezec:\n");
         str = ifj16.readstring();
         str = ifj16.sort();
-        ifj16.print("Serazeno: \"%s\"\n", str);
-        ifj16.print("Funkce tridy proc_int byly volany dohromady %i krat", proc_int.calls);
+        ifj16.print("Serazeno: \"" + str +"\"\n");
+        ifj16.print("Funkce tridy proc_int byly volany dohromady " + proc_int.calls + " krat");
         return;
     }
 }
