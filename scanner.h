@@ -14,8 +14,12 @@
 
 /*! TODO */
 #define S_SIZE 32
+
 /*! TODO */
 #define reset_scanner() (fseek(f, LINE_NUM = 0, SEEK_SET))
+
+/*! TODO */
+#define SPEC_CHAR_FSEEK(spec) (((spec) == S_EQUAL || (spec) == S_LESS_EQUAL || (spec) == S_GREATER_EQUAL || (spec) == S_NOT_EQUAL)?-2:-1)
 
 /*! TODO */
 enum {
