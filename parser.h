@@ -2,6 +2,7 @@
 #define PARSER
 
 #include "scanner.h"
+#include "ial.h"
 #include "structures.h"
 #include <string.h>
 #include <stdbool.h>    // bool
@@ -50,4 +51,7 @@ int analysis(stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols)
 int skip_expr(token * t);
 
 bool token_wanted(token * t);
+
+int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_string* all_class_names);
+
 #endif
