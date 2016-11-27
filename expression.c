@@ -133,13 +133,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT);
 				else
 				{
+					strcpy(tmp, (char *)input_token.ptr);
+					input_token.ptr = tmp;
 					if (ma2_top<256) 
-						ma2[ma2_top++]=tmp_exp_stack.arr;
+						ma2[ma2_top++]=input_token.ptr;
 					else
 						FATAL_ERROR("EXPRESSION: Memory could not be allocated. 12\n", ERR_INTERN_FAULT);
 
-					strcpy(tmp, (char *)input_token.ptr);
-					input_token.ptr = tmp;
 				}
 			}
 
@@ -153,7 +153,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 
 		else if( input_token.id == S_RIGHT_PARE)									// right bracket 
 		{
-			//fprintf(stderr, "%d %d\n", end_token, left_bracket_count);
+			//fprintf(stderr, "%d %d\n", end_token, left_bracket_count);	// odje torima
 			
 			if ( (syn_rules&4)!=0 && !( end_token==S_COMMA && e_type==-1))
 					FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 14\n", ERR_SYNTACTIC_ANALYSIS);
@@ -190,6 +190,9 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 			if ( (syn_rules&2) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
 
+			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id!=S_PLUS )
+				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
+				
 
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
@@ -301,7 +304,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 					{
 						free(fun_param_arr);
 						fun_param_arr=NULL;
-						FATAL_ERROR("EXPRESSION: Function missing \",\" or it has wrong number of parameters. 31\n", ERR_SEM_COMPATIBILITY);		// odje torima
+						FATAL_ERROR("EXPRESSION: Function missing \",\" or it has wrong number of parameters. 31\n", ERR_SEM_COMPATIBILITY);
 					}
 					
 					
@@ -333,7 +336,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				{
 					free(fun_param_arr);
 					fun_param_arr=NULL;
-					FATAL_ERROR("EXPRESSION: Function missing \")\" or it has wrong number of parameters. 35\n", ERR_SEM_COMPATIBILITY);		// odje torima
+					FATAL_ERROR("EXPRESSION: Function missing \")\" or it has wrong number of parameters. 35\n", ERR_SEM_COMPATIBILITY);
 				}
 				
 				
