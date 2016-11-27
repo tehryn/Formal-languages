@@ -348,8 +348,8 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 			
 			else
 			{
-				fprintf(stderr, "Token: %s\n", (char *)input_token.ptr);
-				FATAL_ERROR("EXPRESSION: Undefined token data in hash function. 39\n", ERR_INTERN_FAULT);
+				fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
+				FATAL_ERROR("EXPRESSION: Undefined symbol definition. 39\n", ERR_INTERN_FAULT);
 			}
 			
 			if (type_priority(ident_type) > type_priority(e_type))
@@ -524,6 +524,8 @@ int type_priority (int type)
 		return 3;
 	else if (type==TYPE_BOOLEAN || type==S_BOOLEAN)
 		return 1;
+	else if (type==S_VOID)
+		return 1;
 	
 	return -1;
 }
@@ -536,8 +538,11 @@ int type_name_convertion (int type)
 		return S_DOUBLE;
 	else if (type==TYPE_INT || type==S_INT)
 		return S_INT;
-	else if (type==TYPE_BOOLEAN || type==S_BOOLEAN)
+	else if (type==TYPE_BOOLEAN || type==S_BOOLEAN || type==S_FALSE || type==S_TRUE)
 		return S_BOOLEAN;
+	else if (type==S_VOID)
+		return S_VOID;
+	
 	
 	return -1;
 }
