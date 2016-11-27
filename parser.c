@@ -1585,7 +1585,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
 		return ERR_INTERN_FAULT;
 	}
-	(int) *(TableItem->data) = S_EOF;
+	((int*) TableItem->data)[0] = S_EOF;
 
 	// "ifj16.readDouble"
 
@@ -1605,7 +1605,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
 		return ERR_INTERN_FAULT;
 	}
-	(int) *(TableItem->data) = S_EOF;
+	((int*) TableItem->data)[0] = S_EOF;
 
 	// "ifj16.readString"
 
@@ -1625,7 +1625,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
 		return ERR_INTERN_FAULT;
 	}
-	(int) *(TableItem->data) = S_EOF;
+	((int*) TableItem->data)[0] = S_EOF;
 
 	// void print ( term_nebo_konkatenace ) ;
 	// int length(String s);
@@ -1633,5 +1633,5 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	// int compare(String s1, String s2);
 	// int find(String s, String search);
 	// String sort(String s);
-
+	return 0;
 }
