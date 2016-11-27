@@ -191,7 +191,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
 
 			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id!=S_PLUS )
-				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
+				FATAL_ERROR("EXPRESSION: Unallowed operation in expression with string. 19\n", ERR_SEM_COMPATIBILITY);
 				
 
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
@@ -255,13 +255,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				}
 			}
 			
-			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s\n", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key);	// odje torima
+			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s\n initialized:%d", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key, tmp_table_item->initialized);	// odje torima
 			
 			int ident_type=-1;
 			
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
-				if (tmp_table_item->data==NULL)
+				//if (tmp_table_item->data==NULL)
+				if (tmp_table_item->initialized==1)
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
 				
 				input_token.ptr=tmp_table_item;
@@ -284,6 +285,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 					FATAL_ERROR("EXPRESSION: Function missing \"(\". 29\n", ERR_SYNTACTIC_ANALYSIS);
 				}
 				
+				if (arg_count!=0 && tmp_table_item->data==NULL)
+				{
+					fprintf(stderr, "Function: %s\n", (char *)input_token.ptr);
+					FATAL_ERROR("EXPRESSION: Function data types are undefined. 29.5\n", ERR_INTERN_FAULT);
+				}
 				
 				int err_ret=-1;
 				token fun_last_token;
