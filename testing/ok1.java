@@ -5,8 +5,8 @@ class Main {
     static double input4;
     static void run() {
         ifj16.print("Nacteme 2x integer\n");
-        input1 = ifj16.readint();
-        input2 = ifj16.readint();
+        input1 = ifj16.readInt();
+        input2 = ifj16.readInt();
         int x = proc_int.add(input1, input2);
         String str = "";
         ifj16.print(str + input1 + str +" + " + input2 +" = "+ x);
@@ -24,8 +24,8 @@ class Main {
         ifj16.print("Vysledek odporne operace c. 2 je pry " + x + "\n");
 
         ifj16.print("Nacteme 2x double\n");
-        input1 = ifj16.readdouble();
-        input2 = ifj16.readdouble();
+        input1 = ifj16.readDouble();
+        input2 = ifj16.readDouble();
         double y = proc_double.add(input3, input4);
         str = "HEY ";
         ifj16.print(str + input3 + " + " + input4 + " = " + y);
@@ -47,7 +47,7 @@ class Main {
         str = ifj16.sort(str);
         ifj16.print("Serazeno: \"%s\"\n", str);
         ifj16.print("Zadej retezec:\n");
-        str = ifj16.readstring();
+        str = ifj16.readString();
         str = ifj16.sort();
         ifj16.print("Serazeno: \"" + str +"\"\n");
         ifj16.print("Funkce tridy proc_int byly volany dohromady " + proc_int.calls + " krat");

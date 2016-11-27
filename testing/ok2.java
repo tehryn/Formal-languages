@@ -34,8 +34,8 @@ class fff{
 	static int s1=5;
 
 	static int read_and_compare(){
-		String text=ifj16.readstring();
-		String pat=ifj16.readstring();
+		String text=ifj16.readString();
+		String pat=ifj16.readString();
 		return ifj.compare(text,pat);
 	}
 	static int read_and_compare2(){
@@ -45,12 +45,12 @@ class fff{
 		return ifj16.sort(text);
 	}
 	static void read2(){
-		String a1=ifj16.readstring();
-		a1=ifj16.readstring();
+		String a1=ifj16.readString();
+		a1=ifj16.readString();
 	}
 	static double foo(){
-		a2=ifj.readdouble();
-		return a2/ifj.readdouble();
+		a2=ifj.readDouble();
+		return a2/ifj.readDouble();
 	}
 
 	static int foo1(int a, int b)
