@@ -9,7 +9,7 @@
 #define STRUCTURES
 #include <stdio.h>
 #include <stdlib.h>
-#include "htab.h"
+#include "ial.h"
 
 /**
  * TODO

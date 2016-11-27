@@ -2,8 +2,6 @@
 #define PARSER
 
 #include "scanner.h"
-#include "stack_int.h"
-#include "htab.h"
 #include "structures.h"
 #include <string.h>
 #include <stdbool.h>    // bool
