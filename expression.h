@@ -60,5 +60,6 @@ int stack_expression_pop 	( struct stack_expresion* s, token* t );
 int stack_expression_push	( struct stack_expresion* s, token t );
 int operator_priority 		(int op);
 int type_priority 			(int type);
+int type_name_convertion 	(int type);
 
 #endif	// expression_h_INCLUDED
