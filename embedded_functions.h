@@ -19,5 +19,6 @@ char * shellsort(char * str, mem_list_t *L);
 int find( char *s,  char *search);
 void computeMatchJumps(char *string, unsigned int str_size, int match_jump[]);
 void computeJumps( char *string, unsigned int str_size, int charjump[]);
+char * print(char * string);
 
 #endif 	// embedded_functions_h_INCLUDED
