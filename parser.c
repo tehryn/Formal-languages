@@ -1440,7 +1440,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					if (expected_expr_data_type != expr_data_type)
 					{
-						if (expected_expr_data_type != S_DOUBLE && expr_data_type == S_INT)
+						if (expected_expr_data_type == S_DOUBLE && expr_data_type == S_INT) ;
+						else
 						{
 							fprintf(stderr, "PARSER: On line %u unexpected different data type of expresion.\n", LINE_NUM);
 							return ERR_SEM_COMPATIBILITY;
