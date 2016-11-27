@@ -228,10 +228,16 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 			htab_item *tmp_table_item;
 			if (input_token.ptr == NULL)
 				FATAL_ERROR("EXPRESSION: Token data are not allocated. 26\n", ERR_INTERN_FAULT);
+			
+			
 
 			if (input_token.id==S_FULL_IDENT)
 			{
-				tmp_table_item = htab_find_item(global_table, input_token.ptr);
+				if (global_table!=NULL)
+					tmp_table_item = htab_find_item(global_table, input_token.ptr);
+				else
+					tmp_table_item=NULL;
+				
 				if (tmp_table_item == NULL)
 				{
 					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
@@ -241,14 +247,24 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 
 			else if (input_token.id==S_SIMPLE_IDENT)
 			{
-				tmp_table_item = htab_find_item(local_table, input_token.ptr);
+				if (local_table!=NULL)
+					tmp_table_item = htab_find_item(local_table, input_token.ptr);
+				else
+					tmp_table_item=NULL;
+				
 				if (tmp_table_item == NULL)
 				{
+					
 					char new_name[strlen(input_token.ptr) + strlen(class_name) + 1];
 					strcpy(new_name, class_name);
 					strcat(new_name, ".");
 					strcat(new_name, input_token.ptr);
-					tmp_table_item = htab_find_item(global_table, new_name);
+					
+					if (global_table!=NULL)
+						tmp_table_item = htab_find_item(global_table, new_name);
+					else
+					tmp_table_item=NULL;
+				
 					if (tmp_table_item == NULL)
 					{
 						fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
@@ -257,14 +273,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				}
 			}
 			
-			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s\n initialized:%d", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key, tmp_table_item->initialized);	// odje torima
+			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s initialized:%d\n", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key, tmp_table_item->initialized);	// odje torima
 			
 			int ident_type=-1;
 			
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
 				//if (tmp_table_item->data==NULL)
-				if (tmp_table_item->initialized==1)
+				if (tmp_table_item->initialized!=1)
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
 				
 				input_token.ptr=tmp_table_item;
