@@ -1,6 +1,6 @@
 class Main {
     static void run() {
-        int b = Helo.c;
+        int b = Hello.c;
     }
 }
 
