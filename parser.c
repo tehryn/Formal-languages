@@ -1411,7 +1411,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					token *postfix_token_array;
 					int token_count, expr_data_type;
-					expr_return = expr_analyze(t, &t, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
+					expr_return = expr_analyze(t, &t, class_name, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
 					if (expr_return != 0)
 						return expr_return;
 					free(postfix_token_array); // TODO ukladat
