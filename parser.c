@@ -719,6 +719,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 						TableItem->data_type = type;
 						TableItem->func_or_var = 1;
+						TableItem->initialized = 1;
 					}
 
 					if (stack_int_push(s, 1, P_DEF_ARGUMENTS2) < 0)
@@ -861,6 +862,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 
 						TableItem->data_type = type;
+						TableItem->func_or_var = 1;
+						TableItem->initialized = 1;
 					}
 
 					token_got = false;
