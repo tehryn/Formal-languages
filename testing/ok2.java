@@ -2,8 +2,8 @@ class Main {
     static void run() {
 		ifj16.print("A1\n");
 		int x;
-		x=fff.read_and_compare;
-		x=fff.read_and_compare2;
+		x=fff.read_and_compare();
+		x=fff.read_and_compare2();
 		ifj16.print((x-1));
 		String text="Some random text\n";
 		text=fff.sorting(text);
