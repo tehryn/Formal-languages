@@ -233,6 +233,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 
 			if (input_token.id==S_FULL_IDENT)
 			{
+				
 				if (global_table!=NULL)
 					tmp_table_item = htab_find_item(global_table, input_token.ptr);
 				else
@@ -247,11 +248,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 
 			else if (input_token.id==S_SIMPLE_IDENT)
 			{
+				
 				if (local_table!=NULL)
 					tmp_table_item = htab_find_item(local_table, input_token.ptr);
 				else
 					tmp_table_item=NULL;
-				
 				if (tmp_table_item == NULL)
 				{
 					
@@ -281,8 +282,10 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 			{
 				//if (tmp_table_item->data==NULL)
 				if (tmp_table_item->initialized!=1)
+				{
+					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
-				
+				}
 				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
 				
