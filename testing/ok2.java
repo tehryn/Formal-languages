@@ -49,8 +49,8 @@ class fff{
 		a1=ifj16.readString();
 	}
 	static double foo(){
-		a2=ifj.readDouble();
-		return a2/ifj.readDouble();
+		a2=ifj16.readDouble();
+		return a2/ifj16.readDouble();
 	}
 
 	static int foo1(int a, int b)
