@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-#include "htab.h"
+#include "ial.h"
 #include "scanner.h"
 #include "expression.h"
 
@@ -27,7 +27,7 @@
 												return (error_code); } while(0)
 
 
-int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
+int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
 {
 	void * ma1[2]={0,0};	// memory1 buffer
 	//int ma1_top=0;			// memory1 number of pointers
@@ -219,14 +219,12 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 		{
 			if ( (syn_rules&1) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 25\n", ERR_SYNTACTIC_ANALYSIS);
-			
+
 			htab_item *tmp_table_item;
 			if (input_token.ptr == NULL)
 				FATAL_ERROR("EXPRESSION: Token data are not allocated. 26\n", ERR_INTERN_FAULT);
 
-
-			tmp_table_item = htab_find_item(local_table, input_token.ptr);
-			if (tmp_table_item == NULL)
+			if (input_token.id==S_FULL_IDENT)
 			{
 				tmp_table_item = htab_find_item(global_table, input_token.ptr);
 				if (tmp_table_item == NULL)
@@ -235,13 +233,33 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 					FATAL_ERROR("EXPRESSION: Symbol not defined. 27\n", ERR_SEM_NDEF_REDEF);
 				}
 			}
+
+			else if (input_token.id==S_SIMPLE_IDENT)
+			{
+				tmp_table_item = htab_find_item(local_table, input_token.ptr);
+				if (tmp_table_item == NULL)
+				{
+					char new_name[strlen(input_token.ptr) + strlen(class_name) + 1];
+					strcpy(new_name, class_name);
+					strcat(new_name, ".");
+					strcat(new_name, input_token.ptr);
+					tmp_table_item = htab_find_item(global_table, new_name);
+					if (tmp_table_item == NULL)
+					{
+						fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
+						FATAL_ERROR("EXPRESSION: Symbol not defined. 27.1\n", ERR_SEM_NDEF_REDEF);
+					}
+				}
+			}
+			
+			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s\n", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key);	// odje torima
 			
 			int ident_type=-1;
 			
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
 				if (tmp_table_item->data==NULL)
-					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27\n", ERR_UNINICIALIZED_VAR);
+					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
 				
 				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
@@ -274,7 +292,7 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 				
 				for (int i=0; i<arg_count-1; i++)
 				{
-					err_ret=expr_analyze(fun_in_token, &fun_last_token, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
+					err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 					if (err_ret!=0)
 						FATAL_ERROR("EXPRESSION: Expression error. 30\n", err_ret);
 					
@@ -307,7 +325,7 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 					fparam_data_type = -1;
 				}
 				
-				err_ret=expr_analyze(fun_in_token, &fun_last_token, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
+				err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 				if (err_ret!=0)
 					FATAL_ERROR("EXPRESSION: Expression error. 34\n", err_ret);
 					
@@ -323,7 +341,7 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 				{
 					free(fun_param_arr);
 					fun_param_arr=NULL;
-					FATAL_ERROR("EXPRESSION: Incompatible function parameter. 36\n", ERR_SEM_COMPATIBILITY);
+					FATAL_ERROR("EXPRESSION: Incompatible function parameter or wrong number of parameters. 36\n", ERR_SEM_COMPATIBILITY);
 				}
 				
 				
@@ -349,7 +367,7 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 			else
 			{
 				fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
-				FATAL_ERROR("EXPRESSION: Undefined symbol definition. 39\n", ERR_INTERN_FAULT);
+				FATAL_ERROR("EXPRESSION: Unknown symbol definition. 39\n", ERR_SEM_NDEF_REDEF);
 			}
 			
 			if (type_priority(ident_type) > type_priority(e_type))
