@@ -340,18 +340,22 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_INTERN_FAULT;
 						}
 						class_name = strncpy(class_name, (char*)t.ptr, class_name_strlen);
-						if (array_string_find(&all_class_names, class_name) == NULL)
+						
+						if (runtime == 1)
 						{
-							if(array_string_insert(&all_class_names, class_name) != 0)
+							if (array_string_find(&all_class_names, class_name) == NULL)
 							{
-								fprintf(stderr, "Intern fault. Parser cannot insert class %s into array.\n", class_name);
-								return ERR_INTERN_FAULT;
+								if(array_string_insert(&all_class_names, class_name) != 0)
+								{
+									fprintf(stderr, "Intern fault. Parser cannot insert class %s into array.\n", class_name);
+									return ERR_INTERN_FAULT;
+								}
 							}
-						}
-						else
-						{
-							fprintf(stderr, "PARSER:  On line %u class %s has been already defined.\n", LINE_NUM, class_name);
-							return ERR_SEM_NDEF_REDEF;
+							else
+							{
+								fprintf(stderr, "PARSER:  On line %u class %s has been already defined.\n", LINE_NUM, class_name);
+								return ERR_SEM_NDEF_REDEF;
+							}
 						}
 
 						if (token_got == false)
@@ -632,10 +636,12 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						((int*)TableItem->data)[0] = S_EOF;
 						TableItem->number_of_arguments = number_arguments;
 
+						/*
 						printf("++%i++\n", number_arguments);
 						for (int i=0; i<number_allocated_arguments; i++)
 							printf("%i ", ((int*)TableItem->data)[i]);
 						//printf("\n");
+						*/
 
 						number_arguments = 0;
 						number_allocated_arguments = 0;
@@ -747,11 +753,12 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->number_of_arguments = number_arguments;
 
-						// TODO - for DEBUG
+					/*	// TODO - for DEBUG
 						printf("--%i--\n", number_arguments);
 						for (int i=0; i<number_allocated_arguments; i++)
 							printf("%i ", ((int*)TableItem->data)[i]);
 						printf("\n");
+					*/
 
 						number_arguments = 0;
 						number_allocated_arguments = 0;
