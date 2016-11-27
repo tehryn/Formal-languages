@@ -8,8 +8,6 @@
 #include "scanner.h"
 #include "error.h"
 
-#define SPEC_CHAR_FSEEK(spec) (((spec) == S_EQUAL || (spec) == S_LESS_EQUAL || (spec) == S_GREATER_EQUAL || (spec) == S_NOT_EQUAL)?-2:-1)
-
 unsigned LINE_NUM = 1;
 extern FILE *f;
 char *SCANNER_WORD;
