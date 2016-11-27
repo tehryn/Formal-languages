@@ -1,0 +1,50 @@
+ok1, ok2, err17 -> pridani vestavenych funkci do globalni hash. tab.
+PARSER:  On line 191 variable or function ifj16.print has not been defined.
+ok1.java: ERROR - interpret returned with 3 but should have returned with 0
+PARSER:  On line 74 variable or function ifj.printf has not been defined.
+ok2.java: ERROR - interpret returned with 3 but should have returned with 0
+PARSER:  On line 8 variable or function ifj16.print has not been defined.
+err17.java: ERROR - interpret returned with 3 but should have returned with 4
+
+
+err40 -> asi se nehlasi chyba kvuli chybejicimu return ve funkci: static int a
+err40.java: ERROR - interpret returned with 0 but should have returned with 2
+
+err23 -> nevim proc by se mela hlasit chybu
+err23.java: ERROR - interpret returned with 0 but should have returned with 4	
+
+
+
+
+16, 21, 37, 34 -> vyhledavani funkci ve tride
+Symbol: hello
+EXPRESSION: Symbol not defined. 27
+err16.java: ERROR - interpret returned with 3 but should have returned with 4
+Symbol: hello
+EXPRESSION: Symbol not defined. 27
+err21.java: ERROR - interpret returned with 3 but should have returned with 4
+Symbol: hello
+EXPRESSION: Symbol not defined. 27
+err37.java: ERROR - interpret returned with 3 but should have returned with 4
+Symbol: a
+EXPRESSION: Symbol not defined. 27
+err34.java: ERROR - interpret returned with 3 but should have returned with 4
+
+
+err22 -> asi chyba testu, nedefinovany symbol je chyba 4
+PARSER:  On line 14 variable or function hello has not been defined.
+err22.java: ERROR - interpret returned with 3 but should have returned with 4
+
+
+err30 -> mela by se hlasit chyba ERR_SEM_COMPATIBILITY (asi se ve parseru nekontroluje co je za hodnotou tesne za prikazem return ve void funkci, testuje se asi jenom zda je tam strednik, ne zkoumal jsem kod, ale podle testu bych rekl ze je to problem.) 
+PARSER:  On line 3 expected semicomma after return in void function.
+err30.java: ERROR - interpret returned with 3 but should have returned with 4
+
+err33, err35 -> ukladani lokalnich promennych (ve funkci) do hash. tab, do polozky .fun_or_var je hodnota 0 coz znamena nedefinovany druh symbolu (neni ani funkce ani promenna) 
+Token: b
+EXPRESSION: Undefined token data in hash function. 39
+err33.java: ERROR - interpret returned with 99 but should have returned with 4
+Token: a
+EXPRESSION: Undefined token data in hash function. 39
+err35.java: ERROR - interpret returned with 99 but should have returned with 4
+
