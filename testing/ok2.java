@@ -1,6 +1,6 @@
 class Main {
     static void run() {
-		ifj.printf("A1\n");
+		ifj.print("A1\n");
 		int x;
 		x=fff.read_and_compare;
 		x=fff.read_and_compare2;
