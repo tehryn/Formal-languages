@@ -902,6 +902,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				else if (t.id == S_RIGHT_BRACE) // no other stuffs in function
 				{
 					htab_free_all(LocalTableSymbols);
+					LocalTableSymbols = NULL;
 					break;
 				}
 				else
