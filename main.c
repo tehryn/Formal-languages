@@ -2,7 +2,7 @@
 #include "garbage_collector.h"
 #include "error.h"
 #include "parser.h"
-#include "htab.h"
+#include "ial.h"
 #include "structures.h"
 #define TEST_PARSER
 //#define TEST_TABLE
