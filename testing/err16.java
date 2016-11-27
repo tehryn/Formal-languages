@@ -1,10 +1,10 @@
 class Main {
     static void run() {
-        int a;
-        int b;
+        double a = 1;
+        int b = 2;
         double c = hello(a, b);
     }
-    static int hello(int a, double b) {
+    static double hello(int a, double b) {
         return a;
     }
 }
