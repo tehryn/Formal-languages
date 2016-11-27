@@ -1575,7 +1575,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 
 	htab_item * TableItem = NULL;
 
-	// "ifj16.readInt"
+	// int readInt ( ) ;
 	TableItem = htab_insert_item(global_table_symbols, "ifj16.readInt");
 	if(TableItem == NULL)
 	{
@@ -1594,8 +1594,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	}
 	((int*) TableItem->data)[0] = S_EOF;
 
-	// "ifj16.readDouble"
-
+	// double readDouble ( ) ;
 	TableItem = htab_insert_item(global_table_symbols, "ifj16.readDouble");
 	if(TableItem == NULL)
 	{
@@ -1614,8 +1613,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	}
 	((int*) TableItem->data)[0] = S_EOF;
 
-	// "ifj16.readString"
-
+	// String readString ( ) ;
 	TableItem = htab_insert_item(global_table_symbols, "ifj16.readString");
 	if(TableItem == NULL)
 	{
@@ -1635,10 +1633,128 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	((int*) TableItem->data)[0] = S_EOF;
 
 	// void print ( term_nebo_konkatenace ) ;
+	TableItem = htab_insert_item(global_table_symbols, "ifj16.print");
+	if(TableItem == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser cannot insert intern function into Table of symbols (malloc problem).\n");
+		return ERR_INTERN_FAULT;
+	}
+	TableItem->data_type = S_VOID;
+	TableItem->func_or_var = 2;
+	TableItem->number_of_arguments = 1;
+	TableItem->initialized = 1;
+	TableItem->data = malloc (2*sizeof(int));
+	if(TableItem->data == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
+		return ERR_INTERN_FAULT;
+	}
+	((int*) TableItem->data)[0] = S_STRING;
+	((int*) TableItem->data)[1] = S_EOF;
+
 	// int length(String s);
+	TableItem = htab_insert_item(global_table_symbols, "ifj16.length");
+	if(TableItem == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser cannot insert intern function into Table of symbols (malloc problem).\n");
+		return ERR_INTERN_FAULT;
+	}
+	TableItem->data_type = S_INT;
+	TableItem->func_or_var = 2;
+	TableItem->number_of_arguments = 1;
+	TableItem->initialized = 1;
+	TableItem->data = malloc (2*sizeof(int));
+	if(TableItem->data == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
+		return ERR_INTERN_FAULT;
+	}
+	((int*) TableItem->data)[0] = S_STRING;
+	((int*) TableItem->data)[1] = S_EOF;
+
 	// String substr(String s, int i, int n);
+	TableItem = htab_insert_item(global_table_symbols, "ifj16.substr");
+	if(TableItem == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser cannot insert intern function into Table of symbols (malloc problem).\n");
+		return ERR_INTERN_FAULT;
+	}
+	TableItem->data_type = S_STRING;
+	TableItem->func_or_var = 2;
+	TableItem->number_of_arguments = 3;
+	TableItem->initialized = 1;
+	TableItem->data = malloc (4*sizeof(int));
+	if(TableItem->data == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
+		return ERR_INTERN_FAULT;
+	}
+	((int*) TableItem->data)[0] = S_STRING;
+	((int*) TableItem->data)[1] = S_INT;
+	((int*) TableItem->data)[2] = S_INT;
+	((int*) TableItem->data)[3] = S_EOF;
+
 	// int compare(String s1, String s2);
+	TableItem = htab_insert_item(global_table_symbols, "ifj16.compare");
+	if(TableItem == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser cannot insert intern function into Table of symbols (malloc problem).\n");
+		return ERR_INTERN_FAULT;
+	}
+	TableItem->data_type = S_INT;
+	TableItem->func_or_var = 2;
+	TableItem->number_of_arguments = 2;
+	TableItem->initialized = 1;
+	TableItem->data = malloc (3*sizeof(int));
+	if(TableItem->data == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
+		return ERR_INTERN_FAULT;
+	}
+	((int*) TableItem->data)[0] = S_STRING;
+	((int*) TableItem->data)[1] = S_STRING;
+	((int*) TableItem->data)[2] = S_EOF;
+
 	// int find(String s, String search);
+	TableItem = htab_insert_item(global_table_symbols, "ifj16.find");
+	if(TableItem == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser cannot insert intern function into Table of symbols (malloc problem).\n");
+		return ERR_INTERN_FAULT;
+	}
+	TableItem->data_type = S_INT;
+	TableItem->func_or_var = 2;
+	TableItem->number_of_arguments = 2;
+	TableItem->initialized = 1;
+	TableItem->data = malloc (3*sizeof(int));
+	if(TableItem->data == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
+		return ERR_INTERN_FAULT;
+	}
+	((int*) TableItem->data)[0] = S_STRING;
+	((int*) TableItem->data)[1] = S_STRING;
+	((int*) TableItem->data)[2] = S_EOF;
+
 	// String sort(String s);
+	TableItem = htab_insert_item(global_table_symbols, "ifj16.sort");
+	if(TableItem == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser cannot insert intern function into Table of symbols (malloc problem).\n");
+		return ERR_INTERN_FAULT;
+	}
+	TableItem->data_type = S_STRING;
+	TableItem->func_or_var = 2;
+	TableItem->number_of_arguments = 1;
+	TableItem->initialized = 1;
+	TableItem->data = malloc (2*sizeof(int));
+	if(TableItem->data == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
+		return ERR_INTERN_FAULT;
+	}
+	((int*) TableItem->data)[0] = S_STRING;
+	((int*) TableItem->data)[1] = S_EOF;
+
 	return 0;
 }
