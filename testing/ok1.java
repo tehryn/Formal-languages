@@ -1,18 +1,3 @@
-/*class Main {
-	static int f() {
-		while(true)
-			b();
-		if (false)
-			if (false)
-				print(string);
-			else
-				p();
-		else
-			return 0;
-	}
-	static int b;
-} */
-
 class Main {
     static int input1;
     static int input2;
@@ -23,20 +8,19 @@ class Main {
         input1 = ifj16.readint();
         input2 = ifj16.readint();
         int x = proc_int.add(input1, input2);
-        String str = "%i + %i = %i\012";
-        ifj16.print(str, input1, input2, x);
-        str = "%i\t*\t%i\t=\t%i\n";
-        ifj16.print(str, input1, input2, proc_int.mul(input1, input2));
-        str = "Co je dobre?\n%i\t-\t%i\t=\t%i\nnebo\n%i\t-\t%i\t=\t%i\n";
-        ifj16.print(str, input1, input2, proc_int.sub(input1, input2), input1, input2, proc_int.sub(input1, input2));
-        str = "%i\t\\t%i\t=\t%i\n";
-        ifj16.print(str, input1, input2, proc_int.mul(input1, input2));
-        ifj16.print(str, input2, input1, proc_int.mul(input1, input2));
+        String str = "";
+        ifj16.print(str + input1 + str +" + " + input2 +" = "+ x);
+        ifj16.print(str + input1 + " * " + input2 +" = "+ proc_int.mul(input1, input2));
+        str = "Co je dobre?\n";
+        ifj16.print(str + input1 + " - " input2 " = " proc_int.sub(input1, input2) + " nebo " + input1 +  "- " + input2 " = " proc_int.sub(input1, input2));
+        str = "\n";
+        ifj16.print(str + input1 + " * " input2 + " = " + proc_int.mul(input1, input2));
+        ifj16.print(str + input2 +" * "+ input1 + " = " + proc_int.mul(input1, input2));
         ifj16.print("A ted neco odporneho\n");
         x = proc_int.add(input1,proc_int.mul(input1, proc_int.div(input1, proc_int.sub(input1, input2))));
-        ifj16.print("Vysledek odporne operace c. 1 je pry %i\n", x);
+        ifj16.print("Vysledek odporne operace c. 1 je pry " + x + "\n");
         x = proc_int.foo();
-        ifj16.print("Vysledek odporne operace c. 2 je pry %i\n", x);
+        ifj16.print("Vysledek odporne operace c. 2 je pry " + x + "\n");
 
         ifj16.print("Nacteme 2x double\n");
         input1 = ifj16.readdouble();
