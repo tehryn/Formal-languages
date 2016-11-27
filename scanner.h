@@ -15,7 +15,7 @@
 /*! TODO */
 #define S_SIZE 32
 /*! TODO */
-#define reset_scanner() (fseek(f, 0, SEEK_SET))
+#define reset_scanner() (fseek(f, 0, SEEK_SET); LINE_NUM = 0;)
 
 /*! TODO */
 enum {
