@@ -2,7 +2,7 @@
 #include "garbage_collector.h"
 #include "error.h"
 
-char * readstring(mem_list_t *L)
+char * readString(mem_list_t *L)
 {
     char * tmp = NULL;
     char * string = (char *)mem_alloc(sizeof(char), L);
@@ -44,7 +44,7 @@ char * readstring(mem_list_t *L)
 
 
 
-int readint(mem_list_t *L)
+int readInt(mem_list_t *L)
 {
     char * string=NULL;
     long int n1=0;
@@ -87,7 +87,7 @@ int readint(mem_list_t *L)
 
 
 
-double readdouble(mem_list_t *L)
+double readDouble(mem_list_t *L)
 {
     char * string=NULL;
     double n1=0;
@@ -309,7 +309,7 @@ int find( char *s,  char *search)
 }
 
 
-char * print(char * string)
+void print(char * string)
 {
 	printf("%s", string);
 }
