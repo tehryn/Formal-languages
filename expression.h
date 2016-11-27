@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
-#include "htab.h"
+#include "ial.h"
 #include "scanner.h"
 
 
@@ -50,7 +50,7 @@ struct stack_expresion
 //	int token_count, expr_data_type;
 //	int expr_analyze(t_in, &t_out, &postfix_token_array, &token_count, &expr_data_type, global_table, local_table);
 */
-int expr_analyze 			( token t_in, token *t_out, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...);
+int expr_analyze 			( token t_in, token *t_out, char* class_name, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...);
 int stack_expression_init 	( struct stack_expresion* s, int size );
 int stack_expression_destroy( struct stack_expresion* s );
 int stack_expression_empty 	( const struct stack_expresion* s );
