@@ -594,7 +594,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if (runtime == 1)
 					{
 						TableItem->func_or_var = 1; // variable
-						TableItem->initialized = 1; // it will be initialized in P_EXPR
 					}
 
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
@@ -1092,6 +1091,15 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if(t.id == S_RETURN)
 				{
+					if (runtime == 2)
+					{
+						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+						if (TableItem == NULL)
+						{
+							fprintf(stderr, "PARSER: Unexpected situation happend. We cannot find find function in which we are.\n");
+							return ERR_INTERN_FAULT;
+						}
+					}
 					token_got = false;
 					if (stack_int_push(s, 1, P_RETURN_EXPR) < 0)
 					{
@@ -1158,10 +1166,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				if (t.id == S_ASSIGNMENT) // '='  TODO - porovnani typu expr a typu promenne
 				{
-					if (runtime == 2)
-					{
-						TableItem->initialized = 1;
-					}
 					token_got = false;
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
@@ -1455,6 +1459,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_SEM_COMPATIBILITY;
 						}
 					}
+
+					if (TableItem != NULL)
+						TableItem->initialized = 1;
 				}
 				token_got = true;
 				break;
