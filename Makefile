@@ -23,5 +23,5 @@ odevzdani:
 	make -C ./odevzdani zip
 	rm odevzdani/*.c odevzdani/*.h
 	./odevzdani/is_it_ok.sh ./odevzdani/xmisov00.zip ./odevzdani/test
-	make -C ./odevzdani/test
+#	make -C ./odevzdani/test
 	rm ./odevzdani/test/*
