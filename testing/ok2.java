@@ -1,10 +1,10 @@
 class Main {
     static void run() {
-		ifj.print("A1\n");
+		ifj16.print("A1\n");
 		int x;
 		x=fff.read_and_compare;
 		x=fff.read_and_compare2;
-		ifj.print((x-1));
+		ifj16.print((x-1));
 		String text="Some random text\n";
 		text=fff.sorting(text);
 		fff.read2();
@@ -21,7 +21,7 @@ class Main {
 			x=fff.foo1(y,x);
 		}
 		if (x==x && (x-1)==(x-1) || x/5==1)
-			ifj.print("(Y)\n");
+			ifj16.print("(Y)\n");
 
 
 	}
@@ -36,7 +36,7 @@ class fff{
 	static int read_and_compare(){
 		String text=ifj16.readString();
 		String pat=ifj16.readString();
-		return ifj.compare(text,pat);
+		return ifj16.compare(text,pat);
 	}
 	static int read_and_compare2(){
 		return read_and_compare();
