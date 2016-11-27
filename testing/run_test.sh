@@ -1,4 +1,4 @@
-declare -a valide_tests=("ok1.java" "ok2.java" "ok3.java" "ok4.java" "ok5.java" "ok6.java" "ok7.java" "ok8.java" "ok9.java" "ok10.java")
+declare -a valide_tests=("ok1.java" "ok2.java" "ok3.java" "ok4.java" "ok5.java" "ok6.java" "ok7.java" "ok8.java" "ok9.java" "ok10.java" "ok11.java" "ok12.java" "ok13.java" "ok14.java" "ok15.java")
 declare -a invalide_syntax=("err2.java" "err3.java" "err4.java" "err5.java" "err10.java" "err26.java" "err28.java" "err29.java" "err38.java" "err39.java" "err40.java")
 declare -a invalide_lexical=("err6.java" "err7.java")
 declare -a invalide_semantic_def=("err1.java" "err8.java" "err9.java" "err11.java" "err13.java" "err14.java" "err15.java" "err18.java" "err20.java" "err31.java" "err36.java")
