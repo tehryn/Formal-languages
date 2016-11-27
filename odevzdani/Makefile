@@ -8,9 +8,9 @@ CFLAGS = -std=c99
 CC=gcc
 default: IFJ16
 
-IFJ16: main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o
-	 $CC $(CFLAGS) -o IFJ16 main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o
-	cp IFJ16 testing/
+IFJ16: main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o embedded_functions.o
+	$CC $(CFLAGS) -o IFJ16 main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o
+
 main.o: main.c
 	$CC -c main.c -o $@
 error.o: error.c error.h
@@ -27,9 +27,11 @@ structures.o: structures.c structures.o
 	$CC -c structures.c -o $@
 expression.o: expression.c expression.h
 	$CC -c expression.c -o $@
+embedded_functions.o: embedded_functions.c embedded_functions.h
+	$CC -c embedded_functions.c -o $@
 
 .PHONY: clean zip
 clean:
 	rm *.o IFJ16
 zip:
-	zip xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni
+	zip xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni rozsireni

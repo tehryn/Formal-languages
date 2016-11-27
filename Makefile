@@ -14,15 +14,14 @@ IFJ16: main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o 
 %.o: %.c %.h
 	gcc $(CFLAGS) -c $< -o $@
 
-.PHONY: clean zip odevzdani
+.PHONY: clean odevzdani
 clean:
 	rm *.o IFJ16
-zip:
-	zip xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni
 
 odevzdani:
 	cp *.c *.h odevzdani
-	mkdir -p odevzdani
-	cd odevzdani
-	make zip
-	cd ..
+	make -C ./odevzdani zip
+	rm odevzdani/*.c odevzdani/*.h
+	./odevzdani/is_it_ok.sh ./odevzdani/xmisov00.zip ./odevzdani/test
+	make -C ./odevzdani/test
+	rm ./odevzdani/test/*
