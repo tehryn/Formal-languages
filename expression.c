@@ -191,8 +191,10 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
 
 			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id!=S_PLUS )
-				FATAL_ERROR("EXPRESSION: Unallowed operation in expression with string. 19\n", ERR_SEM_COMPATIBILITY);
-				
+				FATAL_ERROR("EXPRESSION: Unallowed operation in expression with string value. 19.1\n", ERR_SEM_COMPATIBILITY);
+
+			if ( operator_priority(input_token.id)==3 || operator_priority(input_token.id)==2 )
+				e_type=S_BOOLEAN;
 
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
@@ -543,14 +545,14 @@ int operator_priority (int op)
 
 int type_priority (int type)
 {
-	if (type==TYPE_STRING || type==S_STRING)
+	if (type==TYPE_BOOLEAN || type==S_BOOLEAN)
+		return 6;
+	else if (type==TYPE_STRING || type==S_STRING)
 		return 5;
 	else if (type==TYPE_DOUBLE || type==S_DOUBLE)
 		return 4;
 	else if (type==TYPE_INT || type==S_INT)
 		return 3;
-	else if (type==TYPE_BOOLEAN || type==S_BOOLEAN)
-		return 1;
 	else if (type==S_VOID)
 		return 1;
 	
