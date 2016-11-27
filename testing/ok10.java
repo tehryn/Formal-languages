@@ -14,6 +14,6 @@ class Main {
             else
                 b = 1;
         else
-            b = 1
+            b = 1;
     }
 }
