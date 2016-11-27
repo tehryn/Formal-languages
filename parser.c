@@ -1,6 +1,6 @@
 #include "parser.h"
 #include "expression.h"
-
+ 
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
 	char *result = (char *) malloc(len[0] + len[1] + 2);
@@ -594,7 +594,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if (runtime == 1)
 					{
 						TableItem->func_or_var = 1; // variable
-						//TableItem->initialized = 1; // it will be initialized in P_EXPR
+						TableItem->initialized = 1; // it will be initialized in P_EXPR
 					}
 
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
@@ -1157,10 +1157,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				if (t.id == S_ASSIGNMENT) // '='  TODO - porovnani typu expr a typu promenne
 				{
-					/*if (runtime == 2)
+					if (runtime == 2)
 					{
 						TableItem->initialized = 1;
-					}*/
+					}
 					token_got = false;
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
@@ -1454,7 +1454,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_SEM_COMPATIBILITY;
 						}
 					}
-					TableItem->initialized = 1;
 				}
 				token_got = true;
 				break;
