@@ -1,7 +1,7 @@
 class Main {
     static void run() {
         if (a.a > a) {}
-        else (b.b > a)
+        else
             return;
         return;
     }

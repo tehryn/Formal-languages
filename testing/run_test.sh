@@ -5,83 +5,113 @@ declare -a invalide_semantic_def=("err1.java" "err8.java" "err9.java" "err11.jav
 declare -a invalide_semantic_compat=("err12.java" "err16.java" "err17.java" "err19.java" "err21.java" "err22.java" "err23.java" "err24.java" "err25.java" "err27.java" "err30.java" "err32.java" "err33.java" "err34.java" "err35.java" "err37.java")
 declare -a invalide_semantic_other=()
 declare -a invalide_run_no_init=("err41.java" "err42.java" "err43.java" "err44.java" "err45.java")
-GREEN='\033[1;32m'
-RED='\033[1;31m'
-NC='\033[0m' # No Color
+
+if [ $# -eq 0 ]
+then
+	GREEN='\033[1;32m'
+	RED='\033[1;31m'
+	NC='\033[0m' # No Color
+fi
 
 for file in ${valide_tests[@]}
 do
-	./IFJ16 $file >/dev/null 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 0 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 0"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
 	fi
 done
 
 for file in ${invalide_lexical[@]}
 do
-	./IFJ16 $file >/dev/null 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 1 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 1"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
 	fi
 done
 
 for file in ${invalide_syntax[@]}
 do
-	./IFJ16 $file >/dev/null 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 2 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 2"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
 	fi
 done
 
 for file in ${invalide_semantic_def[@]}
 do
-	./IFJ16 $file >/dev/null 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 3 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 3"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
 	fi
 done
 
 for file in ${invalide_semantic_compat[@]}
 do
-	./IFJ16 $file >/dev/null 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 4 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 4"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
 	fi
 done
 
 for file in ${invalide_semantic_other[@]}
 do
-	./IFJ16 $file >/dev/null 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 6 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 6"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
 	fi
 done
 
 for file in ${invalide_run_no_init[@]}
 do
-	./IFJ16 $file >/dev/null 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 8 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 8"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
 	fi
 done
+
+
+
+
+rm tmp.txt
