@@ -13,5 +13,5 @@ class a {
 }
 
 class b {
-    static int b = a;
+    static int b = a.a;
 }

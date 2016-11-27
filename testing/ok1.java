@@ -98,7 +98,7 @@ class proc_int {
     }
 
     static void print_calls() {
-        ifj16.print("%i\n", calls);
+        ifj16.print(calls + "\n");
     }
     static int sum = 0;
     static int calls = sum;
@@ -146,7 +146,7 @@ class proc_double {
     }
 
     static void print_calls() {
-        ifj16.print("%i\n", calls);
+        ifj16.print(calls + "\n");
         return;
     }
     static double sum = 0;
