@@ -226,12 +226,12 @@ char *load_string(char *word, unsigned *max) {
 			else if (c == 't') {
 				c = '\t';
 			}
-			else if (isdigit(c)) {
+			else if (isdigit(c) && c <= '4') {
 				num[0] = c;
 				num[1] = fgetc(f);
-				if (isdigit(num[1])) {
+				if (isdigit(num[1] && num[1] <= '7')) {
 					num[2] = fgetc(f);
-					if (isdigit(num[2])) {
+					if (isdigit(num[2]) && num[2] <= '7') {
 						c = (num[0] - '0')*64 + (num[1] - '0')*8 + (num[2] - '0');
 					}
 					else {
