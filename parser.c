@@ -1559,7 +1559,13 @@ bool token_wanted(token * t)
 
 int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_string* all_class_names)
 {
-	class_name = "ifj16";
+	class_name = (char *) malloc(strlen("ifj16")+1);
+	if (class_name == NULL)
+	{
+		fprintf(stderr, "Intern fault. Parser allocate place for class_name.\n");
+		return ERR_INTERN_FAULT;
+	}
+	strcpy(class_name, "ifj16");
 	if(array_string_insert(all_class_names, class_name) != 0)
 	{
 		fprintf(stderr, "Intern fault. Parser cannot insert class %s into array.\n", class_name);
