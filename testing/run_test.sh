@@ -4,6 +4,7 @@ declare -a invalide_lexical=("err6.java" "err7.java")
 declare -a invalide_semantic_def=("err1.java" "err8.java" "err9.java" "err11.java" "err13.java" "err14.java" "err15.java" "err18.java" "err20.java" "err31.java" "err36.java")
 declare -a invalide_semantic_compat=("err12.java" "err16.java" "err17.java" "err19.java" "err21.java" "err22.java" "err23.java" "err24.java" "err25.java" "err27.java" "err30.java" "err32.java" "err33.java" "err34.java" "err35.java" "err37.java")
 declare -a invalide_semantic_other=()
+declare -a invalide_run_no_init=("err41.java" "err42.java" "err43.java" "err44.java" "err45.java")
 
 for file in ${valide_tests[@]}
 do
@@ -68,5 +69,16 @@ do
 		echo "$file: SUCCES - interpret returned with $ret"
 	else
 		echo "$file: ERROR - interpret returned with $ret but should have returned with 6"
+	fi
+done
+
+for file in ${invalide_run_no_init[@]}
+do
+	./IFJ16 $file >/dev/null 2>&1
+	ret=$?
+	if [[ $ret == 8 ]]; then
+		echo "$file: SUCCES - interpret returned with $ret"
+	else
+		echo "$file: ERROR - interpret returned with $ret but should have returned with 8"
 	fi
 done
