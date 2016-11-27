@@ -7,6 +7,6 @@ class Main {
         a = false;
         b = a;
         a = b;
-        b = true
+        b = true;
     }
 }
