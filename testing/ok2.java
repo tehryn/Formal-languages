@@ -4,7 +4,7 @@ class Main {
 		int x;
 		x=fff.read_and_compare;
 		x=fff.read_and_compare2;
-		ifj.printf((x-1));
+		ifj.print((x-1));
 		String text="Some random text\n";
 		text=fff.sorting(text);
 		fff.read2();
@@ -21,7 +21,7 @@ class Main {
 			x=fff.foo1(y,x);
 		}
 		if (x==x && (x-1)==(x-1) || x/5==1)
-			ifj.printf("(Y)\n");
+			ifj.print("(Y)\n");
 
 
 	}
