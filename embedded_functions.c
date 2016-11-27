@@ -309,7 +309,10 @@ int find( char *s,  char *search)
 }
 
 
-
+char * print(char * string)
+{
+	printf("%s", string);
+}
 
 
 
