@@ -7,7 +7,24 @@
 #include "expression.h"
 
 
+#define ERR_WARNING 0
+#define ERR_LEXICAL_ANALYSIS 1
+#define ERR_SYNTACTIC_ANALYSIS 2
+#define ERR_SEM_NDEF_REDEF 3
+#define ERR_SEM_COMPATIBILITY 4
+#define ERR_SEM_OTHERS 6
+#define ERR_INPUT_NUMBER 7
+#define ERR_UNINICIALIZED_VAR 8
+#define ERR_DIVISION_ZERO 9
+#define ERR_OTHERS 10
+#define ERR_INTERN_FAULT 99
+
 #define FUN_ARG -266
+
+#define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); \
+												for(int i=0; i<ma2_top; i++) if(ma2[i]!=NULL) free(ma2[i]); \
+												fputs((message), stderr); \
+												return (error_code); } while(0)
 
 
 int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
@@ -18,7 +35,7 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 	int ma2_top=0;			// memory2 number of pointers
 	
 	int e_type = -1;
-	int lex_rules = 0;
+	int syn_rules = 6;
 	int end_token = S_SEMICOMMA;	
 	va_list al;
 	
@@ -29,18 +46,31 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 		va_end(al);
 		t_in=get_token();
 	}
-		
-	if (t_in.id<=0 || t_in.id==S_SEMICOMMA || (t_in.id==S_RIGHT_PARE && end_token!=S_COMMA) || t_in.id==end_token)
+
+	if (t_in.id<=0)
 	{
-		fprintf(stderr, "ERROR: Invalid token. func(expr_analyze)\n");
+		fprintf(stderr, "EXPRESSION: Invalid token. 1\n");
+		return ERR_INTERN_FAULT;
+	}
+
+
+	if (t_in.id==0) 
+	{
+		fprintf(stderr, "EXPRESSION: Invalid token. 2\n");
 		return ERR_LEXICAL_ANALYSIS;
 	}
+
+	if (t_in.id==S_SEMICOMMA || (t_in.id==S_RIGHT_PARE && end_token!=S_COMMA) || t_in.id==end_token)
+	{
+		fprintf(stderr, "EXPRESSION: Empty expression. 3\n");
+		return ERR_SYNTACTIC_ANALYSIS;
+	}	
 
 	struct stack_expresion tmp_exp_stack, postfix_exp_stack;
 	*token_count=0;
 
 	if ( stack_expression_init(&tmp_exp_stack, 32) != 0 || stack_expression_init(&postfix_exp_stack, 32) != 0 )
-		FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 4\n", ERR_INTERN_FAULT);
 	
 	ma1[0]=tmp_exp_stack.arr;
 	ma1[1]=postfix_exp_stack.arr;
@@ -51,51 +81,62 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 	token input_token, tmp_token;
 	input_token.id=-166;
 	if ( stack_expression_push(&tmp_exp_stack, input_token) != 0 )
-		FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 5\n", ERR_INTERN_FAULT);
 	ma1[0]=tmp_exp_stack.arr;
-
+	
 	input_token=t_in;
-	while( input_token.id!=S_SEMICOMMA && input_token.id!=end_token)
+	while(1)
 	{
-
-		if (input_token.id < 0)
-			FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
-
-
-		else if (input_token.id == S_LEFT_PARE )								// left bracket 
+		
+		if (input_token.id==S_SEMICOMMA || input_token.id==end_token)
 		{
-			if ( (lex_rules&8) != 0)
-				FATAL_ERROR("ERROR: Unallowed combination of operands and operators. func(expr_analyze)\n", ERR_LEXICAL_ANALYSIS);
+			if ( (syn_rules&2)!=0)
+				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 6\n", ERR_SYNTACTIC_ANALYSIS);
+			else
+				break;
+		}
+
+		else if (input_token.id < 0)
+			FATAL_ERROR("EXPRESSION: Invalid token. 47\n", ERR_INTERN_FAULT);
+
+
+		else if (input_token.id == S_LEFT_PARE )									// left bracket 
+		{
+			if ( (syn_rules&8) != 0)
+				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 7\n", ERR_SYNTACTIC_ANALYSIS);
 
 			left_bracket_count++;
 
 			if (stack_expression_push(&tmp_exp_stack, input_token) != 0)
-				FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 8\n", ERR_INTERN_FAULT);
 			ma1[0]=tmp_exp_stack.arr;
 
-			lex_rules=6;
+			syn_rules=6;
 		}
 
 
 		else if( input_token.id==TYPE_STRING || input_token.id==TYPE_DOUBLE || input_token.id==TYPE_INT || input_token.id==TYPE_BOOLEAN || input_token.id==S_FALSE || input_token.id==S_TRUE )	// operand (number, string or boolean value)
 		{
-			if ( (lex_rules&1) != 0)
-				FATAL_ERROR("ERROR: Unallowed combination of operands and operators. func(expr_analyze)\n", ERR_LEXICAL_ANALYSIS);
+			if ( (syn_rules&1) != 0)
+				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 9\n", ERR_SYNTACTIC_ANALYSIS);
 			
-			if (type_priority(input_token.id) > type_priority(e_type))
-				e_type = input_token.id;
+			if (type_priority(type_name_convertion(input_token.id)) > type_priority(e_type))
+				e_type = type_name_convertion(input_token.id);
 			
 			if (input_token.id==TYPE_STRING)
 			{
+				if (input_token.ptr==NULL)
+					FATAL_ERROR("EXPRESSION: String data are not allocated. 10\n", ERR_INTERN_FAULT);
+				
 				char *tmp = (char *)malloc(sizeof(char) * strlen((char *)input_token.ptr) + 1);
 				if (tmp == NULL)
-					FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT);
 				else
 				{
 					if (ma2_top<256) 
 						ma2[ma2_top++]=tmp_exp_stack.arr;
 					else
-						FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+						FATAL_ERROR("EXPRESSION: Memory could not be allocated. 12\n", ERR_INTERN_FAULT);
 
 					strcpy(tmp, (char *)input_token.ptr);
 					input_token.ptr = tmp;
@@ -103,76 +144,85 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 			}
 
 			if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
-				FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 13\n", ERR_INTERN_FAULT);
 			ma1[1]=postfix_exp_stack.arr;ma1[1]=postfix_exp_stack.arr;
 			
-			lex_rules=9;
+			syn_rules=9;
 		}
 
 
-		else if( input_token.id == S_RIGHT_PARE)								// right bracket 
+		else if( input_token.id == S_RIGHT_PARE)									// right bracket 
 		{
-			if ( (lex_rules&4) != 0)
-				FATAL_ERROR("ERROR: Unallowed combination of operands and operators. func(expr_analyze)\n", ERR_LEXICAL_ANALYSIS);
+			//fprintf(stderr, "%d %d\n", end_token, left_bracket_count);
+			
+			if ( (syn_rules&4)!=0 && !( end_token==S_COMMA && e_type==-1))
+					FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 14\n", ERR_SYNTACTIC_ANALYSIS);
+			
 			
 			right_bracket_count++;
 			if (right_bracket_count>left_bracket_count)
 				break;
 
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
-				FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 15\n", ERR_INTERN_FAULT);
 
 			while( tmp_token.id != S_LEFT_PARE )
 			{
-				stack_expression_pop(&tmp_exp_stack, &tmp_token);
+				if (stack_expression_pop(&tmp_exp_stack, &tmp_token) != 0)
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 16\n", ERR_INTERN_FAULT);
+
 				if (stack_expression_push(&postfix_exp_stack, tmp_token) != 0)
-					FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 17\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
-				
-				stack_expression_top(&tmp_exp_stack, &tmp_token);
+
+				if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 18\n", ERR_INTERN_FAULT);
 			}
 			
 			stack_expression_pop(&tmp_exp_stack, NULL);										// Remove (
 			
-			lex_rules=9;
+			syn_rules=9;
 		}
 
 
 		else if ( operator_priority(input_token.id) != -1)							// operator
 		{
-			if ( (lex_rules&2) != 0)
-				FATAL_ERROR("ERROR: Unallowed combination of operands and operators. func(expr_analyze)\n", ERR_LEXICAL_ANALYSIS);
+			if ( (syn_rules&2) != 0)
+				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
 
 
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
-				FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
 
 			while( operator_priority(tmp_token.id) >= operator_priority(input_token.id) )
 			{
-				stack_expression_pop(&tmp_exp_stack, &tmp_token);
+				if (stack_expression_pop(&tmp_exp_stack, &tmp_token)!=0)
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 21\n", ERR_INTERN_FAULT);
+				
 				if (stack_expression_push(&postfix_exp_stack, tmp_token) != 0)
-					FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 22\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
 
-				stack_expression_top(&tmp_exp_stack, &tmp_token);
+				if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 23\n", ERR_INTERN_FAULT);
 			}
 			
 			if (stack_expression_push(&tmp_exp_stack, input_token)!=0)
-				FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 24\n", ERR_INTERN_FAULT);
 			ma1[0]=tmp_exp_stack.arr;
 			
-			lex_rules=6;
+			syn_rules=6;
 		}
 
 
-		else if (input_token.id==S_SIMPLE_IDENT || input_token.id==S_FULL_IDENT)
+		else if (input_token.id==S_SIMPLE_IDENT || input_token.id==S_FULL_IDENT)	// function or variable
 		{
-			if ( (lex_rules&1) != 0)
-				FATAL_ERROR("ERROR: Unallowed combination of operands and operators. func(expr_analyze)\n", ERR_LEXICAL_ANALYSIS);
+			if ( (syn_rules&1) != 0)
+				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 25\n", ERR_SYNTACTIC_ANALYSIS);
 			
 			htab_item *tmp_table_item;
-			if (input_token.ptr != NULL)
-				FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+			if (input_token.ptr == NULL)
+				FATAL_ERROR("EXPRESSION: Token data are not allocated. 26\n", ERR_INTERN_FAULT);
 
 
 			tmp_table_item = htab_find_item(local_table, input_token.ptr);
@@ -180,21 +230,24 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 			{
 				tmp_table_item = htab_find_item(global_table, input_token.ptr);
 				if (tmp_table_item == NULL)
-					FATAL_ERROR("ERROR: Symbol not defined. func(expr_analyze)\n", ERR_SEM_NDEF_REDEF);
+				{
+					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
+					FATAL_ERROR("EXPRESSION: Symbol not defined. 27\n", ERR_SEM_NDEF_REDEF);
+				}
 			}
 			
-			int ident_type=0;
+			int ident_type=-1;
 			
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
 				if (tmp_table_item->data==NULL)
-					FATAL_ERROR("ERROR: Expression with uninitialized variable. func(expr_analyze)\n", ERR_UNINICIALIZED_VAR);
+					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27\n", ERR_UNINICIALIZED_VAR);
 				
 				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
 				
 				if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
-					FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 28\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
 			}
 			
@@ -205,7 +258,11 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 				
 				fun_in_token=get_token();
 				if (fun_in_token.id!=S_LEFT_PARE)
-					FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+				{
+					fprintf(stderr, "Function: %s\n", (char *)input_token.ptr);
+					FATAL_ERROR("EXPRESSION: Function missing \"(\". 29\n", ERR_SYNTACTIC_ANALYSIS);
+				}
+				
 				
 				int err_ret=-1;
 				token fun_last_token;
@@ -219,19 +276,28 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 				{
 					err_ret=expr_analyze(fun_in_token, &fun_last_token, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 					if (err_ret!=0)
-						FATAL_ERROR("ERROR: Expression error. func(expr_analyze)\n", err_ret);
+						FATAL_ERROR("EXPRESSION: Expression error. 30\n", err_ret);
 					
-					if (fun_last_token.id!=S_COMMA || fparam_data_type!=((int *)(tmp_table_item->data))[i])
+					
+					if (fun_last_token.id!=S_COMMA)
 					{
 						free(fun_param_arr);
 						fun_param_arr=NULL;
-						FATAL_ERROR("ERROR: Incompatible function parameters... func(expr_analyze)\n", ERR_SEM_COMPATIBILITY);
+						FATAL_ERROR("EXPRESSION: Function missing \",\" or it has wrong number of parameters. 31\n", ERR_SEM_COMPATIBILITY);		// odje torima
+					}
+					
+					
+					if (fparam_data_type!=((int *)(tmp_table_item->data))[i])
+					{
+						free(fun_param_arr);
+						fun_param_arr=NULL;
+						FATAL_ERROR("EXPRESSION: Incompatible function parameter. 32\n", ERR_SEM_COMPATIBILITY);
 					}
 		
 					for (int j=0; j<fp_exp_count; j++ )
 					{
 						if (stack_expression_push(&postfix_exp_stack, fun_param_arr[j]) != 0)
-							FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+							FATAL_ERROR("EXPRESSION: Memory could not be allocated. 33\n", ERR_INTERN_FAULT);
 						ma1[1]=postfix_exp_stack.arr;
 					}
 					
@@ -243,19 +309,28 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 				
 				err_ret=expr_analyze(fun_in_token, &fun_last_token, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 				if (err_ret!=0)
-					FATAL_ERROR("ERROR: Expression error. func(expr_analyze)\n", err_ret);
+					FATAL_ERROR("EXPRESSION: Expression error. 34\n", err_ret);
 					
-				if ( fun_last_token.id!=S_RIGHT_PARE || (arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1]) )
+				if ( fun_last_token.id!=S_RIGHT_PARE )
 				{
 					free(fun_param_arr);
 					fun_param_arr=NULL;
-					FATAL_ERROR("ERROR: Incompatible function parameters... func(expr_analyze)\n", ERR_SEM_COMPATIBILITY);
+					FATAL_ERROR("EXPRESSION: Function missing \")\" or it has wrong number of parameters. 35\n", ERR_SEM_COMPATIBILITY);		// odje torima
 				}
+				
+				
+				if ( arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1] )
+				{
+					free(fun_param_arr);
+					fun_param_arr=NULL;
+					FATAL_ERROR("EXPRESSION: Incompatible function parameter. 36\n", ERR_SEM_COMPATIBILITY);
+				}
+				
 				
 				for (int j=0; j<fp_exp_count; j++ )
 				{
 					if (stack_expression_push(&postfix_exp_stack, fun_param_arr[j]) != 0)
-						FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+						FATAL_ERROR("EXPRESSION: Memory could not be allocated. 37\n", ERR_INTERN_FAULT);
 					ma1[1]=postfix_exp_stack.arr;
 				}
 				
@@ -264,51 +339,61 @@ int expr_analyze ( token t_in, token *t_out, token **postfix_token_array, int *t
 				
 				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
+				
 
 				if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
-					FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 38\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
 			}
 			
 			else
-				FATAL_ERROR("ERROR: Symbol not defined. func(expr_analyze)\n", ERR_SEM_NDEF_REDEF);
+			{
+				fprintf(stderr, "Token: %s\n", (char *)input_token.ptr);
+				FATAL_ERROR("EXPRESSION: Undefined token data in hash function. 39\n", ERR_INTERN_FAULT);
+			}
 			
 			if (type_priority(ident_type) > type_priority(e_type))
 				e_type = ident_type;
-			
-			lex_rules=9;
+
+			syn_rules=9;
 		}
 		
 
 		else																	// invalid token
-			FATAL_ERROR("ERROR: Invalid token. func(expr_analyze)\n", ERR_LEXICAL_ANALYSIS);
+			FATAL_ERROR("EXPRESSION: Invalid token. 40\n", ERR_LEXICAL_ANALYSIS);
 		
 
 		input_token=get_token();
 	}
 	
 	if (left_bracket_count>right_bracket_count)
-		FATAL_ERROR("ERROR: Unallowed combination of operands and operators. func(expr_analyze)\n", ERR_LEXICAL_ANALYSIS);
+		FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 41\n", ERR_SYNTACTIC_ANALYSIS);
 	
 
-	*t_out = input_token;
+	*t_out = input_token;		
 	*expr_data_type = e_type;
 
-	stack_expression_top(&tmp_exp_stack, &tmp_token);
+
+	if (stack_expression_top(&tmp_exp_stack, &tmp_token) !=0)
+		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 42\n", ERR_INTERN_FAULT);
+	
 	while( tmp_token.id != -166)
 	{
-		stack_expression_pop(&tmp_exp_stack, &tmp_token);
-		if (stack_expression_push(&postfix_exp_stack, tmp_token) != 0)
-			FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
-		ma1[1]=postfix_exp_stack.arr;
-		stack_expression_top(&tmp_exp_stack, &tmp_token);
-	}
+		if (stack_expression_pop(&tmp_exp_stack, &tmp_token)!=0)
+			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 43\n", ERR_INTERN_FAULT);
 
+		if (stack_expression_push(&postfix_exp_stack, tmp_token) != 0)
+			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 44\n", ERR_INTERN_FAULT);
+		ma1[1]=postfix_exp_stack.arr;
+		
+		if (stack_expression_top(&tmp_exp_stack, &tmp_token) !=0)
+			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 45\n", ERR_INTERN_FAULT);
+	}
 
 	*token_count=postfix_exp_stack.top+1;
 	*postfix_token_array = (token *)malloc(sizeof(token) * (postfix_exp_stack.top+1) );
 	if (*postfix_token_array==NULL)
-		FATAL_ERROR("ERROR: Memory could not be allocated. func(expr_analyze)\n", ERR_INTERN_FAULT);
+		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 46\n", ERR_INTERN_FAULT);
 	
 	for (int i=0; i<=postfix_exp_stack.top; i++)
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
@@ -431,14 +516,28 @@ int operator_priority (int op)
 
 int type_priority (int type)
 {
-	if ( type==TYPE_STRING )
+	if (type==TYPE_STRING || type==S_STRING)
 		return 5;
-	else if ( type==TYPE_DOUBLE )
+	else if (type==TYPE_DOUBLE || type==S_DOUBLE)
 		return 4;
-	else if ( type==TYPE_INT )
+	else if (type==TYPE_INT || type==S_INT)
 		return 3;
-	else if ( type==TYPE_BOOLEAN )
+	else if (type==TYPE_BOOLEAN || type==S_BOOLEAN)
 		return 1;
+	
+	return -1;
+}
+
+int type_name_convertion (int type)
+{
+	if (type==TYPE_STRING || type==S_STRING)
+		return S_STRING;
+	else if (type==TYPE_DOUBLE || type==S_DOUBLE)
+		return S_DOUBLE;
+	else if (type==TYPE_INT || type==S_INT)
+		return S_INT;
+	else if (type==TYPE_BOOLEAN || type==S_BOOLEAN)
+		return S_BOOLEAN;
 	
 	return -1;
 }
