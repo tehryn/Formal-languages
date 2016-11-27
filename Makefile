@@ -21,6 +21,8 @@ zip:
 	zip xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni
 
 odevzdani:
-	cp *.c *.h Makefile odevzdani
+	cp *.c *.h odevzdani
+	mkdir -p odevzdani
 	cd odevzdani
 	make zip
+	cd ..

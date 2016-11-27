@@ -1,11 +1,11 @@
 class Main {
     static void run(){
-        hello();
+        int a = 0;
     }
     static int b() {
         return 1;
     }
-    static double c() {
+    static String c() {
         return b();
     }
 }

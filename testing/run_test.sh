@@ -23,7 +23,7 @@ do
 	if [[ $ret == 1 ]]; then
 		echo "$file: SUCCES - interpret returned with $ret"
 	else
-		echo "$file: ERROR - interpret returned with $ret but should have returned with $ret"
+		echo "$file: ERROR - interpret returned with $ret but should have returned with 1"
 	fi
 done
 
