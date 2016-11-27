@@ -31,7 +31,7 @@ EXPRESSION: Symbol not defined. 27
 err34.java: ERROR - interpret returned with 3 but should have returned with 4
 
 
-err22 -> asi chyba testu, nedefinovany symbol je chyba 4
+err22 -> asi chyba testu, nedefinovany symbol je chyba 3
 PARSER:  On line 14 variable or function hello has not been defined.
 err22.java: ERROR - interpret returned with 3 but should have returned with 4
 
