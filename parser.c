@@ -1226,7 +1226,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				fprintf(stderr, "PARSER: On line %u expected '(', ';' or assignment.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-			// ======================== P_USE_ARGUMENTS =====================
+/*			// ======================== P_USE_ARGUMENTS =====================
 
 			case P_USE_ARGUMENTS:
 				stack_int_pop(s);
@@ -1287,7 +1287,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				fprintf(stderr, "PARSER: On line %u expected ')' or ','.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-			// ======================== P_RETURN_EXPR =======================
+*/			// ======================== P_RETURN_EXPR =======================
 
 			case P_RETURN_EXPR: // TODO - porovnat s typem vystupu funkce
 				stack_int_pop(s);
