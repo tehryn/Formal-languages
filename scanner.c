@@ -182,14 +182,14 @@ int skip_comment(unsigned comment_type) {
 	return 1; // reached EOF
 }
 
-static char *write_back(char *word, int *num, unsigned *idx, unsigned *max, int *check) {
+/*static char *write_back(char *word, int *num, unsigned *idx, unsigned *max, int *check) {
 	for (unsigned i = 0; num[i] != '\0'; i++) {
 		if (*idx >= *max) {
 			char *tmp = word;
 			*max *= 2;
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
-				free(word);
+				//free(word);
 				*max = 0;
 				return NULL;
 			}
@@ -265,7 +265,7 @@ char *load_string(char *word, unsigned *max) {
 		}
 		else if (c == '\n') {
 			*max = -1;
-			free(word);
+			//free(word);
 			return 0;
 		}
 		if (i >= *max) {
@@ -274,7 +274,7 @@ char *load_string(char *word, unsigned *max) {
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
 				*max = 0;
-				free(word);
+				//free(word);
 				return NULL;
 			}
 			word = tmp;
@@ -285,7 +285,79 @@ char *load_string(char *word, unsigned *max) {
 		}
 	}
 	return NULL;
+}*/
+
+char *load_string(char *word, unsigned *max) {
+	int c, num[4] = {'\0',};
+	int octal_set = 0;
+	unsigned i = 0;
+	while(((c = fgetc(f)) != EOF)) {
+		if (c == '\\') {
+			c = fgetc(f);
+			if (c == '\\') {
+				;
+			}
+			else if (c == 'n') {
+				c = '\n';
+			}
+			else if (c == '"') {
+				;
+			}
+			else if (c == '\'') {
+				;
+			}
+			else if (c == 't') {
+				c = '\t';
+			}
+			else if (isdigit(c) && c <= '4') {
+				num[0] = c;
+				num[1] = fgetc(f);
+				if (isdigit(num[1] && num[1] <= '7')) {
+					num[2] = fgetc(f);
+					if (isdigit(num[2]) && num[2] <= '7' && num[2] >= '1') {
+						c = (num[0] - '0')*64 + (num[1] - '0')*8 + (num[2] - '0');
+						octal_set = 1;
+					}
+					else {
+						return NULL;
+					}
+				}
+				else {
+					return NULL;
+				}
+			}
+			else {
+				return NULL;
+			}
+		}
+		else if (c == '"' && !octal_set) {
+			c = '\0';
+		}
+		else if (c == '\n' && !octal_set) {
+			*max = -1;
+			//free(word);
+			return 0;
+		}
+		if (i >= *max) {
+			char *tmp = word;
+			*max *= 2;
+			tmp = (char *) realloc(word, *max);
+			if (tmp == NULL) {
+				*max = 0;
+				//free(word);
+				return NULL;
+			}
+			word = tmp;
+		}
+		word[i++] = c;
+		if (c == '\0' && !octal_set) {
+			return word;
+		}
+		octal_set = 0;
+	}
+	return NULL;
 }
+
 
 void *str2num(char *str, int type, int *valide) {
 	if (str == NULL) {
@@ -456,7 +528,7 @@ token get_token() {
 			tmp = (char *) realloc(SCANNER_WORD, size);
 			if (tmp == NULL) {
 				fprintf(stderr, "Memory reallocation failed\n");
-				free(SCANNER_WORD);
+				//free(SCANNER_WORD);
 				SCANNER_WORD = NULL;
 				new_token.id = -1;
 				new_token.ptr = NULL;
@@ -478,7 +550,7 @@ token get_token() {
 		size *= 2; // preteceni???
 		tmp = (char *) realloc(SCANNER_WORD, size);
 		if (tmp == NULL) {
-			free(SCANNER_WORD);
+			//free(SCANNER_WORD);
 			SCANNER_WORD = NULL;
 			fprintf(stderr, "Memory reallocation failed\n");
 			new_token.id = -1;
