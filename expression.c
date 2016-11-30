@@ -27,7 +27,7 @@
 												return (error_code); } while(0)
 
 
-int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
+int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
 {
 	void * ma1[2]={0,0};	// memory1 buffer
 	//int ma1_top=0;			// memory1 number of pointers
@@ -281,10 +281,10 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
 				//if (tmp_table_item->data==NULL)
-				if (tmp_table_item->initialized!=1)
+				if (tmp_table_item->initialized!=1 && error_6_flag==1 )
 				{
 					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
-					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
+					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_SEM_OTHERS);
 				}
 				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
