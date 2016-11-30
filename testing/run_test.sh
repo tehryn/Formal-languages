@@ -19,7 +19,7 @@ do
 	fi
 done
 
-for file in ./invalid_lexical/*.java
+for file in ./invalid_lex/*.java
 do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
@@ -33,7 +33,7 @@ do
 	fi
 done
 
-for file in ./invalid_syntax/*.java
+for file in ./invalid_syn/*.java
 do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
@@ -47,7 +47,7 @@ do
 	fi
 done
 
-for file in ./invalid_semantic/def/*.java
+for file in ./invalid_sem/def/*.java
 do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
@@ -61,7 +61,7 @@ do
 	fi
 done
 
-for file in ./invalid_semantic/compat/*.java
+for file in ./invalid_sem/com/*.java
 do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
@@ -75,7 +75,7 @@ do
 	fi
 done
 
-for file in ./invalid_runtime/not_init/*.java
+for file in ./invalid_run/ini/*.java
 do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?

@@ -287,10 +287,10 @@ char *load_string(char *word, unsigned *max) {
 	return NULL;
 }*/
 
-char *load_string(char *word, unsigned *max) {
+char *load_string(char *word, int *max) {
 	int c, num[4] = {'\0',};
 	int octal_set = 0;
-	unsigned i = 0;
+	int i = 0;
 	while(((c = fgetc(f)) != EOF)) {
 		if (c == '\\') {
 			c = fgetc(f);
@@ -312,21 +312,27 @@ char *load_string(char *word, unsigned *max) {
 			else if (isdigit(c) && c <= '4') {
 				num[0] = c;
 				num[1] = fgetc(f);
-				if (isdigit(num[1] && num[1] <= '7')) {
+				if (isdigit(num[1]) && num[1] <= '7') {
 					num[2] = fgetc(f);
 					if (isdigit(num[2]) && num[2] <= '7' && num[2] >= '1') {
 						c = (num[0] - '0')*64 + (num[1] - '0')*8 + (num[2] - '0');
 						octal_set = 1;
 					}
 					else {
+						free(word);
+						*max = -2;
 						return NULL;
 					}
 				}
 				else {
+					free(word);
+					*max = -2;
 					return NULL;
 				}
 			}
 			else {
+				free(word);
+				*max = -2;
 				return NULL;
 			}
 		}
@@ -335,8 +341,8 @@ char *load_string(char *word, unsigned *max) {
 		}
 		else if (c == '\n' && !octal_set) {
 			*max = -1;
-			//free(word);
-			return 0;
+			free(word);
+			return NULL;
 		}
 		if (i >= *max) {
 			char *tmp = word;
@@ -344,7 +350,7 @@ char *load_string(char *word, unsigned *max) {
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
 				*max = 0;
-				//free(word);
+				free(word);
 				return NULL;
 			}
 			word = tmp;
@@ -355,6 +361,7 @@ char *load_string(char *word, unsigned *max) {
 		}
 		octal_set = 0;
 	}
+	free(word);
 	return NULL;
 }
 
@@ -397,7 +404,7 @@ void *str2num(char *str, int type, int *valide) {
 }
 
 token get_token() {
-	static unsigned size = 0; // size of SCANNER_WORD
+	static int size = 0; // size of SCANNER_WORD
 	token new_token; // return value
 	if (size == 0) { // if SCANNER_WORD is not allocated - allocate
 		SCANNER_WORD = (char *) malloc(S_SIZE);
@@ -410,7 +417,7 @@ token get_token() {
 		size = S_SIZE; // setting size into default value
 	}
 	int c = 0; // for storing chars from stream
-	unsigned i = 0; // for indexing SCANNER_WORD
+	int i = 0; // for indexing SCANNER_WORD
 	int token_found = 0; // variable that sais if we found token or not
 	int spec = 0; // storing special characters like == or <=...
 	int skip = 0; // variable that sais if we should skip calling function that determinate special chars
@@ -475,6 +482,13 @@ token get_token() {
 						new_token.ptr = NULL;
 						return new_token;
 					}
+					if (size == -2) {
+						fprintf(stderr, "ERROR: line: %u: Invalid use of escape sekvence\n", LINE_NUM);
+						new_token.id = 0;
+						new_token.ptr = NULL;
+						return new_token;
+					}
+
 					fprintf(stderr, "ERROR: line: %u: expected \" at the end of string\n", LINE_NUM);
 					new_token.id = 0;
 					new_token.ptr = NULL;

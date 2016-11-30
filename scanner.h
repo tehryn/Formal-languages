@@ -144,9 +144,9 @@ int skip_comment (unsigned comment_type);
 @pre global variable f is already opened file
 @pre word points to already allocated space
 @pre *max >= 1
-@return Loaded string, return sNULL when function reach EOF or returns NULL and set *max to zero, if reallocation fails
+@return Loaded string, returns NULL when function reach EOF or EOL and set max to -1 or returns NULL and set *max to zero, if reallocation fails or return NULL and set max to -2 if there is invalid use of escape sekvence
 */
-char *load_string(char *word, unsigned *max);
+char *load_string(char *word, int *max);
 
 /**
  * Convert string into double or integer (depends on type variable) and store it into new allocated space

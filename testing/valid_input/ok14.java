@@ -1,12 +1,12 @@
 class Main {
     static void run() {
-        boolean a = true;
-        boolean b = false;
-        a = b;
-        b = a;
-        a = false;
-        b = a;
-        a = b;
-        b = true;
+        int b = Hello.c;
     }
+}
+
+class Hello {
+    static int run() {
+        int c;
+    }
+    static int c = 5;
 }

@@ -1,10 +1,6 @@
 class Main {
-    static void run() { return; }
-    static int a = 0;
-}
+    static int a = 0xFF.FFp-1;
+    static void run() {
 
-class Hello {
-    static int b = Main.a;
-    static int c = b;
-    static int d = c;
+    }
 }

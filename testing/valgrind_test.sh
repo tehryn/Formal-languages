@@ -10,7 +10,7 @@ RED='\033[1;31m'
 NC='\033[0m' # No Color
 valide="ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)"
 
-for file in ./valid_input/*.java
+for file in ./valid_inputs/*.java
 do
     var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
 
@@ -23,7 +23,7 @@ do
 
 done
 
-for file in ./invalid_lexical/*.java
+for file in ./invalid_lex/*.java
 do
     var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
 
@@ -36,7 +36,7 @@ do
 
 done
 
-for file in ./invalid_syntax/*.java
+for file in ./invalid_syn/*.java
 do
     var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
 
@@ -49,7 +49,7 @@ do
 
 done
 
-for file in ./invalid_semantic/def/*.java
+for file in ./invalid_sem/def/*.java
 do
     var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
 
@@ -62,7 +62,7 @@ do
 
 done
 
-for file in ./invalid_semantic/compat/*.java
+for file in ./invalid_sem/com/*.java
 do
     var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
 
@@ -75,7 +75,7 @@ do
 
 done
 
-for file in ./invalid_runtime/not_init/*.java
+for file in ./invalid_run/ini/*.java
 do
     var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
 
