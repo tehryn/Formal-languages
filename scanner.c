@@ -809,7 +809,7 @@ token get_token() {
 				new_token.ptr = NULL;
 				return new_token;
 			}
-			if (id == TYPE_INT_HEX || id == TYPE_INT_OCTAL || id == TYPE_INT_BIN) {
+			if (id == TYPE_INT_HEX || id == TYPE_INT_OCTAL || id == TYPE_INT_BIN || id == TYPE_INT) {
 				id = TYPE_INT;
 			}
 			else {
