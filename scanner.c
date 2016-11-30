@@ -116,9 +116,15 @@ int is_num_literal(char *word, unsigned len) {
 			}
 			int p = 0;
 			int dot = 0;
+			int sign = 0;
 			for (unsigned i = 2; i < len; i++) {
+				if (sign && (word[i] == '+' || word[i] == '-')) {
+					sign = 0;
+					continue;
+				}
+				sign = 0;
 				if (i > 2 && (word[i] == 'p' || word[i] == 'P') && !p && word[i-1] != '.') {
-					p = dot = 1;
+					p = dot = sign = 1;
 					continue;
 				}
 				if (i > 2 && word[i] == '.' && !dot) {
