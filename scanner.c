@@ -88,6 +88,112 @@ int is_special_char(char c) {
 		return 0;
 }
 
+
+int is_num_literal(char *word, unsigned len) {
+	if (word == NULL || len == 0) {
+		return 0;
+	}
+	if (!isdigit(word[0])) {
+		return 0;
+	}
+	int is_base = 1;
+	if (word[0] == '0') {
+		if (len == 1) {
+			return TYPE_INT;
+		}
+		else if (len > 1 && word[1] == '.') {
+			is_base = 0;
+		}
+	}
+	else {
+		is_base = 0;
+	}
+
+	if (is_base) {
+		if (word[1] == 'x') {
+			if (len == 2) {
+				return 0;
+			}
+			int p = 0;
+			int dot = 0;
+			for (unsigned i = 2; i < len; i++) {
+				if (i > 2 && (word[i] == 'p' || word[i] == 'P') && !p && word[i-1] != '.') {
+					p = dot = 1;
+					continue;
+				}
+				if (i > 2 && word[i] == '.' && !dot) {
+					dot = 1;
+					continue;
+				}
+				if ((word[i] < 'A' || word[i] > 'F') && (word[i] < '0' || word[i] > '9')) {
+					return 0;
+				}
+			}
+			//0xFF.FFp-1
+			if (dot && !p) {
+				return 0;
+			}
+			else if (dot && p) {
+				return TYPE_DOUBLE_HEX;
+			}
+			else {
+				return TYPE_INT_HEX;
+			}
+		}
+		else if (word[1] == 'b') {
+			if (len == 3) {
+				return 0;
+			}
+			for (unsigned i = 2; i < len; i++) {
+				if (word[i] != '0' && word[i] != '1') {
+					return 0;
+				}
+			}
+			return TYPE_INT_BIN;
+		}
+		else {
+			for (unsigned i = 1; i < len; i++) {
+				if (word[i] < '0' && word[i] > '7') {
+					return 0;
+				}
+			}
+			return TYPE_INT_OCTAL;
+		}
+	}
+	else {
+		int e = 0, dot = 0, sign = 0;
+		for (unsigned i = 1; i < len; i++) {
+			if (sign && (word[i] == '+' || word[i] == '-')) {
+				sign = 0;
+				continue;
+			}
+			sign = 0;
+			if (word[i] == 'e' || word[i] == 'E') {
+				if (e || word[i-1] == '.') {
+					return 0;
+				}
+				sign = 1;
+				dot = e = 1;
+			}
+			else if (word[i] == '.') {
+				if (dot || e) {
+					return 0;
+				}
+				dot = 1;
+			}
+			else if ((!isdigit(word[i]))) {
+				return 0;
+			}
+		}
+		if(!isdigit(word[len-1])) return 0;
+		if (dot) return TYPE_DOUBLE;
+		return TYPE_INT;
+	}
+	return 0;
+}
+
+
+/*
 int is_num_literal(char *word, unsigned len) {
 	if (word == NULL || len == 0) return -1;
 	int e = 0, dot = 0, sign = 0;
@@ -115,6 +221,7 @@ int is_num_literal(char *word, unsigned len) {
 	if (dot) return TYPE_DOUBLE;
 	return TYPE_INT;
 }
+*/
 
 int is_simple_ident(char *word, unsigned len) {
 	if (word == NULL || len == 0) return 0;
@@ -365,6 +472,74 @@ char *load_string(char *word, int *max) {
 	return NULL;
 }
 
+static inline void bin2dec(char *str, int *result) {
+	int n = strlen(str)-1;
+	*result = 0;
+	for (int i = n; i >= 2; i--) {
+		*result += ((str[i] - '0') << (n - i));
+	}
+}
+
+static inline void octal2dec(char *str, int *result) {
+	int n = strlen(str)-1;
+	*result = 0;
+	for (int i = n; i >= 2; i--) {
+		*result += ((str[i] - '0') * (i<n?8:1 << (n - i)));
+	}
+}
+
+static inline void hex2dec_int(char *str, int *result) {
+	int n = strlen(str)-1;
+	*result = 0;
+	for (int i = n; i >= 2; i--) {
+		if (isdigit(str[i])) {
+			*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
+		}
+		else {
+			*result += ((str[i] - '0' - 7) * (i<n?16:1<<(n - i)));
+		}
+	}
+}
+
+static inline void hex2dec_double(char *str, double *result) {
+	int n = 0;
+	*result = 0;
+	int exp;
+	for(; str[n] != '.' && str[n] != 'p' && str[n] != 'P'; n++);
+	if (str[n] == 'p' || str[n] == 'P') {
+		for (int i = n = n-1; i >= 2; i--) {
+			if (isdigit(str[i])) {
+				*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
+			}
+			else {
+				*result += ((str[i] - '0' - 7) * (i<n?16:1<<(n - i)));
+			}
+		}
+		sscanf(&str[n+2], "%i", &exp);
+		*result *= pow(16, exp);
+	}
+	else {
+		for (int i = n = n-1; i >= 2; i--) {
+			if (isdigit(str[i])) {
+				*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
+			}
+			else {
+				*result += ((str[i] - '0' - 7) * (i<n?16:1<<(n - i)));
+			}
+		}
+		for(n += 2;str[n] != 'p'; n++);
+		for (int i = n = n-1; i >= 2; i--) {
+			if (isdigit(str[i])) {
+				*result += ((str[i] - '0') / (16 << (n - i)));
+			}
+			else {
+				*result += ((str[i] - '0' - 7) / (16 << (n - i)));
+			}
+		}
+		sscanf(&str[n+2], "%i", &exp);
+		*result *= pow(16, exp);
+	}
+}
 
 void *str2num(char *str, int type, int *valide) {
 	if (str == NULL) {
@@ -397,6 +572,42 @@ void *str2num(char *str, int type, int *valide) {
 			*valide = 2;
 			return NULL;
 		}
+		return result;
+	}
+	else if (type == TYPE_INT_BIN) {
+		result = malloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		bin2dec(str, (int *) result);
+		return result;
+	}
+	else if (type == TYPE_INT_HEX) {
+		result = malloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		hex2dec_int(str, (int *) result);
+		return result;
+	}
+	else if (type == TYPE_INT_OCTAL) {
+		result = malloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		octal2dec(str, (int *) result);
+		return result;
+	}
+	else if (type == TYPE_DOUBLE_HEX) {
+		result = malloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		hex2dec_double(str, (double *)result);
 		return result;
 	}
 	*valide = 3;
@@ -500,15 +711,11 @@ token get_token() {
 			}
 		}
 
-		if ( i && is_num_literal(SCANNER_WORD, i-2) && (SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'E') && (c == '-' || c == '+')) {
-			if (isdigit(fgetc(f))) {
+		if (i > 1 && (c == '-' || c == '+')) {
+			if (SCANNER_WORD[i-1] == 'E' || SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'P' || SCANNER_WORD[i-1] == 'p') {
+				if (isdigit(SCANNER_WORD[0])) {
 					skip = 1;
-			}
-			if (fseek(f, -1, SEEK_CUR) != 0) {
-				fprintf(stderr, "Can't set offset in file!\n");
-				new_token.id = -1;
-				new_token.ptr = NULL;
-				return new_token;
+				}
 			}
 		}
 		/* Now we are not in comment nor in sequence of white chars so lets
@@ -594,11 +801,19 @@ token get_token() {
 				fprintf(stderr, "Memory allocation failed\n");
 				new_token.id = -1;
 				new_token.ptr = NULL;
+				return new_token;
 			}
-			else if (valide) {
+			else if (valide == 2 || valide == 3) {
 				fprintf(stderr, "in file: %s:%u Invalid use of function\n", __FILE__, __LINE__);
 				new_token.id = -1;
 				new_token.ptr = NULL;
+				return new_token;
+			}
+			if (id == TYPE_INT_HEX || id == TYPE_INT_OCTAL || id == TYPE_INT_BIN) {
+				id = TYPE_INT;
+			}
+			else {
+				id = TYPE_DOUBLE;
 			}
 			new_token.id = id;
 			new_token.ptr = number;

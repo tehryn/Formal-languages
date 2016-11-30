@@ -5,6 +5,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
+#include <math.h>
 #include "error.h"
 /*! TODO */
 #define ERR_WRONG_COMMENT_SYNTAX -100
@@ -45,10 +46,10 @@ TYPE_DOUBLE, /*!< data type double */ //18
 TYPE_INT, /*!< data type int */ //19
 TYPE_STRING, /*!< data type String */ //20
 TYPE_BOOLEAN, /*!< data type boolean */ //21
-TYPE_STATIC_DOUBLE, /*!< data type static double */ //22
-TYPE_STATIC_INT, /*!< data type static int */ //23
-TYPE_STATIC_STRING, /*!< data type static String */ //24
-TYPE_STATIC_BOOLEAN, /*!< data type static boolean */ //25
+TYPE_INT_BIN, //22 TODO
+TYPE_INT_OCTAL,  //23 TODO
+TYPE_INT_HEX, //24 TODO
+TYPE_DOUBLE_HEX, //25 TODO
 // TODO [static]? void
 
 BLOCK_COMMENT, /*!< identifikator of block comment */ //26
