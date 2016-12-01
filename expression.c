@@ -217,7 +217,10 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.3\n", ERR_SEM_COMPATIBILITY);
 			
 			if (input_token.id==S_AND || input_token.id==S_OR)
+			{
 				bool_flag = 0;
+				e_type = -1;
+			}
 			
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
