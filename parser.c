@@ -1,6 +1,6 @@
 #include "parser.h"
 #include "expression.h"
- 
+
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
 	char *result = (char *) malloc(len[0] + len[1] + 2);
@@ -340,7 +340,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_INTERN_FAULT;
 						}
 						class_name = strncpy(class_name, (char*)t.ptr, class_name_strlen);
-						
+
 						if (runtime == 1)
 						{
 							if (array_string_find(&all_class_names, class_name) == NULL)
@@ -933,7 +933,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					// TODO - vlozit t.ptr do hash. tabulky lokalnich promennych
 					// data_type = type;
-					
+
 					if (runtime == 2)
 					{
 						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
@@ -1441,15 +1441,19 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				if (runtime == 2)
 				{
+                    int error_6_flag = 0;
 					int expected_expr_data_type = 0;
 					if (TableItem == NULL)
 						expected_expr_data_type = S_BOOLEAN;
 					else
-						expected_expr_data_type = (int) TableItem->data_type;
-
+					{
+                        expected_expr_data_type = (int) TableItem->data_type;
+                        if (is_full_ident(TableItem->key,strlen(TableItem->key)))
+                            error_6_flag = 1;
+                    }
 					token *postfix_token_array;
 					int token_count, expr_data_type;
-					expr_return = expr_analyze(t, &t, class_name, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
+					expr_return = expr_analyze(t, &t, class_name, error_6_flag, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
 					if (expr_return != 0)
 						return expr_return;
 					free(postfix_token_array); // TODO ukladat
