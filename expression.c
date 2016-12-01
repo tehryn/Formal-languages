@@ -27,13 +27,16 @@
 												return (error_code); } while(0)
 
 
-int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
+int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
 {
+	int error_6_flag = 1;
 	void * ma1[2]={0,0};	// memory1 buffer
 	//int ma1_top=0;			// memory1 number of pointers
 	void * ma2[256]={0,};	// memory2 buffer
 	int ma2_top=0;			// memory2 number of pointers
 	
+	
+	int bool_flag = 0;
 	int e_type = -1;
 	int syn_rules = 6;
 	int end_token = S_SEMICOMMA;	
@@ -120,6 +123,15 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&1) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 9\n", ERR_SYNTACTIC_ANALYSIS);
 			
+			if ( bool_flag>=2 && input_token.id!=TYPE_BOOLEAN && input_token.id!=S_TRUE && input_token.id!=S_FALSE )
+				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 9.1\n", ERR_SYNTACTIC_ANALYSIS);
+			
+			if ( bool_flag==1 && e_type!=input_token.id && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
+				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.2\n", ERR_SEM_COMPATIBILITY);
+			
+			if (e_type!=S_BOOLEAN && (input_token.id==TYPE_BOOLEAN || input_token.id==S_TRUE || input_token.id==S_FALSE) )
+				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.3\n", ERR_SEM_COMPATIBILITY);
+			
 			if (type_priority(type_name_convertion(input_token.id)) > type_priority(e_type))
 				e_type = type_name_convertion(input_token.id);
 			
@@ -191,11 +203,25 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
 
 			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id!=S_PLUS )
-				FATAL_ERROR("EXPRESSION: Unallowed operation in expression with string value. 19.1\n", ERR_SEM_COMPATIBILITY);
+				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.1\n", ERR_SEM_COMPATIBILITY);
 
 			if ( operator_priority(input_token.id)==3 || operator_priority(input_token.id)==2 )
+			{
+				bool_flag++;
 				e_type=S_BOOLEAN;
-
+			}	
+			else if (bool_flag>=2)
+				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.2\n", ERR_SEM_COMPATIBILITY);
+			
+			if ( (e_type==S_BOOLEAN || e_type==TYPE_BOOLEAN) && operator_priority(input_token.id)!=3 && operator_priority(input_token.id)!=2)
+				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.3\n", ERR_SEM_COMPATIBILITY);
+			
+			if (input_token.id==S_AND || input_token.id==S_OR)
+			{
+				bool_flag = 0;
+				e_type = -1;
+			}
+			
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
 
@@ -229,46 +255,45 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (input_token.ptr == NULL)
 				FATAL_ERROR("EXPRESSION: Token data are not allocated. 26\n", ERR_INTERN_FAULT);
 			
-			
+			char name[strlen((char *)input_token.ptr) + 1];
+			strcpy (name, (char *)input_token.ptr);
 
 			if (input_token.id==S_FULL_IDENT)
 			{
 				
 				if (global_table!=NULL)
-					tmp_table_item = htab_find_item(global_table, input_token.ptr);
+					tmp_table_item = htab_find_item(global_table, name);
 				else
 					tmp_table_item=NULL;
 				
 				if (tmp_table_item == NULL)
 				{
-					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
+					fprintf(stderr, "Symbol: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Symbol not defined. 27\n", ERR_SEM_NDEF_REDEF);
 				}
 			}
 
 			else if (input_token.id==S_SIMPLE_IDENT)
-			{
-				
+			{				
 				if (local_table!=NULL)
-					tmp_table_item = htab_find_item(local_table, input_token.ptr);
+					tmp_table_item = htab_find_item(local_table, name);
 				else
 					tmp_table_item=NULL;
 				if (tmp_table_item == NULL)
 				{
-					
-					char new_name[strlen(input_token.ptr) + strlen(class_name) + 1];
-					strcpy(new_name, class_name);
-					strcat(new_name, ".");
-					strcat(new_name, input_token.ptr);
+					char long_name[strlen((char *)input_token.ptr) + strlen(class_name) + 1];
+					strcpy(long_name, class_name);
+					strcat(long_name, ".");
+					strcat(long_name, name);
 					
 					if (global_table!=NULL)
-						tmp_table_item = htab_find_item(global_table, new_name);
+						tmp_table_item = htab_find_item(global_table, long_name);
 					else
-					tmp_table_item=NULL;
+						tmp_table_item=NULL;
 				
 					if (tmp_table_item == NULL)
 					{
-						fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
+						fprintf(stderr, "Symbol: %s\n", name);
 						FATAL_ERROR("EXPRESSION: Symbol not defined. 27.1\n", ERR_SEM_NDEF_REDEF);
 					}
 				}
@@ -283,7 +308,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				//if (tmp_table_item->data==NULL)
 				if (tmp_table_item->initialized!=1 && error_6_flag==1 )
 				{
-					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
+					fprintf(stderr, "Symbol: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_SEM_OTHERS);
 				}
 				input_token.ptr=tmp_table_item;
@@ -302,13 +327,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				fun_in_token=get_token();
 				if (fun_in_token.id!=S_LEFT_PARE)
 				{
-					fprintf(stderr, "Function: %s\n", (char *)input_token.ptr);
+					fprintf(stderr, "Function: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Function missing \"(\". 29\n", ERR_SYNTACTIC_ANALYSIS);
 				}
 				
 				if (arg_count!=0 && tmp_table_item->data==NULL)
 				{
-					fprintf(stderr, "Function: %s\n", (char *)input_token.ptr);
+					fprintf(stderr, "Function: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Function data types are undefined. 29.5\n", ERR_INTERN_FAULT);
 				}
 				
@@ -331,6 +356,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					{
 						free(fun_param_arr);
 						fun_param_arr=NULL;
+						fprintf(stderr, "Function: %s, token id: %d.\n", name, fun_last_token.id);
 						FATAL_ERROR("EXPRESSION: Function missing \",\" or it has wrong number of parameters. 31\n", ERR_SEM_COMPATIBILITY);
 					}
 					
@@ -339,6 +365,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					{
 						free(fun_param_arr);
 						fun_param_arr=NULL;
+						fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", name, fparam_data_type, i+1);
 						FATAL_ERROR("EXPRESSION: Incompatible function parameter. 32\n", ERR_SEM_COMPATIBILITY);
 					}
 		
@@ -358,19 +385,20 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 				if (err_ret!=0)
 					FATAL_ERROR("EXPRESSION: Expression error. 34\n", err_ret);
-					
+				
 				if ( fun_last_token.id!=S_RIGHT_PARE )
 				{
 					free(fun_param_arr);
 					fun_param_arr=NULL;
+					fprintf(stderr, "Function: %s, token id: %d.\n", name, fun_last_token.id);
 					FATAL_ERROR("EXPRESSION: Function missing \")\" or it has wrong number of parameters. 35\n", ERR_SEM_COMPATIBILITY);
 				}
-				
-				
-				if ( arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1] )
+
+				if ( arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1] && strcmp("ifj16.print", name)!=0 )
 				{
 					free(fun_param_arr);
 					fun_param_arr=NULL;
+					fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", name, fparam_data_type, arg_count-1+1);
 					FATAL_ERROR("EXPRESSION: Incompatible function parameter or wrong number of parameters. 36\n", ERR_SEM_COMPATIBILITY);
 				}
 				
@@ -399,6 +427,15 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 				FATAL_ERROR("EXPRESSION: Unknown symbol definition. 39\n", ERR_SEM_NDEF_REDEF);
 			}
+			
+			if ( bool_flag>=2 && ident_type!=TYPE_BOOLEAN && ident_type!=S_BOOLEAN )
+				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 39.1\n", ERR_SYNTACTIC_ANALYSIS);
+			
+			if ( bool_flag==1 && e_type!=ident_type && e_type!=S_DOUBLE && ident_type!=S_DOUBLE && e_type!=S_INT && ident_type!=S_INT )
+				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 39.2\n", ERR_SEM_COMPATIBILITY);
+			
+			if (e_type!=S_BOOLEAN && ident_type==S_BOOLEAN)
+				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 39.3\n", ERR_SEM_COMPATIBILITY);
 			
 			if (type_priority(ident_type) > type_priority(e_type))
 				e_type = ident_type;
