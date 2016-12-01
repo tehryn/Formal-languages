@@ -14,7 +14,7 @@ class Main {
 		int y;
 		x=31/3;
 		y=x/2;
-		if (1){
+		if (true){
 			x=fff.foo1(x,y);
 		}
 		else{
@@ -49,7 +49,7 @@ class fff{
 		a1=ifj16.readString();
 	}
 	static double foo(){
-		a2=ifj16.readDouble();
+		double a2=ifj16.readDouble();
 		return a2/ifj16.readDouble();
 	}
 
