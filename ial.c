@@ -19,11 +19,11 @@ int length(char * string)
     return len;
 }
 
-char * substring(char * s, int i, int n, mem_list_t *L)
+char * substring(char * s, int i, int n)
 {
     char * string=NULL;
 
-    string = (char *) mem_alloc(sizeof(char)*(n+1), L);
+    string = (char *) mem_alloc(sizeof(char)*(n+1));
     if (string==NULL)
     {
         error_msg(99, "ERROR: Memory could not be allocated. (func. substring)\n");	// code 99 -> internal error
@@ -48,11 +48,11 @@ char * substring(char * s, int i, int n, mem_list_t *L)
 
 
 
-char * shellsort(char * str, mem_list_t *L)
+char * shellsort(char * str)
 {
     int num = strlen(str);
     char * arr=NULL;
-    arr=(char *)mem_alloc( sizeof(char)*(num+1), L);
+    arr=(char *)mem_alloc( sizeof(char)*(num+1));
     if (arr==NULL)
     {
         fprintf(stderr, "ERROR: not enough memory!\n");
