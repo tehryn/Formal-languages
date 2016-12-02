@@ -35,7 +35,7 @@ done
 
 for file in ./invalid_syn/*.java
 do
-	./IFJ16 $file >tmp.txt 2>&1
+	../IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 2 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
