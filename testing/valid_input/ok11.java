@@ -1,5 +1,5 @@
 class Main {
-    static int a = 0xFF.FFp-1;
+    static int a = 0xFF-1;
     static void run() {
 
     }

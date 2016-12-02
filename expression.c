@@ -36,7 +36,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 	int ma2_top=0;			// memory2 number of pointers
 	
 	
-	int bool_flag = 0;
+	int bool_operation = 0;
+	int return_type_bool=0;
 	int e_type = -1;
 	int syn_rules = 6;
 	int end_token = S_SEMICOMMA;	
@@ -100,7 +101,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 		}
 
 		else if (input_token.id < 0)
-			FATAL_ERROR("EXPRESSION: Invalid token. 47\n", ERR_INTERN_FAULT);
+			FATAL_ERROR("EXPRESSION: Invalid token. 6.5\n", ERR_INTERN_FAULT);
 
 
 		else if (input_token.id == S_LEFT_PARE )									// left bracket 
@@ -122,19 +123,16 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 		{
 			if ( (syn_rules&1) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 9\n", ERR_SYNTACTIC_ANALYSIS);
-			
-			if ( bool_flag>=2 && input_token.id!=TYPE_BOOLEAN && input_token.id!=S_TRUE && input_token.id!=S_FALSE )
-				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 9.1\n", ERR_SYNTACTIC_ANALYSIS);
-			
-			if ( bool_flag==1 && e_type!=input_token.id && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
+
+			if ( bool_operation>=2 && input_token.id!=TYPE_BOOLEAN && input_token.id!=S_TRUE && input_token.id!=S_FALSE )
+				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 9.1\n", ERR_SEM_COMPATIBILITY);
+
+			if ( bool_operation==1 && e_type!=input_token.id && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.2\n", ERR_SEM_COMPATIBILITY);
-			
-			if (e_type!=S_BOOLEAN && (input_token.id==TYPE_BOOLEAN || input_token.id==S_TRUE || input_token.id==S_FALSE) )
-				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.3\n", ERR_SEM_COMPATIBILITY);
-			
+
 			if (type_priority(type_name_convertion(input_token.id)) > type_priority(e_type))
 				e_type = type_name_convertion(input_token.id);
-			
+
 			if (input_token.id==TYPE_STRING)
 			{
 				if (input_token.ptr==NULL)
@@ -205,23 +203,25 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id!=S_PLUS )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.1\n", ERR_SEM_COMPATIBILITY);
 
-			if ( operator_priority(input_token.id)==3 || operator_priority(input_token.id)==2 )
-			{
-				bool_flag++;
-				e_type=S_BOOLEAN;
-			}	
-			else if (bool_flag>=2)
-				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.2\n", ERR_SEM_COMPATIBILITY);
-			
-			if ( (e_type==S_BOOLEAN || e_type==TYPE_BOOLEAN) && operator_priority(input_token.id)!=3 && operator_priority(input_token.id)!=2)
-				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.3\n", ERR_SEM_COMPATIBILITY);
-			
 			if (input_token.id==S_AND || input_token.id==S_OR)
 			{
-				bool_flag = 0;
+				if (e_type!=S_BOOLEAN)
+					FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.2\n", ERR_SEM_COMPATIBILITY);
+
+				return_type_bool=1;
+				bool_operation = 0;
 				e_type = -1;
 			}
-			
+			else if ( operator_priority(input_token.id)==3 || operator_priority(input_token.id)==2 )
+			{
+				bool_operation++;
+				e_type=S_BOOLEAN;
+			}
+			else if (bool_operation>=2)
+				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.3\n", ERR_SEM_COMPATIBILITY);
+			else if ( bool_operation==0 && e_type==S_BOOLEAN )
+				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.4\n", ERR_SEM_COMPATIBILITY);
+	
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
 
@@ -309,7 +309,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				if (tmp_table_item->initialized!=1 && error_6_flag==1 )
 				{
 					fprintf(stderr, "Symbol: %s\n", name);
-					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_SEM_OTHERS);
+					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
 				}
 				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
@@ -428,14 +428,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				FATAL_ERROR("EXPRESSION: Unknown symbol definition. 39\n", ERR_SEM_NDEF_REDEF);
 			}
 			
-			if ( bool_flag>=2 && ident_type!=TYPE_BOOLEAN && ident_type!=S_BOOLEAN )
-				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 39.1\n", ERR_SYNTACTIC_ANALYSIS);
+			if ( bool_operation>=2 && ident_type!=TYPE_BOOLEAN && ident_type!=S_BOOLEAN )
+				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 39.1\n", ERR_SEM_COMPATIBILITY);
 			
-			if ( bool_flag==1 && e_type!=ident_type && e_type!=S_DOUBLE && ident_type!=S_DOUBLE && e_type!=S_INT && ident_type!=S_INT )
+			if ( bool_operation==1 && e_type!=ident_type && e_type!=S_DOUBLE && ident_type!=S_DOUBLE && e_type!=S_INT && ident_type!=S_INT )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 39.2\n", ERR_SEM_COMPATIBILITY);
-			
-			if (e_type!=S_BOOLEAN && ident_type==S_BOOLEAN)
-				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 39.3\n", ERR_SEM_COMPATIBILITY);
 			
 			if (type_priority(ident_type) > type_priority(e_type))
 				e_type = ident_type;
@@ -455,7 +452,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 		FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 41\n", ERR_SYNTACTIC_ANALYSIS);
 	
 
-	*t_out = input_token;		
+	*t_out = input_token;
+	
+	if (return_type_bool==1 && e_type!=S_BOOLEAN)
+		FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 41.5\n", ERR_SEM_COMPATIBILITY);
+	
 	*expr_data_type = e_type;
 
 
