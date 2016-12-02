@@ -12,9 +12,9 @@
 
 int length(char * string);
 
-char * substring(char * s, int i, int n, mem_list_t *L);
+char * substring(char * s, int i, int n);
 
-char * shellsort(char * str, mem_list_t *L);
+char * shellsort(char * str);
 
 int find( char *s,  char *search);
 
