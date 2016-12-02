@@ -7,9 +7,9 @@
 #include <limits.h>
 #include "garbage_collector.h"
 
-char * readString(mem_list_t *L);
-int readInt( mem_list_t *L );
-double readDouble(mem_list_t *L);
+char * readString();
+int readInt();
+double readDouble();
 void print(char * string);
 
 #endif 	// embedded_functions_h_INCLUDED

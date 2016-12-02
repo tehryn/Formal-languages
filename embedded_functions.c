@@ -2,10 +2,10 @@
 #include "garbage_collector.h"
 #include "error.h"
 
-char * readString(mem_list_t *L)
+char * readString()
 {
     char * tmp = NULL;
-    char * string = (char *)mem_alloc(sizeof(char), L);
+    char * string = (char *)mem_alloc(sizeof(char));
     if (string==NULL)
     {
         error_msg(99, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
@@ -24,12 +24,12 @@ char * readString(mem_list_t *L)
         if (index == size)
 	{
             size *= 2;
-            tmp = (char *)mem_realloc(string, size, L);
+            tmp = (char *)mem_realloc(string, size);
             if (tmp==NULL)
             {
                 //free(string);
-		error_msg(99, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
-		return NULL;
+		        error_msg(99, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
+		        return NULL;
             }
             else
                 string = tmp;
@@ -44,13 +44,13 @@ char * readString(mem_list_t *L)
 
 
 
-int readInt(mem_list_t *L)
+int readInt()
 {
     char * string=NULL;
     long int n1=0;
     char * err=NULL;
 
-    string = readString(L);
+    string = readString();
     if (string == NULL)
 	{
 		//free(string);
@@ -87,13 +87,13 @@ int readInt(mem_list_t *L)
 
 
 
-double readDouble(mem_list_t *L)
+double readDouble()
 {
     char * string=NULL;
     double n1=0;
     char * err=NULL;
 
-    string = readString(L);
+    string = readString();
 	if (string == NULL)
 	{
 		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readdouble)\n");
@@ -104,7 +104,7 @@ double readDouble(mem_list_t *L)
     if (*err != 0)
     {
 	free(string);
-        error_msg(7, "ERROR: Number value could not be read from stdin, invalid symbol: \"%c\". (func. readdouble)\n", *err);
+    error_msg(7, "ERROR: Number value could not be read from stdin, invalid symbol: \"%c\". (func. readdouble)\n", *err);
 	return 0.0;
     }
 

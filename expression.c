@@ -33,15 +33,15 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	//int ma1_top=0;			// memory1 number of pointers
 	void * ma2[256]={0,};	// memory2 buffer
 	int ma2_top=0;			// memory2 number of pointers
-	
-	
+
+
 	int bool_operation = 0;
 	int return_type_bool=0;
 	int e_type = -1;
 	int syn_rules = 6;
-	int end_token = S_SEMICOMMA;	
+	int end_token = S_SEMICOMMA;
 	va_list al;
-	
+
 	if (t_in.id==FUN_ARG)
 	{
 		va_start(al, local_table);
@@ -57,7 +57,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	}
 
 
-	if (t_in.id==0) 
+	if (t_in.id==0)
 	{
 		fprintf(stderr, "EXPRESSION: Invalid token. 2\n");
 		return ERR_LEXICAL_ANALYSIS;
@@ -67,14 +67,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	{
 		fprintf(stderr, "EXPRESSION: Empty expression. 3\n");
 		return ERR_SYNTACTIC_ANALYSIS;
-	}	
+	}
 
 	struct stack_expresion tmp_exp_stack, postfix_exp_stack;
 	*token_count=0;
 
 	if ( stack_expression_init(&tmp_exp_stack, 32) != 0 || stack_expression_init(&postfix_exp_stack, 32) != 0 )
 		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 4\n", ERR_INTERN_FAULT);
-	
+
 	ma1[0]=tmp_exp_stack.arr;
 	ma1[1]=postfix_exp_stack.arr;
 
@@ -86,11 +86,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	if ( stack_expression_push(&tmp_exp_stack, input_token) != 0 )
 		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 5\n", ERR_INTERN_FAULT);
 	ma1[0]=tmp_exp_stack.arr;
-	
+
 	input_token=t_in;
 	while(1)
 	{
-		
+
 		if (input_token.id==S_SEMICOMMA || input_token.id==end_token)
 		{
 			if ( (syn_rules&2)!=0)
@@ -103,7 +103,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			FATAL_ERROR("EXPRESSION: Invalid token. 6.5\n", ERR_INTERN_FAULT);
 
 
-		else if (input_token.id == S_LEFT_PARE )									// left bracket 
+		else if (input_token.id == S_LEFT_PARE )									// left bracket
 		{
 			if ( (syn_rules&8) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 7\n", ERR_SYNTACTIC_ANALYSIS);
@@ -136,7 +136,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			{
 				if (input_token.ptr==NULL)
 					FATAL_ERROR("EXPRESSION: String data are not allocated. 10\n", ERR_INTERN_FAULT);
-				
+
 				char *tmp = (char *)malloc(sizeof(char) * strlen((char *)input_token.ptr) + 1);
 				if (tmp == NULL)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT);
@@ -144,7 +144,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				{
 					strcpy(tmp, (char *)input_token.ptr);
 					input_token.ptr = tmp;
-					if (ma2_top<256) 
+					if (ma2_top<256)
 						ma2[ma2_top++]=input_token.ptr;
 					else
 						FATAL_ERROR("EXPRESSION: Memory could not be allocated. 12\n", ERR_INTERN_FAULT);
@@ -155,19 +155,19 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 13\n", ERR_INTERN_FAULT);
 			ma1[1]=postfix_exp_stack.arr;ma1[1]=postfix_exp_stack.arr;
-			
+
 			syn_rules=9;
 		}
 
 
-		else if( input_token.id == S_RIGHT_PARE)									// right bracket 
+		else if( input_token.id == S_RIGHT_PARE)									// right bracket
 		{
 			//fprintf(stderr, "%d %d\n", end_token, left_bracket_count);	// odje torima
-			
+
 			if ( (syn_rules&4)!=0 && !( end_token==S_COMMA && e_type==-1))
 					FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 14\n", ERR_SYNTACTIC_ANALYSIS);
-			
-			
+
+
 			right_bracket_count++;
 			if (right_bracket_count>left_bracket_count)
 				break;
@@ -187,9 +187,9 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 18\n", ERR_INTERN_FAULT);
 			}
-			
+
 			stack_expression_pop(&tmp_exp_stack, NULL);										// Remove (
-			
+
 			syn_rules=9;
 		}
 
@@ -220,7 +220,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.3\n", ERR_SEM_COMPATIBILITY);
 			else if ( bool_operation==0 && e_type==S_BOOLEAN )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.4\n", ERR_SEM_COMPATIBILITY);
-	
+
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
 
@@ -228,7 +228,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			{
 				if (stack_expression_pop(&tmp_exp_stack, &tmp_token)!=0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 21\n", ERR_INTERN_FAULT);
-				
+
 				if (stack_expression_push(&postfix_exp_stack, tmp_token) != 0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 22\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
@@ -236,11 +236,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 23\n", ERR_INTERN_FAULT);
 			}
-			
+
 			if (stack_expression_push(&tmp_exp_stack, input_token)!=0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 24\n", ERR_INTERN_FAULT);
 			ma1[0]=tmp_exp_stack.arr;
-			
+
 			syn_rules=6;
 		}
 
@@ -253,18 +253,18 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			htab_item *tmp_table_item;
 			if (input_token.ptr == NULL)
 				FATAL_ERROR("EXPRESSION: Token data are not allocated. 26\n", ERR_INTERN_FAULT);
-			
+
 			char name[strlen((char *)input_token.ptr) + 1];
 			strcpy (name, (char *)input_token.ptr);
 
 			if (input_token.id==S_FULL_IDENT)
 			{
-				
+
 				if (global_table!=NULL)
 					tmp_table_item = htab_find_item(global_table, name);
 				else
 					tmp_table_item=NULL;
-				
+
 				if (tmp_table_item == NULL)
 				{
 					fprintf(stderr, "Symbol: %s\n", name);
@@ -273,7 +273,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			}
 
 			else if (input_token.id==S_SIMPLE_IDENT)
-			{				
+			{
 				if (local_table!=NULL)
 					tmp_table_item = htab_find_item(local_table, name);
 				else
@@ -284,12 +284,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					strcpy(long_name, class_name);
 					strcat(long_name, ".");
 					strcat(long_name, name);
-					
+
 					if (global_table!=NULL)
 						tmp_table_item = htab_find_item(global_table, long_name);
 					else
 						tmp_table_item=NULL;
-				
+
 					if (tmp_table_item == NULL)
 					{
 						fprintf(stderr, "Symbol: %s\n", name);
@@ -297,11 +297,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					}
 				}
 			}
-			
+
 			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s initialized:%d\n", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key, tmp_table_item->initialized);	// odje torima
-			
+
 			int ident_type=-1;
-			
+
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
 				//if (tmp_table_item->data==NULL)
@@ -312,45 +312,45 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				}
 				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
-				
+
 				if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 28\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
 			}
-			
+
 			else if (tmp_table_item->func_or_var==2)
 			{
 				token fun_in_token;
 				int arg_count = tmp_table_item->number_of_arguments;
-				
+
 				fun_in_token=get_token();
 				if (fun_in_token.id!=S_LEFT_PARE)
 				{
 					fprintf(stderr, "Function: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Function missing \"(\". 29\n", ERR_SYNTACTIC_ANALYSIS);
 				}
-				
+
 				if (arg_count!=0 && tmp_table_item->data==NULL)
 				{
 					fprintf(stderr, "Function: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Function data types are undefined. 29.5\n", ERR_INTERN_FAULT);
 				}
-				
+
 				int err_ret=-1;
 				token fun_last_token;
 				token *fun_param_arr=NULL;
 				int fp_exp_count = -1;
 				int fparam_data_type=-1;
-				
+
 				fun_in_token.id=FUN_ARG;
-				
+
 				for (int i=0; i<arg_count-1; i++)
 				{
 					err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, error_6_flag, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 					if (err_ret!=0)
 						FATAL_ERROR("EXPRESSION: Expression error. 30\n", err_ret);
-					
-					
+
+
 					if (fun_last_token.id!=S_COMMA)
 					{
 						free(fun_param_arr);
@@ -358,8 +358,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 						fprintf(stderr, "Function: %s, token id: %d.\n", name, fun_last_token.id);
 						FATAL_ERROR("EXPRESSION: Function missing \",\" or it has wrong number of parameters. 31\n", ERR_SEM_COMPATIBILITY);
 					}
-					
-					
+
+
 					if (fparam_data_type!=((int *)(tmp_table_item->data))[i])
 					{
 						free(fun_param_arr);
@@ -367,24 +367,24 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 						fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", name, fparam_data_type, i+1);
 						FATAL_ERROR("EXPRESSION: Incompatible function parameter. 32\n", ERR_SEM_COMPATIBILITY);
 					}
-		
+
 					for (int j=0; j<fp_exp_count; j++ )
 					{
 						if (stack_expression_push(&postfix_exp_stack, fun_param_arr[j]) != 0)
 							FATAL_ERROR("EXPRESSION: Memory could not be allocated. 33\n", ERR_INTERN_FAULT);
 						ma1[1]=postfix_exp_stack.arr;
 					}
-					
+
 					free(fun_param_arr);
 					fun_param_arr=NULL;
 					fp_exp_count = -1;
 					fparam_data_type = -1;
 				}
-				
+
 				err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, error_6_flag, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 				if (err_ret!=0)
 					FATAL_ERROR("EXPRESSION: Expression error. 34\n", err_ret);
-				
+
 				if ( fun_last_token.id!=S_RIGHT_PARE )
 				{
 					free(fun_param_arr);
@@ -400,68 +400,68 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", name, fparam_data_type, arg_count-1+1);
 					FATAL_ERROR("EXPRESSION: Incompatible function parameter or wrong number of parameters. 36\n", ERR_SEM_COMPATIBILITY);
 				}
-				
-				
+
+
 				for (int j=0; j<fp_exp_count; j++ )
 				{
 					if (stack_expression_push(&postfix_exp_stack, fun_param_arr[j]) != 0)
 						FATAL_ERROR("EXPRESSION: Memory could not be allocated. 37\n", ERR_INTERN_FAULT);
 					ma1[1]=postfix_exp_stack.arr;
 				}
-				
+
 				free(fun_param_arr);
 				fun_param_arr=NULL;
-				
+
 				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
-				
+
 
 				if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 38\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
 			}
-			
+
 			else
 			{
 				fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 				FATAL_ERROR("EXPRESSION: Unknown symbol definition. 39\n", ERR_SEM_NDEF_REDEF);
 			}
-			
+
 			if ( bool_operation>=2 && ident_type!=TYPE_BOOLEAN && ident_type!=S_BOOLEAN )
 				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 39.1\n", ERR_SEM_COMPATIBILITY);
-			
+
 			if ( bool_operation==1 && e_type!=ident_type && e_type!=S_DOUBLE && ident_type!=S_DOUBLE && e_type!=S_INT && ident_type!=S_INT )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 39.2\n", ERR_SEM_COMPATIBILITY);
-			
+
 			if (type_priority(ident_type) > type_priority(e_type))
 				e_type = ident_type;
 
 			syn_rules=9;
 		}
-		
+
 
 		else																	// invalid token
 			FATAL_ERROR("EXPRESSION: Invalid token. 40\n", ERR_LEXICAL_ANALYSIS);
-		
+
 
 		input_token=get_token();
 	}
-	
+
 	if (left_bracket_count>right_bracket_count)
 		FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 41\n", ERR_SYNTACTIC_ANALYSIS);
-	
+
 
 	*t_out = input_token;
-	
+
 	if (return_type_bool==1 && e_type!=S_BOOLEAN)
 		FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 41.5\n", ERR_SEM_COMPATIBILITY);
-	
+
 	*expr_data_type = e_type;
 
 
 	if (stack_expression_top(&tmp_exp_stack, &tmp_token) !=0)
 		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 42\n", ERR_INTERN_FAULT);
-	
+
 	while( tmp_token.id != -166)
 	{
 		if (stack_expression_pop(&tmp_exp_stack, &tmp_token)!=0)
@@ -470,7 +470,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 		if (stack_expression_push(&postfix_exp_stack, tmp_token) != 0)
 			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 44\n", ERR_INTERN_FAULT);
 		ma1[1]=postfix_exp_stack.arr;
-		
+
 		if (stack_expression_top(&tmp_exp_stack, &tmp_token) !=0)
 			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 45\n", ERR_INTERN_FAULT);
 	}
@@ -479,14 +479,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	*postfix_token_array = (token *)malloc(sizeof(token) * (postfix_exp_stack.top+1) );
 	if (*postfix_token_array==NULL)
 		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 46\n", ERR_INTERN_FAULT);
-	
+
 	for (int i=0; i<=postfix_exp_stack.top; i++)
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
-	
-	
-	if(ma1[0]!=NULL) free(ma1[0]); 
+
+
+	if(ma1[0]!=NULL) free(ma1[0]);
 	if(ma1[1]!=NULL) free(ma1[1]);
-	
+
 	return 0;
 }
 
@@ -611,7 +611,7 @@ int type_priority (int type)
 		return 3;
 	else if (type==S_VOID)
 		return 1;
-	
+
 	return -1;
 }
 
@@ -627,8 +627,7 @@ int type_name_convertion (int type)
 		return S_BOOLEAN;
 	else if (type==S_VOID)
 		return S_VOID;
-	
-	
+
+
 	return -1;
 }
-

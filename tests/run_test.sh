@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ $# -eq 0 ]
 then
 	GREEN='\033[1;32m'
