@@ -907,6 +907,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					htab_free_all(LocalTableSymbols); // TODO put Local table somewhere
 					LocalTableSymbols = NULL;
 					free(static_func_var_name);
+					static_func_var_name = NULL;
 					break;
 				}
 				else
