@@ -904,8 +904,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					type = S_BOOLEAN;
 				else if (t.id == S_RIGHT_BRACE) // no other stuffs in function
 				{
-					htab_free_all(LocalTableSymbols);
+					htab_free_all(LocalTableSymbols); // TODO put Local table somewhere
 					LocalTableSymbols = NULL;
+					free(static_func_var_name);
 					break;
 				}
 				else
@@ -1447,10 +1448,12 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						expected_expr_data_type = S_BOOLEAN;
 					else
 					{
-                        expected_expr_data_type = (int) TableItem->data_type;
-                        if (is_full_ident(TableItem->key,strlen(TableItem->key)))
-                            error_6_flag = 1;
-                    }
+						expected_expr_data_type = (int) TableItem->data_type;
+						if (static_func_var_name == NULL)
+							error_6_flag = 1;
+						else
+							error_6_flag = 0;
+					}
 					token *postfix_token_array;
 					int token_count, expr_data_type;
 					expr_return = expr_analyze(t, &t, class_name, error_6_flag, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
