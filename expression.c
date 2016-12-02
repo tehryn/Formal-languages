@@ -27,9 +27,8 @@
 												return (error_code); } while(0)
 
 
-int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
+int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
 {
-	int error_6_flag = 1;
 	void * ma1[2]={0,0};	// memory1 buffer
 	//int ma1_top=0;			// memory1 number of pointers
 	void * ma2[256]={0,};	// memory2 buffer
@@ -347,7 +346,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 				
 				for (int i=0; i<arg_count-1; i++)
 				{
-					err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
+					err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, error_6_flag, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 					if (err_ret!=0)
 						FATAL_ERROR("EXPRESSION: Expression error. 30\n", err_ret);
 					
@@ -382,7 +381,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, token **postfix_t
 					fparam_data_type = -1;
 				}
 				
-				err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
+				err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, error_6_flag, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
 				if (err_ret!=0)
 					FATAL_ERROR("EXPRESSION: Expression error. 34\n", err_ret);
 				
