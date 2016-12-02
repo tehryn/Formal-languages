@@ -7,7 +7,7 @@ fi
 
 for file in ./valid_input/*.java
 do
-	./IFJ16 $file >tmp.txt 2>&1
+	../IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 0 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -21,7 +21,7 @@ done
 
 for file in ./invalid_lex/*.java
 do
-	./IFJ16 $file >tmp.txt 2>&1
+	../IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 1 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -49,7 +49,7 @@ done
 
 for file in ./invalid_sem/def/*.java
 do
-	./IFJ16 $file >tmp.txt 2>&1
+	../IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 3 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -63,7 +63,7 @@ done
 
 for file in ./invalid_sem/com/*.java
 do
-	./IFJ16 $file >tmp.txt 2>&1
+	../IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 4 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -77,7 +77,7 @@ done
 
 for file in ./invalid_run/ini/*.java
 do
-	./IFJ16 $file >tmp.txt 2>&1
+	../IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 8 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
