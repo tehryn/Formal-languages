@@ -90,7 +90,27 @@ do
 	fi
 done
 
-
+for file in ./diff_check/*.java
+do
+	../IFJ16 $file >tmp.txt 2>&1
+	ret=$?
+	if [[ $ret == 0 ]]; then
+		diff=$(diff tmp.txt ${file/java/output})
+		if [[ -z "$diff" ]]; then
+			echo -e "${GREEN}$file: SUCCES - output is correct"
+		else
+			echo -e "${RED}$file: ERROR - output is not correct"
+			echo -e "${NC}------------------------------------------------------------------------------------"
+			echo "$diff"
+			echo "===================================================================================="
+		fi
+	else
+		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 0"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
+	fi
+done
 
 
 rm tmp.txt
