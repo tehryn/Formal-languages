@@ -21,17 +21,35 @@
 
 #define FUN_ARG -266
 
-#define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); \
-												for(int i=0; i<ma2_top; i++) if(ma2[i]!=NULL) free(ma2[i]); \
-												fputs((message), stderr); \
+#define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); 	\
+												for(int i=0; i<ma2_top; i++) if(ma2[i]!=NULL) free(ma2[i]); 	\
+												fputs((message), stderr); 										\
 												return (error_code); } while(0)
+
+													
+#define STRDUP(l, s) do {	char *tmp = (char *)malloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );					\
+							if (tmp == NULL)																			\
+								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
+							else																						\
+							{																							\
+								strcpy(tmp, (char *)(s));																\
+								(l) = tmp;																				\
+								if (ma2_top<512)																		\
+									ma2[ma2_top++] = tmp;																\
+								else																					\
+								{																						\
+									free(tmp);																			\
+									FATAL_ERROR("EXPRESSION: Memory could not be allocated. 12\n", ERR_INTERN_FAULT);	\
+								}																						\
+							} 																							\
+						} while(0)
 
 
 int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
 {
 	void * ma1[2]={0,0};	// memory1 buffer
 	//int ma1_top=0;			// memory1 number of pointers
-	void * ma2[256]={0,};	// memory2 buffer
+	void * ma2[512]={0,};	// memory2 buffer
 	int ma2_top=0;			// memory2 number of pointers
 
 
@@ -136,20 +154,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			{
 				if (input_token.ptr==NULL)
 					FATAL_ERROR("EXPRESSION: String data are not allocated. 10\n", ERR_INTERN_FAULT);
-
-				char *tmp = (char *)malloc(sizeof(char) * strlen((char *)input_token.ptr) + 1);
-				if (tmp == NULL)
-					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT);
-				else
-				{
-					strcpy(tmp, (char *)input_token.ptr);
-					input_token.ptr = tmp;
-					if (ma2_top<256)
-						ma2[ma2_top++]=input_token.ptr;
-					else
-						FATAL_ERROR("EXPRESSION: Memory could not be allocated. 12\n", ERR_INTERN_FAULT);
-
-				}
+				
+				STRDUP(input_token.ptr, input_token.ptr);
 			}
 
 			if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
@@ -253,13 +259,15 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			htab_item *tmp_table_item;
 			if (input_token.ptr == NULL)
 				FATAL_ERROR("EXPRESSION: Token data are not allocated. 26\n", ERR_INTERN_FAULT);
-
 			char name[strlen((char *)input_token.ptr) + 1];
+			char long_name[strlen((char *)input_token.ptr) + strlen(class_name) + 1];
+			strcpy(long_name, class_name);
+			strcat(long_name, ".");
+			strcat(long_name, (char *)input_token.ptr);
 			strcpy (name, (char *)input_token.ptr);
-
+			
 			if (input_token.id==S_FULL_IDENT)
 			{
-
 				if (global_table!=NULL)
 					tmp_table_item = htab_find_item(global_table, name);
 				else
@@ -270,6 +278,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					fprintf(stderr, "Symbol: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Symbol not defined. 27\n", ERR_SEM_NDEF_REDEF);
 				}
+				
+				STRDUP(input_token.ptr, name);
 			}
 
 			else if (input_token.id==S_SIMPLE_IDENT)
@@ -278,13 +288,9 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					tmp_table_item = htab_find_item(local_table, name);
 				else
 					tmp_table_item=NULL;
+
 				if (tmp_table_item == NULL)
 				{
-					char long_name[strlen((char *)input_token.ptr) + strlen(class_name) + 1];
-					strcpy(long_name, class_name);
-					strcat(long_name, ".");
-					strcat(long_name, name);
-
 					if (global_table!=NULL)
 						tmp_table_item = htab_find_item(global_table, long_name);
 					else
@@ -295,7 +301,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 						fprintf(stderr, "Symbol: %s\n", name);
 						FATAL_ERROR("EXPRESSION: Symbol not defined. 27.1\n", ERR_SEM_NDEF_REDEF);
 					}
+					
+					STRDUP(input_token.ptr, long_name);
 				}
+				else
+					STRDUP(input_token.ptr, name);
 			}
 
 			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s initialized:%d\n", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key, tmp_table_item->initialized);	// odje torima
