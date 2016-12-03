@@ -3,7 +3,7 @@
 
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
-	char *result = (char *) malloc(len[0] + len[1] + 2);
+	char *result = (char *) mem_alloc(len[0] + len[1] + 2);
 	if (result == NULL)
 		return NULL;
 	strcpy(result, str1);
@@ -42,7 +42,7 @@ int parser()
 	global_table_symbols = htab_init(HTAB_SIZE);
 	if (global_table_symbols == NULL)
 	{
-		stack_int_destroy(&s);
+		//stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot malloc hash table.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -51,17 +51,17 @@ int parser()
 	stack_htab stack_of_table_symbols;
 	if (stack_htab_init(& stack_of_table_symbols) != 0)
 	{
-		htab_free_all(global_table_symbols);
-		stack_int_destroy(&s);
+		//htab_free_all(global_table_symbols);
+		//stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot malloc stack of hash tables.\n");
 		return ERR_INTERN_FAULT;
 	}
 
 	if (stack_htab_push(& stack_of_table_symbols, global_table_symbols) != 0)
 	{
-		stack_htab_destroy(& stack_of_table_symbols);
-		htab_free_all(global_table_symbols);
-		stack_int_destroy(&s);
+		//stack_htab_destroy(& stack_of_table_symbols);
+		//htab_free_all(global_table_symbols);
+		//stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot realloc stack of hash tables.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -69,18 +69,18 @@ int parser()
 	// inicializace pole stringu
 	if (array_string_init(&all_class_names) != 0)
 	{
-		stack_htab_destroy(& stack_of_table_symbols);
-		htab_free_all(global_table_symbols);
-		stack_int_destroy(&s);
+		//stack_htab_destroy(& stack_of_table_symbols);
+		//htab_free_all(global_table_symbols);
+		//stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parset cannot malloc place for string array.\n");
 		return ERR_INTERN_FAULT;
 	}
 
-	// TODO - vestavene funkce
+	// vestavene funkce
 	if (embedded_functions_into_hash_table(global_table_symbols, &all_class_names) != 0)
 	{
-		stack_htab_destroy(& stack_of_table_symbols);
-		htab_free_all(global_table_symbols);
+		//stack_htab_destroy(& stack_of_table_symbols);
+		//htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
 		return ERR_INTERN_FAULT;
 	}
@@ -89,38 +89,38 @@ int parser()
 	parser_return = analysis(&s, 1, stack_of_table_symbols);
 	if (parser_return != 0)
 	{
-		array_string_destroy(&all_class_names);
-		stack_htab_destroy(& stack_of_table_symbols);
-		htab_free_all(global_table_symbols);
-		stack_int_destroy(&s);
+		//array_string_destroy(&all_class_names);
+		//stack_htab_destroy(& stack_of_table_symbols);
+		//htab_free_all(global_table_symbols);
+		//stack_int_destroy(&s);
 		return parser_return;
 	}
 	// priprava na runtime 2
 	if(reset_scanner() == -1)
 	{
-		array_string_destroy(&all_class_names);
-		stack_htab_destroy(& stack_of_table_symbols);
-		htab_free_all(global_table_symbols);
-		stack_int_destroy(&s);
+		//array_string_destroy(&all_class_names);
+		//stack_htab_destroy(& stack_of_table_symbols);
+		//htab_free_all(global_table_symbols);
+		//stack_int_destroy(&s);
 		fprintf(stderr, "SCANNER: Cannot reset tokens. \n");
 		return ERR_INTERN_FAULT;
 	}
 	if (stack_int_push(&s, 2, S_EOF, P_CLASS) < 0)
 	{
-		array_string_destroy(&all_class_names);
-		stack_htab_destroy(& stack_of_table_symbols);
-		htab_free_all(global_table_symbols);
-		stack_int_destroy(&s);
+		//array_string_destroy(&all_class_names);
+		//stack_htab_destroy(& stack_of_table_symbols);
+		//htab_free_all(global_table_symbols);
+		//stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 		return ERR_INTERN_FAULT;
 	}
 	// runtime = 2
 	parser_return = analysis(&s, 2, stack_of_table_symbols);
 
-	array_string_destroy(&all_class_names);
-	stack_htab_destroy(& stack_of_table_symbols);
-	htab_free_all(global_table_symbols);
-	stack_int_destroy(&s);
+	//array_string_destroy(&all_class_names);
+	//stack_htab_destroy(& stack_of_table_symbols);
+	//htab_free_all(global_table_symbols);
+	//stack_int_destroy(&s);
 	return parser_return;
 }
 
@@ -327,13 +327,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						token_got = false;
 						// make a copy of class name
-						if (class_name != NULL)	// TODO ? - just realloc
-						{
-							free(class_name);
-							class_name = NULL;
-						}
 						class_name_strlen = strlen((char*) t.ptr) + 1; // '\0'
-						class_name = (char *) malloc(class_name_strlen); // * sizeof(char) = 1
+						class_name = (char *) mem_realloc(class_name, class_name_strlen); // * sizeof(char) = 1
 						if (class_name == NULL)
 						{
 							fprintf(stderr, "Intern fault. Memory allocation of class_name failed.\n");
@@ -462,8 +457,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						// save a name of statick function or variable
 						if(static_func_var_name != NULL)
 						{
-							free(static_func_var_name);
-							static_func_var_name = NULL;
+							static_func_var_name = NULL; // garbage collector will free
 						}
 						static_func_var_name = join_strings(class_name, (char*) t.ptr);
 						if (static_func_var_name == NULL)
@@ -512,12 +506,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 									return ERR_INTERN_FAULT;
 								}
 
-								if (stack_htab_push(& Stack_of_TableSymbols, LocalTableSymbols) != 0)
-								{
-									htab_free_all(LocalTableSymbols);
-									fprintf(stderr, "Intern fault. Parser cannot push local hash. table into stack of hash tables.\n");
-									return ERR_INTERN_FAULT;
-								}
+								TableItem->local_table = (void *) LocalTableSymbols; // put local table of symbols to function where it belongs
 							}
 						}
 
@@ -576,6 +565,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if (runtime == 1)
 					{
 						TableItem->func_or_var = 1; // variable
+													// it is not initialized
 						if (TableItem->data_type == S_VOID)
 						{
 							fprintf(stderr, "PARSER: You cannot have a void variable.\n");
@@ -588,12 +578,11 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_ASSIGNMENT) // scanner: '=' -> variable with inicialization
 				{
-					// TODO - porovnani typu expr a typu promenne
 					token_got = false;
 
 					if (runtime == 1)
 					{
-						TableItem->func_or_var = 1; // variable
+						TableItem->func_or_var = 1; // variable and it will be initialized
 					}
 
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
@@ -626,21 +615,14 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					if (runtime == 1)
 					{
-						TableItem->data = (void*) malloc(1 * sizeof(int));
+						TableItem->data = (void*) mem_alloc(1 * sizeof(int));
 						if (TableItem->data == NULL)
 						{
 							fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
 							return ERR_INTERN_FAULT;
 						}
 						((int*)TableItem->data)[0] = S_EOF;
-						TableItem->number_of_arguments = number_arguments;
-
-						/*
-						printf("++%i++\n", number_arguments);
-						for (int i=0; i<number_allocated_arguments; i++)
-							printf("%i ", ((int*)TableItem->data)[i]);
-						//printf("\n");
-						*/
+						TableItem->number_of_arguments = number_arguments; // number_arguments = 0
 
 						number_arguments = 0;
 						number_allocated_arguments = 0;
@@ -654,7 +636,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					number_allocated_arguments += 4;
 
-					TableItem->data = (void*) malloc(number_allocated_arguments * sizeof(int)); // 4 for beginning
+					TableItem->data = (void*) mem_alloc(number_allocated_arguments * sizeof(int)); // 4 for beginning
 					if (TableItem->data == NULL)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
@@ -678,7 +660,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					type = S_BOOLEAN;
 				else
 				{
-					fprintf (stderr, "PARSER: On line %u expected some data type.\n", LINE_NUM);
+					fprintf (stderr, "PARSER: On line %u expected some data type (and not void).\n", LINE_NUM);
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
 				token_got = false;
@@ -728,7 +710,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						return ERR_INTERN_FAULT;
 					}
 
-					break;
+					break; // goto case P_DEF_ARGUMENTS2
 				}
 				fprintf(stderr, "PARSER: On line %u expected simple identifikator.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
@@ -754,13 +736,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->number_of_arguments = number_arguments;
 
-					/*	// TODO - for DEBUG
-						printf("--%i--\n", number_arguments);
-						for (int i=0; i<number_allocated_arguments; i++)
-							printf("%i ", ((int*)TableItem->data)[i]);
-						printf("\n");
-					*/
-
 						number_arguments = 0;
 						number_allocated_arguments = 0;
 					}
@@ -780,24 +755,18 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						number_allocated_arguments += 4;
 
-						int * tmp_ptr = NULL;
-						tmp_ptr = (int*) realloc(TableItem->data, number_allocated_arguments * sizeof(int)); // 4 for beginning
-						if (tmp_ptr == NULL)
+						TableItem->data = (int*) mem_realloc(TableItem->data, number_allocated_arguments * sizeof(int)); // next 4 potentional arguments
+						if (TableItem->data == NULL)
 						{
-							free(TableItem->data); // TODO - garbage_collector?
-							TableItem->data = NULL;
 							fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
 							return ERR_INTERN_FAULT;
 						}
-						TableItem->data = (void*) tmp_ptr;
-
+						
 						((int*)TableItem->data)[number_allocated_arguments -4] = S_EOF;
 						((int*)TableItem->data)[number_allocated_arguments -3] = S_EOF;
 						((int*)TableItem->data)[number_allocated_arguments -2] = S_EOF;
-						((int*)TableItem->data)[number_allocated_arguments -1] = S_EOF; // TODO - control SIGSEGV?
-
+						((int*)TableItem->data)[number_allocated_arguments -1] = S_EOF;
 					}
-
 				}
 
 				token_got = false;
@@ -902,13 +871,11 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					type = S_STRING;
 				else if (t.id == S_BOOLEAN)
 					type = S_BOOLEAN;
-				else if (t.id == S_RIGHT_BRACE) // no other stuffs in function
+				else if (t.id == S_RIGHT_BRACE) // no other stuffs in function and everything in this if will be freed by garbage collector
 				{
-					htab_free_all(LocalTableSymbols); // TODO put Local table somewhere
 					LocalTableSymbols = NULL;
-					free(static_func_var_name);
 					static_func_var_name = NULL;
-					break;
+					break; // goto case S_RIGHT_BARCE
 				}
 				else
 				{ // P_FUNC_BODY -> not definition of local variable
@@ -933,9 +900,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SIMPLE_IDENT)
 				{
-					// TODO - vlozit t.ptr do hash. tabulky lokalnich promennych
-					// data_type = type;
-
 					if (runtime == 2)
 					{
 						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
@@ -1228,70 +1192,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				fprintf(stderr, "PARSER: On line %u expected '(', ';' or assignment.\n", LINE_NUM);
 				return ERR_SYNTACTIC_ANALYSIS;
 
-/*			// ======================== P_USE_ARGUMENTS =====================
+			// ======================== P_RETURN_EXPR =======================
 
-			case P_USE_ARGUMENTS:
-				stack_int_pop(s);
-
-				if (token_got == false)
-				{
-					t = get_token();
-					if (t.id == 0)
-						return ERR_LEXICAL_ANALYSIS;
-					else if (t.id < 0)
-						return ERR_INTERN_FAULT;
-				}
-				token_got = true;
-
-				if (t.id == S_RIGHT_PARE) // ')' - no arguments
-				{
-					break; // just stack pop
-				}
-
-				if (stack_int_push(s, 2, P_USE_ARGUMENTS2, P_EXPR) < 0) // TODO - porovnani typu expr - pocotadlo argumentu?
-				{
-					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-					return ERR_INTERN_FAULT;
-				}
-				break; // goto case P_EXPR
-
-			// ======================== P_USE_ARGUMENTS2 ====================
-
-			case P_USE_ARGUMENTS2:
-				stack_int_pop(s);
-
-				if (token_got == false)
-				{
-					t = get_token();
-					if (t.id == 0)
-						return ERR_LEXICAL_ANALYSIS;
-					else if (t.id < 0)
-						return ERR_INTERN_FAULT;
-				}
-				token_got = true;
-
-				if(t.id == S_COMMA)
-				{
-					token_got = false;
-					if (stack_int_push(s, 2, P_USE_ARGUMENTS2, P_EXPR) < 0) // TODO - porovnani typu expr - pocotadlo argumentu?
-					{
-						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
-						return ERR_INTERN_FAULT;
-					}
-					break; // goto case P_EXPR
-				}
-
-				if(t.id == S_RIGHT_PARE) // ')' - no other arguments
-				{
-					break; // just stack pop
-				}
-
-				fprintf(stderr, "PARSER: On line %u expected ')' or ','.\n", LINE_NUM);
-				return ERR_SYNTACTIC_ANALYSIS;
-
-*/			// ======================== P_RETURN_EXPR =======================
-
-			case P_RETURN_EXPR: // TODO - porovnat s typem vystupu funkce
+			case P_RETURN_EXPR:
 				stack_int_pop(s);
 				if (token_got == false)
 				{
@@ -1310,7 +1213,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					return ERR_INTERN_FAULT;
 				}
 
-				if (TableItem->data_type != S_VOID) // TODO - porovnani navratu funkce - TableItem je inicializovany na funkci ve ktere jsem
+				if (TableItem->data_type != S_VOID)
 				{
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
@@ -1441,6 +1344,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if (expr_return != 0)
 						return expr_return;
 				}
+
 				if (runtime == 2)
 				{
                     int error_6_flag = 0;
@@ -1460,7 +1364,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					expr_return = expr_analyze(t, &t, class_name, error_6_flag, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
 					if (expr_return != 0)
 						return expr_return;
-					free(postfix_token_array); // TODO ukladat
+					//free(postfix_token_array); // TODO posilat interpretu
 
 					if (expected_expr_data_type != expr_data_type)
 					{
@@ -1587,7 +1491,11 @@ bool token_wanted(token * t)
 
 int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_string* all_class_names)
 {
-	class_name = (char *) malloc(strlen("ifj16")+1);
+	if (class_name == NULL)
+		class_name = (char *) mem_alloc(strlen("ifj16")+1);
+	else
+		class_name = (char *) mem_realloc(class_name, strlen("ifj16")+1);
+
 	if (class_name == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for class_name.\n");
@@ -1613,7 +1521,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 0;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (sizeof(int));
+	TableItem->data = mem_alloc (sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
@@ -1632,7 +1540,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 0;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (sizeof(int));
+	TableItem->data = mem_alloc (sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
@@ -1651,7 +1559,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 0;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (sizeof(int));
+	TableItem->data = mem_alloc (sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
@@ -1670,7 +1578,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 1;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (2*sizeof(int));
+	TableItem->data = mem_alloc (2*sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
@@ -1690,7 +1598,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 1;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (2*sizeof(int));
+	TableItem->data = mem_alloc (2*sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
@@ -1710,7 +1618,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 3;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (4*sizeof(int));
+	TableItem->data = mem_alloc (4*sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
@@ -1732,7 +1640,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 2;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (3*sizeof(int));
+	TableItem->data = mem_alloc (3*sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
@@ -1753,7 +1661,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 2;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (3*sizeof(int));
+	TableItem->data = mem_alloc (3*sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");
@@ -1774,7 +1682,7 @@ int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_stri
 	TableItem->func_or_var = 2;
 	TableItem->number_of_arguments = 1;
 	TableItem->initialized = 1;
-	TableItem->data = malloc (2*sizeof(int));
+	TableItem->data = mem_alloc (2*sizeof(int));
 	if(TableItem->data == NULL)
 	{
 		fprintf(stderr, "Intern fault. Parser allocate place for data of function.\n");

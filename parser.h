@@ -22,25 +22,23 @@
 
 // cases in switch in funtion process_token
 enum {
-  P_START = S_EOF + 1, //50
-  P_CLASS, //51
-  P_CLASS_BODY, //52
-  P_TYPE, //53
-  P_DEF, //54
-  P_DEF_ARGUMENTS, //55
-  P_DEF_ARGUMENTS2, //56
-  P_IDENT, //57
-  P_FUNC, //58
-  P_FUNC_BODY, //59
-  P_VAR_EXPR, //60
-  P_GUIDANCE, //61
-//  P_USE_ARGUMENTS, //62
-//  P_USE_ARGUMENTS2, //63
-  P_RETURN_EXPR, //64
-  P_ELSE_EXISTANCE, //65
-  P_IF_ELSE_SECTION, //66
-  P_FUNC_BODY_H1, //67
-  P_EXPR //68
+  P_START = S_EOF + 1,  //50
+  P_CLASS,              //51
+  P_CLASS_BODY,         //52
+  P_TYPE,               //53
+  P_DEF,                //54
+  P_DEF_ARGUMENTS,      //55
+  P_DEF_ARGUMENTS2,     //56
+  P_IDENT,              //57
+  P_FUNC,               //58
+  P_FUNC_BODY,          //59
+  P_VAR_EXPR,           //60
+  P_GUIDANCE,           //61
+  P_RETURN_EXPR,        //62
+  P_ELSE_EXISTANCE,     //63
+  P_IF_ELSE_SECTION,    //64
+  P_FUNC_BODY_H1,       //65
+  P_EXPR                //66
 };
 
 // it eats tokens and says if syntax analysis success or not
