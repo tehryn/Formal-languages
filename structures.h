@@ -2,8 +2,9 @@
 * Author: Matejka Jiri
 * Login: xmatej52
 * School: VUT FIT, BRNO
+* Project: Interpret for IFJ16
 * gcc version: 5.4.0 (ubuntu 16.04.2)
-* Date: TODO
+* Date: 2016-12-03
 **/
 #ifndef STRUCTURES
 #define STRUCTURES
@@ -11,45 +12,48 @@
 #include <stdlib.h>
 #include "ial.h"
 
-/**
- * TODO
- */
+/*! Default size for allocation memory for Stack of hash tables */
 #define STACK_HTAB_INIT_SIZE 16
 
-/**
- * TODO
- */
+/*! Default size for allocation memory for array of hash tables */
 #define ARRAY_HTAB_INIT_SIZE 64
 
-/**
- * TODO
- */
+/*! Default size for allocation memory for array of strings */
 #define ARRAY_STRING_INIT_SIZE 8
 
 /**
- * TODO
+ * Stack of hash tables
  */
 typedef struct stack_htab {
+	/** Index of item on top of stack */
 	int top;
+	/** Maximum number of items after last allocation */
 	size_t size;
+	/** Array of hash tables */
 	htab_t **data;
 } stack_htab;
 
 /**
- * TODO
+ * Array of hash tables
  */
 typedef struct array_htab {
+	/** Index where will be added new hash table */
 	unsigned idx;
+	/** Maximum number of items after last allocation */
 	size_t size;
+	/** Array of hash tables */
 	htab_t **data;
 } array_htab;
 
 /**
- * TODO
+ * Array of strings
  */
 typedef struct array_string {
+	/** Index where will be added new hash table */
 	unsigned idx;
+	/** Maximum number of items after last allocation */
 	size_t size;
+	/** Array of hash tables */
 	char **data;
 } array_string;
 

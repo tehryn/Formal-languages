@@ -1,10 +1,3 @@
-/**
-* Author: Matejka Jiri
-* Login: xmatej52
-* School: VUT FIT, BRNO
-* gcc version: 5.4.0 (ubuntu 16.04.2)
-* Date: TODO
-**/
 #include "scanner.h"
 #include "error.h"
 
@@ -131,7 +124,7 @@ int is_num_literal(char *word, unsigned len) {
 					dot = 1;
 					continue;
 				}
-				if ((word[i] < 'A' || word[i] > 'F') && (word[i] < '0' || word[i] > '9')) {
+				if (word[i] != '_' && (word[i] < 'A' || word[i] > 'F') && (word[i] < '0' || word[i] > '9')) {
 					return 0;
 				}
 			}
@@ -147,11 +140,11 @@ int is_num_literal(char *word, unsigned len) {
 			}
 		}
 		else if (word[1] == 'b') {
-			if (len == 3) {
+			if (len <= 2) {
 				return 0;
 			}
 			for (unsigned i = 2; i < len; i++) {
-				if (word[i] != '0' && word[i] != '1') {
+				if (word[i] != '_' && word[i] != '0' && word[i] != '1') {
 					return 0;
 				}
 			}
@@ -159,7 +152,7 @@ int is_num_literal(char *word, unsigned len) {
 		}
 		else {
 			for (unsigned i = 1; i < len; i++) {
-				if (word[i] < '0' && word[i] > '7') {
+				if (word[i] != '_' && (word[i] < '0' || word[i] > '7')) {
 					return 0;
 				}
 			}
@@ -405,6 +398,16 @@ char *load_string(char *word, int *max) {
 	int octal_set = 0;
 	int i = 0;
 	while(((c = fgetc(f)) != EOF)) {
+		if (c <= 31) {
+			if (c == '\n') {
+				*max = -1;
+			}
+			else {
+				*max = -2;
+			}
+			free(word);
+			return NULL;
+		}
 		if (c == '\\') {
 			c = fgetc(f);
 			if (c == '\\') {
@@ -451,11 +454,6 @@ char *load_string(char *word, int *max) {
 		}
 		else if (c == '"' && !octal_set) {
 			c = '\0';
-		}
-		else if (c == '\n' && !octal_set) {
-			*max = -1;
-			free(word);
-			return NULL;
 		}
 		if (i >= *max) {
 			char *tmp = word;
