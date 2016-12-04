@@ -34,6 +34,6 @@ embedded_functions.o: embedded_functions.c embedded_functions.h
 clean:
 	rm *.o IFJ16
 zip:
-	zip -r xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni rozsireni ../tests/*
+	zip -r xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni rozsireni ../tests/
 test:
 	cd tests; ./run_test.sh
