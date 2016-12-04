@@ -1,251 +1,363 @@
+#include "interpret.h"
 #include <stdio.h>
-#include "str.h"
-#include "stable.h"
-#include "ilist.h"
+#include <stdlib.h>
 
-int inter(tListOfInstr *instrList,token **postfix_token_array,token *return_value);
+#define I_STACKSIZE 20
+
+int inter(Instr_List *L, htab_t *I_Htable)
 {
-	int i=0;
-	token *ptr,tmp1,tmp2;
-  listFirst(instrList);
-  tInstr *I;
-  while (1)
-  {
-    I = listGetData(instrList);
-    ptr=(*postfix_token_array)[i++];
+	struct stack_expresion *S=malloc(sizeof(struct stack_expresion));
+	stack_expression_init(S,I_STACKSIZE);
+	htab_item * item_tmp1;
+	htab_item * return_hitem;
+	token *return_token;	
+	int k=0;
+	token **postfix_array;
+	token *ptr, tmp1, tmp2, *new;	
 	
-	
-	
-    switch (I->instType)
+	while (L->Active!=NULL)
     {
-
-	case I_ASSIGMENT:
-		switch (ptr->id)
+		switch (L->Active->type_instr)
 		{
-			case S_PLUS:					// ----------- PLUS
-				tmp2=ListPop(S);
-				tmp1=ListPop(S);
-				
-				if (tmp1->data->initialized==0 || tmp2->data->initialized==0)
-				{
-					fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
-					freeALL();
-					return ERR_UNINICIALIZED_VAR ;					
-				}
 
-				
-				if (return_value->id==TYPE_DOUBLE)
+			case I_ASSIGMENT:
+				return_token=(token *)L->Active->adr1;
+				return_hitem=(htab_item *)return_token->ptr;
+				k=0;
+				postfix_array=(token **)L->Active->adr2;
+				while(postfix_array[k]->id!=-2)
 				{
-					if (tmp1->id != TYPE_DOUBLE && tmp1->id != TYPE_INT || tmp2->id != TYPE_DOUBLE && tmp2->id != TYPE_INT )
+					ptr=postfix_array[k++];
+					switch (ptr->id)
 					{
-						fprintf(stderr, "In line %d variable is string. Expected double or integer.\n", LINE_NUM);
-						freeALL();
-						return ERR_SEM_COMPATIBILITY;
+						case S_STRING:
+						case S_INT:
+						case S_DOUBLE:
+							new=malloc(sizeof(token));
+							if (ptr->id==S_STRING)
+								new->id=TYPE_STRING;
+							else if (ptr->id==S_DOUBLE)
+								new->id=TYPE_DOUBLE;
+							else 
+								new->id=TYPE_INT;
+							
+							
+							item_tmp1=htab_find_item(I_Htable, (const char*)ptr->ptr);
+							if (item_tmp1->initialized==0)
+							{
+								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
+								//freeALL();
+								return ERR_UNINICIALIZED_VAR ;					
+							}
+							new->ptr=item_tmp1->data;
+							stack_expression_push(S,*new);
+							free(new);
+							break;
+							
+						case TYPE_DOUBLE:
+						case TYPE_INT:
+						case TYPE_STRING:
+							stack_expression_push(S,*ptr);
+							break;
+						
+						case S_PLUS:					// ----------- PLUS
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_plus(tmp1,tmp2);
+							stack_expression_push(S,*new);	
+							break;
+							
+						case S_MINUS:					//     ----------------------  MINUS
+							
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_arm_op(tmp1,tmp2,1);
+							stack_expression_push(S,*new);	
+							break;
+				
+
+						case S_MUL:					//     ----------------------  Multiplication
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_arm_op(tmp1,tmp2,2);
+							stack_expression_push(S,*new);	
+							break;
+
+							
+						case S_DIV:					//     ----------------------  Division 
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_arm_op(tmp1,tmp2,2);
+							if (new->id==-8)
+							{
+								fprintf(stderr, "Divison by zero!.\n");
+								//freeALL();
+								return ERR_DIVISION_ZERO ;					
+							}
+							
+							stack_expression_push(S,*new);	
+							break;
+				
+		
 					}
 					
-					tmp1->data->data=((double)tmp1->data->data)+((double)tmp2->data->data);
-					tmp1->id=TYPE_DOUBLE;
-					ListPush(S,tmp1);
-					break;
 				}
-				if (return_value->id==TYPE_INT)
-				{
-					if (tmp1->id != TYPE_DOUBLE && tmp1->id != TYPE_INT || tmp2->id != TYPE_DOUBLE && tmp2->id != TYPE_INT )
-					{
-						fprintf(stderr, "In line %d variable is string. Expected double or integer.\n", LINE_NUM);
-						freeALL();
-						return ERR_SEM_COMPATIBILITY;
-					}
-					tmp1->data->data=((int)tmp1->data->data)+((int)tmp2->data->data);
-					tmp1->id=TYPE_INT;
-					ListPush(S,tmp1);
-					break;
-				}	
-
 				
-				if (return_value->id==TYPE_STRING)            //     STRING CONCATENATE
+				
+				stack_expression_pop(S,&tmp1);
+				if (return_token->id==TYPE_INT && tmp1.id!=TYPE_INT)
 				{
-					void *ptr;
-					if (tmp1->id == TYPE_DOUBLE)
+					return ERR_SEM_COMPATIBILITY;	
+				}
+				if(return_token->id==TYPE_DOUBLE && tmp1.id==TYPE_STRING)
+				{
+					return ERR_SEM_COMPATIBILITY;
+				}
+				break;
+				
+				if(return_token->id==TYPE_DOUBLE)
+				{
+					return_hitem->data=(double *)tmp1.ptr;
+				}
+				else if(return_token->id==TYPE_INT)
+				{
+					//free(return_hitem->data);
+					return_hitem->data=(int *)tmp1.ptr;
+					
+				}
+				else
+				{
+					if (tmp1.id==TYPE_INT)
 					{
-						ptr=tmp1->data->data;
-						ptr->data->data=DoubleToString(tmp1->data->data);
-						free(ptr);
+						char *str_data=IntToString((*((int *)tmp1.ptr)));
+						free(tmp1.ptr);
+						return_hitem->data=(char *)str_data;
 					}
-					else if (tmp1->id == TYPE_INT)
+					else if (tmp1.id==TYPE_DOUBLE)
 					{
-						ptr=tmp1->data->data;
-						ptr->data->data=IntToString(tmp1->data->data);
-						free(ptr);
+						char *str_data=DoubleToString((*((int *)tmp1.ptr)));
+						free(tmp1.ptr);
+						return_hitem->data=(char *)str_data;
 					}
-					if (tmp2->id == TYPE_DOUBLE)
+					else
 					{
-						ptr=tmp2->data->data;
-						ptr->data->data=DoubleToString(tmp2->data->data);
-						free(ptr);
+						//free(return_hitem->data);
+						return_hitem->data=(char *)tmp1.ptr;
 					}
-					else if (tmp2->id == TYPE_INT)
+				}break;
+				L->Active=L->Active->next_instr;
+				
+			
+			case I_IF:
+			case I_WHILE:
+				return_token=(token *)L->Active->adr1;
+				return_hitem=(htab_item *)return_token->ptr;
+				k=0;
+				postfix_array=(token **)L->Active->adr2;
+				while(postfix_array[k]->id!=-2)
+				{
+					ptr=postfix_array[k++];
+					switch (ptr->id)
 					{
-						ptr=tmp2->data->data;
-						ptr->data->data=IntToString(tmp2->data->data);
-						free(ptr);
+						case S_STRING:
+						case S_INT:
+						case S_DOUBLE:
+							new=malloc(sizeof(token));
+							if (ptr->id==S_STRING)
+								new->id=TYPE_STRING;
+							else if (ptr->id==S_DOUBLE)
+								new->id=TYPE_DOUBLE;
+							else 
+								new->id=TYPE_INT;
+							
+							
+							item_tmp1=htab_find_item(I_Htable, (const char*)ptr->ptr);
+							if (item_tmp1->initialized==0)
+							{
+								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
+								//freeALL();
+								return ERR_UNINICIALIZED_VAR ;					
+							}
+							new->ptr=item_tmp1->data;
+							stack_expression_push(S,*new);
+							free(new);
+							break;
+							
+						case TYPE_DOUBLE:
+						case TYPE_INT:
+						case TYPE_STRING:
+							stack_expression_push(S,*ptr);
+							break;
+						
+						
+						case S_EQUAL:
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							new=inter_bool_op(tmp1,tmp2,1);
+							stack_expression_push(S,*new);	
+							break;						
+						case S_NOT_EQUAL:
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_bool_op(tmp1,tmp2,2);
+							stack_expression_push(S,*new);	
+							break;						
+						
+						case S_GREATER_EQUAL:
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_bool_op(tmp1,tmp2,3);
+							stack_expression_push(S,*new);	
+							break;	
+							
+						case S_GREATER:
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_bool_op(tmp1,tmp2,4);
+							stack_expression_push(S,*new);	
+							break;							
+						
+						case S_LESS_EQUAL:	
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_bool_op(tmp1,tmp2,5);
+							stack_expression_push(S,*new);	
+							break;	
+												
+						case S_LESS:	
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_bool_op(tmp1,tmp2,6);
+							stack_expression_push(S,*new);	
+							break;						
+						
+						case S_AND:	
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_bool_op(tmp1,tmp2,7);
+							stack_expression_push(S,*new);	
+							break;						
+						
+						case S_OR:	
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_bool_op(tmp1,tmp2,8);
+							stack_expression_push(S,*new);	
+							break;											
+
+						
+						case S_PLUS:					// ----------- PLUS
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_plus(tmp1,tmp2);
+							stack_expression_push(S,*new);	
+							break;
+							
+						case S_MINUS:					//     ----------------------  MINUS
+							
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_arm_op(tmp1,tmp2,1);
+							stack_expression_push(S,*new);	
+							break;
+				
+
+						case S_MUL:					//     ----------------------  Multiplication
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_arm_op(tmp1,tmp2,2);
+							stack_expression_push(S,*new);	
+							break;
+
+							
+						case S_DIV:					//     ----------------------  Division 
+							stack_expression_pop(S,&tmp2);
+							stack_expression_pop(S,&tmp1);	
+							
+							new=inter_arm_op(tmp1,tmp2,2);
+							if (new->id==-8)
+							{
+								fprintf(stderr, "Divison by zero!.\n");
+								//freeALL();
+								return ERR_DIVISION_ZERO ;					
+							}
+							
+							stack_expression_push(S,*new);	
+							break;
+						}
+							
+					}
+						
+				stack_expression_pop(S,&tmp1);
+				
+				if (tmp1.id==S_FALSE)
+				{	
+					L->Active=L->Active->next_instr;
+					int count=0;
+					while(count>0)
+					{
+						if (L->Active==NULL)
+							return ERR_OTHERS;
+						if (L->Active->type_instr==I_END)
+							count--;
+						else 
+							count++;
+						L->Active=L->Active->next_instr;
 					}					
-					ptr=tmp1->data->data;
-					tmp1->data->data=Conc_Str((char *)tmp1->data->data,(char * )tmp2->data->data);
-					free(ptr);
-					tmp1->id=TYPE_STRING;
-					ListPush(S,tmp1);
-					break;
-				}						
-								
-				
-				
-			case S_MINUS:					//     ----------------------  MINUS
-				tmp2=ListPop(S);
-				tmp1=ListPop(S);
-
-				if (tmp1->data->initialized==0 || tmp2->data->initialized==0)
-				{
-					fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
-					freeALL();
-					return ERR_UNINICIALIZED_VAR ;					
 				}
 				
-				if (return_value->id==TYPE_DOUBLE)
-				{
-					if (tmp1->id != TYPE_DOUBLE && tmp1->id != TYPE_INT || tmp2->id != TYPE_DOUBLE && tmp2->id != TYPE_INT )
-					{
-						fprintf(stderr, "In line %d variable is string. Expected double or integer.\n", LINE_NUM);
-						freeALL();
-						return ERR_SEM_COMPATIBILITY;
-					}
-					tmp1->data->data=((double)tmp1->data->data)-((double)tmp2->data->data);
-					tmp1->id=TYPE_DOUBLE;
-					ListPush(S,tmp1);
-				}				
-				else if (return_value->id==TYPE_INT)
-				{
-					if (tmp1->id != TYPE_DOUBLE && tmp1->id != TYPE_INT || tmp2->id != TYPE_DOUBLE && tmp2->id != TYPE_INT )
-					{
-						fprintf(stderr, "In line %d variable is string. Expected double or integer.\n", LINE_NUM);
-						freeALL();
-						return ERR_SEM_COMPATIBILITY;
-					}
-					tmp1->data->data=((int)tmp1->data->data)-((int)tmp2->data->data);
-					tmp1->id=TYPE_INT;
-					ListPush(S,tmp1);
-					break;
-				}	
-
-			case S_MUL:					//     ----------------------  Multiplication
-				tmp2=ListPop(S);
-				tmp1=ListPop(S);
-
-				if (tmp1->data->initialized==0 || tmp2->data->initialized==0)
-				{
-					fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
-					freeALL();
-					return ERR_UNINICIALIZED_VAR ;					
-				}				
-				if (return_value->id==TYPE_DOUBLE)
-				{
-					if (tmp1->id != TYPE_DOUBLE && tmp1->id != TYPE_INT || tmp2->id != TYPE_DOUBLE && tmp2->id != TYPE_INT )
-					{
-						fprintf(stderr, "In line %d variable is string. Expected double or integer.\n", LINE_NUM);
-						freeALL();
-						return ERR_SEM_COMPATIBILITY;
-					}
-					tmp1->data->data=((double)tmp1->data->data)*((double)tmp2->data->data);
-					tmp1->id=TYPE_DOUBLE;
-					ListPush(S,tmp1);
-				}				
-				else if (return_value->id==TYPE_INT)
-				{
-					if (tmp1->id != TYPE_DOUBLE && tmp1->id != TYPE_INT || tmp2->id != TYPE_DOUBLE && tmp2->id != TYPE_INT )
-					{
-						fprintf(stderr, "In line %d variable is string. Expected double or integer.\n", LINE_NUM);
-						freeALL();
-						return ERR_SEM_COMPATIBILITY;
-					}
-					tmp1->data->data=((int)tmp1->data->data)*((int)tmp2->data->data);
-					tmp1->id=TYPE_INT;
-					ListPush(S,tmp1);
-					break;
-				}	
-
-			case S_DIV:					//     ----------------------  Division 
-				tmp2=ListPop(S);
-				tmp1=ListPop(S);
 				
-				if (tmp1->data->initialized==0 || tmp2->data->initialized==0)
-				{
-					fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
-					freeALL();
-					return ERR_UNINICIALIZED_VAR ;					
-				}
 				
-				if (return_value->id==TYPE_DOUBLE)
-				{
-					if (tmp1->id != TYPE_DOUBLE && tmp1->id != TYPE_INT || tmp2->id != TYPE_DOUBLE && tmp2->id != TYPE_INT)
-					{
-						fprintf(stderr, "In line %d variable is string. Expected double or integer.\n", LINE_NUM);
-						freeALL();
-						return ERR_SEM_COMPATIBILITY;
-					}
-					if (((double)tmp2->data->data)==0.0)
-					{
-						fprintf(stderr, "In line %d division by zero.\n", LINE_NUM);
-						freeALL();
-						return ERR_DIVISION_ZERO ;
-					}
-					tmp1->data->data=((double)tmp1->data->data)/((double)tmp2->data->data);
-					tmp1->id=TYPE_DOUBLE;
-					ListPush(S,tmp1);
-				}				
-				else if (return_value->id==TYPE_INT)
-				{
-					if (tmp1->id != TYPE_DOUBLE && tmp1->id != TYPE_INT || tmp2->id != TYPE_DOUBLE && tmp2->id != TYPE_INT )
-					{
-						fprintf(stderr, "In line %d variable is string. Expected double or integer.\n", LINE_NUM);
-						freeALL();
-						return ERR_SEM_COMPATIBILITY;
-					}
-					if (((double)tmp2->data->data)==0)
-					{
-						fprintf(stderr, "In line %d division by zero.\n", LINE_NUM);
-						freeALL();
-						return ERR_DIVISION_ZERO ;
-					}
-					tmp1->data->data=((int)tmp1->data->data)/((int)tmp2->data->data);
-					tmp1->id=TYPE_INT;
-					ListPush(S,tmp1);
-					break;
-				}
-				case I_END:
-					return_value->data->data=tmp1->data->data;
-					break;
 				
+				
+				
+				
+				
+			default:
+			break;
+			
+
 		}
-    
-	
-	
+		L->Active=L->Active->next_instr;	
 	}
-    listNext(instrList);
-
-  }
+	
+	stack_expression_destroy(S);
+	free(S);
+	return 0;
 }
 
 
 
-
-
-
-
-
-
-
-
-
+int Add_Instr(Instr_List *L, I_Instr *new)
+{
+	if (new==NULL)
+		return -1;
+	I_Instr *tmp=L->Last;
+	tmp->next_instr=new;
+	L->Last=new;
+	tmp=L->Last->next_instr;
+	while(tmp!=NULL)
+	{
+		L->Last=tmp;
+		tmp=L->Last->next_instr;
+		
+	}
+	return 0;	
+}
 
 
 
@@ -275,7 +387,8 @@ char *Conc_Str(char *s1, char *s2)
     int i=0;
     while(k>=0)
     {
-        str[i]=s1[i++];
+        str[i]=s1[i];
+        i++;
         k--;
     }
     k=strlen(s2)-1;
@@ -291,8 +404,432 @@ char *Conc_Str(char *s1, char *s2)
 
 
 
+token *inter_plus(token tmp1,token tmp2)
+{
+	token *new;
+	if ((tmp1.id==TYPE_STRING) || tmp2.id==TYPE_STRING)            //     STRING CONCATENATE
+	{		
+		char *str1,*str2;
+		if (tmp1.id == TYPE_DOUBLE)
+		{
+			str1=DoubleToString((*((double *)tmp1.ptr)));
+		}
+		else if (tmp1.id == TYPE_INT)
+		{
+			str1=IntToString((*((int *)tmp1.ptr)));
+		}
+		else 
+			str1=(char *)tmp1.ptr;
+		
+		
+		if (tmp2.id == TYPE_DOUBLE)
+		{
+			str2=DoubleToString((*((double *)tmp2.ptr)));
 
+		}
+		else if (tmp2.id == TYPE_INT)
+		{
+			str2=IntToString((*((int *)tmp2.ptr)));
+		}
+		else 
+			str2=(char *)tmp2.ptr;	
+			
+		char *str3=Conc_Str(str1,str2);
+		new=malloc(sizeof(token));
+		new->id=TYPE_STRING;
+		new->ptr=(char *)str3;		
 
+		return new;
+	}						
+	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
+	{
+		new=malloc(sizeof(token));
+		new->id=TYPE_DOUBLE;
+		double *tmp_value=malloc(sizeof(double));
+		
+		(*tmp_value)=(*((double *)tmp1.ptr))+(*((double *)tmp2.ptr));
+		new->ptr=(double *)tmp_value;
+		return new;
+	}
+	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_INT)
+	{
+		new=malloc(sizeof(token));
+		new->id=TYPE_DOUBLE;
+		double *tmp_value=malloc(sizeof(double));
+		
+		(*tmp_value)=(*((double *)tmp1.ptr))+(*((int *)tmp2.ptr));
+		new->ptr=(double *)tmp_value;
+		return new;
+	}
+	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_DOUBLE)
+	{
+		new=malloc(sizeof(token));
+		new->id=TYPE_DOUBLE;
+		double *tmp_value=malloc(sizeof(double));
+		
+		(*tmp_value)=(*((int *)tmp1.ptr))+(*((double *)tmp2.ptr));
+		new->ptr=(double *)tmp_value;
+		return new;
+	}						
+	else
+	{
+		new=malloc(sizeof(token));
+		new->id=TYPE_INT;
+		int *tmp_value=malloc(sizeof(int));
+		
+		(*tmp_value)=(*((int *)tmp1.ptr))+(*((int *)tmp2.ptr));
+		new->ptr=(int *)tmp_value;
+		return new;
+	}					
+}
 
+token *inter_arm_op(token tmp1,token tmp2, int i)
+{
+	token *new=malloc(sizeof(token));
+	if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
+	{
+		new->id=TYPE_DOUBLE;
+		double *tmp_value=malloc(sizeof(double));
+		if (i==1)
+			(*tmp_value)=(*((double *)tmp1.ptr))-(*((double *)tmp2.ptr));
+		else if (i==2)	
+			(*tmp_value)=(*((double *)tmp1.ptr))*(*((double *)tmp2.ptr));
+		else 
+		{
+			if ((*((double *)tmp2.ptr))==0.0)
+			{
+				free(tmp_value);
+				new->id=-8;
+				return new;
+			}
+		
+			(*tmp_value)=(*((double *)tmp1.ptr))/(*((double *)tmp2.ptr));
+		
+		
+		}
+		new->ptr=(double *)tmp_value;
+		return new;
+	}
+	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_INT)
+	{
+		new->id=TYPE_DOUBLE;
+		double *tmp_value=malloc(sizeof(double));
+		
+		if (i==1)
+			(*tmp_value)=(*((double *)tmp1.ptr))-(*((int *)tmp2.ptr));
+		else if (i==2)	
+			(*tmp_value)=(*((double *)tmp1.ptr))*(*((int *)tmp2.ptr));
+		else 
+		{
+			if ((*((int *)tmp2.ptr)==0))
+			{
+				free(tmp_value);
+				new->id=-8;
+				return new;
+			}
+		
+			(*tmp_value)=(*((double *)tmp1.ptr))/(*((int *)tmp2.ptr));
+		
+		
+		}	
+		new->ptr=(double *)tmp_value;
+		return new;
+	}
+	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_DOUBLE)
+	{
+		new->id=TYPE_DOUBLE;
+		double *tmp_value=malloc(sizeof(double));
+		
+		if (i==1)
+			(*tmp_value)=(*((int *)tmp1.ptr))-(*((double *)tmp2.ptr));
+		else if (i==2)	
+			(*tmp_value)=(*((int *)tmp1.ptr))*(*((double *)tmp2.ptr));
+		else 
+		{
+			if ((*((double *)tmp2.ptr)==0.0))
+			{
+				free(tmp_value);
+				new->id=-8;
+				return new;
+			}
+		
+			(*tmp_value)=(*((double *)tmp1.ptr))/(*((double *)tmp2.ptr));
+		
+		
+		}
+			
+		new->ptr=(double *)tmp_value;
+		return new;
+	}						
+	else
+	{
+		new->id=TYPE_INT;
+		int *tmp_value=malloc(sizeof(int));
+		
+		if (i==1)
+			(*tmp_value)=(*((int *)tmp1.ptr))-(*((int *)tmp2.ptr));
+		else if (i==2)	
+			(*tmp_value)=(*((int *)tmp1.ptr))*(*((int *)tmp2.ptr));
+		else 
+		{
+			if ((*((int *)tmp2.ptr)==0))
+			{
+				free(tmp_value);
+				new->id=-8;
+				return new;
+			}
+		
+			(*tmp_value)=(*((double *)tmp1.ptr))/(*((double *)tmp2.ptr));
+		
+		}
+			
+			
+		new->ptr=(int *)tmp_value;
+		return new;
+	}					
+}
 
-
+token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>=) 4 (<=) 
+{
+	token *new=malloc(sizeof(token));
+	if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
+	{
+		if (i==1)
+			if((*((double *)tmp1.ptr))==(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		else if (i==2)
+		{
+			if((*((double *)tmp1.ptr))!=(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}
+		else if (i==3)
+		{
+			if((*((double *)tmp1.ptr))>=(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		else if(i==4)
+		{
+			if((*((double *)tmp1.ptr))>(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		
+		else if(i==5)
+		{
+			if((*((double *)tmp1.ptr))<=(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		else if(i==6)
+		{
+			if((*((double *)tmp1.ptr))<(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		
+	}
+	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_INT)
+	{
+		if (i==1)
+			if((*((double *)tmp1.ptr))==(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		else if (i==2)
+		{
+			if((*((double *)tmp1.ptr))!=(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}
+		else if (i==3)
+		{
+			if((*((double *)tmp1.ptr))>=(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		else if(i==4)
+		{
+			if((*((double *)tmp1.ptr))>(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		
+		else if(i==5)
+		{
+			if((*((double *)tmp1.ptr))<=(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		else if(i==6)
+		{
+			if((*((double *)tmp1.ptr))<(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+	}
+	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_DOUBLE)
+	{
+		if (i==1)
+			if((*((int *)tmp1.ptr))==(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		else if (i==2)
+		{
+			if((*((int *)tmp1.ptr))!=(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}
+		else if (i==3)
+		{
+			if((*((int *)tmp1.ptr))>=(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		else if(i==4)
+		{
+			if((*((int *)tmp1.ptr))>(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		
+		else if(i==5)
+		{
+			if((*((int *)tmp1.ptr))<=(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		else if(i==6)
+		{
+			if((*((int *)tmp1.ptr))<(*((double *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+	}						
+	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_INT)
+	{
+		if (i==1)
+			if((*((int *)tmp1.ptr))==(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		else if (i==2)
+		{
+			if((*((int *)tmp1.ptr))!=(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}
+		else if (i==3)
+		{
+			if((*((int *)tmp1.ptr))>=(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		else if(i==4)
+		{
+			if((*((int *)tmp1.ptr))>(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		
+		else if(i==5)
+		{
+			if((*((int *)tmp1.ptr))<=(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+		else if(i==6)
+		{
+			if((*((int *)tmp1.ptr))<(*((int *)tmp2.ptr)))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;		
+		}
+	}
+	else
+	{
+		if (i==1)
+		{
+			if ((tmp1.id==S_TRUE && tmp2.id==S_TRUE) || (tmp1.id==S_FALSE && tmp2.id==S_FALSE))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}
+		else if (i==2)
+		{
+			if (((tmp1.id==S_TRUE) && (tmp1.id==S_FALSE)) || ((tmp1.id==S_FALSE) && (tmp2.id==S_TRUE)))
+				new->id=S_TRUE;		
+			else
+				new->id=S_FALSE;				
+		}
+		else if (i==3)
+		{
+			if ((tmp1.id==S_TRUE) || (tmp1.id==S_FALSE && tmp2.id==S_FALSE) || (tmp1.id==S_TRUE && tmp2.id==S_TRUE))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}
+		else if (i==4)
+		{
+			if ((tmp1.id==S_TRUE) && (tmp2.id==S_FALSE))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}	
+		else if (i==5)
+		{
+			if ((tmp1.id==S_FALSE) || (tmp1.id==S_FALSE && tmp2.id==S_FALSE) || (tmp1.id==S_TRUE && tmp2.id==S_TRUE))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}	
+		else if (i==6)
+		{
+			if ((tmp1.id=S_FALSE) && (tmp2.id==S_TRUE))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;
+		}
+		else if (i==7)
+		{
+			if ((tmp1.id=S_TRUE) && (tmp2.id==S_TRUE))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;	
+		}
+		else if (i==8)
+		{
+			if ((tmp1.id=S_TRUE) || (tmp2.id==S_TRUE))
+				new->id=S_TRUE;
+			else 
+				new->id=S_FALSE;	
+		}
+			
+	}
+	return new;
+	
+						
+}
