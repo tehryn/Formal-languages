@@ -33,14 +33,15 @@
 							else																						\
 							{																							\
 								strcpy(tmp, (char *)(s));																\
-								(l) = tmp;																				\
 								if (ma2_top<512)																		\
 									ma2[ma2_top++] = tmp;																\
 								else																					\
 								{																						\
 									free(tmp);																			\
+									tmp = NULL;																			\
 									FATAL_ERROR("EXPRESSION: Memory could not be allocated. 12\n", ERR_INTERN_FAULT);	\
 								}																						\
+								(l) = tmp;																				\
 							} 																							\
 						} while(0)
 
