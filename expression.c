@@ -298,7 +298,10 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 						FATAL_ERROR("EXPRESSION: Symbol not defined. 27.1\n", ERR_SEM_NDEF_REDEF);
 					}
 					else
+					{
 						STRDUP(input_token.ptr, long_name);							// if item is found in global table, allocate new memory for name of the identifier (function or variable name with class name)  
+						input_token.id=S_FULL_IDENT;
+					}
 				}
 				else
 					STRDUP(input_token.ptr, name);									// if item is found in local table, allocate new memory  for name of the identifier (function or variable name)  
