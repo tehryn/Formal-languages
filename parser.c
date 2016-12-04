@@ -993,7 +993,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							else
 							{
 								t.id = S_FULL_IDENT;
-								(char*) t.ptr = local_func_var_name;
+								t.ptr = (void*) local_func_var_name;
 								
 								if (TableItem->func_or_var == 2)
 								{
@@ -1139,7 +1139,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = false;
 					break; // just stack_int_pop(s);
 				}
-				if (t.id == S_ASSIGNMENT) // '='  TODO - porovnani typu expr a typu promenne
+				if (t.id == S_ASSIGNMENT)
 				{
 					token_got = false;
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
@@ -1183,7 +1183,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					token_got = false;
 					break; // just stack_int_pop(s);
 				}
-				if (t.id == S_ASSIGNMENT) // '=' TODO - porovnani prirazeni (stejny datovy typ)
+				if (t.id == S_ASSIGNMENT)
 				{
 					token_got = false;
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
