@@ -1,5 +1,6 @@
 #include "parser.h"
 #include "expression.h"
+#include "interpret.h"
 
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
@@ -42,7 +43,7 @@ int parser()
 	global_table_symbols = htab_init(HTAB_SIZE);
 	if (global_table_symbols == NULL)
 	{
-		//stack_int_destroy(&s);
+		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot malloc hash table.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -52,7 +53,7 @@ int parser()
 	if (stack_htab_init(& stack_of_table_symbols) != 0)
 	{
 		//htab_free_all(global_table_symbols);
-		//stack_int_destroy(&s);
+		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot malloc stack of hash tables.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -61,7 +62,7 @@ int parser()
 	{
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
-		//stack_int_destroy(&s);
+		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot realloc stack of hash tables.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -71,7 +72,7 @@ int parser()
 	{
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
-		//stack_int_destroy(&s);
+		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parset cannot malloc place for string array.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -81,7 +82,7 @@ int parser()
 	{
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
-		//stack_int_destroy(&s);
+		stack_int_destroy(&s);
 		return ERR_INTERN_FAULT;
 	}
 
@@ -92,7 +93,7 @@ int parser()
 		//array_string_destroy(&all_class_names);
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
-		//stack_int_destroy(&s);
+		stack_int_destroy(&s);
 		return parser_return;
 	}
 	// priprava na runtime 2
@@ -101,7 +102,7 @@ int parser()
 		//array_string_destroy(&all_class_names);
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
-		//stack_int_destroy(&s);
+		stack_int_destroy(&s);
 		fprintf(stderr, "SCANNER: Cannot reset tokens. \n");
 		return ERR_INTERN_FAULT;
 	}
@@ -110,7 +111,7 @@ int parser()
 		//array_string_destroy(&all_class_names);
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
-		//stack_int_destroy(&s);
+		stack_int_destroy(&s);
 		fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -128,7 +129,7 @@ int parser()
 	//array_string_destroy(&all_class_names);
 	//stack_htab_destroy(& stack_of_table_symbols);
 	//htab_free_all(global_table_symbols);
-	//stack_int_destroy(&s);
+	stack_int_destroy(&s);
 	return parser_return;
 }
 
