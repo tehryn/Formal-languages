@@ -327,8 +327,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						token_got = false;
 						// make a copy of class name
+						class_name = NULL;
 						class_name_strlen = strlen((char*) t.ptr) + 1; // '\0'
-						class_name = (char *) mem_realloc(class_name, class_name_strlen); // * sizeof(char) = 1
+						class_name = (char *) mem_alloc(class_name_strlen); // * sizeof(char) = 1
 						if (class_name == NULL)
 						{
 							fprintf(stderr, "Intern fault. Memory allocation of class_name failed.\n");
@@ -754,7 +755,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if(number_arguments >= number_allocated_arguments-1) // -1 for ending symbol
 					{
 						number_allocated_arguments += 4;
-
+						TableItem->data = NULL; // it will be filled now for the first time
 						TableItem->data = (int*) mem_realloc(TableItem->data, number_allocated_arguments * sizeof(int)); // next 4 potentional arguments
 						if (TableItem->data == NULL)
 						{
