@@ -16,7 +16,7 @@ main.o: main.c
 error.o: error.c error.h
 	$(CC) -c error.c -o $@
 scanner.o: scanner.c scanner.h
-	$(CC) -c scanner.c -o $@
+	$(CC) -c scanner.c -o $@ -lm
 garbage_collector.o: garbage_collector.c garbage_collector.h
 	$(CC) -c garbage_collector.c -o $@
 parser.o: parser.c parser.h
@@ -30,8 +30,10 @@ expression.o: expression.c expression.h
 embedded_functions.o: embedded_functions.c embedded_functions.h
 	$(CC) -c embedded_functions.c -o $@
 
-.PHONY: clean zip
+.PHONY: clean zip test
 clean:
 	rm *.o IFJ16
 zip:
-	zip xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni rozsireni
+	zip xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni rozsireni ../tests
+test:
+	cd tests; ./run_test.sh
