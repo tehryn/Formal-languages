@@ -329,7 +329,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						// make a copy of class name
 						class_name = NULL;
 						class_name_strlen = strlen((char*) t.ptr) + 1; // '\0'
-						class_name = (char *) mem_alloc(class_name_strlen); // * sizeof(char) = 1
+						class_name = (char *) mem_alloc(class_name, class_name_strlen); // * sizeof(char) = 1
 						if (class_name == NULL)
 						{
 							fprintf(stderr, "Intern fault. Memory allocation of class_name failed.\n");
@@ -616,6 +616,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					if (runtime == 1)
 					{
+						TableItem->data = NULL;
 						TableItem->data = (void*) mem_alloc(1 * sizeof(int));
 						if (TableItem->data == NULL)
 						{
@@ -755,8 +756,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if(number_arguments >= number_allocated_arguments-1) // -1 for ending symbol
 					{
 						number_allocated_arguments += 4;
-						TableItem->data = NULL; // it will be filled now for the first time
-						TableItem->data = (int*) mem_alloc(number_allocated_arguments * sizeof(int)); // next 4 potentional arguments
+
+						TableItem->data = (int*) mem_realloc(TableItem->data, number_allocated_arguments * sizeof(int)); // next 4 potentional arguments
 						if (TableItem->data == NULL)
 						{
 							fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
