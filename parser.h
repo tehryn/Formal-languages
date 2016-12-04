@@ -38,7 +38,8 @@ enum {
   P_ELSE_EXISTANCE,     //63
   P_IF_ELSE_SECTION,    //64
   P_FUNC_BODY_H1,       //65
-  P_EXPR                //66
+  P_EXPR,               //66
+  P_I_END               //67
 };
 
 // it eats tokens and says if syntax analysis success or not
