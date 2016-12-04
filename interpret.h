@@ -41,7 +41,7 @@ int Add_Instr(Instr_List *L, I_Instr *new);
 token *inter_plus(token a,token b);
 token *inter_arm_op(token tmp1,token tmp2, int i);
 token *inter_bool_op(token tmp1,token tmp2, int i);
-int inter(Instr_List *L,htab_t *I_Htable);
+int inter(Instr_List *L, stack_htab *I_Htable);
 
 char *IntToString(int x);
 char *DoubleToString(double x);
