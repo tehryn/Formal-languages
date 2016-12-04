@@ -1360,9 +1360,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						expected_expr_data_type = (int) TableItem->data_type;
 						if (static_func_var_name == NULL)
-							error_6_flag = 1;
-						else
 							error_6_flag = 0;
+						else
+							error_6_flag = 1;
 					}
 					token *postfix_token_array;
 					int token_count, expr_data_type;
