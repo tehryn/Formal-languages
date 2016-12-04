@@ -91,6 +91,13 @@ htab_t *stack_htab_pop(stack_htab *stack);
 htab_t *stack_htab_get_item(stack_htab *stack, unsigned bactrack);
 
 /**
+ * [stack_htab_get_first description]
+ * @param  stack [description]
+ * @return       [description]
+ */
+htab_t *stack_htab_get_first(stack_htab *stack);
+
+/**
  * Free all memory allocated by stack
  * @param stack Stack that shall be freed
  * @pre         Stack was inicializated
