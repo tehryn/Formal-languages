@@ -1,5 +1,6 @@
 // hlavicka pro interpret
-#ifndef INTeRPRET
+#ifndef INTERPRET
+#define INTERPRET
 #include <string.h>
 #include <stdbool.h>    // bool
 #include <stdio.h>
