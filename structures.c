@@ -1,10 +1,3 @@
-/**
-* Author: Matejka Jiri
-* Login: xmatej52
-* School: VUT FIT, BRNO
-* gcc version: 5.4.0 (ubuntu 16.04.2)
-* Date: TODO
-**/
 #include "structures.h"
 
 /**
@@ -72,6 +65,13 @@ htab_t *stack_htab_get_item(stack_htab *stack, unsigned bactrack) {
 		return NULL;
 	return stack->data[idx];
 }
+
+/**
+ * Return item that is at the bottom of stack
+ * @param  stack Stack where item is stored
+ * @return       Item that is stored on the bottom, NULL if stack is empty
+ */
+htab_t *stack_htab_get_first(stack_htab *stack);
 
 /**
  * Free all memory allocated by stack
@@ -142,10 +142,6 @@ htab_t* array_htab_get_item(array_htab *array, unsigned idx) {
 	else {
 		return array->data[idx];
 	}
-}
-
-htab_t *stack_htab_get_first(stack_htab *stack) {
-	return stack->data[0];
 }
 
 /**
