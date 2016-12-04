@@ -48,7 +48,7 @@ typedef struct htab_item {
 	unsigned initialized; 		// 0 - not initialized, 1 - initialized
 
 	unsigned number_of_arguments; // for function
-	void * local_table;		// htab_t* // TODO - zde bude predvyplnena lokalni tabulka s noninitialized variable 
+	void * local_table;		// htab_t* // TODO - zde bude predvyplnena lokalni tabulka s noninitialized variable
 	void * instruction_tape;	// for function
 
 	struct htab_item* next_item; // next variable
