@@ -144,6 +144,10 @@ htab_t* array_htab_get_item(array_htab *array, unsigned idx) {
 	}
 }
 
+htab_t *stack_htab_get_first(stack_htab *stack) {
+	return stack->data[0];
+}
+
 /**
  * Free all memory allocated by array and all memory allocated by all hash tables in array
  * @param array Array that shall be freed

@@ -91,9 +91,9 @@ htab_t *stack_htab_pop(stack_htab *stack);
 htab_t *stack_htab_get_item(stack_htab *stack, unsigned bactrack);
 
 /**
- * [stack_htab_get_first description]
- * @param  stack [description]
- * @return       [description]
+ * Return item that is at the bottom of stack
+ * @param  stack Stack where item is stored
+ * @return       Item that is stored on the bottom, NULL if stack is empty
  */
 htab_t *stack_htab_get_first(stack_htab *stack);
 

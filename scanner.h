@@ -14,7 +14,7 @@
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
-#include "error.h"
+#include "garbage_collector.h"
 
 /*! Default size for memory allocation */
 #define S_SIZE 32
@@ -134,7 +134,7 @@ int is_simple_ident(char *word, unsigned len);
 @param word String (or array of chars) for detection
 @param len length of word (without '\0', if there is)
 @pre size of allocated space for word is bigger or equal len
-@return 1 if word represents simple identifikator, otherwise return 0
+@return 1 if word represents full identifikator, otherwise return 0
 */
 int is_full_ident(char *word, unsigned len);
 

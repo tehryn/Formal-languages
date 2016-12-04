@@ -1,5 +1,4 @@
 #include "scanner.h"
-#include "error.h"
 
 unsigned LINE_NUM = 1;
 extern FILE *f;
@@ -553,7 +552,7 @@ void *str2num(char *str, int type, int *valide) {
 	void *result = NULL;
 	*valide = 0;
 	if (type == TYPE_INT) {
-		result = malloc(sizeof(int));
+		result = mem_alloc(sizeof(int));
 		if (result == NULL) {
 			*valide = 1;
 			return NULL;
@@ -566,7 +565,7 @@ void *str2num(char *str, int type, int *valide) {
 		return result;
 	}
 	else if (type == TYPE_DOUBLE) {
-		result = malloc(sizeof(double));
+		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
 			*valide = 1;
 			return NULL;
@@ -579,7 +578,7 @@ void *str2num(char *str, int type, int *valide) {
 		return result;
 	}
 	else if (type == TYPE_INT_BIN) {
-		result = malloc(sizeof(double));
+		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
 			*valide = 1;
 			return NULL;
@@ -588,7 +587,7 @@ void *str2num(char *str, int type, int *valide) {
 		return result;
 	}
 	else if (type == TYPE_INT_HEX) {
-		result = malloc(sizeof(double));
+		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
 			*valide = 1;
 			return NULL;
@@ -597,7 +596,7 @@ void *str2num(char *str, int type, int *valide) {
 		return result;
 	}
 	else if (type == TYPE_INT_OCTAL) {
-		result = malloc(sizeof(double));
+		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
 			*valide = 1;
 			return NULL;
@@ -606,7 +605,7 @@ void *str2num(char *str, int type, int *valide) {
 		return result;
 	}
 	else if (type == TYPE_DOUBLE_HEX) {
-		result = malloc(sizeof(double));
+		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
 			*valide = 1;
 			return NULL;
