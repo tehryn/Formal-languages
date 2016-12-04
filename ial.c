@@ -357,12 +357,21 @@ htab_t * htab_copy(htab_t * table)
 {
 	htab_t *result = htab_init(table->htab_size);
     htab_item *tmp;
+    htab_item *item;
     for (unsigned i = 0; i < table->htab_size; i++) {
         tmp = table->ptr[i];
         while (tmp != NULL) {
-            if (htab_insert_item(result, tmp->key) == NULL) {
+            if ((item = htab_insert_item(result, tmp->key)) == NULL) {
                 return NULL;
             }
+            item->data_type = tmp->data_type;
+            item->func_or_var = 1;
+            item->data = NULL;
+            item->initialized = 0;
+            item->number_of_arguments = 0;
+            item->local_table = NULL;
+            item->instruction_tape = NULL;
+            item->next_item = NULL;
             tmp = tmp->next_item;
         }
     }
