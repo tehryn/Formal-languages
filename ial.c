@@ -352,14 +352,32 @@ htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsign
 		htab->ptr[i] = NULL;
 	return htab;
 }
+/*
+htab_t * htab_copy(htab_t * T)
+{
+	htab_t * output_htab = htab_init(T->htab_size);
+	
+	if (output_htab == NULL)
+		return NULL;
+		
+	htab_item * item; // item that we will copied
+	for (unsigned i = 0; i < T->htab_size; i++)
+	{
+		while (T->ptr[i] != NULL)
+		{
+			item = T->ptr[i];
+			T->ptr[i] = T->ptr[i]->next_item; // store next item
+			
+		}
+	}
 
-
-
+}
+*/
 void htab_clear_items(htab_t * T)
 {
 	return; // garbage collector
 
-	htab_item * item; // item that we will free
+/*	htab_item * item; // item that we will free
 	for (unsigned i = 0; i < T->htab_size; i++)
 	{
 		while (T->ptr[i] != NULL)
@@ -372,19 +390,22 @@ void htab_clear_items(htab_t * T)
 			item = NULL;
 		}
 	}
+*/
 }
 
 void htab_free_all(htab_t * T)
 {
+	T = NULL;
 	return; // garbage collector
 
-	if (T != NULL)
+/*	if (T != NULL)
 	{
 		htab_clear_items(T);
 		free(T->ptr);
 		free(T);
 		T = NULL;
 	}
+*/
 }
 
 
@@ -453,5 +474,6 @@ htab_item * htab_insert_item(htab_t * T, const char * key)
 
 	// jsme na poslednim prvku
 	item->next_item = malloc_item(key);
+	T->number_items++;
 	return item->next_item; // could be NULL
 }
