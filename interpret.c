@@ -4,7 +4,7 @@
 
 #define I_STACKSIZE 20
 
-int inter(Instr_List *L, htab_t *I_Htable)
+int inter(Instr_List *L, stack_htab *I_Htable)
 {
 	struct stack_expresion *S=malloc(sizeof(struct stack_expresion));
 	if (S==NULL)
@@ -48,7 +48,7 @@ int inter(Instr_List *L, htab_t *I_Htable)
 								new->id=TYPE_INT;
 							
 							
-							item_tmp1=htab_find_item(I_Htable, (const char*)ptr->ptr);
+							item_tmp1=stack_htab_find_htab_item(I_Htable, (const char*)ptr->ptr);
 							if (item_tmp1->initialized==0)
 							{
 								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
@@ -184,7 +184,7 @@ int inter(Instr_List *L, htab_t *I_Htable)
 								new->id=TYPE_INT;
 							
 							
-							item_tmp1=htab_find_item(I_Htable, (const char*)ptr->ptr);
+							item_tmp1=stack_htab_find_htab_item(I_Htable, (const char*)ptr->ptr);
 							if (item_tmp1->initialized==0)
 							{
 								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
