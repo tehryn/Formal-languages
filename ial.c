@@ -359,11 +359,11 @@ htab_t * htab_copy(htab_t * table)
     htab_item *tmp;
     for (unsigned i = 0; i < table->htab_size; i++) {
         tmp = table->ptr[i];
-        result->ptr[i] = tmp;
         while (tmp != NULL) {
             if (htab_insert_item(result, tmp->key) == NULL) {
                 return NULL;
             }
+            tmp = tmp->next_item;
         }
     }
     return result;
