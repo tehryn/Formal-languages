@@ -6,9 +6,9 @@ then
 	NC='\033[0m' # No Color
 fi
 
-for file in ./valid_input/*.java
+for file in ./tests/valid_input/*.java
 do
-	../IFJ16 $file >tmp.txt 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 0 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -20,9 +20,9 @@ do
 	fi
 done
 
-for file in ./invalid_lex/*.java
+for file in ./tests/invalid_lex/*.java
 do
-	../IFJ16 $file >tmp.txt 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 1 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -34,9 +34,9 @@ do
 	fi
 done
 
-for file in ./invalid_syn/*.java
+for file in ./tests/invalid_syn/*.java
 do
-	../IFJ16 $file >tmp.txt 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 2 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -48,9 +48,9 @@ do
 	fi
 done
 
-for file in ./invalid_sem/def/*.java
+for file in ./tests/invalid_sem/def/*.java
 do
-	../IFJ16 $file >tmp.txt 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 3 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -62,9 +62,9 @@ do
 	fi
 done
 
-for file in ./invalid_sem/com/*.java
+for file in ./tests/invalid_sem/com/*.java
 do
-	../IFJ16 $file >tmp.txt 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 4 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -76,9 +76,9 @@ do
 	fi
 done
 
-for file in ./invalid_run/ini/*.java
+for file in ./tests/invalid_run/ini/*.java
 do
-	../IFJ16 $file >tmp.txt 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 8 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
@@ -90,9 +90,9 @@ do
 	fi
 done
 
-for file in ./diff_check/*.java
+for file in ./tests/diff_check/*.java
 do
-	../IFJ16 $file >tmp.txt 2>&1
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 0 ]]; then
 		diff=$(diff tmp.txt ${file/java/output})
