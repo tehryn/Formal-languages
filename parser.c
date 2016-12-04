@@ -294,7 +294,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 					if (class_name != NULL)
 					{
-						free(class_name);
+						//free(class_name);
 						class_name = NULL;
 					}
 
