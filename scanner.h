@@ -156,6 +156,42 @@ int skip_comment (unsigned comment_type);
 char *load_string(char *word, int *max);
 
 /**
+ * Count power
+ * @param  x   Cardinal number
+ * @param  exp Exponent
+ * @return     Result of x to the exponent
+ */
+double make_power (double x, long int exp);
+
+/**
+ * Convert string to decimal if string represents binnary integer number
+ * @param str    String for conversion
+ * @param result Converted number
+ */
+void bin2dec(char *str, int *result);
+
+/**
+ * Convert string to decimal number if string represents octal integer number
+ * @param str    String for conversion
+ * @param result Converted number
+ */
+void octal2dec(char *str, int *result);
+
+/**
+ * Convert string to decimal number if string represents hexadecimal integer number
+ * @param str    String for conversion
+ * @param result Converted number
+ */
+void hex2dec_int(char *str, int *result);
+
+/**
+ * Convert string to decimal number if string represents hexadecimal floating point number
+ * @param str    String for conversion
+ * @param result Converted number
+ */
+void hex2dec_double(char *str, double *result);
+
+/**
  * Convert string into double or integer (depends on type variable) and store it into new allocated space
  * @param  str    String that represents number
  * @param  type   Type of number that represent string (should be TYPE_INT or TYPE_DOUBLE)

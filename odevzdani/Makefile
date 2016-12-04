@@ -16,7 +16,7 @@ main.o: main.c
 error.o: error.c error.h
 	$(CC) -c error.c -o $@
 scanner.o: scanner.c scanner.h
-	$(CC) -c scanner.c -o $@ -lm
+	$(CC) -c scanner.c -o $@
 garbage_collector.o: garbage_collector.c garbage_collector.h
 	$(CC) -c garbage_collector.c -o $@
 parser.o: parser.c parser.h

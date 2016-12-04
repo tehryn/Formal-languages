@@ -475,7 +475,35 @@ char *load_string(char *word, int *max) {
 	return NULL;
 }
 
-static inline void bin2dec(char *str, int *result) {
+double make_power (double x, long int exp) {
+	if ( exp < 0.0) {
+		x = 1.0/x;
+		exp = -exp; //now exp > 0
+	}
+
+	if (exp == 0.0)
+		return 1.0;
+	if (exp == 1.0)
+		return x;
+
+	double y = 1.0;
+
+	while (exp > 1) {
+
+		if (exp%2 == 0)
+			exp/=2;
+
+		else {
+			exp = (exp - 1)/2;
+			y *= x;
+		}
+
+		x*=x;
+	}
+	return x*y;
+}
+
+void bin2dec(char *str, int *result) {
 	int n = strlen(str)-1;
 	*result = 0;
 	for (int i = n; i >= 2; i--) {
@@ -483,7 +511,7 @@ static inline void bin2dec(char *str, int *result) {
 	}
 }
 
-static inline void octal2dec(char *str, int *result) {
+void octal2dec(char *str, int *result) {
 	int n = strlen(str)-1;
 	*result = 0;
 	for (int i = n; i >= 2; i--) {
@@ -491,7 +519,7 @@ static inline void octal2dec(char *str, int *result) {
 	}
 }
 
-static inline void hex2dec_int(char *str, int *result) {
+void hex2dec_int(char *str, int *result) {
 	int n = strlen(str)-1;
 	*result = 0;
 	for (int i = n; i >= 2; i--) {
@@ -504,7 +532,7 @@ static inline void hex2dec_int(char *str, int *result) {
 	}
 }
 
-static inline void hex2dec_double(char *str, double *result) {
+void hex2dec_double(char *str, double *result) {
 	int n = 0;
 	*result = 0;
 	int exp;
@@ -519,7 +547,7 @@ static inline void hex2dec_double(char *str, double *result) {
 			}
 		}
 		sscanf(&str[n+2], "%i", &exp);
-		*result *= pow(16, exp);
+		*result *= make_power(16, exp);
 	}
 	else {
 		for (int i = n = n-1; i >= 2; i--) {
@@ -540,7 +568,7 @@ static inline void hex2dec_double(char *str, double *result) {
 			}
 		}
 		sscanf(&str[n+2], "%i", &exp);
-		*result *= pow(16, exp);
+		*result *= make_power(16, exp);
 	}
 }
 

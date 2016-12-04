@@ -149,6 +149,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 	int number_arguments = 0; // arguments of function
 	int number_allocated_arguments = 0;
 	unsigned func_or_var = 0;
+	
+	int error_6_flag = 1;
 
 	while (!stack_int_top(s, &on_top)) // stack_int_top == -1 if stack is empty
 	{
@@ -853,7 +855,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 			case P_FUNC:
 				stack_int_pop(s);
-
+				
+				error_6_flag = 0;
+				
 				if (token_got == false)
 				{
 					t = get_token();
@@ -877,6 +881,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					LocalTableSymbols = NULL;
 					static_func_var_name = NULL;
+					error_6_flag = 1;
 					break; // goto case S_RIGHT_BARCE
 				}
 				else
@@ -1352,17 +1357,13 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (runtime == 2)
 				{
-                    int error_6_flag = 0;
+                    
 					int expected_expr_data_type = 0;
 					if (TableItem == NULL)
 						expected_expr_data_type = S_BOOLEAN;
 					else
 					{
 						expected_expr_data_type = (int) TableItem->data_type;
-						if (static_func_var_name == NULL)
-							error_6_flag = 0;
-						else
-							error_6_flag = 1;
 					}
 					token *postfix_token_array;
 					int token_count, expr_data_type;
