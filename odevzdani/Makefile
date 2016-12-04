@@ -36,7 +36,6 @@ clean:
 zip:
 	zip -r xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni rozsireni ../tests/
 test:
-	echo "Test funkcionality"
 	chmod +x ./tests/run_test.sh
 	./tests/run_test.sh
 test-valgrind:
