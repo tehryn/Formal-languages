@@ -7,6 +7,9 @@
 int inter(Instr_List *L, htab_t *I_Htable)
 {
 	struct stack_expresion *S=malloc(sizeof(struct stack_expresion));
+	if (S==NULL)
+		return ERR_INTERN_FAULT;
+		
 	stack_expression_init(S,I_STACKSIZE);
 	htab_item * item_tmp1;
 	htab_item * return_hitem;
@@ -34,6 +37,9 @@ int inter(Instr_List *L, htab_t *I_Htable)
 						case S_INT:
 						case S_DOUBLE:
 							new=malloc(sizeof(token));
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
+								
 							if (ptr->id==S_STRING)
 								new->id=TYPE_STRING;
 							else if (ptr->id==S_DOUBLE)
@@ -167,6 +173,9 @@ int inter(Instr_List *L, htab_t *I_Htable)
 						case S_INT:
 						case S_DOUBLE:
 							new=malloc(sizeof(token));
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
+								
 							if (ptr->id==S_STRING)
 								new->id=TYPE_STRING;
 							else if (ptr->id==S_DOUBLE)
@@ -198,6 +207,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp2);
 							stack_expression_pop(S,&tmp1);	
 							new=inter_bool_op(tmp1,tmp2,1);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;						
 						case S_NOT_EQUAL:
@@ -205,6 +216,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_bool_op(tmp1,tmp2,2);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;						
 						
@@ -213,6 +226,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_bool_op(tmp1,tmp2,3);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;	
 							
@@ -221,6 +236,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_bool_op(tmp1,tmp2,4);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;							
 						
@@ -229,6 +246,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_bool_op(tmp1,tmp2,5);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;	
 												
@@ -237,6 +256,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_bool_op(tmp1,tmp2,6);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;						
 						
@@ -245,6 +266,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_bool_op(tmp1,tmp2,7);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;						
 						
@@ -253,6 +276,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_bool_op(tmp1,tmp2,8);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;											
 
@@ -262,6 +287,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_plus(tmp1,tmp2);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;
 							
@@ -271,6 +298,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_arm_op(tmp1,tmp2,1);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;
 				
@@ -280,6 +309,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_arm_op(tmp1,tmp2,2);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							stack_expression_push(S,*new);	
 							break;
 
@@ -289,6 +320,8 @@ int inter(Instr_List *L, htab_t *I_Htable)
 							stack_expression_pop(S,&tmp1);	
 							
 							new=inter_arm_op(tmp1,tmp2,2);
+							if (new==NULL)
+								return ERR_INTERN_FAULT;
 							if (new->id==-8)
 							{
 								fprintf(stderr, "Divison by zero!.\n");
@@ -367,6 +400,8 @@ char *DoubleToString(double x)
 {
     int req_size=8*sizeof(double)+3;
 	char *str=malloc(req_size);
+	if (str==NULL)
+		return str;
 	snprintf(str, req_size, "%f", x);
 	return str;
 }
@@ -375,6 +410,8 @@ char *IntToString(int x)
 {
     int req_size=8*sizeof(int)+3;
 	char *str=malloc(req_size);
+	if (str==NULL)
+		return str;
 	snprintf(str, req_size, "%d", x);
 	return str;
 }
@@ -383,6 +420,8 @@ char *Conc_Str(char *s1, char *s2)
 {
     int req_size=strlen(s1)+strlen(s2);
     char *str=malloc(req_size+1);
+   	if (str==NULL)
+		return str;
     int k=strlen(s1)-1;
     int i=0;
     while(k>=0)
@@ -436,6 +475,8 @@ token *inter_plus(token tmp1,token tmp2)
 			
 		char *str3=Conc_Str(str1,str2);
 		new=malloc(sizeof(token));
+		if (new==NULL)
+			return NULL;
 		new->id=TYPE_STRING;
 		new->ptr=(char *)str3;		
 
@@ -444,9 +485,14 @@ token *inter_plus(token tmp1,token tmp2)
 	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
 	{
 		new=malloc(sizeof(token));
+		if (new==NULL)
+			return NULL;
+			
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
-		
+		if (tmp_value==NULL)
+			return NULL;
+					
 		(*tmp_value)=(*((double *)tmp1.ptr))+(*((double *)tmp2.ptr));
 		new->ptr=(double *)tmp_value;
 		return new;
@@ -454,9 +500,12 @@ token *inter_plus(token tmp1,token tmp2)
 	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_INT)
 	{
 		new=malloc(sizeof(token));
+		if (new==NULL)
+			return NULL;
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
-		
+		if (tmp_value==NULL)
+			return NULL;		
 		(*tmp_value)=(*((double *)tmp1.ptr))+(*((int *)tmp2.ptr));
 		new->ptr=(double *)tmp_value;
 		return new;
@@ -464,9 +513,14 @@ token *inter_plus(token tmp1,token tmp2)
 	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_DOUBLE)
 	{
 		new=malloc(sizeof(token));
+		if (new==NULL)
+			return NULL;
+			
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
-		
+		if (tmp_value==NULL)
+			return NULL;
+				
 		(*tmp_value)=(*((int *)tmp1.ptr))+(*((double *)tmp2.ptr));
 		new->ptr=(double *)tmp_value;
 		return new;
@@ -474,9 +528,14 @@ token *inter_plus(token tmp1,token tmp2)
 	else
 	{
 		new=malloc(sizeof(token));
+		if (new==NULL)
+			return NULL;
+			
 		new->id=TYPE_INT;
 		int *tmp_value=malloc(sizeof(int));
-		
+		if (tmp_value==NULL)
+			return NULL;
+					
 		(*tmp_value)=(*((int *)tmp1.ptr))+(*((int *)tmp2.ptr));
 		new->ptr=(int *)tmp_value;
 		return new;
@@ -486,10 +545,15 @@ token *inter_plus(token tmp1,token tmp2)
 token *inter_arm_op(token tmp1,token tmp2, int i)
 {
 	token *new=malloc(sizeof(token));
+	if (new==NULL)
+		return NULL;
+		
 	if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
 	{
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
+		if (tmp_value==NULL)
+			return NULL;
 		if (i==1)
 			(*tmp_value)=(*((double *)tmp1.ptr))-(*((double *)tmp2.ptr));
 		else if (i==2)	
@@ -514,7 +578,8 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 	{
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
-		
+		if (tmp_value==NULL)
+			return NULL;		
 		if (i==1)
 			(*tmp_value)=(*((double *)tmp1.ptr))-(*((int *)tmp2.ptr));
 		else if (i==2)	
@@ -539,7 +604,8 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 	{
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
-		
+		if (tmp_value==NULL)
+			return NULL;		
 		if (i==1)
 			(*tmp_value)=(*((int *)tmp1.ptr))-(*((double *)tmp2.ptr));
 		else if (i==2)	
@@ -565,7 +631,8 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 	{
 		new->id=TYPE_INT;
 		int *tmp_value=malloc(sizeof(int));
-		
+		if (tmp_value==NULL)
+			return NULL;		
 		if (i==1)
 			(*tmp_value)=(*((int *)tmp1.ptr))-(*((int *)tmp2.ptr));
 		else if (i==2)	
@@ -592,6 +659,8 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>=) 4 (<=) 
 {
 	token *new=malloc(sizeof(token));
+	if (new==NULL)
+		return NULL;
 	if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
 	{
 		if (i==1)
