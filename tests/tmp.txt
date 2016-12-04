@@ -1,1 +1,0 @@
-Semantic fauilt. There is no function 'Main.run' or it is not void function.

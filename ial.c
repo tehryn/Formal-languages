@@ -352,29 +352,27 @@ htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsign
 		htab->ptr[i] = NULL;
 	return htab;
 }
-/*
-htab_t * htab_copy(htab_t * T)
-{
-	htab_t * output_htab = htab_init(T->htab_size);
-	
-	if (output_htab == NULL)
-		return NULL;
-		
-	htab_item * item; // item that we will copied
-	for (unsigned i = 0; i < T->htab_size; i++)
-	{
-		while (T->ptr[i] != NULL)
-		{
-			item = T->ptr[i];
-			T->ptr[i] = T->ptr[i]->next_item; // store next item
-			
-		}
-	}
 
+htab_t * htab_copy(htab_t * table)
+{
+	htab_t *result = htab_init(table->htab_size);
+    htab_item *tmp;
+    for (unsigned i = 0; i < table->htab_size; i++) {
+        tmp = table->ptr[i];
+        while (tmp != NULL) {
+            if (htab_insert_item(result, tmp->key) == NULL) {
+                return NULL;
+            }
+            tmp = tmp->next_item;
+        }
+    }
+    return result;
 }
-*/
+
 void htab_clear_items(htab_t * T)
 {
+    T = T;
+    T = T;
 	return; // garbage collector
 
 /*	htab_item * item; // item that we will free
@@ -395,6 +393,7 @@ void htab_clear_items(htab_t * T)
 
 void htab_free_all(htab_t * T)
 {
+    T = T;
 	T = NULL;
 	return; // garbage collector
 
@@ -449,7 +448,7 @@ htab_item * malloc_item(const char * key)
 	item->initialized = 0;
 
 	item->number_of_arguments = 0;
-	item->local_table = NULL;		
+	item->local_table = NULL;
 	item->instruction_tape = NULL;
 
 	item->next_item = NULL;
