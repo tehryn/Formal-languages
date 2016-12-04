@@ -329,7 +329,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						// make a copy of class name
 						class_name = NULL;
 						class_name_strlen = strlen((char*) t.ptr) + 1; // '\0'
-						class_name = (char *) mem_alloc(class_name, class_name_strlen); // * sizeof(char) = 1
+						class_name = (char *) mem_alloc(class_name_strlen); // * sizeof(char) = 1
 						if (class_name == NULL)
 						{
 							fprintf(stderr, "Intern fault. Memory allocation of class_name failed.\n");
