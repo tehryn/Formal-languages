@@ -126,6 +126,21 @@ int parser()
 	
 	parser_return = analysis(&s, 2, stack_of_table_symbols, Instruction);
 
+	if (parser_return != 0)
+	{
+		stack_int_destroy(&s);
+		return parser_return;
+	}
+
+	/*
+	int interpret_return = inter(Instruction, stack_of_table_symbols); // I think there should be stack_of_table_symbols
+	if (interpret_return != 0)
+	{
+		stack_int_destroy(&s);
+		return interpret_return;
+	}
+	*/
+
 	//array_string_destroy(&all_class_names);
 	//stack_htab_destroy(& stack_of_table_symbols);
 	//htab_free_all(global_table_symbols);
@@ -1782,7 +1797,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 
 						Instruction->adr2 = TableItem->instruction_tape;
-						
+
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
 						if (tmp_ptr != NULL)
 						{
