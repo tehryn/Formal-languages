@@ -1,12 +1,4 @@
-/**
-* Author: Matejka Jiri
-* Login: xmatej52
-* School: VUT FIT, BRNO
-* gcc version: 5.4.0 (ubuntu 16.04.2)
-* Date: TODO
-**/
 #include "scanner.h"
-#include "error.h"
 
 unsigned LINE_NUM = 1;
 extern FILE *f;
@@ -88,6 +80,118 @@ int is_special_char(char c) {
 		return 0;
 }
 
+
+int is_num_literal(char *word, unsigned len) {
+	if (word == NULL || len == 0) {
+		return 0;
+	}
+	if (!isdigit(word[0])) {
+		return 0;
+	}
+	int is_base = 1;
+	if (word[0] == '0') {
+		if (len == 1) {
+			return TYPE_INT;
+		}
+		else if (len > 1 && word[1] == '.') {
+			is_base = 0;
+		}
+	}
+	else {
+		is_base = 0;
+	}
+
+	if (is_base) {
+		if (word[1] == 'x') {
+			if (len == 2) {
+				return 0;
+			}
+			int p = 0;
+			int dot = 0;
+			int sign = 0;
+			for (unsigned i = 2; i < len; i++) {
+				if (sign && (word[i] == '+' || word[i] == '-')) {
+					sign = 0;
+					continue;
+				}
+				sign = 0;
+				if (i > 2 && (word[i] == 'p' || word[i] == 'P') && !p && word[i-1] != '.') {
+					p = dot = sign = 1;
+					continue;
+				}
+				if (i > 2 && word[i] == '.' && !dot) {
+					dot = 1;
+					continue;
+				}
+				if (word[i] != '_' && (word[i] < 'A' || word[i] > 'F') && (word[i] < '0' || word[i] > '9')) {
+					return 0;
+				}
+			}
+			//0xFF.FFp-1
+			if (dot && !p) {
+				return 0;
+			}
+			else if (dot && p) {
+				return TYPE_DOUBLE_HEX;
+			}
+			else {
+				return TYPE_INT_HEX;
+			}
+		}
+		else if (word[1] == 'b') {
+			if (len <= 2) {
+				return 0;
+			}
+			for (unsigned i = 2; i < len; i++) {
+				if (word[i] != '_' && word[i] != '0' && word[i] != '1') {
+					return 0;
+				}
+			}
+			return TYPE_INT_BIN;
+		}
+		else {
+			for (unsigned i = 1; i < len; i++) {
+				if (word[i] != '_' && (word[i] < '0' || word[i] > '7')) {
+					return 0;
+				}
+			}
+			return TYPE_INT_OCTAL;
+		}
+	}
+	else {
+		int e = 0, dot = 0, sign = 0;
+		for (unsigned i = 1; i < len; i++) {
+			if (sign && (word[i] == '+' || word[i] == '-')) {
+				sign = 0;
+				continue;
+			}
+			sign = 0;
+			if (word[i] == 'e' || word[i] == 'E') {
+				if (e || word[i-1] == '.') {
+					return 0;
+				}
+				sign = 1;
+				dot = e = 1;
+			}
+			else if (word[i] == '.') {
+				if (dot || e) {
+					return 0;
+				}
+				dot = 1;
+			}
+			else if ((!isdigit(word[i]))) {
+				return 0;
+			}
+		}
+		if(!isdigit(word[len-1])) return 0;
+		if (dot) return TYPE_DOUBLE;
+		return TYPE_INT;
+	}
+	return 0;
+}
+
+
+/*
 int is_num_literal(char *word, unsigned len) {
 	if (word == NULL || len == 0) return -1;
 	int e = 0, dot = 0, sign = 0;
@@ -115,6 +219,7 @@ int is_num_literal(char *word, unsigned len) {
 	if (dot) return TYPE_DOUBLE;
 	return TYPE_INT;
 }
+*/
 
 int is_simple_ident(char *word, unsigned len) {
 	if (word == NULL || len == 0) return 0;
@@ -182,14 +287,14 @@ int skip_comment(unsigned comment_type) {
 	return 1; // reached EOF
 }
 
-static char *write_back(char *word, int *num, unsigned *idx, unsigned *max, int *check) {
+/*static char *write_back(char *word, int *num, unsigned *idx, unsigned *max, int *check) {
 	for (unsigned i = 0; num[i] != '\0'; i++) {
 		if (*idx >= *max) {
 			char *tmp = word;
 			*max *= 2;
 			tmp = (char *) realloc(word, *max);
 			if (tmp == NULL) {
-				free(word);
+				//free(word);
 				*max = 0;
 				return NULL;
 			}
@@ -265,8 +370,89 @@ char *load_string(char *word, unsigned *max) {
 		}
 		else if (c == '\n') {
 			*max = -1;
-			free(word);
+			//free(word);
 			return 0;
+		}
+		if (i >= *max) {
+			char *tmp = word;
+			*max *= 2;
+			tmp = (char *) realloc(word, *max);
+			if (tmp == NULL) {
+				*max = 0;
+				//free(word);
+				return NULL;
+			}
+			word = tmp;
+		}
+		word[i++] = c;
+		if (c == '\0') {
+			return word;
+		}
+	}
+	return NULL;
+}*/
+
+char *load_string(char *word, int *max) {
+	int c, num[4] = {'\0',};
+	int octal_set = 0;
+	int i = 0;
+	while(((c = fgetc(f)) != EOF)) {
+		if (c <= 31) {
+			if (c == '\n') {
+				*max = -1;
+			}
+			else {
+				*max = -2;
+			}
+			free(word);
+			return NULL;
+		}
+		if (c == '\\') {
+			c = fgetc(f);
+			if (c == '\\') {
+				;
+			}
+			else if (c == 'n') {
+				c = '\n';
+			}
+			else if (c == '"') {
+				;
+			}
+			else if (c == '\'') {
+				;
+			}
+			else if (c == 't') {
+				c = '\t';
+			}
+			else if (isdigit(c) && c <= '4') {
+				num[0] = c;
+				num[1] = fgetc(f);
+				if (isdigit(num[1]) && num[1] <= '7') {
+					num[2] = fgetc(f);
+					if (isdigit(num[2]) && num[2] <= '7' && num[2] >= '1') {
+						c = (num[0] - '0')*64 + (num[1] - '0')*8 + (num[2] - '0');
+						octal_set = 1;
+					}
+					else {
+						free(word);
+						*max = -2;
+						return NULL;
+					}
+				}
+				else {
+					free(word);
+					*max = -2;
+					return NULL;
+				}
+			}
+			else {
+				free(word);
+				*max = -2;
+				return NULL;
+			}
+		}
+		else if (c == '"' && !octal_set) {
+			c = '\0';
 		}
 		if (i >= *max) {
 			char *tmp = word;
@@ -280,11 +466,82 @@ char *load_string(char *word, unsigned *max) {
 			word = tmp;
 		}
 		word[i++] = c;
-		if (c == '\0') {
+		if (c == '\0' && !octal_set) {
 			return word;
 		}
+		octal_set = 0;
 	}
+	free(word);
 	return NULL;
+}
+
+static inline void bin2dec(char *str, int *result) {
+	int n = strlen(str)-1;
+	*result = 0;
+	for (int i = n; i >= 2; i--) {
+		*result += ((str[i] - '0') << (n - i));
+	}
+}
+
+static inline void octal2dec(char *str, int *result) {
+	int n = strlen(str)-1;
+	*result = 0;
+	for (int i = n; i >= 2; i--) {
+		*result += ((str[i] - '0') * (i<n?8:1 << (n - i)));
+	}
+}
+
+static inline void hex2dec_int(char *str, int *result) {
+	int n = strlen(str)-1;
+	*result = 0;
+	for (int i = n; i >= 2; i--) {
+		if (isdigit(str[i])) {
+			*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
+		}
+		else {
+			*result += ((str[i] - '0' - 7) * (i<n?16:1<<(n - i)));
+		}
+	}
+}
+
+static inline void hex2dec_double(char *str, double *result) {
+	int n = 0;
+	*result = 0;
+	int exp;
+	for(; str[n] != '.' && str[n] != 'p' && str[n] != 'P'; n++);
+	if (str[n] == 'p' || str[n] == 'P') {
+		for (int i = n = n-1; i >= 2; i--) {
+			if (isdigit(str[i])) {
+				*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
+			}
+			else {
+				*result += ((str[i] - '0' - 7) * (i<n?16:1<<(n - i)));
+			}
+		}
+		sscanf(&str[n+2], "%i", &exp);
+		*result *= pow(16, exp);
+	}
+	else {
+		for (int i = n = n-1; i >= 2; i--) {
+			if (isdigit(str[i])) {
+				*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
+			}
+			else {
+				*result += ((str[i] - '0' - 7) * (i<n?16:1<<(n - i)));
+			}
+		}
+		for(n += 2;str[n] != 'p'; n++);
+		for (int i = n = n-1; i >= 2; i--) {
+			if (isdigit(str[i])) {
+				*result += ((str[i] - '0') / (16 << (n - i)));
+			}
+			else {
+				*result += ((str[i] - '0' - 7) / (16 << (n - i)));
+			}
+		}
+		sscanf(&str[n+2], "%i", &exp);
+		*result *= pow(16, exp);
+	}
 }
 
 void *str2num(char *str, int type, int *valide) {
@@ -295,7 +552,7 @@ void *str2num(char *str, int type, int *valide) {
 	void *result = NULL;
 	*valide = 0;
 	if (type == TYPE_INT) {
-		result = malloc(sizeof(int));
+		result = mem_alloc(sizeof(int));
 		if (result == NULL) {
 			*valide = 1;
 			return NULL;
@@ -308,7 +565,7 @@ void *str2num(char *str, int type, int *valide) {
 		return result;
 	}
 	else if (type == TYPE_DOUBLE) {
-		result = malloc(sizeof(double));
+		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
 			*valide = 1;
 			return NULL;
@@ -320,12 +577,48 @@ void *str2num(char *str, int type, int *valide) {
 		}
 		return result;
 	}
+	else if (type == TYPE_INT_BIN) {
+		result = mem_alloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		bin2dec(str, (int *) result);
+		return result;
+	}
+	else if (type == TYPE_INT_HEX) {
+		result = mem_alloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		hex2dec_int(str, (int *) result);
+		return result;
+	}
+	else if (type == TYPE_INT_OCTAL) {
+		result = mem_alloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		octal2dec(str, (int *) result);
+		return result;
+	}
+	else if (type == TYPE_DOUBLE_HEX) {
+		result = mem_alloc(sizeof(double));
+		if (result == NULL) {
+			*valide = 1;
+			return NULL;
+		}
+		hex2dec_double(str, (double *)result);
+		return result;
+	}
 	*valide = 3;
 	return NULL;
 }
 
 token get_token() {
-	static unsigned size = 0; // size of SCANNER_WORD
+	static int size = 0; // size of SCANNER_WORD
 	token new_token; // return value
 	if (size == 0) { // if SCANNER_WORD is not allocated - allocate
 		SCANNER_WORD = (char *) malloc(S_SIZE);
@@ -338,7 +631,7 @@ token get_token() {
 		size = S_SIZE; // setting size into default value
 	}
 	int c = 0; // for storing chars from stream
-	unsigned i = 0; // for indexing SCANNER_WORD
+	int i = 0; // for indexing SCANNER_WORD
 	int token_found = 0; // variable that sais if we found token or not
 	int spec = 0; // storing special characters like == or <=...
 	int skip = 0; // variable that sais if we should skip calling function that determinate special chars
@@ -403,6 +696,13 @@ token get_token() {
 						new_token.ptr = NULL;
 						return new_token;
 					}
+					if (size == -2) {
+						fprintf(stderr, "ERROR: line: %u: Invalid use of escape sekvence\n", LINE_NUM);
+						new_token.id = 0;
+						new_token.ptr = NULL;
+						return new_token;
+					}
+
 					fprintf(stderr, "ERROR: line: %u: expected \" at the end of string\n", LINE_NUM);
 					new_token.id = 0;
 					new_token.ptr = NULL;
@@ -414,15 +714,11 @@ token get_token() {
 			}
 		}
 
-		if ( i && is_num_literal(SCANNER_WORD, i-2) && (SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'E') && (c == '-' || c == '+')) {
-			if (isdigit(fgetc(f))) {
+		if (i > 1 && (c == '-' || c == '+')) {
+			if (SCANNER_WORD[i-1] == 'E' || SCANNER_WORD[i-1] == 'e' || SCANNER_WORD[i-1] == 'P' || SCANNER_WORD[i-1] == 'p') {
+				if (isdigit(SCANNER_WORD[0])) {
 					skip = 1;
-			}
-			if (fseek(f, -1, SEEK_CUR) != 0) {
-				fprintf(stderr, "Can't set offset in file!\n");
-				new_token.id = -1;
-				new_token.ptr = NULL;
-				return new_token;
+				}
 			}
 		}
 		/* Now we are not in comment nor in sequence of white chars so lets
@@ -456,7 +752,7 @@ token get_token() {
 			tmp = (char *) realloc(SCANNER_WORD, size);
 			if (tmp == NULL) {
 				fprintf(stderr, "Memory reallocation failed\n");
-				free(SCANNER_WORD);
+				//free(SCANNER_WORD);
 				SCANNER_WORD = NULL;
 				new_token.id = -1;
 				new_token.ptr = NULL;
@@ -478,7 +774,7 @@ token get_token() {
 		size *= 2; // preteceni???
 		tmp = (char *) realloc(SCANNER_WORD, size);
 		if (tmp == NULL) {
-			free(SCANNER_WORD);
+			//free(SCANNER_WORD);
 			SCANNER_WORD = NULL;
 			fprintf(stderr, "Memory reallocation failed\n");
 			new_token.id = -1;
@@ -508,11 +804,19 @@ token get_token() {
 				fprintf(stderr, "Memory allocation failed\n");
 				new_token.id = -1;
 				new_token.ptr = NULL;
+				return new_token;
 			}
-			else if (valide) {
+			else if (valide == 2 || valide == 3) {
 				fprintf(stderr, "in file: %s:%u Invalid use of function\n", __FILE__, __LINE__);
 				new_token.id = -1;
 				new_token.ptr = NULL;
+				return new_token;
+			}
+			if (id == TYPE_INT_HEX || id == TYPE_INT_OCTAL || id == TYPE_INT_BIN || id == TYPE_INT) {
+				id = TYPE_INT;
+			}
+			else {
+				id = TYPE_DOUBLE;
 			}
 			new_token.id = id;
 			new_token.ptr = number;

@@ -4,17 +4,16 @@
 # Date: TODO
 # Module: IFJ-MAKEFILE
 # Make version: GNU Make 4.1
-CFLAGS = -std=c99 -pedantic -Wall -Wextra -lm -g
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -g
 default: IFJ16
 
 IFJ16: main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o
-	gcc $(CFLAGS) -o IFJ16 $^
-	cp IFJ16 testing/
+	gcc $(CFLAGS) -o IFJ16 $^ -lm
 
 %.o: %.c %.h
-	gcc $(CFLAGS) -c $< -o $@
+	gcc $(CFLAGS) -c $< -lm -o $@
 
-.PHONY: clean odevzdani
+.PHONY: clean odevzdani test
 clean:
 	rm *.o IFJ16
 
@@ -25,3 +24,5 @@ odevzdani:
 	./odevzdani/is_it_ok.sh ./odevzdani/xmisov00.zip ./odevzdani/test
 #	make -C ./odevzdani/test
 	rm ./odevzdani/test/*
+test:
+	cd tests; ./run_test.sh

@@ -19,11 +19,11 @@ int length(char * string)
     return len;
 }
 
-char * substring(char * s, int i, int n, mem_list_t *L)
+char * substring(char * s, int i, int n)
 {
     char * string=NULL;
 
-    string = (char *) mem_alloc(sizeof(char)*(n+1), L);
+    string = (char *) mem_alloc(sizeof(char)*(n+1));
     if (string==NULL)
     {
         error_msg(99, "ERROR: Memory could not be allocated. (func. substring)\n");	// code 99 -> internal error
@@ -48,11 +48,11 @@ char * substring(char * s, int i, int n, mem_list_t *L)
 
 
 
-char * shellsort(char * str, mem_list_t *L)
+char * shellsort(char * str)
 {
     int num = strlen(str);
     char * arr=NULL;
-    arr=(char *)mem_alloc( sizeof(char)*(num+1), L);
+    arr=(char *)mem_alloc( sizeof(char)*(num+1));
     if (arr==NULL)
     {
         fprintf(stderr, "ERROR: not enough memory!\n");
@@ -320,7 +320,7 @@ unsigned hash_function(const char *str, unsigned htab_size)
 
 htab_t * htab_init(unsigned size)
 {
-	htab_t * htab = (htab_t *) malloc(sizeof(htab_t));
+	htab_t * htab = (htab_t *) mem_alloc(sizeof(htab_t));
 	if (htab == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. htab_init)");
@@ -330,7 +330,7 @@ htab_t * htab_init(unsigned size)
 	htab->htab_size = size;
 	htab->hash_fun_ptr = &hash_function;
 	htab->number_items = 0;
-	htab->ptr = (htab_item**) malloc(size * sizeof(htab_item*));
+	htab->ptr = (htab_item**) mem_alloc(size * sizeof(htab_item*));
 	for (unsigned i = 0; i < size; i++)
 		htab->ptr[i] = NULL;
 	return htab;
@@ -339,7 +339,7 @@ htab_t * htab_init(unsigned size)
 htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsigned htab_size))
 {
 	htab_t * htab;
-	if ((htab = (htab_t *) malloc(sizeof(htab_t) + size * sizeof(htab_item*))) == NULL)
+	if ((htab = (htab_t *) mem_alloc(sizeof(htab_t) + size * sizeof(htab_item*))) == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. htab_init2)");
 		return NULL;
@@ -347,17 +347,44 @@ htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsign
 	htab->htab_size = size;
 	htab->hash_fun_ptr = hash_fun;
 	htab->number_items = 0;
-	htab->ptr = (htab_item**) malloc(size * sizeof(htab_item*));
+	htab->ptr = (htab_item**) mem_alloc(size * sizeof(htab_item*));
 	for (unsigned i = 0; i < size; i++)
 		htab->ptr[i] = NULL;
 	return htab;
 }
 
-
+htab_t * htab_copy(htab_t * table)
+{
+	htab_t *result = htab_init(table->htab_size);
+    htab_item *tmp;
+    htab_item *item;
+    for (unsigned i = 0; i < table->htab_size; i++) {
+        tmp = table->ptr[i];
+        while (tmp != NULL) {
+            if ((item = htab_insert_item(result, tmp->key)) == NULL) {
+                return NULL;
+            }
+            item->data_type = tmp->data_type;
+            item->func_or_var = 1;
+            item->data = NULL;
+            item->initialized = 0;
+            item->number_of_arguments = 0;
+            item->local_table = NULL;
+            item->instruction_tape = NULL;
+            item->next_item = NULL;
+            tmp = tmp->next_item;
+        }
+    }
+    return result;
+}
 
 void htab_clear_items(htab_t * T)
 {
-	htab_item * item; // item that we will free
+    T = T;
+    T = T;
+	return; // garbage collector
+
+/*	htab_item * item; // item that we will free
 	for (unsigned i = 0; i < T->htab_size; i++)
 	{
 		while (T->ptr[i] != NULL)
@@ -370,17 +397,23 @@ void htab_clear_items(htab_t * T)
 			item = NULL;
 		}
 	}
+*/
 }
 
 void htab_free_all(htab_t * T)
 {
-	if (T != NULL)
+    T = T;
+	T = NULL;
+	return; // garbage collector
+
+/*	if (T != NULL)
 	{
 		htab_clear_items(T);
 		free(T->ptr);
 		free(T);
 		T = NULL;
 	}
+*/
 }
 
 
@@ -401,7 +434,7 @@ htab_item * htab_find_item(htab_t * T, const char * key) // NULL if not there
 
 htab_item * malloc_item(const char * key)
 {
-	htab_item * item = (htab_item *) malloc(sizeof(htab_item));
+	htab_item * item = (htab_item *) mem_alloc(sizeof(htab_item));
 	if (item == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. htab_insert_item)");
@@ -409,20 +442,24 @@ htab_item * malloc_item(const char * key)
 	}
 
 	unsigned key_len = strlen(key) + 1;
-	item->key = (char *) malloc(key_len);
+	item->key = (char *) mem_alloc(key_len);
 	if (item->key == NULL)
 	{
 		fprintf(stderr, "Memory could not be allocated! (func. htab_insert_item)");
-		free(item);
+		//free(item); //garbage collector
 		return NULL;
 	}
-
 	strncpy(item->key, key, key_len);
+
 	item->data_type = 0;
 	item->func_or_var = 0;
 	item->data = NULL;
-	item->number_of_arguments = 0;
 	item->initialized = 0;
+
+	item->number_of_arguments = 0;
+	item->local_table = NULL;
+	item->instruction_tape = NULL;
+
 	item->next_item = NULL;
 
 	return item;
@@ -445,5 +482,6 @@ htab_item * htab_insert_item(htab_t * T, const char * key)
 
 	// jsme na poslednim prvku
 	item->next_item = malloc_item(key);
+	T->number_items++;
 	return item->next_item; // could be NULL
 }

@@ -47,8 +47,7 @@ extern char* SCANNER_WORD;
 
 int main (int argc, char **argv) {
 	int return_value = 0;
-	mem_list_t l;
-	mem_list_t_init(&l);
+	mem_list_t_init();
 	if (argc != 2) {
 		fprintf(stderr, "Invalid arguments\n");
 		return 99;
@@ -142,7 +141,7 @@ int main (int argc, char **argv) {
 #ifdef TEST_SCANNER
 token *t;
 do {
-	t = (token *) mem_alloc(sizeof(token), &l);
+	t = (token *) mem_alloc(sizeof(token));
 	*t = get_token();
 		if (t->ptr) {
 			printf("+-------------------\n");
@@ -206,7 +205,7 @@ do {
 		}
 	} while (t->id > 0 && t->id != S_EOF);
 #endif
-	free_memory(&l);
+	free_memory();
 	free(SCANNER_WORD);
 	fclose(f);
 	return return_value;

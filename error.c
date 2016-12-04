@@ -24,8 +24,8 @@ void error_msg(int err_number, const char *fmt, ...)
     fprintf(stream, "\n");
     va_end(args);
 
-    if (err_number != 0)
-        exit(err_number);
+/*    if (err_number != 0)
+        exit(err_number);*/
 }
 
 

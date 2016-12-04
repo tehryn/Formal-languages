@@ -12,9 +12,9 @@
 
 int length(char * string);
 
-char * substring(char * s, int i, int n, mem_list_t *L);
+char * substring(char * s, int i, int n);
 
-char * shellsort(char * str, mem_list_t *L);
+char * shellsort(char * str);
 
 int find( char *s,  char *search);
 
@@ -29,15 +29,32 @@ typedef struct t_stack_int
 	int *data; // array
 } stack_int_t;
 
+int stack_int_create ( struct t_stack_int * stack, int n );
+void stack_int_destroy( struct t_stack_int * stack );
+int stack_int_push(struct t_stack_int* stack, int num, ...);
+int stack_int_pop(struct t_stack_int* stack);
+int stack_int_top(struct t_stack_int* stack, int* var);
+int stack_int_clean(struct t_stack_int* stack, int n);
+int stack_int_is_empty( struct t_stack_int * stack );
+int stack_int_is_full( struct t_stack_int * stack );
+
+
 typedef struct htab_item {
+
 	char* key; 				// string ID
 	unsigned data_type; 	// 0 - not defined, data type for variable or returns type of function
 	unsigned func_or_var; 	// 0 - not defined, 1 - variable, 2 - function
 	void* data; 			// pointer to the place with data, for function it is int* (int array of data_types of parametres)
+	unsigned initialized; 		// 0 - not initialized, 1 - initialized
+
 	unsigned number_of_arguments; // for function
-	unsigned initialized; 	// 0 - not initialized, 1 - initialized
+	void * local_table;		// htab_t* // TODO - zde bude predvyplnena lokalni tabulka s noninitialized variable
+	void * instruction_tape;	// for function
+
 	struct htab_item* next_item; // next variable
+
 } htab_item;
+
 
 typedef struct htab_t {
 	unsigned (*hash_fun_ptr) (const char * str, unsigned htab_size); // pointer to hash function, &hash_function by default
@@ -46,24 +63,10 @@ typedef struct htab_t {
 	htab_item **ptr; // lines
 } htab_t;
 
-int stack_int_create ( struct t_stack_int * stack, int n );
-
-void stack_int_destroy( struct t_stack_int * stack );
-
-int stack_int_push(struct t_stack_int* stack, int num, ...);
-
-int stack_int_pop(struct t_stack_int* stack);
-
-int stack_int_top(struct t_stack_int* stack, int* var);
-
-int stack_int_clean(struct t_stack_int* stack, int n);
-
-int stack_int_is_empty( struct t_stack_int * stack );
-
-int stack_int_is_full( struct t_stack_int * stack );
-
 htab_t * htab_init(unsigned size);
 htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsigned htab_size));
+
+htab_t * htab_copy(htab_t * T);
 
 void htab_clear_items(htab_t * T);
 void htab_free_all(htab_t * T);
