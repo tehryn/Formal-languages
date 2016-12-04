@@ -992,6 +992,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 							else
 							{
+								t.id = S_FULL_IDENT;
+								(char*) t.ptr = local_func_var_name;
+								
 								if (TableItem->func_or_var == 2)
 								{
 									if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)

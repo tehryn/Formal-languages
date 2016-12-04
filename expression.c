@@ -27,20 +27,15 @@
 												return (error_code); } while(0)
 
 													
-#define STRDUP(l, s) do {	char *tmp = (char *)malloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );					\
+#define STRDUP(l, s) do {	if (ma2_top>=512)																			\
+								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
+							char *tmp = (char *)malloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );					\
 							if (tmp == NULL)																			\
 								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
 							else																						\
 							{																							\
 								strcpy(tmp, (char *)(s));																\
-								if (ma2_top<512)																		\
-									ma2[ma2_top++] = tmp;																\
-								else																					\
-								{																						\
-									free(tmp);																			\
-									tmp = NULL;																			\
-									FATAL_ERROR("EXPRESSION: Memory could not be allocated. 12\n", ERR_INTERN_FAULT);	\
-								}																						\
+								ma2[ma2_top++] = tmp;																	\
 								(l) = tmp;																				\
 							} 																							\
 						} while(0)
