@@ -1,8 +1,8 @@
 class Main {
-    static void run() {
-        int c;
+    static void run () {
+        return;
     }
-    static int a() {
-        int b;
+    static int foo.pes() {
+        return 0;
     }
 }

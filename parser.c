@@ -115,7 +115,15 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 	// runtime = 2
-	parser_return = analysis(&s, 2, stack_of_table_symbols);
+	Instr_List * Instruction = NULL;
+	Instruction = mem_alloc(sizeof(Instr_List));
+	if (Instruction == NULL)
+	{
+		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
+		return ERR_INTERN_FAULT;
+	}
+	
+	parser_return = analysis(&s, 2, stack_of_table_symbols, Instruction);
 
 	//array_string_destroy(&all_class_names);
 	//stack_htab_destroy(& stack_of_table_symbols);
@@ -124,7 +132,7 @@ int parser()
 	return parser_return;
 }
 
-int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols)
+int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols, Instr_List * InstructionTape)
 {
 	token t;
 	t.ptr = NULL;
@@ -151,6 +159,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 	unsigned func_or_var = 0;
 	
 	int error_6_flag = 1;
+	
+	I_Instr * Instruction = NULL;
 
 	while (!stack_int_top(s, &on_top)) // stack_int_top == -1 if stack is empty
 	{
@@ -587,7 +597,21 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->func_or_var = 1; // variable and it will be initialized
 					}
-
+					else if (runtime == 2)
+					{
+						Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+						if (Instruction == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						Instruction->type_instr = I_ASSIGMENT;
+						
+						token t_tmp;
+						
+						
+						Instruction->adr1 = &token;
+					}
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");

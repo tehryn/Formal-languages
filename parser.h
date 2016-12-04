@@ -44,7 +44,7 @@ enum {
 // it eats tokens and says if syntax analysis success or not
 int parser();
 
-int analysis(stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols);
+int analysis(stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols, Instr_List * InstructionTape);
 
 int skip_expr(token * t);
 
