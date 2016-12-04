@@ -28,7 +28,7 @@ typedef struct mem_item_t {
 	/** Pointer to allocated memory */
 	void *ptr;
 	/** Pointer to nex item */
-	struct mem_item_t *next;
+	mem_item_t *next;
 } mem_item_t;
 
 /*! Global list of items that holds allocated memory */
