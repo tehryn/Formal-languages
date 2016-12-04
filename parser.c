@@ -756,7 +756,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						number_allocated_arguments += 4;
 						TableItem->data = NULL; // it will be filled now for the first time
-						TableItem->data = (int*) mem_realloc(TableItem->data, number_allocated_arguments * sizeof(int)); // next 4 potentional arguments
+						TableItem->data = (int*) mem_alloc(number_allocated_arguments * sizeof(int)); // next 4 potentional arguments
 						if (TableItem->data == NULL)
 						{
 							fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
