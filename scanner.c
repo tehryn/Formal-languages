@@ -586,7 +586,6 @@ void *str2num(char *str, int type, int *valide) {
 			return NULL;
 		}
 		if (sscanf(str, "%i", (int *)result) == EOF) {
-			free(result);
 			*valide = 2;
 			return NULL;
 		}
@@ -599,7 +598,6 @@ void *str2num(char *str, int type, int *valide) {
 			return NULL;
 		}
 		if (sscanf(str, "%lf", (double *)result) == EOF) {
-			free(result);
 			*valide = 2;
 			return NULL;
 		}

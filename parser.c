@@ -86,8 +86,18 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 
+	Instr_List * InstructionTape = NULL;
+	InstructionTape = mem_alloc(sizeof(Instr_List));
+	if (InstructionTape == NULL)
+	{
+		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
+		return ERR_INTERN_FAULT;
+	}
+	InstructionTape->Active=NULL;
+	InstructionTape->Last=NULL;
+
 	// runtime = 1
-	parser_return = analysis(&s, 1, stack_of_table_symbols);
+	parser_return = analysis(&s, 1, stack_of_table_symbols, InstructionTape);
 	if (parser_return != 0)
 	{
 		//array_string_destroy(&all_class_names);
@@ -116,15 +126,65 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 	// runtime = 2
-	Instr_List * Instruction = NULL;
-	Instruction = mem_alloc(sizeof(Instr_List));
+	
+	parser_return = analysis(&s, 2, stack_of_table_symbols, InstructionTape);
+
+	if (parser_return != 0)
+	{
+		stack_int_destroy(&s);
+		return parser_return;
+	}
+
+	// call Main.run
+	
+	I_Instr * Instruction = NULL;
+	Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
 	if (Instruction == NULL)
 	{
-		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
+		fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
 		return ERR_INTERN_FAULT;
 	}
+	Instruction->type_instr = I_FCE;
+
+	Instruction->adr1 = NULL;
+	Instruction->adr2 = NULL;
+	Instruction->adr3 = NULL;
+	Instruction->next_instr = NULL;
+
+	token * t_tmp = (token*) mem_alloc(sizeof(token));
+	if (t_tmp == NULL)
+	{
+		fprintf(stderr, "Intern fault. token cannot be allocated.\n");
+		return ERR_INTERN_FAULT;
+	}
+	t_tmp->ptr = (void*) mem_alloc(strlen("Main.run")+1);
+	if (t_tmp->ptr == NULL)
+	{
+		fprintf(stderr, "Intern fault. Token cannot be allocated.\n");
+		return ERR_INTERN_FAULT;
+	}
+	strcpy((char*)t_tmp, "Main.run");
 	
-	parser_return = analysis(&s, 2, stack_of_table_symbols, Instruction);
+	Instruction->adr1 = t_tmp;
+
+	htab_item * TableItem = htab_find_item(global_table_symbols, "Main.run");
+	Instruction->adr2 = TableItem->instruction_tape;
+	
+	
+	if (Add_Instr(InstructionTape, Instruction) != 0)
+	{
+		fprintf(stderr, "Intern fault. Instruction cannot be pushed into instruction tape.\n");
+		return ERR_INTERN_FAULT;
+	}
+
+	// call interpret
+	int interpret_return = inter(InstructionTape, &stack_of_table_symbols);
+	if (interpret_return != 0)
+	{
+		stack_int_destroy(&s);
+		return interpret_return;
+	}
+	
 
 	//array_string_destroy(&all_class_names);
 	//stack_htab_destroy(& stack_of_table_symbols);
@@ -522,6 +582,35 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 								TableItem->local_table = (void *) LocalTableSymbols; // put local table of symbols to function where it belongs
 							}
+							else if (func_or_var == 1)
+							{
+
+								Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+								if (Instruction == NULL)
+								{
+									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+									return ERR_INTERN_FAULT;
+								}
+								Instruction->type_instr = I_ASSIGMENT;
+								
+								token * t_tmp = (token*) mem_alloc(sizeof(token));
+								if (t_tmp == NULL)
+								{
+									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+									return ERR_INTERN_FAULT;
+								}
+								t_tmp->ptr = (void*) mem_alloc(strlen(static_func_var_name)+1);
+								if (t_tmp->ptr == NULL)
+								{
+									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+									return ERR_INTERN_FAULT;
+								}
+								strcpy((char*)t_tmp->ptr, static_func_var_name);
+								Instruction->adr1 = t_tmp;
+								Instruction->adr2 = NULL;
+								Instruction->adr3 = NULL;
+								Instruction->next_instr = NULL;
+							}
 						}
 
 						token_got = false;
@@ -586,6 +675,8 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_SEM_NDEF_REDEF;
 						}
 					}
+					else if (runtime == 2)
+						Instruction = NULL;
 
 					break; // goto P_CLASS_BODY
 				}
@@ -598,21 +689,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->func_or_var = 1; // variable and it will be initialized
 					}
-					else if (runtime == 2)
-					{
-						Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
-						if (Instruction == NULL)
-						{
-							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
-							return ERR_INTERN_FAULT;
-						}
-						Instruction->type_instr = I_ASSIGMENT;
-						
-						token t_tmp;
-						
-						
-						Instruction->adr1 = &token;
-					}
+					
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -904,6 +981,37 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					type = S_BOOLEAN;
 				else if (t.id == S_RIGHT_BRACE) // no other stuffs in function and everything in this if will be freed by garbage collector
 				{
+					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+					if (Instruction == NULL)
+					{
+						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+						return ERR_INTERN_FAULT;
+					}
+					Instruction->type_instr = I_END;
+					Instruction->adr1 = NULL;
+					Instruction->adr2 = NULL;
+					Instruction->adr3 = NULL;
+					Instruction->next_instr = NULL;
+
+					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+					if (TableItem == NULL)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+						return ERR_INTERN_FAULT;
+					}
+					I_Instr * tmp_ptr = TableItem->instruction_tape;
+					if (tmp_ptr == NULL)
+					{
+						TableItem->instruction_tape = Instruction;
+					}
+					else 
+					{
+						while(tmp_ptr->next_instr != NULL)
+					 		tmp_ptr = tmp_ptr->next_instr;
+						tmp_ptr->next_instr = Instruction;
+					}
+					Instruction = NULL;
+
 					LocalTableSymbols = NULL;
 					static_func_var_name = NULL;
 					error_6_flag = 1;
@@ -952,6 +1060,33 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 						TableItem->data_type = type;
 						TableItem->func_or_var = 1;
+
+
+						Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+						if (Instruction == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						Instruction->type_instr = I_ASSIGMENT;
+						
+						token * t_tmp = (token*) mem_alloc(sizeof(token));
+						if (t_tmp == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						t_tmp->ptr = (void*) mem_alloc(strlen((char *) t.ptr)+1);
+						if (t_tmp->ptr == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						strcpy((char*)t_tmp, (char *) t.ptr);
+						Instruction->adr1 = t_tmp;
+						Instruction->adr2 = NULL;
+						Instruction->adr3 = NULL;
+						Instruction->next_instr = NULL;
 					}
 
 					token_got = false;
@@ -995,10 +1130,36 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					if (runtime == 2)
 					{
+						token_got = false;
 						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
 						if(TableItem!=NULL) // local variable
 						{
-							token_got = false;
+							Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+							if (Instruction == NULL)
+							{
+								fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+								return ERR_INTERN_FAULT;
+							}
+							Instruction->type_instr = I_ASSIGMENT;
+							
+							token * t_tmp = (token*) mem_alloc(sizeof(token));
+							if (t_tmp == NULL)
+							{
+								fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+								return ERR_INTERN_FAULT;
+							}
+							t_tmp->ptr = (void*) mem_alloc(strlen((char *) t.ptr)+1);
+							if (t_tmp->ptr == NULL)
+							{
+								fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+								return ERR_INTERN_FAULT;
+							}
+							strcpy((char*)t_tmp, (char *) t.ptr);
+							Instruction->adr1 = t_tmp;
+							Instruction->adr2 = NULL;
+							Instruction->adr3 = NULL;
+							Instruction->next_instr = NULL;
+
 							if (stack_int_push(s, 1, P_GUIDANCE) < 0)
 							{
 								fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1024,9 +1185,22 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							{
 								t.id = S_FULL_IDENT;
 								t.ptr = (void*) local_func_var_name;
-								
+
 								if (TableItem->func_or_var == 2)
 								{
+									Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+									if (Instruction == NULL)
+									{
+										fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+										return ERR_INTERN_FAULT;
+									}
+									Instruction->type_instr = I_FCE;
+
+									Instruction->adr1 = NULL;
+									Instruction->adr2 = NULL;
+									Instruction->adr3 = NULL;
+									Instruction->next_instr = NULL;
+
 									if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 									{
 										fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1036,6 +1210,32 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 								}
 								else
 								{
+									Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+									if (Instruction == NULL)
+									{
+										fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+										return ERR_INTERN_FAULT;
+									}
+									Instruction->type_instr = I_ASSIGMENT;
+									
+									token * t_tmp = (token*) mem_alloc(sizeof(token));
+									if (t_tmp == NULL)
+									{
+										fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+										return ERR_INTERN_FAULT;
+									}
+									t_tmp->ptr = (void*) mem_alloc(strlen((char *) t.ptr)+1);
+									if (t_tmp->ptr == NULL)
+									{
+										fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+										return ERR_INTERN_FAULT;
+									}
+									strcpy((char*)t_tmp, (char *) t.ptr);
+									Instruction->adr1 = t_tmp;
+									Instruction->adr2 = NULL;
+									Instruction->adr3 = NULL;
+									Instruction->next_instr = NULL;
+
 									token_got = false;
 									if (stack_int_push(s, 1, P_GUIDANCE) < 0)
 									{
@@ -1073,6 +1273,19 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						{
 							if (TableItem->func_or_var == 2)
 							{
+								Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+								if (Instruction == NULL)
+								{
+									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+									return ERR_INTERN_FAULT;
+								}
+								Instruction->type_instr = I_FCE;
+
+								Instruction->adr1 = NULL;
+								Instruction->adr2 = NULL;
+								Instruction->adr3 = NULL;
+								Instruction->next_instr = NULL;
+
 								if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 								{
 									fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1082,6 +1295,32 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 							else
 							{
+								Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+								if (Instruction == NULL)
+								{
+									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+									return ERR_INTERN_FAULT;
+								}
+								Instruction->type_instr = I_ASSIGMENT;
+								
+								token * t_tmp = (token*) mem_alloc(sizeof(token));
+								if (t_tmp == NULL)
+								{
+									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+									return ERR_INTERN_FAULT;
+								}
+								t_tmp->ptr = (void*) mem_alloc(strlen((char *) t.ptr)+1);
+								if (t_tmp->ptr == NULL)
+								{
+									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+									return ERR_INTERN_FAULT;
+								}
+								strcpy((char*)t_tmp, (char *) t.ptr);
+								Instruction->adr1 = t_tmp;
+								Instruction->adr2 = NULL;
+								Instruction->adr3 = NULL;
+								Instruction->next_instr = NULL;
+
 								token_got = false;
 								if (stack_int_push(s, 1, P_GUIDANCE) < 0)
 								{
@@ -1104,6 +1343,18 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							fprintf(stderr, "PARSER: Unexpected situation happend. We cannot find find function in which we are.\n");
 							return ERR_INTERN_FAULT;
 						}
+
+						Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+						if (Instruction == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						Instruction->type_instr = I_RETURN;
+						Instruction->adr1 = NULL;
+						Instruction->adr2 = NULL;
+						Instruction->adr3 = NULL;
+						Instruction->next_instr = NULL;
 					}
 					token_got = false;
 					if (stack_int_push(s, 1, P_RETURN_EXPR) < 0)
@@ -1117,6 +1368,19 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				if(t.id == S_IF)
 				{
 					token_got = false;
+
+					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+					if (Instruction == NULL)
+					{
+						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+						return ERR_INTERN_FAULT;
+					}
+					Instruction->type_instr = I_IF;
+					Instruction->adr1 = NULL;
+					Instruction->adr2 = NULL;
+					Instruction->adr3 = NULL;
+					Instruction->next_instr = NULL;
+
 					if (stack_int_push(s, 5, P_ELSE_EXISTANCE, P_IF_ELSE_SECTION, S_RIGHT_PARE, P_EXPR, S_LEFT_PARE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1130,6 +1394,19 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				if(t.id == S_WHILE)
 				{
 					token_got = false;
+
+					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+					if (Instruction == NULL)
+					{
+						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+						return ERR_INTERN_FAULT;
+					}
+					Instruction->type_instr = I_WHILE;
+					Instruction->adr1 = NULL;
+					Instruction->adr2 = NULL;
+					Instruction->adr3 = NULL;
+					Instruction->next_instr = NULL;
+
 					if (stack_int_push(s, 4, P_IF_ELSE_SECTION, S_RIGHT_PARE, P_EXPR, S_LEFT_PARE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1166,6 +1443,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SEMICOMMA) // ';'
 				{
+					Instruction = NULL; // no assigment
 					token_got = false;
 					break; // just stack_int_pop(s);
 				}
@@ -1210,6 +1488,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (t.id == S_SEMICOMMA) // ';' - in runtime 2 nothing hapened with variable
 				{
+					Instruction = NULL; // no assigment
 					token_got = false;
 					break; // just stack_int_pop(s);
 				}
@@ -1264,6 +1543,26 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						fprintf(stderr, "PARSER:  On line %u expected semicomma after return in void function.\n", LINE_NUM);
 						return ERR_SEM_COMPATIBILITY;
 					}
+
+					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+					if (TableItem == NULL)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+						return ERR_INTERN_FAULT;
+					}
+					I_Instr * tmp_ptr = TableItem->instruction_tape;
+					if (tmp_ptr == NULL)
+					{
+						TableItem->instruction_tape = Instruction;
+					}
+					else 
+					{
+						while(tmp_ptr->next_instr != NULL)
+					 		tmp_ptr = tmp_ptr->next_instr;
+						tmp_ptr->next_instr = Instruction;
+					}
+					Instruction = NULL;
+
 					token_got = false;
 					break;
 				}
@@ -1285,6 +1584,38 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				if(t.id == S_ELSE)
 				{
 					token_got = false;
+					
+					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+					if (Instruction == NULL)
+					{
+						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+						return ERR_INTERN_FAULT;
+					}
+					Instruction->type_instr = I_ELSE;
+					Instruction->adr1 = NULL;
+					Instruction->adr2 = NULL;
+					Instruction->adr3 = NULL;
+					Instruction->next_instr = NULL;
+
+					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+					if (TableItem == NULL)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+						return ERR_INTERN_FAULT;
+					}
+					I_Instr * tmp_ptr = TableItem->instruction_tape;
+					if (tmp_ptr == NULL)
+					{
+						TableItem->instruction_tape = Instruction;
+					}
+					else 
+					{
+						while(tmp_ptr->next_instr != NULL)
+					 		tmp_ptr = tmp_ptr->next_instr;
+						tmp_ptr->next_instr = Instruction;
+					}
+					Instruction = NULL;
+
 					if (stack_int_push(s, 1, P_IF_ELSE_SECTION) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1316,7 +1647,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				if (t.id == S_LEFT_BRACE) // '{'
 				{
 					token_got = false;
-					if (stack_int_push(s, 2, S_RIGHT_BRACE, P_FUNC_BODY_H1) < 0)
+					if (stack_int_push(s, 3, P_I_END, S_RIGHT_BRACE, P_FUNC_BODY_H1) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
@@ -1324,12 +1655,50 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					break; // goto P_FUNC_BODY_H1
 				}
 
-				if (stack_int_push(s, 1, P_FUNC_BODY) < 0)
+				if (stack_int_push(s, 2, P_I_END, P_FUNC_BODY) < 0)
 				{
 					fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 					return ERR_INTERN_FAULT;
 				}
 				break; // goto case P_FUNC_BODY
+
+			// ======================== P_I_END ======================
+			case P_I_END:
+				stack_int_pop(s);
+				if (runtime == 2)
+				{
+					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+					if (Instruction == NULL)
+					{
+						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+						return ERR_INTERN_FAULT;
+					}
+					Instruction->type_instr = I_END;
+					Instruction->adr1 = NULL;
+					Instruction->adr2 = NULL;
+					Instruction->adr3 = NULL;
+					Instruction->next_instr = NULL;
+
+					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+					if (TableItem == NULL)
+					{
+						fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+						return ERR_INTERN_FAULT;
+					}
+					I_Instr * tmp_ptr = TableItem->instruction_tape;
+					if (tmp_ptr == NULL)
+					{
+						TableItem->instruction_tape = Instruction;
+					}
+					else 
+					{
+						while(tmp_ptr->next_instr != NULL)
+					 		tmp_ptr = tmp_ptr->next_instr;
+						tmp_ptr->next_instr = Instruction;
+					}
+					Instruction = NULL;
+				}
+				break;
 
 			// ======================== P_FUNC_BODY_H1 ======================
 
@@ -1395,7 +1764,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					expr_return = expr_analyze(t, &t, class_name, error_6_flag, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
 					if (expr_return != 0)
 						return expr_return;
-					//free(postfix_token_array); // TODO posilat interpretu
+					
 
 					if (expected_expr_data_type != expr_data_type)
 					{
@@ -1407,8 +1776,93 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 					}
 
-					if (TableItem != NULL)
+					if (Instruction->type_instr == I_ASSIGMENT) // assigment of variable
+					{
 						TableItem->initialized = 1;
+
+						Instruction->adr2 = postfix_token_array;
+						
+						if (error_6_flag == 1) // we are out of function
+							Add_Instr(InstructionTape, Instruction);
+						else
+						{
+							TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+							if (TableItem == NULL)
+							{
+								fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+								return ERR_INTERN_FAULT;
+							}
+							I_Instr * tmp_ptr = TableItem->instruction_tape;
+							if (tmp_ptr == NULL)
+							{
+								TableItem->instruction_tape = Instruction;
+							}
+							else 
+							{
+								while(tmp_ptr->next_instr != NULL)
+							 		tmp_ptr = tmp_ptr->next_instr;
+								tmp_ptr->next_instr = Instruction;
+							}
+						}
+						Instruction = NULL;
+					}
+					else if (Instruction->type_instr == I_IF || Instruction->type_instr == I_RETURN || Instruction->type_instr == I_WHILE)
+					{
+						Instruction->adr1 = postfix_token_array;
+
+						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+						if (TableItem == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+							return ERR_INTERN_FAULT;
+						}
+						I_Instr * tmp_ptr = TableItem->instruction_tape;
+						if (tmp_ptr == NULL)
+						{
+							TableItem->instruction_tape = Instruction;
+						}
+						else 
+						{
+							while(tmp_ptr->next_instr != NULL)
+						 		tmp_ptr = tmp_ptr->next_instr;
+							tmp_ptr->next_instr = Instruction;
+						}
+
+						Instruction = NULL;
+					}
+					else if (Instruction->type_instr == I_FCE)
+					{
+						Instruction->adr1 = postfix_token_array;
+
+						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+						if (TableItem == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+							return ERR_INTERN_FAULT;
+						}
+
+						Instruction->adr2 = TableItem->instruction_tape;
+
+						I_Instr * tmp_ptr = TableItem->instruction_tape;
+						if (tmp_ptr == NULL)
+						{
+							TableItem->instruction_tape = Instruction;
+						}
+						else 
+						{
+							while(tmp_ptr->next_instr != NULL)
+						 		tmp_ptr = tmp_ptr->next_instr;
+							tmp_ptr->next_instr = Instruction;
+						}
+
+						Instruction = NULL;
+					}
+					else
+					{
+						fprintf(stderr, "Intern fault. Something bad happend in expression.\n");
+						return ERR_INTERN_FAULT;
+					}
+
 				}
 				token_got = true;
 				break;

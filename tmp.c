@@ -5,13 +5,13 @@
  * @return			pointer to item of hash. table where searched thing is, or NULL if the search was not successful
  * @pre				stack has been inicializated
  */
-htab_item * stack_htab_find_htab_item(stack_htab * stack, const char * key)
+htab_item * stack_htab_find_htab_item(stack_htab * stack, char * key)
 {
 	htab_t * Table = NULL;
 	htab_item * TableItem = NULL;
 	if (is_full_ident(key, strlen(key)))
 	{
-		Table = stack_htab_get_first(stack)
+		Table = stack_htab_get_first(stack);
 		if (Table == NULL)
 			return NULL;
 		TableItem = htab_find_item(Table, key);

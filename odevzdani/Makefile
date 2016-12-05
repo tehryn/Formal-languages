@@ -8,11 +8,13 @@ CFLAGS = -std=c99
 CC = gcc
 default: IFJ16
 
-IFJ16: main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o embedded_functions.o
+IFJ16: main.o interpret.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o embedded_functions.o
 	$(CC) $(CFLAGS) -o IFJ16 main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o
 
 main.o: main.c
 	$(CC) -c main.c -o $@
+interpret.o: interpret.c
+	$(CC) -c interpret.c -o $@
 error.o: error.c error.h
 	$(CC) -c error.c -o $@
 scanner.o: scanner.c scanner.h
@@ -36,7 +38,6 @@ clean:
 zip:
 	zip -r xmisov00.zip *.c *.h Makefile dokumentace.pdf rozdeleni rozsireni ../tests/
 test:
-	echo "Test funkcionality"
 	chmod +x ./tests/run_test.sh
 	./tests/run_test.sh
 test-valgrind:

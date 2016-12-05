@@ -22,20 +22,16 @@
 #define END_EXPR -266
 
 #define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); 	\
-												for(int i=0; i<ma2_top; i++) if(ma2[i]!=NULL) free(ma2[i]); 	\
 												fputs((message), stderr); 										\
 												return (error_code); } while(0)
 
 													
-#define STRDUP(l, s) do {	if (ma2_top>=512)																			\
-								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
-							char *tmp = (char *)malloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );					\
+#define STRDUP(l, s) do {	char *tmp = (char *)mem_alloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );				\
 							if (tmp == NULL)																			\
 								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
 							else																						\
 							{																							\
 								strcpy(tmp, (char *)(s));																\
-								ma2[ma2_top++] = tmp;																	\
 								(l) = tmp;																				\
 							} 																							\
 						} while(0)
@@ -43,11 +39,8 @@
 
 int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
 {
-	void * ma1[2]={0,0};	// memory1 buffer
+	void * ma1[2]={0,0};		// memory1 buffer
 	//int ma1_top=0;			// memory1 number of pointers
-	void * ma2[512]={0,};	// memory2 buffer
-	int ma2_top=0;			// memory2 number of pointers
-
 
 	int bool_operation = 0;
 	int return_type_bool=0;
@@ -314,7 +307,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
 				//if (tmp_table_item->data==NULL)
-				if (tmp_table_item->initialized!=1 && error_6_flag==1 )
+				if ( error_6_flag==1 && tmp_table_item->initialized!=1 )
 				{
 					fprintf(stderr, "Symbol: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
