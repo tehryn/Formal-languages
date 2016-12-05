@@ -93,6 +93,8 @@ int parser()
 		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
 		return ERR_INTERN_FAULT;
 	}
+	InstructionTape->Active=NULL;
+	InstructionTape->Last=NULL;
 
 	// runtime = 1
 	parser_return = analysis(&s, 1, stack_of_table_symbols, InstructionTape);
@@ -603,7 +605,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
 									return ERR_INTERN_FAULT;
 								}
-								strcpy((char*)t_tmp, static_func_var_name);
+								strcpy((char*)t_tmp->ptr, static_func_var_name);
 								Instruction->adr1 = t_tmp;
 								Instruction->adr2 = NULL;
 								Instruction->adr3 = NULL;
