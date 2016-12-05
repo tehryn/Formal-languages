@@ -226,8 +226,8 @@ char *array_string_find(array_string *array, const char *str) {
  * @pre Array was inicializated
  */
 void array_string_destroy(array_string *array) {
-//	for (unsigned i = 0; i < array->idx; i++) {
-//		free(array->data[i]);
-//	}
+	for (unsigned i = 0; i < array->idx; i++) {
+		free(array->data[i]);
+	}
 	free(array->data);
 }
