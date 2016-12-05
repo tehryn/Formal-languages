@@ -55,6 +55,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 			case I_ASSIGMENT:
 				return_token=(token *)L->Active->adr1;
+				printf("token id: %d\n",return_token->id);
 				return_hitem=(htab_item *)return_token->ptr;
 				k=0;
 				postfix_array=(token *)L->Active->adr2;
@@ -389,7 +390,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 
 
-
+			case I_FCE:
+				
 
 
 			default:
