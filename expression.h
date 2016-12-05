@@ -10,13 +10,7 @@
 #include "scanner.h"
 
 
-
-#define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); \
-												for(int i=0; i<ma2_top; i++) if(ma2[i]!=NULL) free(ma2[i]); \
-												fputs((message), stderr); \
-												return (error_code); } while(0)
-//
-
+#define ERR_WARNING 0
 #define ERR_LEXICAL_ANALYSIS 1
 #define ERR_SYNTACTIC_ANALYSIS 2
 #define ERR_SEM_NDEF_REDEF 3
@@ -27,6 +21,27 @@
 #define ERR_DIVISION_ZERO 9
 #define ERR_OTHERS 10
 #define ERR_INTERN_FAULT 99
+
+#define END_EXPR -266
+
+#define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); 	\
+												for(int i=0; i<ma2_top; i++) if(ma2[i]!=NULL) free(ma2[i]); 	\
+												fputs((message), stderr); 										\
+												return (error_code); } while(0)
+
+													
+#define STRDUP(l, s) do {	if (ma2_top>=512)																			\
+								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
+							char *tmp = (char *)malloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );					\
+							if (tmp == NULL)																			\
+								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
+							else																						\
+							{																							\
+								strcpy(tmp, (char *)(s));																\
+								ma2[ma2_top++] = tmp;																	\
+								(l) = tmp;																				\
+							} 																							\
+						} while(0)
 
 
 struct stack_expresion
