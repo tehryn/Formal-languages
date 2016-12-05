@@ -17,7 +17,11 @@ enum {
 	I_WHILE,					//72
 	I_END, 						//73  end of IF || end of ELSE || end of WHILE
 	I_FCE,						//74
-	I_RETURN					//75
+	I_RETURN,					//75
+	I_PRINT,					//76
+	I_ENDIF,					//77
+	I_ENDWHILE,					//78
+	I_ENDELSE					//79
 };
 
 typedef struct I_Instr
@@ -45,7 +49,7 @@ int inter(Instr_List *L, stack_htab *I_Htable);
 char *IntToString(int x);
 char *DoubleToString(double x);
 char *Conc_Str(char *s1, char *s2);
-int is_emb_fce(htab_item *return_hitem,token *postfix_array);
+int is_emb_fce(htab_item *return_hitem,token *postfix_array,Instr_List *L);
 extern htab_t *stack_htab_get_first(stack_htab *stack);
 
 

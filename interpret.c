@@ -420,7 +420,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				k=0;	
 				postfix_array=(token *)L->Active->adr2;
 				
-				if (is_emb_fce(return_hitem,postfix_array))
+				if (is_emb_fce(return_hitem,postfix_array,L))
 					break;
 				
 				loc_table=(htab_t *)return_hitem->local_table;
@@ -583,8 +583,33 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					
 					
 				}	
+				
 				stack_htab_push(I_Htable, loc_table);
 				L->Active=(I_Instr *)return_hitem->instruction_tape;
+				break;
+				
+				
+			case I_PRINT:
+				return_token=(token *)L->Active->adr1;
+				printf("%s",((char *)return_token->ptr));
+				break;
+				
+			case I_ENDIF:
+				L->Active=L->Active->next_instr;
+				if (L->Active->type_instr==I_ELSE)
+				{
+					int count=0;
+					while (count>0)
+					{
+						L->Active=L->Active->next_instr;
+						if (L->Active->type_instr==I_ENDELSE)
+							count--;
+						if (L->Active->type_instr==I_ELSE)	
+							count++;
+					}
+					L->Active=L->Active->next_instr;
+				}
+				break;	
 				
 				
 			default:
@@ -629,12 +654,31 @@ int Add_Instr(Instr_List *L, I_Instr *new)
 
 
 
-int is_emb_fce(htab_item *return_hitem,token *postfix_array)
+int is_emb_fce(htab_item *return_hitem,token *postfix_array,Instr_List *L)
 {
 	if (strcmp(return_hitem->key,"ifj16.print")==0)
 	{
-		printf("Its print\n");
-		return 1;
+		token *ret_value=malloc(sizeof(token));
+		ret_value->id=TYPE_STRING;
+		I_Instr *new1,*new2,*tmp1;
+		new1=malloc(sizeof(I_Instr));
+		new1->type_instr=I_ASSIGMENT;
+		new1->adr1=ret_value;
+		new1->adr2=postfix_array;
+		new1->adr3=NULL;
+		
+		tmp1=L->Active->next_instr;
+		
+		new2=malloc(sizeof(I_Instr));
+		new2->type_instr=I_PRINT;
+		new2->adr1=ret_value;
+		
+		new1->next_instr=new2;
+		new2->next_instr=tmp1;
+		
+		L->Active=new1;
+		
+	
 	}
 	if (strcmp(return_hitem->key,"ifj16.readInt")==0)
 	{
