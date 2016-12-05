@@ -176,7 +176,7 @@ int parser()
 	}
 
 	// call interpret
-	int interpret_return = inter(InstructionTape, stack_of_table_symbols);
+	int interpret_return = inter(InstructionTape, &stack_of_table_symbols);
 	if (interpret_return != 0)
 	{
 		stack_int_destroy(&s);
