@@ -9,7 +9,7 @@ CC = gcc
 default: IFJ16
 
 IFJ16: main.o interpret.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o embedded_functions.o
-	$(CC) $(CFLAGS) -o IFJ16 main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o
+	$(CC) $(CFLAGS) -o IFJ16 main.o error.o scanner.o garbage_collector.o parser.o ial.o structures.o expression.o interpret.o
 
 main.o: main.c
 	$(CC) -c main.c -o $@
