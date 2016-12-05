@@ -603,7 +603,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 									fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
 									return ERR_INTERN_FAULT;
 								}
-								strcpy((char*)t_tmp, static_func_var_name);
+								strcpy((char*)t_tmp->ptr, static_func_var_name);
 								Instruction->adr1 = t_tmp;
 								Instruction->adr2 = NULL;
 								Instruction->adr3 = NULL;
