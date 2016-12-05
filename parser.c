@@ -104,6 +104,8 @@ int parser()
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
 		return parser_return;
 	}
 	// priprava na runtime 2
@@ -113,6 +115,8 @@ int parser()
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
 		fprintf(stderr, "SCANNER: Cannot reset tokens. \n");
 		return ERR_INTERN_FAULT;
 	}
@@ -122,21 +126,25 @@ int parser()
 		//stack_htab_destroy(& stack_of_table_symbols);
 		//htab_free_all(global_table_symbols);
 		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
 		fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 		return ERR_INTERN_FAULT;
 	}
 	// runtime = 2
-	
+
 	parser_return = analysis(&s, 2, stack_of_table_symbols, InstructionTape);
 
 	if (parser_return != 0)
 	{
 		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
 		return parser_return;
 	}
 
 	// call Main.run
-	
+/*
 	I_Instr * Instruction = NULL;
 	Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
 	if (Instruction == NULL)
@@ -164,13 +172,13 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 	strcpy((char*)t_tmp, "Main.run");
-	
+
 	Instruction->adr1 = t_tmp;
 
 	htab_item * TableItem = htab_find_item(global_table_symbols, "Main.run");
 	Instruction->adr2 = TableItem->instruction_tape;
-	
-	
+
+
 	if (Add_Instr(InstructionTape, Instruction) != 0)
 	{
 		fprintf(stderr, "Intern fault. Instruction cannot be pushed into instruction tape.\n");
@@ -184,11 +192,14 @@ int parser()
 		stack_int_destroy(&s);
 		return interpret_return;
 	}
-	
+
 
 	//array_string_destroy(&all_class_names);
 	//stack_htab_destroy(& stack_of_table_symbols);
 	//htab_free_all(global_table_symbols);
+	*/
+	stack_htab_destroy(&stack_of_table_symbols);
+	array_string_destroy(&all_class_names);
 	stack_int_destroy(&s);
 	return parser_return;
 }
@@ -218,9 +229,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 	int number_arguments = 0; // arguments of function
 	int number_allocated_arguments = 0;
 	unsigned func_or_var = 0;
-	
+
 	int error_6_flag = 1;
-	
+
 	I_Instr * Instruction = NULL;
 
 	while (!stack_int_top(s, &on_top)) // stack_int_top == -1 if stack is empty
@@ -592,7 +603,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 									return ERR_INTERN_FAULT;
 								}
 								Instruction->type_instr = I_ASSIGMENT;
-								
+
 								token * t_tmp = (token*) mem_alloc(sizeof(token));
 								if (t_tmp == NULL)
 								{
@@ -606,6 +617,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 									return ERR_INTERN_FAULT;
 								}
 								strcpy((char*)t_tmp->ptr, static_func_var_name);
+								t_tmp->id = TableItem->data_type; // FIXME xmatej52
 								Instruction->adr1 = t_tmp;
 								Instruction->adr2 = NULL;
 								Instruction->adr3 = NULL;
@@ -689,7 +701,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->func_or_var = 1; // variable and it will be initialized
 					}
-					
+
 					if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -867,7 +879,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							fprintf(stderr, "Intern fault. Parser cannot malloc place for data in hash table (int array).\n");
 							return ERR_INTERN_FAULT;
 						}
-						
+
 						((int*)TableItem->data)[number_allocated_arguments -4] = S_EOF;
 						((int*)TableItem->data)[number_allocated_arguments -3] = S_EOF;
 						((int*)TableItem->data)[number_allocated_arguments -2] = S_EOF;
@@ -957,9 +969,9 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 			case P_FUNC:
 				stack_int_pop(s);
-				
+
 				error_6_flag = 0;
-				
+
 				if (token_got == false)
 				{
 					t = get_token();
@@ -1004,7 +1016,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->instruction_tape = Instruction;
 					}
-					else 
+					else
 					{
 						while(tmp_ptr->next_instr != NULL)
 					 		tmp_ptr = tmp_ptr->next_instr;
@@ -1069,7 +1081,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_INTERN_FAULT;
 						}
 						Instruction->type_instr = I_ASSIGMENT;
-						
+
 						token * t_tmp = (token*) mem_alloc(sizeof(token));
 						if (t_tmp == NULL)
 						{
@@ -1141,7 +1153,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 								return ERR_INTERN_FAULT;
 							}
 							Instruction->type_instr = I_ASSIGMENT;
-							
+
 							token * t_tmp = (token*) mem_alloc(sizeof(token));
 							if (t_tmp == NULL)
 							{
@@ -1217,7 +1229,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 										return ERR_INTERN_FAULT;
 									}
 									Instruction->type_instr = I_ASSIGMENT;
-									
+
 									token * t_tmp = (token*) mem_alloc(sizeof(token));
 									if (t_tmp == NULL)
 									{
@@ -1230,7 +1242,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 										fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
 										return ERR_INTERN_FAULT;
 									}
-									strcpy((char*)t_tmp, (char *) t.ptr);
+									strcpy((char*)t_tmp->ptr, (char *) t.ptr);
 									Instruction->adr1 = t_tmp;
 									Instruction->adr2 = NULL;
 									Instruction->adr3 = NULL;
@@ -1302,7 +1314,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 									return ERR_INTERN_FAULT;
 								}
 								Instruction->type_instr = I_ASSIGMENT;
-								
+
 								token * t_tmp = (token*) mem_alloc(sizeof(token));
 								if (t_tmp == NULL)
 								{
@@ -1555,7 +1567,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->instruction_tape = Instruction;
 					}
-					else 
+					else
 					{
 						while(tmp_ptr->next_instr != NULL)
 					 		tmp_ptr = tmp_ptr->next_instr;
@@ -1584,7 +1596,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				if(t.id == S_ELSE)
 				{
 					token_got = false;
-					
+
 					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
 					if (Instruction == NULL)
 					{
@@ -1608,7 +1620,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->instruction_tape = Instruction;
 					}
-					else 
+					else
 					{
 						while(tmp_ptr->next_instr != NULL)
 					 		tmp_ptr = tmp_ptr->next_instr;
@@ -1690,7 +1702,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					{
 						TableItem->instruction_tape = Instruction;
 					}
-					else 
+					else
 					{
 						while(tmp_ptr->next_instr != NULL)
 					 		tmp_ptr = tmp_ptr->next_instr;
@@ -1751,7 +1763,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 				if (runtime == 2)
 				{
-                    
+
 					int expected_expr_data_type = 0;
 					if (TableItem == NULL)
 						expected_expr_data_type = S_BOOLEAN;
@@ -1764,7 +1776,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					expr_return = expr_analyze(t, &t, class_name, error_6_flag, &postfix_token_array, &token_count, &expr_data_type, GlobalTableSymbols, LocalTableSymbols);
 					if (expr_return != 0)
 						return expr_return;
-					
+					free(postfix_token_array); // FIXME xmatej52
 
 					if (expected_expr_data_type != expr_data_type)
 					{
@@ -1781,7 +1793,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						TableItem->initialized = 1;
 
 						Instruction->adr2 = postfix_token_array;
-						
+
 						if (error_6_flag == 1) // we are out of function
 							Add_Instr(InstructionTape, Instruction);
 						else
@@ -1797,7 +1809,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							{
 								TableItem->instruction_tape = Instruction;
 							}
-							else 
+							else
 							{
 								while(tmp_ptr->next_instr != NULL)
 							 		tmp_ptr = tmp_ptr->next_instr;
@@ -1821,7 +1833,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						{
 							TableItem->instruction_tape = Instruction;
 						}
-						else 
+						else
 						{
 							while(tmp_ptr->next_instr != NULL)
 						 		tmp_ptr = tmp_ptr->next_instr;
@@ -1848,7 +1860,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						{
 							TableItem->instruction_tape = Instruction;
 						}
-						else 
+						else
 						{
 							while(tmp_ptr->next_instr != NULL)
 						 		tmp_ptr = tmp_ptr->next_instr;
