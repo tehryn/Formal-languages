@@ -12,6 +12,12 @@
 #include <stdlib.h>
 #include "ial.h"
 
+/** @defgroup structures Structures*/
+/** @addtogroup structures
+  * @brief Structures is group of structures and functions upon them
+  * @{
+  */
+
 /*! Default size for allocation memory for Stack of hash tables */
 #define STACK_HTAB_INIT_SIZE 16
 
@@ -169,4 +175,7 @@ char *array_string_find(array_string *array, const char *str);
  * @pre Array was inicializated
  */
 void array_string_destroy(array_string *array);
+
+/** @} */
+
 #endif

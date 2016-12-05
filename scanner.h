@@ -13,8 +13,12 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
-#include <math.h>
 #include "garbage_collector.h"
+/** @defgroup lexical_analysis Lexical analysis */
+/** @addtogroup lexical_analysis
+  * @brief Lexical analysise analysi input source code and check, if itis subject of the language IFJ16. ALso transfer input source code into tokens
+  * @{
+  */
 
 /*! Default size for memory allocation */
 #define S_SIZE 32
@@ -206,4 +210,6 @@ void *str2num(char *str, int type, int *valide);
 @return token, where token.id is identifikator and token.ptr is string (or poiter to NULL if string is not needed)
 */
 token get_token();
+
+/** @} */
 #endif
