@@ -86,8 +86,16 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 
+	Instr_List * InstructionTape = NULL;
+	InstructionTape = mem_alloc(sizeof(Instr_List));
+	if (Instruction == NULL)
+	{
+		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
+		return ERR_INTERN_FAULT;
+	}
+
 	// runtime = 1
-	parser_return = analysis(&s, 1, stack_of_table_symbols);
+	parser_return = analysis(&s, 1, stack_of_table_symbols, InstructionTape);
 	if (parser_return != 0)
 	{
 		//array_string_destroy(&all_class_names);
@@ -116,13 +124,6 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 	// runtime = 2
-	Instr_List * InstructionTape = NULL;
-	InstructionTape = mem_alloc(sizeof(Instr_List));
-	if (Instruction == NULL)
-	{
-		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
-		return ERR_INTERN_FAULT;
-	}
 	
 	parser_return = analysis(&s, 2, stack_of_table_symbols, InstructionTape);
 
