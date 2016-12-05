@@ -61,7 +61,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				ptr=postfix_array[k];
 				
 				while(postfix_array[k].id!=END_EXPR)
-				{printf("ASDF\n");
+				{
 					ptr=postfix_array[k++];
 					switch (ptr.id)
 					{
