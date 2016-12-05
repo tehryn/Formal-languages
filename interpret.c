@@ -416,23 +416,25 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 			case I_FCE:
 				return_token=(token *)L->Active->adr1;
-				return_hitem=stack_htab_find_htab_item(I_Htable, (char *)return_token->ptr);
-				k=0;
+				return_hitem=stack_htab_find_htab_item(I_Htable, (char *)L->Active->adr1);
+				k=0;	
 				postfix_array=(token *)L->Active->adr2;
-
+				
 				if (is_emb_fce(return_hitem,postfix_array))
 					break;
 				
 				loc_table=(htab_t *)return_hitem->local_table;
 				loc_table=htab_copy((htab_t *)return_hitem->local_table); 
 				
-				if (postfix_array==NULL)
-					stack_htab_push(I_Htable, loc_table);
-				else
+					
+				if (postfix_array!=NULL)
 				{
 					while(postfix_array[k].id!=END_EXPR)
 					{	
-						printf("K: %d  key:%s\n",k,(char *)postfix_array[k].ptr);
+						if (postfix_array[k].ptr==NULL)
+							printf("ITS NULL! id: %d\n",postfix_array[k].id);
+						else
+							printf("K: %d  key:%s\n",k,(char *)postfix_array[k].ptr);
 						ptr=postfix_array[k++];
 						switch (ptr.id)
 						{
@@ -581,7 +583,10 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					
 					
 				}	
-
+				stack_htab_push(I_Htable, loc_table);
+				L->Active=(I_Instr *)return_hitem->instruction_tape;
+				
+				
 			default:
 			break;
 
