@@ -53,35 +53,17 @@ int readInt()
     string = readString();
     if (string == NULL)
 	{
-		//free(string);
 		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readint)\n");	// code 7 -> read number error
-		return 0;
+		return -1;
 	}
 
     n1 = strtol(string, &err, 10);
     if (*err != 0)
 	{
-		//free(string);
 		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readint)\n");	// code 7 -> read number error
-		return 0;
+		return -1;
     	}
 
-/*
-	if (n1 > (long int)(INT_MAX))
-	{
-		//free(string);
-		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readint)\n");	// code 7 -> read number error
-		return 0;
-	}
-	else if (n1 < (long int)(INT_MIN))
-	{
-		//free(string);
-		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readint)\n");	// code 7 -> read number error
-		return 0;
-	}
-*/
-
-    	//free(string);
 	return (int) n1;
 }
 
@@ -97,18 +79,16 @@ double readDouble()
 	if (string == NULL)
 	{
 		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readdouble)\n");
-		return 0.0;
+		return -1.0;
 	}
 
     n1 = strtod(string, &err);
     if (*err != 0)
     {
-	free(string);
-    error_msg(7, "ERROR: Number value could not be read from stdin, invalid symbol: \"%c\". (func. readdouble)\n", *err);
-	return 0.0;
+    	error_msg(7, "ERROR: Number value could not be read from stdin, invalid symbol: \"%c\". (func. readdouble)\n", *err);
+	return -1.0;
     }
 
-    //free(string);
 	return n1;
 }
 
