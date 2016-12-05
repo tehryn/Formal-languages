@@ -46,6 +46,7 @@ char *IntToString(int x);
 char *DoubleToString(double x);
 char *Conc_Str(char *s1, char *s2);
 
+extern htab_t *stack_htab_get_first(stack_htab *stack);
 /**
  * Search for item of local or global hash table in the stack
  * @param  stack	stack where item will be searched
