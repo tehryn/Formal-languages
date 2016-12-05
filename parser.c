@@ -116,15 +116,15 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 	// runtime = 2
-	Instr_List * Instruction = NULL;
-	Instruction = mem_alloc(sizeof(Instr_List));
+	Instr_List * InstructionTape = NULL;
+	InstructionTape = mem_alloc(sizeof(Instr_List));
 	if (Instruction == NULL)
 	{
 		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
 		return ERR_INTERN_FAULT;
 	}
 	
-	parser_return = analysis(&s, 2, stack_of_table_symbols, Instruction);
+	parser_return = analysis(&s, 2, stack_of_table_symbols, InstructionTape);
 
 	if (parser_return != 0)
 	{
@@ -132,14 +132,56 @@ int parser()
 		return parser_return;
 	}
 
-	/*
-	int interpret_return = inter(Instruction, stack_of_table_symbols); // I think there should be stack_of_table_symbols
+	// call Main.run
+	
+	I_Instr * Instruction = NULL;
+	Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+	if (Instruction == NULL)
+	{
+		fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+		return ERR_INTERN_FAULT;
+	}
+	Instruction->type_instr = I_FCE;
+
+	Instruction->adr1 = NULL;
+	Instruction->adr2 = NULL;
+	Instruction->adr3 = NULL;
+	Instruction->next_instr = NULL;
+
+	token * t_tmp = (token*) mem_alloc(sizeof(token));
+	if (t_tmp == NULL)
+	{
+		fprintf(stderr, "Intern fault. token cannot be allocated.\n");
+		return ERR_INTERN_FAULT;
+	}
+	t_tmp->ptr = (void*) mem_alloc(strlen("Main.run")+1);
+	if (t_tmp->ptr == NULL)
+	{
+		fprintf(stderr, "Intern fault. Token cannot be allocated.\n");
+		return ERR_INTERN_FAULT;
+	}
+	strcpy((char*)t_tmp, "Main.run");
+	
+	Instruction->adr1 = t_tmp;
+
+	htab_item * TableItem = htab_find_item(global_table_symbols, "Main.run");
+	Instruction->adr2 = TableItem->instruction_tape;
+	
+	
+	if (Add_Instr(InstructionTape, Instruction) != 0)
+	{
+		fprintf(stderr, "Intern fault. Instruction cannot be pushed into instruction tape.\n");
+		return ERR_INTERN_FAULT;
+	}
+
+	// call interpret
+	int interpret_return = inter(Instruction, stack_of_table_symbols);
 	if (interpret_return != 0)
 	{
 		stack_int_destroy(&s);
 		return interpret_return;
 	}
-	*/
+	
 
 	//array_string_destroy(&all_class_names);
 	//stack_htab_destroy(& stack_of_table_symbols);
