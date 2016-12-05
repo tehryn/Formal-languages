@@ -17,8 +17,7 @@ htab_item * stack_htab_find_htab_item(stack_htab * stack, char * key)
 	htab_item * TableItem = NULL;
 	if (is_full_ident(key, strlen(key)))
 	{
-//		Table = stack_htab_get_first(stack);
-		Table = stack->data[0];
+		Table = stack_htab_get_first(stack);
 		if (Table == NULL)
 			return NULL;
 		TableItem = htab_find_item(Table, key);

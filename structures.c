@@ -71,7 +71,9 @@ htab_t *stack_htab_get_item(stack_htab *stack, unsigned bactrack) {
  * @param  stack Stack where item is stored
  * @return       Item that is stored on the bottom, NULL if stack is empty
  */
-htab_t *stack_htab_get_first(stack_htab *stack);
+htab_t *stack_htab_get_first(stack_htab *stack) {
+	return stack->data[0];
+}
 
 /**
  * Free all memory allocated by stack
