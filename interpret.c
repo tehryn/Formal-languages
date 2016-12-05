@@ -45,8 +45,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	htab_item * return_hitem;
 	token *return_token;
 	int k=0;
-	token **postfix_array;
-	token *ptr, tmp1, tmp2, *new;
+	token *postfix_array;
+	token ptr, tmp1, tmp2, *new;
 
 	while (L->Active!=NULL)
     {
@@ -57,13 +57,13 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				return_token=(token *)L->Active->adr1;
 				return_hitem=(htab_item *)return_token->ptr;
 				k=0;
-				postfix_array=(token **)L->Active->adr2;
-				if (L->Active->adr2==NULL)
-					return -3;
-				while(postfix_array[k]->id!=END_EXPR)
-				{
+				postfix_array=(token *)L->Active->adr2;
+				ptr=postfix_array[k];
+				
+				while(postfix_array[k].id!=END_EXPR)
+				{printf("ASDF\n");
 					ptr=postfix_array[k++];
-					switch (ptr->id)
+					switch (ptr.id)
 					{
 						case S_STRING:
 						case S_INT:
@@ -72,15 +72,15 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
 
-							if (ptr->id==S_STRING)
+							if (ptr.id==S_STRING)
 								new->id=TYPE_STRING;
-							else if (ptr->id==S_DOUBLE)
+							else if (ptr.id==S_DOUBLE)
 								new->id=TYPE_DOUBLE;
 							else
 								new->id=TYPE_INT;
 
 
-							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr->ptr);
+							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
 							if (item_tmp1->initialized==0)
 							{
 								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
@@ -95,7 +95,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 						case TYPE_DOUBLE:
 						case TYPE_INT:
 						case TYPE_STRING:
-							stack_expression_push(S,*ptr);
+							stack_expression_push(S,ptr);
 							break;
 
 						case S_PLUS:					// ----------- PLUS
@@ -195,11 +195,11 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				return_token=(token *)L->Active->adr1;
 				return_hitem=(htab_item *)return_token->ptr;
 				k=0;
-				postfix_array=(token **)L->Active->adr2;
-				while(postfix_array[k]->id!=-2)
+				postfix_array=(token *)L->Active->adr2;
+				while(postfix_array[k].id!=END_EXPR)
 				{
 					ptr=postfix_array[k++];
-					switch (ptr->id)
+					switch (ptr.id)
 					{
 						case S_STRING:
 						case S_INT:
@@ -208,15 +208,15 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
 
-							if (ptr->id==S_STRING)
+							if (ptr.id==S_STRING)
 								new->id=TYPE_STRING;
-							else if (ptr->id==S_DOUBLE)
+							else if (ptr.id==S_DOUBLE)
 								new->id=TYPE_DOUBLE;
 							else
 								new->id=TYPE_INT;
 
 
-							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr->ptr);
+							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
 							if (item_tmp1->initialized==0)
 							{
 								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
@@ -231,7 +231,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 						case TYPE_DOUBLE:
 						case TYPE_INT:
 						case TYPE_STRING:
-							stack_expression_push(S,*ptr);
+							stack_expression_push(S,ptr);
 							break;
 
 
