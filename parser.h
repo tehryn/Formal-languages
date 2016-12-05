@@ -4,6 +4,7 @@
 #include "scanner.h"
 #include "ial.h"
 #include "structures.h"
+#include "interpret.h"
 #include <string.h>
 #include <stdbool.h>    // bool
 
