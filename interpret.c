@@ -409,6 +409,14 @@ int Add_Instr(Instr_List *L, I_Instr *new)
 {
 	if (new==NULL)
 		return -1;
+	if (L->Last==NULL)
+	{
+		L->Last=new;
+		L->Active=new;
+		return 0;
+	}
+	
+	
 	I_Instr *tmp=L->Last;
 	tmp->next_instr=new;
 	L->Last=new;
