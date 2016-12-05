@@ -389,7 +389,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 
 
-
+			case I_FCE:
+				
 
 
 			default:
