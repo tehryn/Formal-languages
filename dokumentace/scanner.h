@@ -14,7 +14,12 @@
 #include <ctype.h>
 #include <limits.h>
 #include <math.h>
-#include "error.h"
+#include "garbage_collector.h"
+/** @defgroup lexical_analysis Lexical analysis */
+/** @addtogroup lexical_analysis
+  * @brief Lexical analysise analysi input source code and check, if itis subject of the language IFJ16. ALso transfer input source code into tokens
+  * @{
+  */
 
 /*! Default size for memory allocation */
 #define S_SIZE 32
@@ -134,7 +139,7 @@ int is_simple_ident(char *word, unsigned len);
 @param word String (or array of chars) for detection
 @param len length of word (without '\0', if there is)
 @pre size of allocated space for word is bigger or equal len
-@return 1 if word represents simple identifikator, otherwise return 0
+@return 1 if word represents full identifikator, otherwise return 0
 */
 int is_full_ident(char *word, unsigned len);
 
@@ -156,6 +161,42 @@ int skip_comment (unsigned comment_type);
 char *load_string(char *word, int *max);
 
 /**
+ * Count power
+ * @param  x   Cardinal number
+ * @param  exp Exponent
+ * @return     Result of x to the exponent
+ */
+double make_power (double x, long int exp);
+
+/**
+ * Convert string to decimal if string represents binnary integer number
+ * @param str    String for conversion
+ * @param result Converted number
+ */
+void bin2dec(char *str, int *result);
+
+/**
+ * Convert string to decimal number if string represents octal integer number
+ * @param str    String for conversion
+ * @param result Converted number
+ */
+void octal2dec(char *str, int *result);
+
+/**
+ * Convert string to decimal number if string represents hexadecimal integer number
+ * @param str    String for conversion
+ * @param result Converted number
+ */
+void hex2dec_int(char *str, int *result);
+
+/**
+ * Convert string to decimal number if string represents hexadecimal floating point number
+ * @param str    String for conversion
+ * @param result Converted number
+ */
+void hex2dec_double(char *str, double *result);
+
+/**
  * Convert string into double or integer (depends on type variable) and store it into new allocated space
  * @param  str    String that represents number
  * @param  type   Type of number that represent string (should be TYPE_INT or TYPE_DOUBLE)
@@ -170,4 +211,6 @@ void *str2num(char *str, int type, int *valide);
 @return token, where token.id is identifikator and token.ptr is string (or poiter to NULL if string is not needed)
 */
 token get_token();
+
+/** @} */
 #endif

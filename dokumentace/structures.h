@@ -12,6 +12,12 @@
 #include <stdlib.h>
 #include "ial.h"
 
+/** @defgroup structures Structures*/
+/** @addtogroup structures
+  * @brief Structures is group of structures and functions upon them
+  * @{
+  */
+
 /*! Default size for allocation memory for Stack of hash tables */
 #define STACK_HTAB_INIT_SIZE 16
 
@@ -91,6 +97,13 @@ htab_t *stack_htab_pop(stack_htab *stack);
 htab_t *stack_htab_get_item(stack_htab *stack, unsigned bactrack);
 
 /**
+ * Return item that is at the bottom of stack
+ * @param  stack Stack where item is stored
+ * @return       Item that is stored on the bottom, NULL if stack is empty
+ */
+htab_t *stack_htab_get_first(stack_htab *stack);
+
+/**
  * Free all memory allocated by stack
  * @param stack Stack that shall be freed
  * @pre         Stack was inicializated
@@ -162,4 +175,7 @@ char *array_string_find(array_string *array, const char *str);
  * @pre Array was inicializated
  */
 void array_string_destroy(array_string *array);
+
+/** @} */
+
 #endif
