@@ -7,7 +7,7 @@
 CFLAGS = -std=c99 -pedantic -Wall -Wextra -g
 default: IFJ16
 
-IFJ16: main.o parser.o interpret.o expression.o scanner.o ial.o structures.o garbage_collector.o error.o
+IFJ16: main.o parser.o expression.o scanner.o ial.o structures.o garbage_collector.o error.o interpret.o
 	gcc $(CFLAGS) -o IFJ16 $^
 
 %.o: %.c %.h

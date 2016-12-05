@@ -4,20 +4,51 @@
 
 #define I_STACKSIZE 20
 
+/**
+ * Search for item of local or global hash table in the stack
+ * @param  stack	stack where item will be searched
+ * @param  key		name of variable or function which will be searched
+ * @return			pointer to item of hash. table where searched thing is, or NULL if the search was not successful
+ * @pre				stack has been inicializated
+ */
+htab_item * stack_htab_find_htab_item(stack_htab * stack, char * key)
+{
+	htab_t * Table = NULL;
+	htab_item * TableItem = NULL;
+	if (is_full_ident(key, strlen(key)))
+	{
+//		Table = stack_htab_get_first(stack);
+		Table = stack->data[0];
+		if (Table == NULL)
+			return NULL;
+		TableItem = htab_find_item(Table, key);
+		return TableItem; // could be NULL
+	}
+	else if (is_simple_ident(key, strlen(key)))
+	{
+		Table = stack_htab_get_item(stack, 0);
+		if (Table == NULL)
+			return NULL;
+		TableItem = htab_find_item(Table, key);
+		return TableItem; // could be NULL
+	}
+	return NULL;
+}
+
 int inter(Instr_List *L, stack_htab *I_Htable)
 {
 	struct stack_expresion *S=malloc(sizeof(struct stack_expresion));
 	if (S==NULL)
 		return ERR_INTERN_FAULT;
-		
+
 	stack_expression_init(S,I_STACKSIZE);
 	htab_item * item_tmp1;
 	htab_item * return_hitem;
-	token *return_token;	
+	token *return_token;
 	int k=0;
 	token **postfix_array;
-	token *ptr, tmp1, tmp2, *new;	
-	
+	token *ptr, tmp1, tmp2, *new;
+
 	while (L->Active!=NULL)
     {
 		switch (L->Active->type_instr)
@@ -39,92 +70,92 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							new=malloc(sizeof(token));
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-								
+
 							if (ptr->id==S_STRING)
 								new->id=TYPE_STRING;
 							else if (ptr->id==S_DOUBLE)
 								new->id=TYPE_DOUBLE;
-							else 
+							else
 								new->id=TYPE_INT;
-							
-							
+
+
 							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr->ptr);
 							if (item_tmp1->initialized==0)
 							{
 								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
 								//freeALL();
-								return ERR_UNINICIALIZED_VAR ;					
+								return ERR_UNINICIALIZED_VAR ;
 							}
 							new->ptr=item_tmp1->data;
 							stack_expression_push(S,*new);
 							free(new);
 							break;
-							
+
 						case TYPE_DOUBLE:
 						case TYPE_INT:
 						case TYPE_STRING:
 							stack_expression_push(S,*ptr);
 							break;
-						
+
 						case S_PLUS:					// ----------- PLUS
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_plus(tmp1,tmp2);
-							stack_expression_push(S,*new);	
+							stack_expression_push(S,*new);
 							break;
-							
+
 						case S_MINUS:					//     ----------------------  MINUS
-							
+
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_arm_op(tmp1,tmp2,1);
-							stack_expression_push(S,*new);	
+							stack_expression_push(S,*new);
 							break;
-				
+
 
 						case S_MUL:					//     ----------------------  Multiplication
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_arm_op(tmp1,tmp2,2);
-							stack_expression_push(S,*new);	
+							stack_expression_push(S,*new);
 							break;
 
-							
-						case S_DIV:					//     ----------------------  Division 
+
+						case S_DIV:					//     ----------------------  Division
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_arm_op(tmp1,tmp2,2);
 							if (new->id==-8)
 							{
 								fprintf(stderr, "Divison by zero!.\n");
 								//freeALL();
-								return ERR_DIVISION_ZERO ;					
+								return ERR_DIVISION_ZERO ;
 							}
-							
-							stack_expression_push(S,*new);	
+
+							stack_expression_push(S,*new);
 							break;
-				
-		
+
+
 					}
-					
+
 				}
-				
-				
+
+
 				stack_expression_pop(S,&tmp1);
 				if (return_token->id==TYPE_INT && tmp1.id!=TYPE_INT)
 				{
-					return ERR_SEM_COMPATIBILITY;	
+					return ERR_SEM_COMPATIBILITY;
 				}
 				if(return_token->id==TYPE_DOUBLE && tmp1.id==TYPE_STRING)
 				{
 					return ERR_SEM_COMPATIBILITY;
 				}
 				break;
-				
+
 				if(return_token->id==TYPE_DOUBLE)
 				{
 					return_hitem->data=(double *)tmp1.ptr;
@@ -133,7 +164,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				{
 					//free(return_hitem->data);
 					return_hitem->data=(int *)tmp1.ptr;
-					
+
 				}
 				else
 				{
@@ -156,8 +187,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					}
 				}break;
 				L->Active=L->Active->next_instr;
-				
-			
+
+
 			case I_IF:
 			case I_WHILE:
 				return_token=(token *)L->Active->adr1;
@@ -175,150 +206,150 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							new=malloc(sizeof(token));
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-								
+
 							if (ptr->id==S_STRING)
 								new->id=TYPE_STRING;
 							else if (ptr->id==S_DOUBLE)
 								new->id=TYPE_DOUBLE;
-							else 
+							else
 								new->id=TYPE_INT;
-							
-							
+
+
 							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr->ptr);
 							if (item_tmp1->initialized==0)
 							{
 								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
 								//freeALL();
-								return ERR_UNINICIALIZED_VAR ;					
+								return ERR_UNINICIALIZED_VAR ;
 							}
 							new->ptr=item_tmp1->data;
 							stack_expression_push(S,*new);
 							free(new);
 							break;
-							
+
 						case TYPE_DOUBLE:
 						case TYPE_INT:
 						case TYPE_STRING:
 							stack_expression_push(S,*ptr);
 							break;
-						
-						
+
+
 						case S_EQUAL:
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
+							stack_expression_pop(S,&tmp1);
 							new=inter_bool_op(tmp1,tmp2,1);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
-							break;						
+							stack_expression_push(S,*new);
+							break;
 						case S_NOT_EQUAL:
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_bool_op(tmp1,tmp2,2);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
-							break;						
-						
+							stack_expression_push(S,*new);
+							break;
+
 						case S_GREATER_EQUAL:
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_bool_op(tmp1,tmp2,3);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
-							break;	
-							
+							stack_expression_push(S,*new);
+							break;
+
 						case S_GREATER:
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_bool_op(tmp1,tmp2,4);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
-							break;							
-						
-						case S_LESS_EQUAL:	
+							stack_expression_push(S,*new);
+							break;
+
+						case S_LESS_EQUAL:
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_bool_op(tmp1,tmp2,5);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
-							break;	
-												
-						case S_LESS:	
+							stack_expression_push(S,*new);
+							break;
+
+						case S_LESS:
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_bool_op(tmp1,tmp2,6);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
-							break;						
-						
-						case S_AND:	
+							stack_expression_push(S,*new);
+							break;
+
+						case S_AND:
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_bool_op(tmp1,tmp2,7);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
-							break;						
-						
-						case S_OR:	
+							stack_expression_push(S,*new);
+							break;
+
+						case S_OR:
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_bool_op(tmp1,tmp2,8);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
-							break;											
+							stack_expression_push(S,*new);
+							break;
 
-						
+
 						case S_PLUS:					// ----------- PLUS
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_plus(tmp1,tmp2);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
+							stack_expression_push(S,*new);
 							break;
-							
+
 						case S_MINUS:					//     ----------------------  MINUS
-							
+
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_arm_op(tmp1,tmp2,1);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
+							stack_expression_push(S,*new);
 							break;
-				
+
 
 						case S_MUL:					//     ----------------------  Multiplication
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_arm_op(tmp1,tmp2,2);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);	
+							stack_expression_push(S,*new);
 							break;
 
-							
-						case S_DIV:					//     ----------------------  Division 
+
+						case S_DIV:					//     ----------------------  Division
 							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);	
-							
+							stack_expression_pop(S,&tmp1);
+
 							new=inter_arm_op(tmp1,tmp2,2);
 							if (new==NULL)
 								return ERR_INTERN_FAULT;
@@ -326,19 +357,19 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							{
 								fprintf(stderr, "Divison by zero!.\n");
 								//freeALL();
-								return ERR_DIVISION_ZERO ;					
+								return ERR_DIVISION_ZERO ;
 							}
-							
-							stack_expression_push(S,*new);	
+
+							stack_expression_push(S,*new);
 							break;
 						}
-							
+
 					}
-						
+
 				stack_expression_pop(S,&tmp1);
-				
+
 				if (tmp1.id==S_FALSE)
-				{	
+				{
 					L->Active=L->Active->next_instr;
 					int count=0;
 					while(count>0)
@@ -347,27 +378,27 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							return ERR_OTHERS;
 						if (L->Active->type_instr==I_END)
 							count--;
-						else 
+						else
 							count++;
 						L->Active=L->Active->next_instr;
-					}					
+					}
 				}
-				
-				
-				
-				
-				
-				
-				
-				
+
+
+
+
+
+
+
+
 			default:
 			break;
-			
+
 
 		}
-		L->Active=L->Active->next_instr;	
+		L->Active=L->Active->next_instr;
 	}
-	
+
 	stack_expression_destroy(S);
 	free(S);
 	return 0;
@@ -387,9 +418,9 @@ int Add_Instr(Instr_List *L, I_Instr *new)
 	{
 		L->Last=tmp;
 		tmp=L->Last->next_instr;
-		
+
 	}
-	return 0;	
+	return 0;
 }
 
 
@@ -447,7 +478,7 @@ token *inter_plus(token tmp1,token tmp2)
 {
 	token *new;
 	if ((tmp1.id==TYPE_STRING) || tmp2.id==TYPE_STRING)            //     STRING CONCATENATE
-	{		
+	{
 		char *str1,*str2;
 		if (tmp1.id == TYPE_DOUBLE)
 		{
@@ -457,10 +488,10 @@ token *inter_plus(token tmp1,token tmp2)
 		{
 			str1=IntToString((*((int *)tmp1.ptr)));
 		}
-		else 
+		else
 			str1=(char *)tmp1.ptr;
-		
-		
+
+
 		if (tmp2.id == TYPE_DOUBLE)
 		{
 			str2=DoubleToString((*((double *)tmp2.ptr)));
@@ -470,29 +501,29 @@ token *inter_plus(token tmp1,token tmp2)
 		{
 			str2=IntToString((*((int *)tmp2.ptr)));
 		}
-		else 
-			str2=(char *)tmp2.ptr;	
-			
+		else
+			str2=(char *)tmp2.ptr;
+
 		char *str3=Conc_Str(str1,str2);
 		new=malloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
 		new->id=TYPE_STRING;
-		new->ptr=(char *)str3;		
+		new->ptr=(char *)str3;
 
 		return new;
-	}						
+	}
 	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
 	{
 		new=malloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
-			
+
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
 		if (tmp_value==NULL)
 			return NULL;
-					
+
 		(*tmp_value)=(*((double *)tmp1.ptr))+(*((double *)tmp2.ptr));
 		new->ptr=(double *)tmp_value;
 		return new;
@@ -505,7 +536,7 @@ token *inter_plus(token tmp1,token tmp2)
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
 		if (tmp_value==NULL)
-			return NULL;		
+			return NULL;
 		(*tmp_value)=(*((double *)tmp1.ptr))+(*((int *)tmp2.ptr));
 		new->ptr=(double *)tmp_value;
 		return new;
@@ -515,31 +546,31 @@ token *inter_plus(token tmp1,token tmp2)
 		new=malloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
-			
+
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
 		if (tmp_value==NULL)
 			return NULL;
-				
+
 		(*tmp_value)=(*((int *)tmp1.ptr))+(*((double *)tmp2.ptr));
 		new->ptr=(double *)tmp_value;
 		return new;
-	}						
+	}
 	else
 	{
 		new=malloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
-			
+
 		new->id=TYPE_INT;
 		int *tmp_value=malloc(sizeof(int));
 		if (tmp_value==NULL)
 			return NULL;
-					
+
 		(*tmp_value)=(*((int *)tmp1.ptr))+(*((int *)tmp2.ptr));
 		new->ptr=(int *)tmp_value;
 		return new;
-	}					
+	}
 }
 
 token *inter_arm_op(token tmp1,token tmp2, int i)
@@ -547,7 +578,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 	token *new=malloc(sizeof(token));
 	if (new==NULL)
 		return NULL;
-		
+
 	if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
 	{
 		new->id=TYPE_DOUBLE;
@@ -556,9 +587,9 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 			return NULL;
 		if (i==1)
 			(*tmp_value)=(*((double *)tmp1.ptr))-(*((double *)tmp2.ptr));
-		else if (i==2)	
+		else if (i==2)
 			(*tmp_value)=(*((double *)tmp1.ptr))*(*((double *)tmp2.ptr));
-		else 
+		else
 		{
 			if ((*((double *)tmp2.ptr))==0.0)
 			{
@@ -566,10 +597,10 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 				new->id=-8;
 				return new;
 			}
-		
+
 			(*tmp_value)=(*((double *)tmp1.ptr))/(*((double *)tmp2.ptr));
-		
-		
+
+
 		}
 		new->ptr=(double *)tmp_value;
 		return new;
@@ -579,12 +610,12 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
 		if (tmp_value==NULL)
-			return NULL;		
+			return NULL;
 		if (i==1)
 			(*tmp_value)=(*((double *)tmp1.ptr))-(*((int *)tmp2.ptr));
-		else if (i==2)	
+		else if (i==2)
 			(*tmp_value)=(*((double *)tmp1.ptr))*(*((int *)tmp2.ptr));
-		else 
+		else
 		{
 			if ((*((int *)tmp2.ptr)==0))
 			{
@@ -592,11 +623,11 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 				new->id=-8;
 				return new;
 			}
-		
+
 			(*tmp_value)=(*((double *)tmp1.ptr))/(*((int *)tmp2.ptr));
-		
-		
-		}	
+
+
+		}
 		new->ptr=(double *)tmp_value;
 		return new;
 	}
@@ -605,12 +636,12 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
 		if (tmp_value==NULL)
-			return NULL;		
+			return NULL;
 		if (i==1)
 			(*tmp_value)=(*((int *)tmp1.ptr))-(*((double *)tmp2.ptr));
-		else if (i==2)	
+		else if (i==2)
 			(*tmp_value)=(*((int *)tmp1.ptr))*(*((double *)tmp2.ptr));
-		else 
+		else
 		{
 			if ((*((double *)tmp2.ptr)==0.0))
 			{
@@ -618,26 +649,26 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 				new->id=-8;
 				return new;
 			}
-		
+
 			(*tmp_value)=(*((double *)tmp1.ptr))/(*((double *)tmp2.ptr));
-		
-		
+
+
 		}
-			
+
 		new->ptr=(double *)tmp_value;
 		return new;
-	}						
+	}
 	else
 	{
 		new->id=TYPE_INT;
 		int *tmp_value=malloc(sizeof(int));
 		if (tmp_value==NULL)
-			return NULL;		
+			return NULL;
 		if (i==1)
 			(*tmp_value)=(*((int *)tmp1.ptr))-(*((int *)tmp2.ptr));
-		else if (i==2)	
+		else if (i==2)
 			(*tmp_value)=(*((int *)tmp1.ptr))*(*((int *)tmp2.ptr));
-		else 
+		else
 		{
 			if ((*((int *)tmp2.ptr)==0))
 			{
@@ -645,18 +676,18 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 				new->id=-8;
 				return new;
 			}
-		
+
 			(*tmp_value)=(*((double *)tmp1.ptr))/(*((double *)tmp2.ptr));
-		
+
 		}
-			
-			
+
+
 		new->ptr=(int *)tmp_value;
 		return new;
-	}					
+	}
 }
 
-token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>=) 4 (<=) 
+token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>=) 4 (<=)
 {
 	token *new=malloc(sizeof(token));
 	if (new==NULL)
@@ -666,88 +697,88 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 		if (i==1)
 			if((*((double *)tmp1.ptr))==(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		else if (i==2)
 		{
 			if((*((double *)tmp1.ptr))!=(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		}
 		else if (i==3)
 		{
 			if((*((double *)tmp1.ptr))>=(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 		else if(i==4)
 		{
 			if((*((double *)tmp1.ptr))>(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
-		
+
 		else if(i==5)
 		{
 			if((*((double *)tmp1.ptr))<=(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 		else if(i==6)
 		{
 			if((*((double *)tmp1.ptr))<(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
-		
+
 	}
 	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_INT)
 	{
 		if (i==1)
 			if((*((double *)tmp1.ptr))==(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		else if (i==2)
 		{
 			if((*((double *)tmp1.ptr))!=(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		}
 		else if (i==3)
 		{
 			if((*((double *)tmp1.ptr))>=(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 		else if(i==4)
 		{
 			if((*((double *)tmp1.ptr))>(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
-		
+
 		else if(i==5)
 		{
 			if((*((double *)tmp1.ptr))<=(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 		else if(i==6)
 		{
 			if((*((double *)tmp1.ptr))<(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 	}
 	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_DOUBLE)
@@ -755,87 +786,87 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 		if (i==1)
 			if((*((int *)tmp1.ptr))==(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		else if (i==2)
 		{
 			if((*((int *)tmp1.ptr))!=(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		}
 		else if (i==3)
 		{
 			if((*((int *)tmp1.ptr))>=(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 		else if(i==4)
 		{
 			if((*((int *)tmp1.ptr))>(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
-		
+
 		else if(i==5)
 		{
 			if((*((int *)tmp1.ptr))<=(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 		else if(i==6)
 		{
 			if((*((int *)tmp1.ptr))<(*((double *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
-	}						
+	}
 	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_INT)
 	{
 		if (i==1)
 			if((*((int *)tmp1.ptr))==(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		else if (i==2)
 		{
 			if((*((int *)tmp1.ptr))!=(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		}
 		else if (i==3)
 		{
 			if((*((int *)tmp1.ptr))>=(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 		else if(i==4)
 		{
 			if((*((int *)tmp1.ptr))>(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
-		
+
 		else if(i==5)
 		{
 			if((*((int *)tmp1.ptr))<=(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 		else if(i==6)
 		{
 			if((*((int *)tmp1.ptr))<(*((int *)tmp2.ptr)))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;		
+			else
+				new->id=S_FALSE;
 		}
 	}
 	else
@@ -844,61 +875,61 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 		{
 			if ((tmp1.id==S_TRUE && tmp2.id==S_TRUE) || (tmp1.id==S_FALSE && tmp2.id==S_FALSE))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		}
 		else if (i==2)
 		{
 			if (((tmp1.id==S_TRUE) && (tmp1.id==S_FALSE)) || ((tmp1.id==S_FALSE) && (tmp2.id==S_TRUE)))
-				new->id=S_TRUE;		
+				new->id=S_TRUE;
 			else
-				new->id=S_FALSE;				
+				new->id=S_FALSE;
 		}
 		else if (i==3)
 		{
 			if ((tmp1.id==S_TRUE) || (tmp1.id==S_FALSE && tmp2.id==S_FALSE) || (tmp1.id==S_TRUE && tmp2.id==S_TRUE))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		}
 		else if (i==4)
 		{
 			if ((tmp1.id==S_TRUE) && (tmp2.id==S_FALSE))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
-		}	
+		}
 		else if (i==5)
 		{
 			if ((tmp1.id==S_FALSE) || (tmp1.id==S_FALSE && tmp2.id==S_FALSE) || (tmp1.id==S_TRUE && tmp2.id==S_TRUE))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
-		}	
+		}
 		else if (i==6)
 		{
 			if ((tmp1.id=S_FALSE) && (tmp2.id==S_TRUE))
 				new->id=S_TRUE;
-			else 
+			else
 				new->id=S_FALSE;
 		}
 		else if (i==7)
 		{
 			if ((tmp1.id=S_TRUE) && (tmp2.id==S_TRUE))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;	
+			else
+				new->id=S_FALSE;
 		}
 		else if (i==8)
 		{
 			if ((tmp1.id=S_TRUE) || (tmp2.id==S_TRUE))
 				new->id=S_TRUE;
-			else 
-				new->id=S_FALSE;	
+			else
+				new->id=S_FALSE;
 		}
-			
+
 	}
 	return new;
-	
-						
+
+
 }
