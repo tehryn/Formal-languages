@@ -93,6 +93,8 @@ int parser()
 		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
 		return ERR_INTERN_FAULT;
 	}
+	InstructionTape->Active=NULL;
+	InstructionTape->Last=NULL;
 
 	// runtime = 1
 	parser_return = analysis(&s, 1, stack_of_table_symbols, InstructionTape);
