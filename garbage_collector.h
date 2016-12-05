@@ -10,6 +10,11 @@
 #define MEMORY
 #include <stdio.h>
 #include <stdlib.h>
+/** @defgroup garbage_collector Garbage collector */
+/** @addtogroup garbage_collector
+  * @brief Garbage collector is group of functions that allocate memory and store pointers into list to prevent memory leaks
+  * @{
+  */
 
 /**
  * List of items, that holds allocated memory
@@ -61,4 +66,6 @@ void free_memory();
  * @pre         Function mem_list_t_init was called before
  */
 void * mem_realloc(void *ptr, size_t size);
+
+/** @} */
 #endif
