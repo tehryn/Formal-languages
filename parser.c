@@ -998,7 +998,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						return ERR_INTERN_FAULT;
 					}
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
-					if (tmp_ptr != NULL)
+					if (tmp_ptr == NULL)
 					{
 						TableItem->instruction_tape = Instruction;
 					}
@@ -1549,7 +1549,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						return ERR_INTERN_FAULT;
 					}
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
-					if (tmp_ptr != NULL)
+					if (tmp_ptr == NULL)
 					{
 						TableItem->instruction_tape = Instruction;
 					}
@@ -1602,7 +1602,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						return ERR_INTERN_FAULT;
 					}
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
-					if (tmp_ptr != NULL)
+					if (tmp_ptr == NULL)
 					{
 						TableItem->instruction_tape = Instruction;
 					}
@@ -1684,7 +1684,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						return ERR_INTERN_FAULT;
 					}
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
-					if (tmp_ptr != NULL)
+					if (tmp_ptr == NULL)
 					{
 						TableItem->instruction_tape = Instruction;
 					}
@@ -1791,7 +1791,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 								return ERR_INTERN_FAULT;
 							}
 							I_Instr * tmp_ptr = TableItem->instruction_tape;
-							if (tmp_ptr != NULL)
+							if (tmp_ptr == NULL)
 							{
 								TableItem->instruction_tape = Instruction;
 							}
@@ -1815,7 +1815,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							return ERR_INTERN_FAULT;
 						}
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
-						if (tmp_ptr != NULL)
+						if (tmp_ptr == NULL)
 						{
 							TableItem->instruction_tape = Instruction;
 						}
@@ -1842,7 +1842,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						Instruction->adr2 = TableItem->instruction_tape;
 
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
-						if (tmp_ptr != NULL)
+						if (tmp_ptr == NULL)
 						{
 							TableItem->instruction_tape = Instruction;
 						}
