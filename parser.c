@@ -88,7 +88,7 @@ int parser()
 
 	Instr_List * InstructionTape = NULL;
 	InstructionTape = mem_alloc(sizeof(Instr_List));
-	if (Instruction == NULL)
+	if (InstructionTape == NULL)
 	{
 		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
 		return ERR_INTERN_FAULT;
@@ -176,7 +176,7 @@ int parser()
 	}
 
 	// call interpret
-	int interpret_return = inter(Instruction, stack_of_table_symbols);
+	int interpret_return = inter(InstructionTape, stack_of_table_symbols);
 	if (interpret_return != 0)
 	{
 		stack_int_destroy(&s);
