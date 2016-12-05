@@ -45,7 +45,7 @@ int inter(Instr_List *L, stack_htab *I_Htable);
 char *IntToString(int x);
 char *DoubleToString(double x);
 char *Conc_Str(char *s1, char *s2);
-
+int is_emb_fce(htab_item *return_hitem,token *postfix_array);
 extern htab_t *stack_htab_get_first(stack_htab *stack);
 
 
