@@ -48,7 +48,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 								new->id=TYPE_INT;
 							
 							
-							item_tmp1=stack_htab_find_htab_item(I_Htable, (const char*)ptr->ptr);
+							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr->ptr);
 							if (item_tmp1->initialized==0)
 							{
 								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
@@ -184,7 +184,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 								new->id=TYPE_INT;
 							
 							
-							item_tmp1=stack_htab_find_htab_item(I_Htable, (const char*)ptr->ptr);
+							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr->ptr);
 							if (item_tmp1->initialized==0)
 							{
 								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
