@@ -58,7 +58,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				return_hitem=(htab_item *)return_token->ptr;
 				k=0;
 				postfix_array=(token **)L->Active->adr2;
-				while(postfix_array[k]->id!=-2)
+				while(postfix_array[k]->id!=END_EXPR)
 				{
 					ptr=postfix_array[k++];
 					switch (ptr->id)
