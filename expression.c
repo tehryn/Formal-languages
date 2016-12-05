@@ -314,7 +314,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
 				//if (tmp_table_item->data==NULL)
-				if (tmp_table_item->initialized!=1 && error_6_flag==1 )
+				if ( error_6_flag==1 && tmp_table_item->initialized!=1 )
 				{
 					fprintf(stderr, "Symbol: %s\n", name);
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
