@@ -89,7 +89,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							}
 							new->ptr=item_tmp1->data;
 							stack_expression_push(S,*new);
-							free(new);
+							//free(new);
 							break;
 
 						case TYPE_DOUBLE:
@@ -155,7 +155,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				{
 					return ERR_SEM_COMPATIBILITY;
 				}
-				break;
+				
 
 				if(return_token->id==TYPE_DOUBLE)
 				{
@@ -172,13 +172,13 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					if (tmp1.id==TYPE_INT)
 					{
 						char *str_data=IntToString((*((int *)tmp1.ptr)));
-						free(tmp1.ptr);
+						//(tmp1.ptr);
 						return_hitem->data=(char *)str_data;
 					}
 					else if (tmp1.id==TYPE_DOUBLE)
 					{
 						char *str_data=DoubleToString((*((int *)tmp1.ptr)));
-						free(tmp1.ptr);
+						//free(tmp1.ptr);
 						return_hitem->data=(char *)str_data;
 					}
 					else
@@ -225,7 +225,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							}
 							new->ptr=item_tmp1->data;
 							stack_expression_push(S,*new);
-							free(new);
+							//free(new);
 							break;
 
 						case TYPE_DOUBLE:
