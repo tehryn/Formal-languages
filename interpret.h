@@ -49,7 +49,7 @@ int inter(Instr_List *L, stack_htab *I_Htable);
 char *IntToString(int x);
 char *DoubleToString(double x);
 char *Conc_Str(char *s1, char *s2);
-int is_emb_fce(htab_item *return_hitem,token *postfix_array,Instr_List *L);
+int is_emb_fce(htab_item *item_tmp1,token *postfix_array,token *return_token, stack_htab *I_Htable);
 extern htab_t *stack_htab_get_first(stack_htab *stack);
 
 
