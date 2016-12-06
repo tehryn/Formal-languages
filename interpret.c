@@ -59,6 +59,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				if (return_token->id!=TYPE_STRING)
 				{
 					return_hitem=stack_htab_find_htab_item(I_Htable, (char *)return_token->ptr);
+					break;
 				}
 				k=0;
 				postfix_array=(token *)L->Active->adr2;
@@ -484,10 +485,12 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				k=0;	
 				if (return_hitem==NULL)
 					printf ("NULL\n");
+		
 				postfix_array=(token *)L->Active->adr2;
 				
 				if (strcmp(return_hitem->key,"ifj16.print")==0)
 				{
+					printf("NADSASDASDA\n");
 					while(postfix_array[k].id!=END_EXPR)
 						k++;
 					postfix_array[k-1].id=END_EXPR;
@@ -516,9 +519,9 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					printf("NULL\n");
 				
 				k=0;	
-				if (postfix_array!=NULL)
-				{
-					while(postfix_array[k].id!=END_EXPR)
+				if (L->Active->adr2!=NULL)
+				{	printf("K jeeeeeeeeee:%d\n",k);
+					while(postfix_array[k+1].id!=END_EXPR)
 					{	
 						if (postfix_array[k].ptr==NULL)
 							printf("ITS NULL! id: %d\n",postfix_array[k].id);
