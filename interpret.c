@@ -55,27 +55,22 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 		switch (L->Active->type_instr)
 		{
 			case I_ASSIGMENT:
-				if (L->Active->adr1!=NULL)
-				{printf("Null je\n");
-					return_token=(token *)L->Active->adr1;
-					if (return_token->id!=TYPE_STRING)
-					{
-						return_hitem=stack_htab_find_htab_item(I_Htable, (char *)return_token->ptr);
-						break;
-					}
-					k=0;
-					postfix_array=(token *)L->Active->adr2;
-					ptr=postfix_array[k];
-				}
+				return_token=(token *)L->Active->adr1;
+				return_hitem=stack_htab_find_htab_item(I_Htable,(char *) return_token->ptr);
+				k=0;
+				postfix_array=(token *)L->Active->adr2;
+				ptr=postfix_array[k];
 				printf("Assigment\n");
 				while(postfix_array[k].id!=END_EXPR)
 				{	
+					
 					ptr=postfix_array[k++];
+					printf("ptr.id: %d\n",ptr.id);
 					switch (ptr.id)
 					{
 						case S_SIMPLE_IDENT:
 						case S_FULL_IDENT:
-							
+							printf("simple ident\n");
 							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
 							if (item_tmp1==NULL)
 							{
@@ -126,6 +121,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 						case TYPE_DOUBLE:
 						case TYPE_INT:
 						case TYPE_STRING:
+							printf("nije simple ident\n");
 							stack_expression_push(S,ptr);
 							break;
 
@@ -178,7 +174,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 
 				stack_expression_pop(S,&tmp1);
-				
+				printf("prirazeni\n");
 				if(L->Active->adr1==NULL) // ifj16.print
 				{
 					if (tmp1.id==TYPE_INT)
@@ -209,7 +205,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					L->Active=tmp_instr;
 					break;
 				}
-				
+				printf("prirazeni1: %d\n",return_hitem->data_type);
 				
 				if (return_hitem->data_type==S_INT && tmp1.id!=TYPE_INT)
 				{
@@ -228,8 +224,13 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				else if(return_hitem->data_type==S_INT)
 				{
 					//free(return_hitem->data);
-					return_hitem->data=(int *)tmp1.ptr;
-
+					int *tmp=malloc(sizeof(int));
+					*tmp=(*((int *)tmp1.ptr));
+					printf("TMP VAL: %d\n",*tmp);
+					return_hitem->data=(int *)tmp;
+					printf("Return token data: %d\n",*((int*)return_hitem->data));
+					printf("Return token key: %s\n",(char *)return_hitem->key);
+					return_token->ptr=(htab_item*)return_hitem;
 				}
 				else
 				{
@@ -251,8 +252,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 						return_hitem->data=(char *)tmp1.ptr;
 					}
 				}
-				L->Active=L->Active->next_instr;
-
+				
+				break;
 
 			case I_IF:
 			case I_WHILE:
@@ -488,17 +489,26 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				k=0;	
 				if (return_hitem==NULL)
 					printf ("NULL\n");
-		
+				htab_item *tmp_123=stack_htab_find_htab_item(I_Htable,"a");
+				if (tmp_123!=NULL)
+				{
+					printf("key: %s\n",tmp_123->key);
+					printf("key DATA: %d\n",(*(int *)tmp_123->data));
+				}
 				postfix_array=(token *)L->Active->adr2;
 				
 				if (strcmp(return_hitem->key,"ifj16.print")==0)
 				{
-					while(postfix_array[k].id!=END_EXPR)
-						k++;
-					postfix_array[k-1].id=END_EXPR;
-					k=0;
 					
-					printf("%d\n",(*(int *)postfix_array[0].ptr));
+					k=0;
+					//if (postfix_array[0].id==S_INT)
+						printf("JESTE: %d\n",postfix_array[0].id);
+						if (postfix_array[0].ptr==NULL)
+							printf("ASDF\n");
+					htab_item *tmp_item=postfix_array[0].ptr;
+					printf("key: %s\n",tmp_item->key);
+					printf("%d\n",*((int *)tmp_item->data));
+//					printf("%d\n",(*(int *)postfix_array[2].ptr));
 					
 					
 					break;
@@ -686,10 +696,13 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 						if (L->Active->type_instr==I_ELSE)	
 							count++;
 					}
-					L->Active=L->Active->next_instr;
+						
 				}
 				break;	
 				
+			case I_END:
+				
+				break;
 				
 			default:
 			break;
