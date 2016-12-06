@@ -153,11 +153,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 		else if( input_token.id == S_RIGHT_PARE)									// right bracket
 		{
-			//fprintf(stderr, "%d %d\n", end_token, left_bracket_count);	// odje torima
-
 			if ( (syn_rules&4)!=0 && !( end_token==S_COMMA && e_type==-1))
 					FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 14\n", ERR_SYNTACTIC_ANALYSIS);
-
 
 			right_bracket_count++;
 			if (right_bracket_count>left_bracket_count)
@@ -290,8 +287,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			}
 
 			STRDUP(input_token.ptr, tmp_table_item->key);
-			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s initialized:%d\n", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key, tmp_table_item->initialized);	// odje torima
-			
+
 			int ident_type=-1;
 
 			if (tmp_table_item->func_or_var==1)		// variable
@@ -478,6 +474,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 	for (int i=0; i<=postfix_exp_stack.top; i++)
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
+	
+	//print_token_array( *postfix_token_array, 0);
 
 	if(ma1[0]!=NULL) free(ma1[0]);
 	if(ma1[1]!=NULL) free(ma1[1]);
@@ -580,12 +578,16 @@ int operator_priority (int op)
 {
 	if ( op==S_DIV || op==S_MUL )
 		return 5;
+
 	else if ( op==S_MINUS || op==S_PLUS )
 		return 4;
-	else if ( op==S_LESS_EQUAL || op==S_GREATER_EQUAL || op==S_LESS || op==S_GREATER || op==S_OR || op==S_AND )
+
+	else if ( op==S_LESS_EQUAL || op==S_GREATER_EQUAL || op==S_LESS || op==S_GREATER || op==S_EQUAL || op==S_NOT_EQUAL)
 		return 3;
-	else if ( op==S_EQUAL || op==S_NOT_EQUAL )
+
+	else if ( op==S_OR || op==S_AND )
 		return 2;
+
 	else if ( op==S_COMMA )
 		return 1;
 
@@ -597,12 +599,16 @@ int type_priority (int type)
 {
 	if (type==TYPE_BOOLEAN || type==S_BOOLEAN)
 		return 6;
+
 	else if (type==TYPE_STRING || type==S_STRING)
 		return 5;
+
 	else if (type==TYPE_DOUBLE || type==S_DOUBLE)
 		return 4;
+
 	else if (type==TYPE_INT || type==S_INT)
 		return 3;
+
 	else if (type==S_VOID)
 		return 1;
 
@@ -613,12 +619,16 @@ int type_name_convertion (int type)
 {
 	if (type==TYPE_STRING || type==S_STRING)
 		return S_STRING;
+
 	else if (type==TYPE_DOUBLE || type==S_DOUBLE)
 		return S_DOUBLE;
+
 	else if (type==TYPE_INT || type==S_INT)
 		return S_INT;
+
 	else if (type==TYPE_BOOLEAN || type==S_BOOLEAN || type==S_FALSE || type==S_TRUE)
 		return S_BOOLEAN;
+
 	else if (type==S_VOID)
 		return S_VOID;
 
