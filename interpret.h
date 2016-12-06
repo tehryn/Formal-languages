@@ -53,6 +53,6 @@ int is_emb_fce(htab_item *item_tmp1,token *postfix_array,token *return_token, st
 extern htab_t *stack_htab_get_first(stack_htab *stack);
 
 
-
+void I_Instr_null_elements(I_Instr * Instruction);
 
 #endif

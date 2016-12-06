@@ -50,12 +50,13 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	token ptr, tmp1, tmp2, *new;
 	while (L->Active!=NULL)
     {
+		printf("L->Active type: %d\n",L->Active->type_instr);
+			
 		switch (L->Active->type_instr)
 		{
-
 			case I_ASSIGMENT:
 				if (L->Active->adr1!=NULL)
-				{
+				{printf("Null je\n");
 					return_token=(token *)L->Active->adr1;
 					if (return_token->id!=TYPE_STRING)
 					{
@@ -66,6 +67,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					postfix_array=(token *)L->Active->adr2;
 					ptr=postfix_array[k];
 				}
+				printf("Assigment\n");
 				while(postfix_array[k].id!=END_EXPR)
 				{	
 					ptr=postfix_array[k++];
@@ -496,7 +498,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					postfix_array[k-1].id=END_EXPR;
 					k=0;
 					
-					printf("%s",(char *)postfix_array[0].ptr);
+					printf("%d\n",(*(int *)postfix_array[0].ptr));
 					
 					
 					break;
@@ -1364,4 +1366,12 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 	return new;
 
 
+}
+void I_Instr_null_elements(I_Instr * Instruction)
+{
+	Instruction->type_instr = 0;
+	Instruction->adr1 = NULL;
+	Instruction->adr2 = NULL;
+	Instruction->adr3 = NULL;
+	Instruction->next_instr = NULL;
 }
