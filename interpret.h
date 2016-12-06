@@ -40,6 +40,7 @@ typedef struct Instr_List{
 
 int Add_Instr(Instr_List *L, I_Instr *new);
 
+token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_expresion *S);
 
 token *inter_plus(token a,token b);
 token *inter_arm_op(token tmp1,token tmp2, int i);

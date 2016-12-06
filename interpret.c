@@ -50,7 +50,6 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	token ptr, tmp1, tmp2, *new;
 	while (L->Active!=NULL)
     {
-			
 		switch (L->Active->type_instr)
 		{
 			case I_ASSIGMENT:
@@ -59,153 +58,16 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				k=0;
 				postfix_array=(token *)L->Active->adr2;
 				ptr=postfix_array[k];
-				while(postfix_array[k].id!=END_EXPR)
-				{	
-					
-					ptr=postfix_array[k++];
-					switch (ptr.id)
-					{
-						case S_SIMPLE_IDENT:
-						case S_FULL_IDENT:
-							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
-							if (item_tmp1==NULL)
-							{
-								stack_expression_destroy(S);
-								free(S);
-								fprintf(stderr,"Interpret: Item wasn't found.\n");
-								return ERR_OTHERS;
-							}
-							if (item_tmp1->func_or_var==2)
-							{
-								if(is_emb_fce(item_tmp1,postfix_array,return_token,I_Htable))
-								{
-									stack_expression_destroy(S);
-									free(S);
-									return 0;
-								}
-								else 				// TODO
-									return -1;
-							
-							}
-							if (item_tmp1->initialized==0)
-							{
-								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
-								//freeALL();
-								return ERR_UNINICIALIZED_VAR ;
-							}
-							if (item_tmp1->func_or_var==1)
-							{
-								new=malloc(sizeof(token));
-								if (new==NULL)
-									return ERR_INTERN_FAULT;
+				
 
-								if (item_tmp1->data_type==S_STRING)
-									new->id=TYPE_STRING;
-								else if (item_tmp1->data_type==S_DOUBLE)
-									new->id=TYPE_DOUBLE;
-								else
-									new->id=TYPE_INT;							
-								
-								
-								
-								new->ptr=item_tmp1->data;
-								stack_expression_push(S,*new);
-							}
-							//free(new);
-							break;
-
-						case TYPE_DOUBLE:
-						case TYPE_INT:
-						case TYPE_STRING: 
-							stack_expression_push(S,ptr);
-							break;
-
-						case S_PLUS:					// ----------- PLUS
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_plus(tmp1,tmp2);
-							stack_expression_push(S,*new);
-							break;
-
-						case S_MINUS:					//     ----------------------  MINUS
-
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_arm_op(tmp1,tmp2,1);
-							stack_expression_push(S,*new);
-							break;
-
-
-						case S_MUL:					//     ----------------------  Multiplication
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_arm_op(tmp1,tmp2,2);
-							stack_expression_push(S,*new);
-							break;
-
-
-						case S_DIV:					//     ----------------------  Division
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_arm_op(tmp1,tmp2,2);
-							if (new->id==-8)
-							{
-								fprintf(stderr, "Divison by zero!.\n");
-								//freeALL();
-								return ERR_DIVISION_ZERO ;
-							}
-
-							stack_expression_push(S,*new);
-							break;
-
-
-					}
-
-				}
-
-
-				stack_expression_pop(S,&tmp1);
-				/*
-				if(L->Active->adr1==NULL) // ifj16.print
-				{
-					if (tmp1.id==TYPE_INT)
-					{
-						char *str_data=IntToString((*((int *)tmp1.ptr)));
-						//(tmp1.ptr);
-						print(str_data);
-						free(str_data);
-					}
-					else if (tmp1.id==TYPE_DOUBLE)
-					{
-						char *str_data=DoubleToString((*((int *)tmp1.ptr)));
-						//free(tmp1.ptr);
-						print(str_data);
-						free(str_data);
-					}
-					else
-					{
-						//free(return_hitem->data);
-						char *str_data=(char *)tmp1.ptr;
-						print(str_data);
-						free(str_data);
-					}
-					I_Instr *tmp_instr=L->Active->next_instr;
-					I_Instr *prev_instr=L->Active->adr3;
-					prev_instr->next_instr=tmp_instr;
-					free(L->Active);
-					L->Active=tmp_instr;
-					break;
-				}
-				*/
-				if (return_hitem->data_type==S_INT && tmp1.id!=TYPE_INT)
+				new=do_expression(postfix_array,I_Htable,S);
+				
+				
+				if (return_hitem->data_type==S_INT && new->id!=TYPE_INT)
 				{
 					return ERR_SEM_COMPATIBILITY;
 				}
-				if(return_hitem->data_type==S_DOUBLE && tmp1.id==TYPE_STRING)
+				if(return_hitem->data_type==S_DOUBLE && new->id==TYPE_STRING)
 				{
 					return ERR_SEM_COMPATIBILITY;
 				}
@@ -213,34 +75,34 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 				if(return_hitem->data_type==S_DOUBLE)
 				{
-					return_hitem->data=(double *)tmp1.ptr;
+					return_hitem->data=(double *)new->ptr;
 				}
 				else if(return_hitem->data_type==S_INT)
 				{
 					//free(return_hitem->data);
-					return_hitem->data=(int *)tmp1.ptr;
+					return_hitem->data=(int *)new->ptr;
 				}
 				else
 				{
-					if (tmp1.id==TYPE_INT)
+					if (new->id==TYPE_INT)
 					{
-						char *str_data=IntToString((*((int *)tmp1.ptr)));
-						//(tmp1.ptr);
+						char *str_data=IntToString((*((int *)new->ptr)));
+						//(new->ptr);
 						return_hitem->data=(char *)str_data;
 					}
-					else if (tmp1.id==TYPE_DOUBLE)
+					else if (new->id==TYPE_DOUBLE)
 					{
-						char *str_data=DoubleToString((*((int *)tmp1.ptr)));
-						//free(tmp1.ptr);
+						char *str_data=DoubleToString((*((int *)new->ptr)));
+						//free(new->ptr);
 						return_hitem->data=(char *)str_data;
 					}
 					else
 					{
 						//free(return_hitem->data);
-						return_hitem->data=(char *)tmp1.ptr;
+						return_hitem->data=(char *)new->ptr;
 					}
 				}
-				
+				return_hitem->initialized=1;
 				break;
 
 			case I_IF:
@@ -479,25 +341,14 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				
 				if (strcmp(return_hitem->key,"ifj16.print")==0)
 				{
-					htab_item *	tmp_item=stack_htab_find_htab_item(I_Htable,(char *)postfix_array[0].ptr);
-					if (tmp_item->data_type==S_INT)
-					{
-						char *str=IntToString(*((int*)tmp_item->data));
-						print(str);
-						free(str);
-					}
-					else if (tmp_item->data_type==S_DOUBLE)
-					{
-						char *str=DoubleToString(*((double*)tmp_item->data));
-						print(str);
-						free(str);
-					}					
-					else
-					{
-						char *str=((char*)tmp_item->data);
-						print(str);
-					}
+					token *str_token=do_expression(postfix_array,I_Htable,S);
+					print((char *)str_token->ptr);
+					print("\n");
+					free(str_token->ptr);
+					free(str_token);
 					break;
+					//printf("%d\n",str
+					
 				}
 				
 				loc_table=(htab_t *)return_hitem->local_table;
@@ -1373,3 +1224,146 @@ void I_Instr_null_elements(I_Instr * Instruction)
 	Instruction->adr3 = NULL;
 	Instruction->next_instr = NULL;
 }
+
+token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_expresion *S)
+{
+	token *new_token=malloc(sizeof(token));
+	token ptr,tmp1,tmp2;
+	token *new;
+	int k=0;
+	htab_item *item_tmp1;
+	while(postfix_array[k].id!=END_EXPR)
+	{	
+		
+		ptr=postfix_array[k++];
+		switch (ptr.id)
+		{
+			case S_SIMPLE_IDENT:
+			case S_FULL_IDENT:
+				item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
+				if (item_tmp1==NULL)
+				{
+					stack_expression_destroy(S);
+					free(S);
+					fprintf(stderr,"Interpret: Item wasn't found.\n");
+					new_token->id=ERR_OTHERS;
+					return new_token;
+				}
+				/*
+				if (item_tmp1->func_or_var==2)
+				{
+					if(is_emb_fce(item_tmp1,postfix_array,new_token,I_Htable))
+					{
+						stack_expression_destroy(S);
+						free(S);
+						return 0;
+					}
+					else 				// TODO
+						return -1;
+				
+				}
+				*/
+				if (item_tmp1->initialized==0)
+				{
+					fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
+					//freeALL();
+					new_token->id=ERR_UNINICIALIZED_VAR;
+					return new_token;
+				}
+				if (item_tmp1->func_or_var==1)
+				{
+					new=malloc(sizeof(token));
+
+					if (item_tmp1->data_type==S_STRING)
+						new->id=TYPE_STRING;
+					else if (item_tmp1->data_type==S_DOUBLE)
+						new->id=TYPE_DOUBLE;
+					else
+						new->id=TYPE_INT;							
+					
+					
+					
+					new->ptr=item_tmp1->data;
+					stack_expression_push(S,*new);
+				}
+				//free(new);
+				break;
+
+			case TYPE_DOUBLE:
+			case TYPE_INT:
+			case TYPE_STRING: 
+				stack_expression_push(S,ptr);
+				break;
+
+			case S_PLUS:					// ----------- PLUS
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_plus(tmp1,tmp2);
+				stack_expression_push(S,*new);
+				break;
+
+			case S_MINUS:					//     ----------------------  MINUS
+
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_arm_op(tmp1,tmp2,1);
+				stack_expression_push(S,*new);
+				break;
+
+
+			case S_MUL:					//     ----------------------  Multiplication
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_arm_op(tmp1,tmp2,2);
+				stack_expression_push(S,*new);
+				break;
+
+
+			case S_DIV:					//     ----------------------  Division
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_arm_op(tmp1,tmp2,2);
+				if (new->id==-8)
+				{
+					fprintf(stderr, "Divison by zero!.\n");
+					//freeALL();
+					new_token->id=ERR_DIVISION_ZERO;
+					return new_token ;
+				}
+
+				stack_expression_push(S,*new);
+				break;
+
+
+		}
+	}
+	stack_expression_pop(S,&tmp1);
+	new_token->id=tmp1.id;
+	if (new_token->id==TYPE_INT)
+	{
+		int *new_val=malloc(sizeof(int));
+		*new_val=*((int*)tmp1.ptr);
+		new_token->ptr=(int *)new_val;
+	}
+	else if (new_token->id==TYPE_DOUBLE)
+	{
+		double *new_val=malloc(sizeof(double));
+		*new_val=*((double*)tmp1.ptr);
+		new_token->ptr=(double *)new_val;
+	}
+	else
+	{
+		char *new_val=malloc(sizeof(char)*strlen((char*)tmp1.ptr)+1);
+		memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp1.ptr)+1);
+		new_token->ptr=(char *)new_val;		
+	}
+	
+	
+	
+	return new_token;
+}
+
