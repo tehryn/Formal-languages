@@ -59,16 +59,18 @@ struct stack_expresion
 //	int token_count, expr_data_type;
 //	int expr_analyze(t_in, &t_out, &postfix_token_array, &token_count, &expr_data_type, global_table, local_table);
 */
-int expr_analyze 			( token t_in, token *t_out, char* class_name, int error_6_flag, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...);
+int expr_analyze 		( token t_in, token *t_out, char* class_name, int error_6_flag, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...);
 int stack_expression_init 	( struct stack_expresion* s, int size );
-int stack_expression_destroy( struct stack_expresion* s );
+int stack_expression_destroy	( struct stack_expresion* s );
 int stack_expression_empty 	( const struct stack_expresion* s );
 int stack_expression_full 	( const struct stack_expresion* s );
 int stack_expression_top 	( struct stack_expresion* s, token* t );
 int stack_expression_pop 	( struct stack_expresion* s, token* t );
 int stack_expression_push	( struct stack_expresion* s, token t );
 int operator_priority 		(int op);
-int type_priority 			(int type);
+int type_priority 		(int type);
 int type_name_convertion 	(int type);
+void print_token		(token t, int id_flag);
+void print_token_array		(token * arr, int id_flag);
 
 #endif	// expression_h_INCLUDED
