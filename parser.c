@@ -138,7 +138,7 @@ int parser()
 	}
 
 	// call Main.run
-
+	
 	I_Instr * Instruction = NULL;
 	Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
 	if (Instruction == NULL)
@@ -180,9 +180,13 @@ int parser()
 	strcpy((char*)t_tmp[0].ptr, "Main.run");
 
 	// nutne nastavit t_tmp[1] ...
+	
+	t_tmp[1].id = END_EXPR;
+	t_tmp[1].ptr = NULL;
+	
 	Instruction->adr2 = t_tmp;
 
-
+	
 	if (Add_Instr(InstructionTape, Instruction) != 0)
 	{
 		stack_int_destroy(&s);
@@ -201,9 +205,9 @@ int parser()
 		array_string_destroy(&all_class_names);
 		return interpret_return;
 	}
-
+	
 	//htab_free_all(global_table_symbols);
-
+	
 
 
 
@@ -1815,14 +1819,14 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					else if (Instruction->type_instr == I_FCE)
 					{
 						Instruction->adr2 = postfix_token_array;
-
+						
 						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
 						if (TableItem == NULL)
 						{
 							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
 							return ERR_INTERN_FAULT;
 						}
-
+						
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
 						if (tmp_ptr == NULL)
 						{
@@ -1885,7 +1889,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-
+			
 			case P_I_ENDIF:
 				stack_int_pop(s);
 				if (runtime == 2)
@@ -1922,7 +1926,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-
+			
 			case P_I_ENDELSE:
 				stack_int_pop(s);
 				if (runtime == 2)
@@ -1959,7 +1963,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-
+			
 			case P_I_ENDWHILE:
 				stack_int_pop(s);
 				if (runtime == 2)
