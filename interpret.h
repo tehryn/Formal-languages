@@ -9,19 +9,20 @@
 #include "scanner.h"
 #include "structures.h"
 #include "expression.h"
+#include "parser.h"
 
 enum {
-	I_ASSIGMENT = 68+1,	//69
-	I_IF,						//70
-	I_ELSE,						//71
-	I_WHILE,					//72
-	I_END, 						//73  end of IF || end of ELSE || end of WHILE
-	I_FCE,						//74
-	I_RETURN,					//75
-	I_PRINT,					//76
-	I_ENDIF,					//77
-	I_ENDWHILE,					//78
-	I_ENDELSE					//79
+	I_ASSIGMENT = P_I_ENDELSE+1,//71
+	I_IF,						//72
+	I_ELSE,						//73
+	I_WHILE,					//74
+	I_END, 						//75  
+	I_FCE,						//76
+	I_RETURN,					//77
+	I_PRINT,					//78
+	I_ENDIF,					//79
+	I_ENDWHILE,					//80
+	I_ENDELSE					//81
 };
 
 typedef struct I_Instr
