@@ -50,6 +50,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	token ptr, tmp1, tmp2, *new;
 	while (L->Active!=NULL)
     {
+		printf("type: %d\n",L->Active->type_instr);
 		switch (L->Active->type_instr)
 		{
 
@@ -481,6 +482,9 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 			case I_FCE:
 				return_hitem=(htab_item *)L->Active->adr1;
 				k=0;	
+				if (return_hitem==NULL)
+					printf("null je\n");
+				printf("%s\n",return_hitem->key);
 				postfix_array=(token *)L->Active->adr2;
 				
 				if (strcmp(return_hitem->key,"ifj16.print")==0)
@@ -506,9 +510,11 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					break;
 				}
 				
-				loc_table=(htab_t *)return_hitem->local_table;
+				//loc_table=(htab_t *)return_hitem->local_table;
+			
 				loc_table=htab_copy((htab_t *)return_hitem->local_table); 
-				
+				if(loc_table==NULL)
+					printf("NULL\n");
 					
 				if (postfix_array!=NULL)
 				{
