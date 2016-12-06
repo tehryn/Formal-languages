@@ -9,10 +9,9 @@
 #include "scanner.h"
 #include "structures.h"
 #include "expression.h"
-#include "parser.h"
 
 enum {
-	I_ASSIGMENT = P_I_ENDELSE+1,//71
+	I_ASSIGMENT = 100+1,//71
 	I_IF,						//72
 	I_ELSE,						//73
 	I_WHILE,					//74
