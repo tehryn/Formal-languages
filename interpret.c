@@ -508,8 +508,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					new1->adr3=L->Active;
 					
 					tmp1=L->Active->next_instr;
-					
-					L->Active=new1;
+					new1->next_instr=tmp1;
+					L->Active->next_instr=new1;
 					L->Active->next_instr=tmp1;
 					
 					
