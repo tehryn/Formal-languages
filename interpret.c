@@ -510,12 +510,13 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					break;
 				}
 				
-				//loc_table=(htab_t *)return_hitem->local_table;
-			
+				loc_table=(htab_t *)return_hitem->local_table;
+				
 				loc_table=htab_copy((htab_t *)return_hitem->local_table); 
 				if(loc_table==NULL)
 					printf("NULL\n");
-					
+				
+				k=0;	
 				if (postfix_array!=NULL)
 				{
 					while(postfix_array[k].id!=END_EXPR)
