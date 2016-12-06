@@ -483,8 +483,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				return_hitem=(htab_item *)L->Active->adr1;
 				k=0;	
 				if (return_hitem==NULL)
-					printf("null je\n");
-				printf("%s\n",return_hitem->key);
+					printf ("NULL\n");
 				postfix_array=(token *)L->Active->adr2;
 				
 				if (strcmp(return_hitem->key,"ifj16.print")==0)
