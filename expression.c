@@ -244,33 +244,31 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			htab_item *tmp_table_item;
 			if (input_token.ptr == NULL)
 				FATAL_ERROR("EXPRESSION: Token data are not allocated. 26\n", ERR_INTERN_FAULT);
-			char name[strlen((char *)input_token.ptr) + 1];
+
 			char long_name[strlen((char *)input_token.ptr) + strlen(class_name) + 1];
 			strcpy(long_name, class_name);
 			strcat(long_name, ".");
 			strcat(long_name, (char *)input_token.ptr);
-			strcpy (name, (char *)input_token.ptr);
 
+			
 			if (input_token.id==S_FULL_IDENT)
 			{
 				if (global_table!=NULL)
-					tmp_table_item = htab_find_item(global_table, name);	// find item in global table if there is global	table (table is not NULL)
-				else
+					tmp_table_item = htab_find_item(global_table, (char *)input_token.ptr);	// find item in global table if there is global	table (table is not NULL)
+				else														
 					tmp_table_item=NULL;									// set item to NULL if there isn't a global	table (table is NULL)
 
 				if (tmp_table_item == NULL)									// if item is not found or there isn't a global table, exit with error
 				{
-					fprintf(stderr, "Symbol: %s\n", name);
+					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 					FATAL_ERROR("EXPRESSION: Symbol not defined. 27\n", ERR_SEM_NDEF_REDEF);
 				}
-				else
-					STRDUP(input_token.ptr, name);							// if item is found in global table, allocate new memory  for name of the identifier (function or variable name)
 			}
 
 			else if (input_token.id==S_SIMPLE_IDENT)
 			{
 				if (local_table!=NULL)
-					tmp_table_item = htab_find_item(local_table, name);				// find item in local table if there is global	table (table is not NULL)
+					tmp_table_item = htab_find_item(local_table, (char *)input_token.ptr);				// find item in local table if there is global	table (table is not NULL)
 				else
 					tmp_table_item=NULL;											// set item to NULL if there isn't a local table (table is NULL)
 
@@ -283,32 +281,27 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 					if (tmp_table_item == NULL)										// if item is not found neither in global nor local table or there aren't neither in global nor local table, exit with error
 					{
-						fprintf(stderr, "Symbol: %s\n", name);
+						fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 						FATAL_ERROR("EXPRESSION: Symbol not defined. 27.1\n", ERR_SEM_NDEF_REDEF);
 					}
 					else
-					{
-						STRDUP(input_token.ptr, long_name);							// if item is found in global table, allocate new memory for name of the identifier (function or variable name with class name)
-						input_token.id=S_FULL_IDENT;
-					}
+						input_token.id=S_FULL_IDENT;								// if item is found in global table, allocate new memory for name of the identifier (function or variable name with class name)  
 				}
-				else
-					STRDUP(input_token.ptr, name);									// if item is found in local table, allocate new memory  for name of the identifier (function or variable name)
 			}
 
+			STRDUP(input_token.ptr, tmp_table_item->key);
 			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s initialized:%d\n", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key, tmp_table_item->initialized);	// odje torima
-
+			
 			int ident_type=-1;
 
 			if (tmp_table_item->func_or_var==1)		// variable
 			{
-				//if (tmp_table_item->data==NULL)
 				if ( error_6_flag==1 && tmp_table_item->initialized!=1 )
 				{
-					fprintf(stderr, "Symbol: %s\n", name);
+					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_UNINICIALIZED_VAR);
 				}
-				input_token.ptr=tmp_table_item;
+				//input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
 
 				if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
@@ -324,13 +317,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				fun_in_token=get_token();
 				if (fun_in_token.id!=S_LEFT_PARE)
 				{
-					fprintf(stderr, "Function: %s\n", name);
+					fprintf(stderr, "Function: %s\n", (char *)input_token.ptr);
 					FATAL_ERROR("EXPRESSION: Function missing \"(\". 29\n", ERR_SYNTACTIC_ANALYSIS);
 				}
 
 				if (arg_count!=0 && tmp_table_item->data==NULL)
 				{
-					fprintf(stderr, "Function: %s\n", name);
+					fprintf(stderr, "Function: %s\n", (char *)input_token.ptr);
 					FATAL_ERROR("EXPRESSION: Function data types are undefined. 29.5\n", ERR_INTERN_FAULT);
 				}
 
@@ -353,7 +346,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					{
 						free(fun_param_arr);
 						fun_param_arr=NULL;
-						fprintf(stderr, "Function: %s, token id: %d.\n", name, fun_last_token.id);
+						fprintf(stderr, "Function: %s, token id: %d.\n", (char *)input_token.ptr, fun_last_token.id);
 						FATAL_ERROR("EXPRESSION: Function missing \",\" or it has wrong number of parameters. 31\n", ERR_SEM_COMPATIBILITY);
 					}
 
@@ -362,7 +355,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					{
 						free(fun_param_arr);
 						fun_param_arr=NULL;
-						fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", name, fparam_data_type, i+1);
+						fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", (char *)input_token.ptr, fparam_data_type, i+1);
 						FATAL_ERROR("EXPRESSION: Incompatible function parameter. 32\n", ERR_SEM_COMPATIBILITY);
 					}
 
@@ -387,15 +380,15 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				{
 					free(fun_param_arr);
 					fun_param_arr=NULL;
-					fprintf(stderr, "Function: %s, token id: %d.\n", name, fun_last_token.id);
+					fprintf(stderr, "Function: %s, token id: %d.\n", (char *)input_token.ptr, fun_last_token.id);
 					FATAL_ERROR("EXPRESSION: Function missing \")\" or it has wrong number of parameters. 35\n", ERR_SEM_COMPATIBILITY);
 				}
 
-				if ( arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1] && strcmp("ifj16.print", name)!=0 )
+				if ( arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1] && strcmp("ifj16.print", (char *)input_token.ptr)!=0 )
 				{
 					free(fun_param_arr);
 					fun_param_arr=NULL;
-					fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", name, fparam_data_type, arg_count-1+1);
+					fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", (char *)input_token.ptr, fparam_data_type, arg_count-1+1);
 					FATAL_ERROR("EXPRESSION: Incompatible function parameter or wrong number of parameters. 36\n", ERR_SEM_COMPATIBILITY);
 				}
 
@@ -410,13 +403,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				free(fun_param_arr);
 				fun_param_arr=NULL;
 
-				input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
 
 
 				if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 38\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
+				
+				
 			}
 
 			else
@@ -434,13 +428,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (type_priority(ident_type) > type_priority(e_type))
 				e_type = ident_type;
 
+			
 			syn_rules=9;
 		}
 
 
 		else																	// invalid token
 			FATAL_ERROR("EXPRESSION: Invalid token. 40\n", ERR_LEXICAL_ANALYSIS);
-
 
 		input_token=get_token();
 	}
@@ -460,7 +454,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	if (stack_expression_top(&tmp_exp_stack, &tmp_token) !=0)
 		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 42\n", ERR_INTERN_FAULT);
 
-
+	
 	//while( tmp_token.id != -166)
 	while( !stack_expression_empty(&tmp_exp_stack) )
 	{
@@ -475,8 +469,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			//FATAL_ERROR("EXPRESSION: Memory could not be allocated. 45\n", ERR_INTERN_FAULT);
 	}
 
-
-
+	
+	
 	*token_count=postfix_exp_stack.top+1;
 	*postfix_token_array = (token *)malloc(sizeof(token) * (postfix_exp_stack.top+1) );
 	if (*postfix_token_array==NULL)
@@ -485,13 +479,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	for (int i=0; i<=postfix_exp_stack.top; i++)
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
 
-
 	if(ma1[0]!=NULL) free(ma1[0]);
 	if(ma1[1]!=NULL) free(ma1[1]);
 
 	return 0;
 }
-
 
 
 int stack_expression_init ( struct stack_expresion* s, int size  )
