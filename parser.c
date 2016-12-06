@@ -138,10 +138,14 @@ int parser()
 	}
 
 	// call Main.run
+	
 	I_Instr * Instruction = NULL;
 	Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
 	if (Instruction == NULL)
 	{
+		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
 		fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -157,12 +161,18 @@ int parser()
 	token * t_tmp = (token*) mem_alloc(2*sizeof(token));
 	if (t_tmp == NULL)
 	{
+		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
 		fprintf(stderr, "Intern fault. token cannot be allocated.\n");
 		return ERR_INTERN_FAULT;
 	}
 	t_tmp[0].ptr = (void*) mem_alloc(strlen("Main.run")+1);
 	if (t_tmp[0].ptr == NULL)
 	{
+		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
 		fprintf(stderr, "Intern fault. Token cannot be allocated.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -171,11 +181,12 @@ int parser()
 	// nutne nastavit t_tmp[1] ...
 	Instruction->adr2 = t_tmp;
 
-
-
-
+	
 	if (Add_Instr(InstructionTape, Instruction) != 0)
 	{
+		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
 		fprintf(stderr, "Intern fault. Instruction cannot be pushed into instruction tape.\n");
 		return ERR_INTERN_FAULT;
 	}
@@ -185,12 +196,17 @@ int parser()
 	if (interpret_return != 0)
 	{
 		stack_int_destroy(&s);
+		stack_htab_destroy(&stack_of_table_symbols);
+		array_string_destroy(&all_class_names);
+		stack_int_destroy(&s);
 		return interpret_return;
 	}
-
-
-
+	
 	//htab_free_all(global_table_symbols);
+	
+
+
+
 	stack_htab_destroy(&stack_of_table_symbols);
 	array_string_destroy(&all_class_names);
 	stack_int_destroy(&s);
@@ -1799,14 +1815,14 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					else if (Instruction->type_instr == I_FCE)
 					{
 						Instruction->adr2 = postfix_token_array;
-
+						
 						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
 						if (TableItem == NULL)
 						{
 							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
 							return ERR_INTERN_FAULT;
 						}
-
+						
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
 						if (tmp_ptr == NULL)
 						{
@@ -1869,7 +1885,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-
+			
 			case P_I_ENDIF:
 				stack_int_pop(s);
 				if (runtime == 2)
@@ -1906,7 +1922,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-
+			
 			case P_I_ENDELSE:
 				stack_int_pop(s);
 				if (runtime == 2)
@@ -1943,7 +1959,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-
+			
 			case P_I_ENDWHILE:
 				stack_int_pop(s);
 				if (runtime == 2)
