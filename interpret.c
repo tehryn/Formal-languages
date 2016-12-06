@@ -503,7 +503,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					I_Instr *new1,*tmp1;
 					new1=malloc(sizeof(I_Instr));
 					new1->type_instr=I_ASSIGMENT;
-					new1->adr1=ret_value;
+					new1->adr1=NULL;
 					new1->adr2=postfix_array;
 					new1->adr3=L->Active;
 					
