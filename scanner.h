@@ -16,7 +16,8 @@
 #include "garbage_collector.h"
 /** @defgroup lexical_analysis Lexical analysis */
 /** @addtogroup lexical_analysis
-  * @brief Lexical analysise analysi input source code and check, if itis subject of the language IFJ16. ALso transfer input source code into tokens
+  * @brief Lexical analysise analysi input source code and check, if itis subject
+  * of the language IFJ16. ALso transfer input source code into tokens
   * @{
   */
 

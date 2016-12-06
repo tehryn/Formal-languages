@@ -12,7 +12,8 @@
 #include <stdlib.h>
 /** @defgroup garbage_collector Garbage collector */
 /** @addtogroup garbage_collector
-  * @brief Garbage collector is group of functions that allocate memory and store pointers into list to prevent memory leaks
+  * @brief Garbage collector is group of functions that allocate memory and
+  * store pointers into list to prevent memory leaks
   * @{
   */
 
