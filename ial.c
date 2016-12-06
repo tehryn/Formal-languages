@@ -356,6 +356,12 @@ htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsign
 htab_t * htab_copy(htab_t * table)
 {
 	htab_t *result = htab_init(table->htab_size);
+    if (result == NULL) {
+        return NULL;
+    }
+    if (table->ptr == NULL) {
+        return result;
+    }
     htab_item *tmp;
     htab_item *item;
     for (unsigned i = 0; i < table->htab_size; i++) {
