@@ -498,7 +498,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					
 					token *ret_value=malloc(sizeof(token));
 					ret_value->id=TYPE_STRING;
-					I_Instr *new1,*new2,*tmp1;
+					I_Instr *new1,*tmp1;
 					new1=malloc(sizeof(I_Instr));
 					new1->type_instr=I_ASSIGMENT;
 					new1->adr1=ret_value;
@@ -508,6 +508,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					tmp1=L->Active->next_instr;
 					
 					L->Active=new1;
+					L->Active->next_instr=tmp1;
+					
 					
 					break;
 				}
