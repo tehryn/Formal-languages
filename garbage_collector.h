@@ -10,6 +10,7 @@
 #define MEMORY
 #include <stdio.h>
 #include <stdlib.h>
+#define END_EXPR -266
 /** @defgroup garbage_collector Garbage collector */
 /** @addtogroup garbage_collector
   * @brief Garbage collector is group of functions that allocate memory and

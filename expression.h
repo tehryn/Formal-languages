@@ -22,13 +22,11 @@
 #define ERR_OTHERS 10
 #define ERR_INTERN_FAULT 99
 
-#define END_EXPR -266
-
 #define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); 	\
 												fputs((message), stderr); 										\
 												return (error_code); } while(0)
 
-													
+
 #define STRDUP(l, s) do {	char *tmp = (char *)mem_alloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );				\
 							if (tmp == NULL)																			\
 								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\

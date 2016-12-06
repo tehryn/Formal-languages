@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include "ial.h"
@@ -19,13 +17,11 @@
 #define ERR_OTHERS 10
 #define ERR_INTERN_FAULT 99
 
-#define END_EXPR -266
-
 #define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); 	\
 												fputs((message), stderr); 										\
 												return (error_code); } while(0)
 
-													
+
 #define STRDUP(l, s) do {	char *tmp = (char *)mem_alloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );				\
 							if (tmp == NULL)																			\
 								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
@@ -143,7 +139,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			{
 				if (input_token.ptr==NULL)
 					FATAL_ERROR("EXPRESSION: String data are not allocated. 10\n", ERR_INTERN_FAULT);
-				
+
 				STRDUP(input_token.ptr, input_token.ptr);
 			}
 
@@ -254,12 +250,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			strcat(long_name, ".");
 			strcat(long_name, (char *)input_token.ptr);
 			strcpy (name, (char *)input_token.ptr);
-			
+
 			if (input_token.id==S_FULL_IDENT)
 			{
 				if (global_table!=NULL)
 					tmp_table_item = htab_find_item(global_table, name);	// find item in global table if there is global	table (table is not NULL)
-				else														
+				else
 					tmp_table_item=NULL;									// set item to NULL if there isn't a global	table (table is NULL)
 
 				if (tmp_table_item == NULL)									// if item is not found or there isn't a global table, exit with error
@@ -268,7 +264,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					FATAL_ERROR("EXPRESSION: Symbol not defined. 27\n", ERR_SEM_NDEF_REDEF);
 				}
 				else
-					STRDUP(input_token.ptr, name);							// if item is found in global table, allocate new memory  for name of the identifier (function or variable name)  
+					STRDUP(input_token.ptr, name);							// if item is found in global table, allocate new memory  for name of the identifier (function or variable name)
 			}
 
 			else if (input_token.id==S_SIMPLE_IDENT)
@@ -292,12 +288,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					}
 					else
 					{
-						STRDUP(input_token.ptr, long_name);							// if item is found in global table, allocate new memory for name of the identifier (function or variable name with class name)  
+						STRDUP(input_token.ptr, long_name);							// if item is found in global table, allocate new memory for name of the identifier (function or variable name with class name)
 						input_token.id=S_FULL_IDENT;
 					}
 				}
 				else
-					STRDUP(input_token.ptr, name);									// if item is found in local table, allocate new memory  for name of the identifier (function or variable name)  
+					STRDUP(input_token.ptr, name);									// if item is found in local table, allocate new memory  for name of the identifier (function or variable name)
 			}
 
 			//fprintf(stderr, "test: input_token.id:%d tmp_table_item->func_or_var:%d input_token.ptr:%s key:%s initialized:%d\n", input_token.id, tmp_table_item->func_or_var, (char *)input_token.ptr, tmp_table_item->key, tmp_table_item->initialized);	// odje torima
@@ -464,7 +460,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	if (stack_expression_top(&tmp_exp_stack, &tmp_token) !=0)
 		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 42\n", ERR_INTERN_FAULT);
 
-	
+
 	//while( tmp_token.id != -166)
 	while( !stack_expression_empty(&tmp_exp_stack) )
 	{
@@ -479,8 +475,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			//FATAL_ERROR("EXPRESSION: Memory could not be allocated. 45\n", ERR_INTERN_FAULT);
 	}
 
-	
-	
+
+
 	*token_count=postfix_exp_stack.top+1;
 	*postfix_token_array = (token *)malloc(sizeof(token) * (postfix_exp_stack.top+1) );
 	if (*postfix_token_array==NULL)
