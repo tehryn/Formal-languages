@@ -50,7 +50,6 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	token ptr, tmp1, tmp2, *new;
 	while (L->Active!=NULL)
     {
-		printf("type: %d\n",L->Active->type_instr);
 		switch (L->Active->type_instr)
 		{
 
@@ -492,25 +491,12 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				
 				if (strcmp(return_hitem->key,"ifj16.print")==0)
 				{
-					printf("NADSASDASDA\n");
 					while(postfix_array[k].id!=END_EXPR)
 						k++;
 					postfix_array[k-1].id=END_EXPR;
 					k=0;
 					
-					token *ret_value=malloc(sizeof(token));
-					ret_value->id=TYPE_STRING;
-					I_Instr *new1,*tmp1;
-					new1=malloc(sizeof(I_Instr));
-					new1->type_instr=I_ASSIGMENT;
-					new1->adr1=NULL;
-					new1->adr2=postfix_array;
-					new1->adr3=L->Active;
-					
-					tmp1=L->Active->next_instr;
-					new1->next_instr=tmp1;
-					L->Active->next_instr=new1;
-					L->Active->next_instr=tmp1;
+					printf("%s",(char *)postfix_array[0].ptr);
 					
 					
 					break;
@@ -524,13 +510,9 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				
 				k=0;	
 				if (L->Active->adr2!=NULL)
-				{	printf("K jeeeeeeeeee:%d\n",k);
+				{
 					while(postfix_array[k+1].id!=END_EXPR)
 					{	
-						if (postfix_array[k].ptr==NULL)
-							printf("ITS NULL! id: %d\n",postfix_array[k].id);
-						else
-							printf("K: %d  key:%s\n",k,(char *)postfix_array[k].ptr);
 						ptr=postfix_array[k++];
 						switch (ptr.id)
 						{
