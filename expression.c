@@ -635,3 +635,68 @@ int type_name_convertion (int type)
 
 	return -1;
 }
+
+
+
+void print_token(token t, int id_flag)
+{
+	if (t.id == S_INT || t.id == TYPE_INT)
+		fprintf(stderr, "%d", *(int *)t.ptr);
+	else if (t.id == S_DOUBLE || t.id == TYPE_DOUBLE)
+		fprintf(stderr, "%f", *(double *)t.ptr);
+	else if (t.id == S_SIMPLE_IDENT || t.id == S_FULL_IDENT )
+		fprintf(stderr, "%s", (char *)t.ptr);
+	else if (t.id == S_STRING || t.id == TYPE_STRING)
+		fprintf(stderr, "\"%s\"", (char *)t.ptr);
+	else if (t.id == S_PLUS)
+		fprintf(stderr, "+");
+	else if (t.id == S_MINUS)
+		fprintf(stderr, "-");
+	else if (t.id == S_DIV)
+		fprintf(stderr, "/");
+	else if (t.id == S_MUL)
+		fprintf(stderr, "*");
+	else if (t.id == S_COMMA)
+		fprintf(stderr, ",");
+	else if (t.id == S_NOT_EQUAL)
+		fprintf(stderr, "!=");
+	else if (t.id == S_AND)
+		fprintf(stderr, "&&");
+	else if (t.id == S_OR)
+		fprintf(stderr, "||");
+	else if (t.id == S_GREATER)
+		fprintf(stderr, ">");
+	else if (t.id == S_LESS)
+		fprintf(stderr, "<");
+	else if (t.id == S_GREATER_EQUAL)
+		fprintf(stderr, ">=");
+	else if (t.id == S_LESS_EQUAL)
+		fprintf(stderr, "<=");
+	else if (t.id == S_EQUAL)
+		fprintf(stderr, "==");
+	else if (t.id == S_TRUE)
+		fprintf(stderr, "true");
+	else if (t.id == S_FALSE)
+		fprintf(stderr, "false");
+	else
+		fprintf(stderr, ";");
+	
+	if (id_flag == 1)
+		fprintf(stderr, "[.id=%d] ", t.id);
+	else
+		fprintf(stderr, " ");
+
+}
+
+
+void print_token_array(token * arr, int id_flag)
+{
+	int i = 0;
+	for (i = 0; arr[i].id!=END_EXPR; i++)
+		print_token(arr[i], id_flag);
+	
+	print_token(arr[i], id_flag);
+	fprintf(stderr, "\n");
+
+}
+
