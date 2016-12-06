@@ -55,16 +55,18 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 		{
 
 			case I_ASSIGMENT:
-				return_token=(token *)L->Active->adr1;
-				if (return_token->id!=TYPE_STRING)
+				if (L->Active->adr1!=NULL)
 				{
-					return_hitem=stack_htab_find_htab_item(I_Htable, (char *)return_token->ptr);
-					break;
+					return_token=(token *)L->Active->adr1;
+					if (return_token->id!=TYPE_STRING)
+					{
+						return_hitem=stack_htab_find_htab_item(I_Htable, (char *)return_token->ptr);
+						break;
+					}
+					k=0;
+					postfix_array=(token *)L->Active->adr2;
+					ptr=postfix_array[k];
 				}
-				k=0;
-				postfix_array=(token *)L->Active->adr2;
-				ptr=postfix_array[k];
-				
 				while(postfix_array[k].id!=END_EXPR)
 				{	
 					ptr=postfix_array[k++];
