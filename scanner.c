@@ -507,6 +507,10 @@ void bin2dec(char *str, int *result) {
 	int n = strlen(str)-1;
 	*result = 0;
 	for (int i = n; i >= 2; i--) {
+		if (str[i] == '_') {
+			str[i] = '0';
+			continue;
+		}
 		*result += ((str[i] - '0') << (n - i));
 	}
 }
@@ -515,6 +519,10 @@ void octal2dec(char *str, int *result) {
 	int n = strlen(str)-1;
 	*result = 0;
 	for (int i = n; i >= 2; i--) {
+		if (str[i] == '_') {
+			str[i] = '0';
+			continue;
+		}
 		*result += ((str[i] - '0') * (i<n?8:1 << (n - i)));
 	}
 }
@@ -523,6 +531,10 @@ void hex2dec_int(char *str, int *result) {
 	int n = strlen(str)-1;
 	*result = 0;
 	for (int i = n; i >= 2; i--) {
+		if (str[i] == '_') {
+			str[i] = '0';
+			continue;
+		}
 		if (isdigit(str[i])) {
 			*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
 		}
@@ -539,6 +551,10 @@ void hex2dec_double(char *str, double *result) {
 	for(; str[n] != '.' && str[n] != 'p' && str[n] != 'P'; n++);
 	if (str[n] == 'p' || str[n] == 'P') {
 		for (int i = n = n-1; i >= 2; i--) {
+			if (str[i] == '_') {
+				str[i] = '0';
+				continue;
+			}
 			if (isdigit(str[i])) {
 				*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
 			}
@@ -551,6 +567,10 @@ void hex2dec_double(char *str, double *result) {
 	}
 	else {
 		for (int i = n = n-1; i >= 2; i--) {
+			if (str[i] == '_') {
+				str[i] = '0';
+				continue;
+			}
 			if (isdigit(str[i])) {
 				*result += ((str[i] - '0') * (i<n?16:1<<(n - i)));
 			}
