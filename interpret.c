@@ -440,35 +440,56 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					}
 
 				stack_expression_pop(S,&tmp1);
-
 				if (tmp1.id==S_FALSE)
 				{
-					L->Active=L->Active->next_instr;
-					int count=0;
-					while(count>0)
+					if (L->Active->type_instr==I_IF)
 					{
-						if (L->Active==NULL)
-							return ERR_OTHERS;
-						if (L->Active->type_instr==I_END)
-							count--;
-						else
-							count++;
 						L->Active=L->Active->next_instr;
+						int count=0;
+						while(count>0)
+						{
+							if (L->Active==NULL)
+								return ERR_OTHERS;
+							if (L->Active->type_instr==I_ENDIF)
+								count--;
+							else if (L->Active->type_instr==I_IF)
+								count++;
+							L->Active=L->Active->next_instr;
+						}
+					}
+					else 
+					{	
+						L->Active=L->Active->next_instr;
+						int count=0;
+						while(count>0)
+						{
+							if (L->Active==NULL)
+								return ERR_OTHERS;
+							if (L->Active->type_instr==I_ENDWHILE)
+								count--;
+							else if (L->Active->type_instr==I_WHILE)
+								count++;
+							L->Active=L->Active->next_instr;
+						}					
 					}
 				}
-
-
+				L->Active=L->Active->next_instr;
+				break;
 
 
 
 			case I_FCE:
-				return_token=(token *)L->Active->adr1;
-				return_hitem=stack_htab_find_htab_item(I_Htable, (char *)L->Active->adr1);
+				return_hitem=(htab_item *)L->Active->adr1;
 				k=0;	
 				postfix_array=(token *)L->Active->adr2;
 				
 				if (strcmp(return_hitem->key,"ifj16.print")==0)
 				{
+					while(postfix_array[k].id!=END_EXPR)
+						k++;
+					postfix_array[k-1].id=END_EXPR;
+					k=0;
+					
 					token *ret_value=malloc(sizeof(token));
 					ret_value->id=TYPE_STRING;
 					I_Instr *new1,*new2,*tmp1;
@@ -476,16 +497,9 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					new1->type_instr=I_ASSIGMENT;
 					new1->adr1=ret_value;
 					new1->adr2=postfix_array;
-					
+					new1->adr3=L->Active;
 					
 					tmp1=L->Active->next_instr;
-					
-					new2=malloc(sizeof(I_Instr));
-					new2->type_instr=I_PRINT;
-					new2->adr1=ret_value;
-					new2->adr2=L->Active;
-					new1->next_instr=new2;
-					new2->next_instr=tmp1;
 					
 					L->Active=new1;
 					
@@ -510,7 +524,9 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							case S_SIMPLE_IDENT:
 							case S_FULL_IDENT:
 								
-								item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
+								item_tmp1=stack_htab_find_htab_item(I_Htable,(char*) ptr.ptr);
+								if (item_tmp1==return_hitem)
+									break;
 								if (item_tmp1==NULL)
 								{
 									stack_expression_destroy(S);
@@ -596,7 +612,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 
 						}
-
+						
 					}
 					
 					int i=return_hitem->number_of_arguments;
