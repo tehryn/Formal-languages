@@ -119,10 +119,11 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				{
 					if (L->Active->type_instr==I_IF)
 					{
-						L->Active=L->Active->next_instr;
+						
 						int count=0;
-						while(count>0)
+						while(count>=0)
 						{
+							L->Active=L->Active->next_instr;
 							if (L->Active==NULL)
 								return ERR_OTHERS;
 							if (L->Active->type_instr==I_ENDIF)
@@ -131,7 +132,6 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 								break;
 							else if (L->Active->type_instr==I_IF)
 								count++;
-							L->Active=L->Active->next_instr;
 						}
 						if (L->Active->next_instr->type_instr==I_ELSE)
 							L->Active=L->Active->next_instr;
@@ -1243,7 +1243,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 		*new_val=*((double*)tmp1.ptr);
 		new_token->ptr=(double *)new_val;
 	}
-	else
+	else if (new_token->id==TYPE_STRING)
 	{
 		char *new_val=malloc(sizeof(char)*strlen((char*)tmp1.ptr)+1);
 		memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp1.ptr)+1);
