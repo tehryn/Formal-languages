@@ -465,7 +465,10 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			//FATAL_ERROR("EXPRESSION: Memory could not be allocated. 45\n", ERR_INTERN_FAULT);
 	}
 
-	
+	if (end_token==S_COMMA)
+		if ( stack_expression_pop(&postfix_exp_stack, NULL)!=0 )
+			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 43\n", ERR_INTERN_FAULT);
+
 	
 	*token_count=postfix_exp_stack.top+1;
 	*postfix_token_array = (token *)malloc(sizeof(token) * (postfix_exp_stack.top+1) );
