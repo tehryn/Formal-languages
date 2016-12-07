@@ -50,7 +50,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	token ptr, tmp1, tmp2, *new;
 	while (L->Active!=NULL)
     {
-		printf("type of intr: %d\n",L->Active->type_instr);
+		//printf("type of intr: %d\n",L->Active->type_instr);
 		switch (L->Active->type_instr)
 		{
 			case I_ASSIGMENT:
@@ -63,27 +63,27 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 				new=do_expression(postfix_array,I_Htable,S);
 				
-				
-				if (return_hitem->data_type==S_INT && new->id!=TYPE_INT)
-				{
-					return ERR_SEM_COMPATIBILITY;
-				}
-				if(return_hitem->data_type==S_DOUBLE && new->id==TYPE_STRING)
-				{
-					return ERR_SEM_COMPATIBILITY;
-				}
-				
 
-				if(return_hitem->data_type==S_DOUBLE)
+				if(return_hitem->data_type==S_DOUBLE && new->id==TYPE_DOUBLE)
 				{
 					return_hitem->data=(double *)new->ptr;
+				}
+				else if (return_hitem->data_type==S_DOUBLE && new->id==TYPE_INT)
+				{
+					double *new_val1=malloc(sizeof(double));
+					double help_val=(*((int*)new->ptr));
+					*new_val1=help_val;
+					free(new->ptr);
+					return_hitem->data=(double *)new_val1;
+					
+					
 				}
 				else if(return_hitem->data_type==S_INT)
 				{
 					//free(return_hitem->data);
 					return_hitem->data=(int *)new->ptr;
 				}
-				else
+				else if(return_hitem->data_type==S_STRING)
 				{
 					if (new->id==TYPE_INT)
 					{
@@ -103,6 +103,11 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 						return_hitem->data=(char *)new->ptr;
 					}
 				}
+				else
+				{
+					return_hitem->data_type=new->id;
+				}
+				
 				return_hitem->initialized=1;
 				break;
 
@@ -110,11 +115,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 			case I_WHILE:
 				k=0;
 				postfix_array=(token *)L->Active->adr1;
-			
-				
 				new=do_expression(postfix_array,I_Htable,S);
 			
-				
 				if (new->id==S_FALSE)
 				{
 					if (L->Active->type_instr==I_IF)
@@ -165,8 +167,16 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				
 				if (strcmp(return_hitem->key,"ifj16.print")==0)
 				{
+					char *help_tmp;
 					token *str_token=do_expression(postfix_array,I_Htable,S);
-					print((char *)str_token->ptr);
+					if (str_token->id==TYPE_DOUBLE)
+						help_tmp=DoubleToString(*((double*)str_token->ptr));
+					else if (str_token->id==TYPE_INT)
+						help_tmp=DoubleToString(*((int*)str_token->ptr));
+					else 
+						help_tmp=str_token->ptr;
+					
+					print(help_tmp);
 					print("\n");
 					free(str_token->ptr);
 					free(str_token);
@@ -213,14 +223,14 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 									new=malloc(sizeof(token));
 									if (new==NULL)
 										return ERR_INTERN_FAULT;
-
+									
+									
 									if (item_tmp1->data_type==S_STRING)
 										new->id=TYPE_STRING;
 									else if (item_tmp1->data_type==S_DOUBLE)
 										new->id=TYPE_DOUBLE;
 									else
 										new->id=TYPE_INT;							
-									
 									
 									
 									new->ptr=item_tmp1->data;
@@ -233,6 +243,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 							case TYPE_INT:
 							case TYPE_STRING:
 								stack_expression_push(S,ptr);
+								
 								break;
 
 							case S_PLUS:					// ----------- PLUS
@@ -373,6 +384,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 
 		}
+		
 		L->Active=L->Active->next_instr;
 	}
 
@@ -1106,12 +1118,13 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 						new->id=TYPE_STRING;
 					else if (item_tmp1->data_type==S_DOUBLE)
 						new->id=TYPE_DOUBLE;
-					else
+					else if (item_tmp1->data_type==S_INT)
 						new->id=TYPE_INT;							
+					else 
+						new->id=item_tmp1->data_type;
 					
-					
-					
-					new->ptr=item_tmp1->data;
+					if (new->id!=S_TRUE || new->id!=S_FALSE) 
+						new->ptr=item_tmp1->data;
 					stack_expression_push(S,*new);
 				}
 				//free(new);
@@ -1120,6 +1133,8 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 			case TYPE_DOUBLE:
 			case TYPE_INT:
 			case TYPE_STRING: 
+			case S_TRUE:
+			case S_FALSE:
 				stack_expression_push(S,ptr);
 				break;
 			
@@ -1164,7 +1179,6 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 			case S_LESS:
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
-
 				new=inter_bool_op(tmp1,tmp2,6);
 				stack_expression_push(S,*new);
 				break;
