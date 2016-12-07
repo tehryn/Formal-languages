@@ -751,6 +751,7 @@ char *Conc_Str(char *s1, char *s2)
         str[i++]=s2[j++];
         k--;
     }
+    str[req_size]='\0';
 	return str;
 }
 
@@ -793,7 +794,6 @@ token *inter_plus(token tmp1,token tmp2)
 			return NULL;
 		new->id=TYPE_STRING;
 		new->ptr=(char *)str3;
-
 		return new;
 	}
 	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
@@ -1298,7 +1298,6 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 			case S_PLUS:					// ----------- PLUS
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
-
 				new=inter_plus(tmp1,tmp2);
 				stack_expression_push(S,*new);
 				break;
