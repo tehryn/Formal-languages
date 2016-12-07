@@ -573,7 +573,7 @@ void hex2dec_double(char *str, double *result) {
 }
 
 static inline void repair_num(char *str) {
-	int n = strlen(str);
+	int n = strlen(str) + 1;
 	for (int i = 0, j = 0; i < n; i++) {
 		if (str[i] != '_') {
 			str[j++] = str[i];
