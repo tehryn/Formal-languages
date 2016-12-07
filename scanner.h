@@ -16,15 +16,15 @@
 #include "garbage_collector.h"
 /** @defgroup lexical_analysis Lexical analysis */
 /** @addtogroup lexical_analysis
-  * @brief Lexical analysise analysi input source code and check, if itis subject
-  * of the language IFJ16. ALso transfer input source code into tokens
+  * @brief Lexical analyse analyse input source code and check, if it is subset
+  * of the language IFJ16. Also transfer input source code into tokens
   * @{
   */
 
 /*! Default size for memory allocation */
 #define S_SIZE 32
 
-/*! Macro that set offset at the begining of file */
+/*! Macro that set offset at the beginning of file */
 #define reset_scanner() (fseek(f, LINE_NUM = 0, SEEK_SET))
 
 /*! Macro that return number how much will be offset returned */
@@ -156,7 +156,7 @@ int skip_comment (unsigned comment_type);
 @pre global variable f is already opened file
 @pre word points to already allocated space
 @pre *max >= 1
-@return Loaded string, returns NULL when function reach EOF or EOL and set max to -1 or returns NULL and set *max to zero, if reallocation fails or return NULL and set max to -2 if there is invalid use of escape sekvence
+@return Loaded string, returns NULL when function reach EOF or EOL and set max to -1 or returns NULL and set *max to zero, if reallocation fails or return NULL and set max to -2 if there is invalid use of escape sequence
 */
 char *load_string(char *word, int *max);
 
@@ -200,15 +200,15 @@ void hex2dec_double(char *str, double *result);
  * Convert string into double or integer (depends on type variable) and store it into new allocated space
  * @param  str    String that represents number
  * @param  type   Type of number that represent string (should be TYPE_INT or TYPE_DOUBLE)
- * @param  valide Variable that will be set into 0 in case of succes, into 1 in case of error while allocating memory, into 2 in case of invalide string or into 3 in case of invalide type
+ * @param  valid Variable that will be set into 0 in case of success, into 1 in case of error while allocating memory, into 2 in case of invalid string or into 3 in case of invalid type
  * @return        Pointer into value that is result of conversion
  */
-void *str2num(char *str, int type, int *valide);
+void *str2num(char *str, int type, int *valid);
 
-/** Retrive token from source code
+/** Retrieve token from source code
 @pre global variable f is already opened file
 @post token.id > 0 ( 0 in case of lexical error, otherwise error while setting offset or allocating memory)
-@return token, where token.id is identifikator and token.ptr is string (or poiter to NULL if string is not needed)
+@return token, where token.id is identifikator and token.ptr is string (or pointer to NULL if string is not needed)
 */
 token get_token();
 

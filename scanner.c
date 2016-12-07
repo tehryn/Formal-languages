@@ -592,21 +592,21 @@ void hex2dec_double(char *str, double *result) {
 	}
 }
 
-void *str2num(char *str, int type, int *valide) {
+void *str2num(char *str, int type, int *valid) {
 	if (str == NULL) {
-		*valide = 2;
+		*valid = 2;
 		return NULL;
 	}
 	void *result = NULL;
-	*valide = 0;
+	*valid = 0;
 	if (type == TYPE_INT) {
 		result = mem_alloc(sizeof(int));
 		if (result == NULL) {
-			*valide = 1;
+			*valid = 1;
 			return NULL;
 		}
 		if (sscanf(str, "%i", (int *)result) == EOF) {
-			*valide = 2;
+			*valid = 2;
 			return NULL;
 		}
 		return result;
@@ -614,11 +614,11 @@ void *str2num(char *str, int type, int *valide) {
 	else if (type == TYPE_DOUBLE) {
 		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
-			*valide = 1;
+			*valid = 1;
 			return NULL;
 		}
 		if (sscanf(str, "%lf", (double *)result) == EOF) {
-			*valide = 2;
+			*valid = 2;
 			return NULL;
 		}
 		return result;
@@ -626,7 +626,7 @@ void *str2num(char *str, int type, int *valide) {
 	else if (type == TYPE_INT_BIN) {
 		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
-			*valide = 1;
+			*valid = 1;
 			return NULL;
 		}
 		bin2dec(str, (int *) result);
@@ -635,7 +635,7 @@ void *str2num(char *str, int type, int *valide) {
 	else if (type == TYPE_INT_HEX) {
 		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
-			*valide = 1;
+			*valid = 1;
 			return NULL;
 		}
 		hex2dec_int(str, (int *) result);
@@ -644,7 +644,7 @@ void *str2num(char *str, int type, int *valide) {
 	else if (type == TYPE_INT_OCTAL) {
 		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
-			*valide = 1;
+			*valid = 1;
 			return NULL;
 		}
 		octal2dec(str, (int *) result);
@@ -653,13 +653,13 @@ void *str2num(char *str, int type, int *valide) {
 	else if (type == TYPE_DOUBLE_HEX) {
 		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
-			*valide = 1;
+			*valid = 1;
 			return NULL;
 		}
 		hex2dec_double(str, (double *)result);
 		return result;
 	}
-	*valide = 3;
+	*valid = 3;
 	return NULL;
 }
 
@@ -835,7 +835,7 @@ token get_token() {
 	if (token_found) {
 		// token found! but what did we find???
 		int id = is_keyword(SCANNER_WORD);
-		int valide = 0;
+		int valid = 0;
 		if (id) {
 			new_token.id = id;
 			new_token.ptr = SCANNER_WORD;
@@ -845,14 +845,14 @@ token get_token() {
 		/* Ok, we did not found key word... Did we found number?*/
 		id = is_num_literal(SCANNER_WORD, i);
 		if (id) {
-			number = str2num(SCANNER_WORD, id, &valide);
-			if (valide == 1) {
+			number = str2num(SCANNER_WORD, id, &valid);
+			if (valid == 1) {
 				fprintf(stderr, "Memory allocation failed\n");
 				new_token.id = -1;
 				new_token.ptr = NULL;
 				return new_token;
 			}
-			else if (valide == 2 || valide == 3) {
+			else if (valid == 2 || valid == 3) {
 				fprintf(stderr, "in file: %s:%u Invalid use of function\n", __FILE__, __LINE__);
 				new_token.id = -1;
 				new_token.ptr = NULL;
@@ -886,7 +886,7 @@ token get_token() {
 			new_token.ptr = SCANNER_WORD;
 			return new_token;
 		}
-		fprintf(stderr, "ERROR: line: %u: '%s' is not valide identifikator, numeric constant nor keyword\n", LINE_NUM, SCANNER_WORD);
+		fprintf(stderr, "ERROR: line: %u: '%s' is not valid identifikator, numeric constant nor keyword\n", LINE_NUM, SCANNER_WORD);
 		new_token.id = 0;
 		new_token.ptr = NULL;
 		return new_token;
