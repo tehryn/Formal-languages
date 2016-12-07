@@ -50,6 +50,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	token ptr, tmp1, tmp2, *new;
 	while (L->Active!=NULL)
     {
+		printf("type of intr: %d\n",L->Active->type_instr);
 		switch (L->Active->type_instr)
 		{
 			case I_ASSIGMENT:
@@ -107,196 +108,14 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 
 			case I_IF:
 			case I_WHILE:
-				return_token=(token *)L->Active->adr1;
-				return_hitem=stack_htab_find_htab_item(I_Htable, (char *)return_token->ptr);
 				k=0;
-				postfix_array=(token *)L->Active->adr2;
-				ptr=postfix_array[k];
-				while(postfix_array[k].id!=END_EXPR)
-				{
-					ptr=postfix_array[k++];
-					switch (ptr.id)
-					{
-						case S_SIMPLE_IDENT:
-						case S_FULL_IDENT:
-							
-							item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
-							if (item_tmp1==NULL)
-							{
-								fprintf(stderr,"Interpret: Item wasn't found.\n");
-								stack_expression_destroy(S);
-								free(S);
-								return ERR_OTHERS;
-							}
-							
-							if (item_tmp1->initialized==0)
-							{
-								fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
-								//freeALL();
-								return ERR_UNINICIALIZED_VAR ;
-							}
-							if (item_tmp1->func_or_var==1)
-							{
-								new=malloc(sizeof(token));
-								if (new==NULL)
-									return ERR_INTERN_FAULT;
-
-								if (item_tmp1->data_type==S_STRING)
-									new->id=TYPE_STRING;
-								else if (item_tmp1->data_type==S_DOUBLE)
-									new->id=TYPE_DOUBLE;
-								else
-									new->id=TYPE_INT;							
-								
-								
-								
-								new->ptr=item_tmp1->data;
-								stack_expression_push(S,*new);
-							}
-							//free(new);
-							break;
-
-						case TYPE_DOUBLE:
-						case TYPE_INT:
-						case TYPE_STRING:
-							stack_expression_push(S,ptr);
-							break;
-
-
-						case S_EQUAL:
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-							new=inter_bool_op(tmp1,tmp2,1);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-						case S_NOT_EQUAL:
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_bool_op(tmp1,tmp2,2);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-						case S_GREATER_EQUAL:
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_bool_op(tmp1,tmp2,3);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-						case S_GREATER:
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_bool_op(tmp1,tmp2,4);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-						case S_LESS_EQUAL:
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_bool_op(tmp1,tmp2,5);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-						case S_LESS:
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_bool_op(tmp1,tmp2,6);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-						case S_AND:
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_bool_op(tmp1,tmp2,7);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-						case S_OR:
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_bool_op(tmp1,tmp2,8);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-
-						case S_PLUS:					// ----------- PLUS
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_plus(tmp1,tmp2);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-						case S_MINUS:					//     ----------------------  MINUS
-
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_arm_op(tmp1,tmp2,1);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-
-						case S_MUL:					//     ----------------------  Multiplication
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_arm_op(tmp1,tmp2,2);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							stack_expression_push(S,*new);
-							break;
-
-
-						case S_DIV:					//     ----------------------  Division
-							stack_expression_pop(S,&tmp2);
-							stack_expression_pop(S,&tmp1);
-
-							new=inter_arm_op(tmp1,tmp2,2);
-							if (new==NULL)
-								return ERR_INTERN_FAULT;
-							if (new->id==-8)
-							{
-								fprintf(stderr, "Divison by zero!.\n");
-								//freeALL();
-								return ERR_DIVISION_ZERO ;
-							}
-
-							stack_expression_push(S,*new);
-							break;
-						}
-
-					}
-
-				stack_expression_pop(S,&tmp1);
-				if (tmp1.id==S_FALSE)
+				postfix_array=(token *)L->Active->adr1;
+			
+				
+				new=do_expression(postfix_array,I_Htable,S);
+			
+				
+				if (new->id==S_FALSE)
 				{
 					if (L->Active->type_instr==I_IF)
 					{
@@ -308,10 +127,14 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 								return ERR_OTHERS;
 							if (L->Active->type_instr==I_ENDIF)
 								count--;
+							if(count<0)
+								break;
 							else if (L->Active->type_instr==I_IF)
 								count++;
 							L->Active=L->Active->next_instr;
 						}
+						if (L->Active->next_instr->type_instr==I_ELSE)
+							L->Active=L->Active->next_instr;
 					}
 					else 
 					{	
@@ -329,7 +152,8 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 						}					
 					}
 				}
-				L->Active=L->Active->next_instr;
+				
+				
 				break;
 
 
@@ -520,11 +344,12 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 			
 				
 			case I_ENDIF:
-				L->Active=L->Active->next_instr;
-				if (L->Active->type_instr==I_ELSE)
+				if (L->Active->next_instr->type_instr==I_ELSE)
 				{
+					L->Active=L->Active->next_instr;
+					
 					int count=0;
-					while (count>0)
+					while (count>=0)
 					{
 						L->Active=L->Active->next_instr;
 						if (L->Active->type_instr==I_ENDELSE)
@@ -539,6 +364,9 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 			case I_END:
 				
 				break;
+				
+			case I_ELSE:
+				
 				
 			default:
 			break;
@@ -1294,7 +1122,68 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 			case TYPE_STRING: 
 				stack_expression_push(S,ptr);
 				break;
+			
+			case S_EQUAL:
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+				new=inter_bool_op(tmp1,tmp2,1);
+				stack_expression_push(S,*new);
+				break;
+			case S_NOT_EQUAL:
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
 
+				new=inter_bool_op(tmp1,tmp2,2);
+				stack_expression_push(S,*new);
+				break;
+
+			case S_GREATER_EQUAL:
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_bool_op(tmp1,tmp2,3);
+				stack_expression_push(S,*new);
+				break;
+
+			case S_GREATER:
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_bool_op(tmp1,tmp2,4);
+				stack_expression_push(S,*new);
+				break;
+
+			case S_LESS_EQUAL:
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_bool_op(tmp1,tmp2,5);
+				stack_expression_push(S,*new);
+				break;
+
+			case S_LESS:
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_bool_op(tmp1,tmp2,6);
+				stack_expression_push(S,*new);
+				break;
+
+			case S_AND:
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_bool_op(tmp1,tmp2,7);
+				stack_expression_push(S,*new);
+				break;
+
+			case S_OR:
+				stack_expression_pop(S,&tmp2);
+				stack_expression_pop(S,&tmp1);
+
+				new=inter_bool_op(tmp1,tmp2,8);
+				stack_expression_push(S,*new);
+				break;
 			case S_PLUS:					// ----------- PLUS
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);

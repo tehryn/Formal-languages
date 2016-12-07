@@ -11,17 +11,17 @@
 #include "expression.h"
 
 enum {
-	I_ASSIGMENT = 100+1,//71
-	I_IF,						//72
-	I_ELSE,						//73
-	I_WHILE,					//74
-	I_END, 						//75  
-	I_FCE,						//76
-	I_RETURN,					//77
-	I_PRINT,					//78
-	I_ENDIF,					//79
-	I_ENDWHILE,					//80
-	I_ENDELSE					//81
+	I_ASSIGMENT = 100+1,		//101
+	I_IF,						//102
+	I_ELSE,						//103
+	I_WHILE,					//104
+	I_END, 						//105 
+	I_FCE,						//106
+	I_RETURN,					//107
+	I_PRINT,					//108
+	I_ENDIF,					//109
+	I_ENDWHILE,					//110
+	I_ENDELSE					//111
 };
 
 typedef struct I_Instr
