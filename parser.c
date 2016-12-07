@@ -2052,26 +2052,32 @@ int skip_expr(token * t)
 
 bool token_wanted(token * t)
 {
-	if (t->id == S_TRUE) return true;
-	else if (t->id == S_FALSE) return true;
+	if      (t->id == S_FALSE) return true;
+	else if (t->id == S_TRUE) return true;
+
 	else if (t->id == TYPE_DOUBLE) return true;
 	else if (t->id == TYPE_INT) return true;
 	else if (t->id == TYPE_STRING) return true;
 	else if (t->id == TYPE_BOOLEAN) return true;
+
 	else if (t->id == S_SIMPLE_IDENT) return true;
 	else if (t->id == S_FULL_IDENT) return true;
+
 	else if (t->id == S_EQUAL) return true;
 	else if (t->id == S_LESS_EQUAL) return true;
 	else if (t->id == S_GREATER_EQUAL) return true;
+	else if (t->id == S_LESS) return true;
+	else if (t->id == S_GREATER) return true;
+
+	else if (t->id == S_OR) return true;
+	else if (t->id == S_AND) return true;
 	else if (t->id == S_NOT_EQUAL) return true;
+
 	else if (t->id == S_PLUS) return true;
 	else if (t->id == S_MINUS) return true;
 	else if (t->id == S_DIV) return true;
 	else if (t->id == S_MUL) return true;
-	else if (t->id == S_OR) return true;
-	else if (t->id == S_AND) return true;
-	else if (t->id == S_LESS) return true;
-	else if (t->id == S_GREATER) return true;
+	
 	else return false;
 }
 
