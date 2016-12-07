@@ -478,7 +478,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	for (int i=0; i<=postfix_exp_stack.top; i++)
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
 	
-	//print_token_array( *postfix_token_array, 0);
+//	if (end_token!=S_COMMA)
+//		print_token_array( *postfix_token_array, 0);
 
 	if(ma1[0]!=NULL) free(ma1[0]);
 	if(ma1[1]!=NULL) free(ma1[1]);
