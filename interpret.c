@@ -337,7 +337,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				}	
 				
 				stack_htab_push(I_Htable, loc_table);
-				L->Active=(I_Instr *)return_hitem->instruction_tape;
+				L->Active->next_instr=(I_Instr *)return_hitem->instruction_tape;
 				break;
 				
 				
