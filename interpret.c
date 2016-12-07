@@ -172,7 +172,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					if (str_token->id==TYPE_DOUBLE)
 						help_tmp=DoubleToString(*((double*)str_token->ptr));
 					else if (str_token->id==TYPE_INT)
-						help_tmp=DoubleToString(*((int*)str_token->ptr));
+						help_tmp=IntToString(*((int*)str_token->ptr));
 					else 
 						help_tmp=str_token->ptr;
 					
