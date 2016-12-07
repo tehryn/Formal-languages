@@ -376,7 +376,7 @@ htab_t * htab_copy(htab_t * table)
 //            }
 //            prev = item;
             item->data_type = tmp->data_type;
-//            item->func_or_var = 1;
+            item->func_or_var = 1;
 //            item->data = NULL;
 //            item->initialized = 0;
 //            item->number_of_arguments = 0;
