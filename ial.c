@@ -459,7 +459,7 @@ htab_t * htab_copy(htab_t * table)
 //            item->local_table = NULL;
 //            item->instruction_tape = NULL;
 //            item->next_item = NULL;
-			item->argument_index = tmp->item->argument_index; 
+			item->argument_index = tmp->argument_index; 
             tmp = tmp->next_item;
         }
     }
