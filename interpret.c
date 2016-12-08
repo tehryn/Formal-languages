@@ -1186,13 +1186,13 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 								
 							}							
 						}
-						if (par_type==TYPE_INT)
+						else if (par_type==TYPE_INT)
 						{
 							int *par_value=malloc(sizeof(int));
 							*par_value=(*((int*)tmp2.ptr));
 							parametr->data=(double*)par_value;
 						}
-						if (par_type==TYPE_BOOLEAN)
+						else if (par_type==TYPE_BOOLEAN)
 							parametr->data_type=tmp2.id;
 						else
 						{
