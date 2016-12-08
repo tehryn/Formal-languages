@@ -1035,7 +1035,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						tmp_ptr->next_instr = Instruction;
 					}
 					#ifdef DEBUG
-						printf("Instruction - main tape: %d \n", Instruction->type_instr); 
+						printf("Instruction - func tape: %d \n", Instruction->type_instr); 
 					#endif
 
 					Instruction = NULL;
@@ -1870,7 +1870,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 
 			// ======================== P_I_END apod. ======================
 
-			case P_I_END:
+			/*case P_I_END:
 				stack_int_pop(s);
 				if (runtime == 2)
 				{
@@ -1908,7 +1908,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-			
+			*/
 			case P_I_ENDIF:
 				stack_int_pop(s);
 				if (runtime == 2)
