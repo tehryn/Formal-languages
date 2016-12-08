@@ -756,17 +756,18 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						((int*)TableItem->data)[0] = S_EOF;
 						TableItem->number_of_arguments = number_arguments; // number_arguments = 0
-
-						number_arguments = 0;
-						number_allocated_arguments = 0;
+						
 					}
+					number_arguments = 0;
+					number_allocated_arguments = 0;
+
 					break; // goto case S_RIGHT_PARE
 				}
 
+				number_arguments++;
+
 				if (runtime == 1) // it will be first argument
 				{
-					number_arguments++;
-
 					number_allocated_arguments += 4;
 
 					TableItem->data = (void*) mem_alloc(number_allocated_arguments * sizeof(int)); // 4 for beginning
@@ -780,7 +781,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					((int*)TableItem->data)[1] = S_EOF;
 					((int*)TableItem->data)[2] = S_EOF;
 					((int*)TableItem->data)[3] = S_EOF;
-
 				}
 
 				if (t.id == S_INT)
@@ -835,6 +835,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						TableItem->data_type = type;
 						TableItem->func_or_var = 1;
 						TableItem->initialized = 1;
+						TableItem->argument_index = number_arguments - 1;
 					}
 
 					if (stack_int_push(s, 1, P_DEF_ARGUMENTS2) < 0)
@@ -868,10 +869,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					if (runtime == 1)
 					{
 						TableItem->number_of_arguments = number_arguments;
-
-						number_arguments = 0;
-						number_allocated_arguments = 0;
 					}
+					number_arguments = 0;
+					number_allocated_arguments = 0;
+
 					break; // goto case S_RIGHT_PARE
 				}
 				else if (t.id != S_COMMA) // ',' - other arguments
@@ -881,9 +882,10 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					return ERR_SYNTACTIC_ANALYSIS;
 				}
 
+				number_arguments++;
+
 				if (runtime == 1) // it will be first argument
 				{
-					number_arguments++;
 					if(number_arguments >= number_allocated_arguments-1) // -1 for ending symbol
 					{
 						number_allocated_arguments += 4;
@@ -966,6 +968,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						TableItem->data_type = type;
 						TableItem->func_or_var = 1;
 						TableItem->initialized = 1;
+						TableItem->argument_index = number_arguments - 1;
 					}
 
 					token_got = false;
