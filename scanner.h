@@ -197,6 +197,12 @@ void hex2dec_int(char *str, int *result);
 void hex2dec_double(char *str, double *result);
 
 /**
+ * Remove '_' from string
+ * @param str String what will be changed
+ */
+void repair_num(char *str);
+
+/**
  * Convert string into double or integer (depends on type variable) and store it into new allocated space
  * @param  str    String that represents number
  * @param  type   Type of number that represent string (should be TYPE_INT or TYPE_DOUBLE)
