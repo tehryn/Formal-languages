@@ -40,6 +40,9 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	if (S==NULL)
 		return ERR_INTERN_FAULT;
 
+	I_Instr *while_instr;
+	stack_instr while_stack;
+	stack_instr_init(&while_stack);
 	stack_expression_init(S,I_STACKSIZE);
 	htab_item * item_tmp1;
 	htab_item * return_hitem;
@@ -50,7 +53,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 	token ptr, tmp1, tmp2, *new;
 	while (L->Active!=NULL)
     {
-		//printf("type of intr: %d\n",L->Active->type_instr);
+		//printf("type of instr interpret: %d\n",L->Active->type_instr);
 		switch (L->Active->type_instr)
 		{
 			case I_ASSIGMENT:
@@ -109,56 +112,70 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				}
 				
 				return_hitem->initialized=1;
+				L->Active=L->Active->next_instr;
 				break;
 
 			case I_IF:
-			case I_WHILE:
 				k=0;
 				postfix_array=(token *)L->Active->adr1;
 				new=do_expression(postfix_array,I_Htable,S);
 			
 				if (new->id==S_FALSE)
 				{
-					if (L->Active->type_instr==I_IF)
+					int count=0;
+					while(count>=0)
 					{
-						
-						int count=0;
-						while(count>=0)
-						{
-							L->Active=L->Active->next_instr;
-							if (L->Active==NULL)
-								return ERR_OTHERS;
-							if (L->Active->type_instr==I_ENDIF)
-								count--;
-							if(count<0)
-								break;
-							else if (L->Active->type_instr==I_IF)
-								count++;
-						}
-						if (L->Active->next_instr->type_instr==I_ELSE)
-							L->Active=L->Active->next_instr;
-					}
-					else 
-					{	
 						L->Active=L->Active->next_instr;
-						int count=0;
-						while(count>0)
-						{
-							if (L->Active==NULL)
-								return ERR_OTHERS;
-							if (L->Active->type_instr==I_ENDWHILE)
-								count--;
-							else if (L->Active->type_instr==I_WHILE)
-								count++;
-							L->Active=L->Active->next_instr;
-						}					
+						if (L->Active==NULL)
+							return ERR_OTHERS;
+						if (L->Active->type_instr==I_ENDIF)
+							count--;
+						if(count<0)
+							break;
+						else if (L->Active->type_instr==I_IF)
+							count++;
 					}
-				}
-				
-				
+					if (L->Active->next_instr->type_instr==I_ELSE)
+						L->Active=L->Active->next_instr;
+				}				
+				L->Active=L->Active->next_instr;
 				break;
 
-
+			case I_WHILE:
+				k=0;
+				postfix_array=(token *)L->Active->adr1;
+				new=do_expression(postfix_array,I_Htable,S);
+				if (new->id==S_FALSE)
+				{
+					int count=0;
+					while(count>=0)
+					{
+						L->Active=L->Active->next_instr;
+						if (L->Active==NULL)
+							return ERR_OTHERS;
+						if (L->Active->type_instr==I_ENDWHILE)
+							count--;
+						else if (L->Active->type_instr==I_WHILE)
+							count++;
+					}
+				}
+				else
+				{
+					stack_instr_push(&while_stack,L->Active);// TODO PUSH				
+										
+				}
+				L->Active=L->Active->next_instr;
+				break;
+				
+			
+			case I_ENDWHILE:
+				
+				while_instr=stack_instr_pop(&while_stack);
+				if (while_instr!=NULL)
+					L->Active=while_instr;
+				else
+					L->Active=L->Active->next_instr;
+				break;
 
 			case I_FCE:
 				return_hitem=(htab_item *)L->Active->adr1;
@@ -177,9 +194,10 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 						help_tmp=str_token->ptr;
 					
 					print(help_tmp);
-					print("\n");
+//					print("\n");
 					free(str_token->ptr);
 					free(str_token);
+					L->Active=L->Active->next_instr;
 					break;
 					//printf("%d\n",str
 					
@@ -348,7 +366,7 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 				}	
 				
 				stack_htab_push(I_Htable, loc_table);
-				L->Active->next_instr=(I_Instr *)return_hitem->instruction_tape;
+				L->Active=(I_Instr *)return_hitem->instruction_tape;
 				break;
 				
 				
@@ -370,22 +388,22 @@ int inter(Instr_List *L, stack_htab *I_Htable)
 					}
 						
 				}
+				L->Active=L->Active->next_instr;
 				break;	
 				
 			case I_END:
-				
+				L->Active=L->Active->next_instr;
 				break;
 				
 			case I_ELSE:
 				
 				
 			default:
+				L->Active=L->Active->next_instr;
 			break;
 
 
 		}
-		
-		L->Active=L->Active->next_instr;
 	}
 
 	stack_expression_destroy(S);
@@ -556,7 +574,7 @@ char *DoubleToString(double x)
 	char *str=malloc(req_size);
 	if (str==NULL)
 		return str;
-	snprintf(str, req_size, "%f", x);
+	snprintf(str, req_size, "%g", x);
 	return str;
 }
 
@@ -1135,6 +1153,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 			case TYPE_STRING: 
 			case S_TRUE:
 			case S_FALSE:
+				
 				stack_expression_push(S,ptr);
 				break;
 			
@@ -1206,7 +1225,6 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				break;
 
 			case S_MINUS:					//     ----------------------  MINUS
-
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1228,7 +1246,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
-				new=inter_arm_op(tmp1,tmp2,2);
+				new=inter_arm_op(tmp1,tmp2,3);
 				if (new->id==-8)
 				{
 					fprintf(stderr, "Divison by zero!.\n");
