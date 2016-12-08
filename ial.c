@@ -466,7 +466,7 @@ htab_t * htab_copy(htab_t * table)
     return result;
 }
 
-htab_item * htab_find_item_by_argument_index(htab_t * T, int index); // NULL if not there
+htab_item * htab_find_item_by_argument_index(htab_t * T, int index) // NULL if not there
 {
 	if (index < 0)
 		return NULL;
