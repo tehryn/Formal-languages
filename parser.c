@@ -187,7 +187,7 @@ int parser()
 	Instruction->adr2 = t_tmp;
 
 	#ifdef DEBUG
-		printf("Instruction - main tape: %d \n", Instruction->type_instr); 
+		printf("Instruction - main tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 	#endif
 
 	if (Add_Instr(InstructionTape, Instruction) != 0)
@@ -1035,7 +1035,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						tmp_ptr->next_instr = Instruction;
 					}
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					Instruction = NULL;
@@ -1566,7 +1566,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1621,7 +1621,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1768,7 +1768,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						if (error_6_flag == 1) // we are out of function
 						{
 							#ifdef DEBUG
-								printf("Instruction - main tape: %d \n", Instruction->type_instr); 
+								printf("Instruction - main tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 							#endif
 
 							Add_Instr(InstructionTape, Instruction);
@@ -1783,7 +1783,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 
 							#ifdef DEBUG
-								printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+								printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 							#endif
 
 							I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1812,7 +1812,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 
 						#ifdef DEBUG
-							printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 						#endif
 
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1841,7 +1841,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						
 						#ifdef DEBUG
-							printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 						#endif
 
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1891,7 +1891,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1930,7 +1930,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1969,7 +1969,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -2008,7 +2008,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \n", Instruction->type_instr); 
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
