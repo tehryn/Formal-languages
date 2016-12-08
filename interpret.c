@@ -1163,14 +1163,15 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					{
 						printf("ASDF\n");
 						key_str=IntToString(i);
-						par_type=((int*)item_tmp1->data)[i];
+						par_type=((int*)item_tmp1->data)[i-1];
 						printf("ASDF\n");
 
 						parametr=htab_find_item(loc_table, key_str);
 						stack_expression_pop(S,&tmp2);
 												printf("ASDF\n");
 
-						if (par_type==TYPE_DOUBLE)
+						printf("par_type val:%d\n",par_type);
+						if (par_type==S_DOUBLE)
 						{
 							double *par_value=malloc(sizeof(double));
 							if (tmp2.id==TYPE_DOUBLE)
@@ -1186,16 +1187,18 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 								
 							}							
 						}
-						else if (par_type==TYPE_INT)
+						else if (par_type==S_INT)
 						{
+							printf("@312312312313\n");
 							int *par_value=malloc(sizeof(int));
 							*par_value=(*((int*)tmp2.ptr));
 							parametr->data=(double*)par_value;
 						}
-						else if (par_type==TYPE_BOOLEAN)
+						else if (par_type==S_BOOLEAN)
 							parametr->data_type=tmp2.id;
 						else
 						{
+							printf("strin\n");
 							char *new_val=malloc(sizeof(char)*strlen((char*)tmp2.ptr)+1);
 							memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp2.ptr)+1);
 							parametr->data=(char*)new_val;	
