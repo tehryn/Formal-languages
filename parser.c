@@ -2,7 +2,7 @@
 #include "expression.h"
 #include "interpret.h"
 
-//#define DEBUG
+#define DEBUG
 
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
@@ -140,7 +140,7 @@ int parser()
 	}
 
 	// call Main.run
-
+	
 	I_Instr * Instruction = NULL;
 	Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
 	if (Instruction == NULL)
@@ -180,14 +180,14 @@ int parser()
 		return ERR_INTERN_FAULT;
 	}
 	strcpy((char*)t_tmp[0].ptr, "Main.run");
-
+	
 	t_tmp[1].id = END_EXPR;
 	t_tmp[1].ptr = NULL;
-
+	
 	Instruction->adr2 = t_tmp;
 
 	#ifdef DEBUG
-		printf("Instruction - main tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+		printf("Instruction - main tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 	#endif
 
 	if (Add_Instr(InstructionTape, Instruction) != 0)
@@ -208,9 +208,9 @@ int parser()
 		array_string_destroy(&all_class_names);
 		return interpret_return;
 	}
-
+	
 	//htab_free_all(global_table_symbols);
-
+	
 
 
 
@@ -1018,7 +1018,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						I_Instr_null_elements(Instruction);
 						Instruction->type_instr = I_END;
-
+						
 						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
 						if (TableItem == NULL)
 						{
@@ -1037,12 +1037,12 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							tmp_ptr->next_instr = Instruction;
 						}
 						#ifdef DEBUG
-							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 						#endif
 
 						Instruction = NULL;
 					}
-
+					
 					LocalTableSymbols = NULL;
 					static_func_var_name = NULL;
 					error_6_flag = 1;
@@ -1312,7 +1312,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 								Instruction->type_instr = I_FCE;
 
 								Instruction->adr1 = TableItem;
-
+								
 								if (stack_int_push(s, 2, S_SEMICOMMA, P_EXPR) < 0)
 								{
 									fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1379,6 +1379,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						I_Instr_null_elements(Instruction);
 						Instruction->type_instr = I_RETURN;
 					}
+
 					token_got = false;
 					if (stack_int_push(s, 1, P_RETURN_EXPR) < 0)
 					{
@@ -1392,45 +1393,54 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					token_got = false;
 
-					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
-					if (Instruction == NULL)
+					if (runtime == 2)
 					{
-						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
-						return ERR_INTERN_FAULT;
+						Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+						if (Instruction == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						I_Instr_null_elements(Instruction);
+						Instruction->type_instr = I_IF;
 					}
-					I_Instr_null_elements(Instruction);
-					Instruction->type_instr = I_IF;
 
 					if (stack_int_push(s, 6, P_ELSE_EXISTANCE, P_I_ENDIF, P_IF_ELSE_SECTION, S_RIGHT_PARE, P_EXPR, S_LEFT_PARE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
 					}
+
 					if (runtime == 2) // because of expr.
 						TableItem = NULL;
+
 					break; // goto case P_LEFT_PARE
 				}
 
 				if(t.id == S_WHILE)
 				{
 					token_got = false;
-
-					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
-					if (Instruction == NULL)
+					if (runtime == 2)
 					{
-						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
-						return ERR_INTERN_FAULT;
+						Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+						if (Instruction == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						I_Instr_null_elements(Instruction);
+						Instruction->type_instr = I_WHILE;
 					}
-					I_Instr_null_elements(Instruction);
-					Instruction->type_instr = I_WHILE;
 
 					if (stack_int_push(s, 5, P_I_ENDWHILE, P_IF_ELSE_SECTION, S_RIGHT_PARE, P_EXPR, S_LEFT_PARE) < 0)
 					{
 						fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
 						return ERR_INTERN_FAULT;
 					}
+
 					if(runtime == 2) // because of expr.
 						TableItem = NULL;
+					
 					break; // goto case P_LEFT_PARE
 				}
 
@@ -1561,29 +1571,32 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						return ERR_SEM_COMPATIBILITY;
 					}
 
-					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
-					if (TableItem == NULL)
+					if (runtime == 2)
 					{
-						fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
-						return ERR_INTERN_FAULT;
-					}
+						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+						if (TableItem == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+							return ERR_INTERN_FAULT;
+						}
 
-					#ifdef DEBUG
-						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
-					#endif
+						#ifdef DEBUG
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
+						#endif
 
-					I_Instr * tmp_ptr = TableItem->instruction_tape;
-					if (tmp_ptr == NULL)
-					{
-						TableItem->instruction_tape = Instruction;
+						I_Instr * tmp_ptr = TableItem->instruction_tape;
+						if (tmp_ptr == NULL)
+						{
+							TableItem->instruction_tape = Instruction;
+						}
+						else
+						{
+							while(tmp_ptr->next_instr != NULL)
+						 		tmp_ptr = tmp_ptr->next_instr;
+							tmp_ptr->next_instr = Instruction;
+						}
+						Instruction = NULL;
 					}
-					else
-					{
-						while(tmp_ptr->next_instr != NULL)
-					 		tmp_ptr = tmp_ptr->next_instr;
-						tmp_ptr->next_instr = Instruction;
-					}
-					Instruction = NULL;
 
 					token_got = false;
 					break;
@@ -1626,7 +1639,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 
 						#ifdef DEBUG
-							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 						#endif
 
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1774,7 +1787,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						if (error_6_flag == 1) // we are out of function
 						{
 							#ifdef DEBUG
-								printf("Instruction - main tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+								printf("Instruction - main tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 							#endif
 
 							Add_Instr(InstructionTape, Instruction);
@@ -1789,7 +1802,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							}
 
 							#ifdef DEBUG
-								printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+								printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 							#endif
 
 							I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1818,7 +1831,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 
 						#ifdef DEBUG
-							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 						#endif
 
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1838,16 +1851,16 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					else if (Instruction->type_instr == I_FCE)
 					{
 						Instruction->adr2 = postfix_token_array;
-
+						
 						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
 						if (TableItem == NULL)
 						{
 							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
 							return ERR_INTERN_FAULT;
 						}
-
+						
 						#ifdef DEBUG
-							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 						#endif
 
 						I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1888,7 +1901,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					I_Instr_null_elements(Instruction);
 					Instruction->type_instr = I_END;
-
+					
 					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
 					if (TableItem == NULL)
 					{
@@ -1897,7 +1910,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1936,7 +1949,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1953,7 +1966,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-
+			
 			case P_I_ENDELSE:
 				stack_int_pop(s);
 				if (runtime == 2)
@@ -1966,7 +1979,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					I_Instr_null_elements(Instruction);
 					Instruction->type_instr = I_ENDELSE;
-
+					
 					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
 					if (TableItem == NULL)
 					{
@@ -1975,7 +1988,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -1992,7 +2005,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					Instruction = NULL;
 				}
 				break;
-
+			
 			case P_I_ENDWHILE:
 				stack_int_pop(s);
 				if (runtime == 2)
@@ -2014,7 +2027,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 
 					#ifdef DEBUG
-						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM);
+						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
 					#endif
 
 					I_Instr * tmp_ptr = TableItem->instruction_tape;
@@ -2140,7 +2153,7 @@ bool token_wanted(token * t)
 	else if (t->id == S_MINUS) return true;
 	else if (t->id == S_DIV) return true;
 	else if (t->id == S_MUL) return true;
-
+	
 	else return false;
 }
 
