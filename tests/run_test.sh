@@ -95,13 +95,16 @@ do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 0 ]]; then
-		diff=$(diff tmp.txt ${file/java/output})
-		if [[ -z "$diff" ]]; then
+		ok=$(cat  ${file/java/output})
+		ret=$(cat tmp.txt)
+		if [[ "$ret" == "$ok" ]]; then
 			echo -e "${GREEN}$file: SUCCES - output is correct"
 		else
 			echo -e "${RED}$file: ERROR - output is not correct"
 			echo -e "${NC}------------------------------------------------------------------------------------"
-			echo "$diff"
+			echo "${ok}"
+			echo "------------------------------------------------------------------------------------"
+			echo "${ret}"
 			echo "===================================================================================="
 		fi
 	else
