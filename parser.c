@@ -1008,38 +1008,41 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					type = S_BOOLEAN;
 				else if (t.id == S_RIGHT_BRACE) // no other stuffs in function and everything in this if will be freed by garbage collector
 				{
-					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
-					if (Instruction == NULL)
+					if (runtime == 2)
 					{
-						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
-						return ERR_INTERN_FAULT;
+						Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+						if (Instruction == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						I_Instr_null_elements(Instruction);
+						Instruction->type_instr = I_END;
+						
+						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+						if (TableItem == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+							return ERR_INTERN_FAULT;
+						}
+						I_Instr * tmp_ptr = TableItem->instruction_tape;
+						if (tmp_ptr == NULL)
+						{
+							TableItem->instruction_tape = Instruction;
+						}
+						else
+						{
+							while(tmp_ptr->next_instr != NULL)
+						 		tmp_ptr = tmp_ptr->next_instr;
+							tmp_ptr->next_instr = Instruction;
+						}
+						#ifdef DEBUG
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
+						#endif
+
+						Instruction = NULL;
 					}
-					I_Instr_null_elements(Instruction);
-					Instruction->type_instr = I_END;
 					
-					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
-					if (TableItem == NULL)
-					{
-						fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
-						return ERR_INTERN_FAULT;
-					}
-					I_Instr * tmp_ptr = TableItem->instruction_tape;
-					if (tmp_ptr == NULL)
-					{
-						TableItem->instruction_tape = Instruction;
-					}
-					else
-					{
-						while(tmp_ptr->next_instr != NULL)
-					 		tmp_ptr = tmp_ptr->next_instr;
-						tmp_ptr->next_instr = Instruction;
-					}
-					#ifdef DEBUG
-						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
-					#endif
-
-					Instruction = NULL;
-
 					LocalTableSymbols = NULL;
 					static_func_var_name = NULL;
 					error_6_flag = 1;
@@ -1604,38 +1607,41 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				{
 					token_got = false;
 
-					Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
-					if (Instruction == NULL)
+					if (runtime == 2)
 					{
-						fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
-						return ERR_INTERN_FAULT;
-					}
-					I_Instr_null_elements(Instruction);
-					Instruction->type_instr = I_ELSE;
+						Instruction = (I_Instr*) mem_alloc(sizeof(I_Instr));
+						if (Instruction == NULL)
+						{
+							fprintf(stderr, "Intern fault. Instruction cannot be allocated.\n");
+							return ERR_INTERN_FAULT;
+						}
+						I_Instr_null_elements(Instruction);
+						Instruction->type_instr = I_ELSE;
 
-					TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
-					if (TableItem == NULL)
-					{
-						fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
-						return ERR_INTERN_FAULT;
-					}
+						TableItem = htab_find_item(GlobalTableSymbols, static_func_var_name);
+						if (TableItem == NULL)
+						{
+							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
+							return ERR_INTERN_FAULT;
+						}
 
-					#ifdef DEBUG
-						printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
-					#endif
+						#ifdef DEBUG
+							printf("Instruction - func tape: %d \tLine number: %u\n", Instruction->type_instr, LINE_NUM); 
+						#endif
 
-					I_Instr * tmp_ptr = TableItem->instruction_tape;
-					if (tmp_ptr == NULL)
-					{
-						TableItem->instruction_tape = Instruction;
+						I_Instr * tmp_ptr = TableItem->instruction_tape;
+						if (tmp_ptr == NULL)
+						{
+							TableItem->instruction_tape = Instruction;
+						}
+						else
+						{
+							while(tmp_ptr->next_instr != NULL)
+						 		tmp_ptr = tmp_ptr->next_instr;
+							tmp_ptr->next_instr = Instruction;
+						}
+						Instruction = NULL;
 					}
-					else
-					{
-						while(tmp_ptr->next_instr != NULL)
-					 		tmp_ptr = tmp_ptr->next_instr;
-						tmp_ptr->next_instr = Instruction;
-					}
-					Instruction = NULL;
 
 					if (stack_int_push(s, 2, P_I_ENDELSE, P_IF_ELSE_SECTION) < 0)
 					{
