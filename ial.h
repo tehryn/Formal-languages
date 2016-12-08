@@ -50,6 +50,8 @@ typedef struct htab_item {
 	unsigned number_of_arguments; // for function
 	void * local_table;		// htab_t* // TODO - zde bude predvyplnena lokalni tabulka s noninitialized variable
 	void * instruction_tape;	// for function
+	
+	int argument_index;		// for variable which is argument of some function, -1 by default for non-argument variable
 
 	struct htab_item* next_item; // next variable
 
@@ -66,12 +68,15 @@ typedef struct htab_t {
 htab_t * htab_init(unsigned size);
 htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsigned htab_size));
 
+htab_item * htab_find_item(htab_t * T, const char * key); // NULL if not there
+htab_item * htab_insert_item(htab_t * T, const char * key); // NULL if failed
+
 htab_t * htab_copy(htab_t * T);
+
+// pre: index >= 0
+htab_item * htab_find_item_by_argument_index(htab_t * T, int index); // NULL if not there
 
 void htab_clear_items(htab_t * T);
 void htab_free_all(htab_t * T);
-
-htab_item * htab_find_item(htab_t * T, const char * key); // NULL if not there
-htab_item * htab_insert_item(htab_t * T, const char * key); // NULL if failed
 
 #endif

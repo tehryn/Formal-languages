@@ -192,6 +192,8 @@ int find( char *s,  char *search)
     return -1;
 }
 
+// -------------------------------------------------------------------------------------
+
 int stack_int_create ( struct t_stack_int * stack, int n )
 {
 	stack->data = (int *) malloc(n * sizeof(int));
@@ -316,7 +318,7 @@ unsigned hash_function(const char *str, unsigned htab_size)
 	return h % htab_size;
 }
 
-
+// ------------------------------------------------------------------------------------------
 
 htab_t * htab_init(unsigned size)
 {
@@ -353,79 +355,7 @@ htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsign
 	return htab;
 }
 
-htab_t * htab_copy(htab_t * table)
-{
-	htab_t *result = htab_init(table->htab_size);
-    if (result == NULL) {
-        return NULL;
-    }
-    if (table->ptr == NULL) {
-        return result;
-    }
-    htab_item *tmp = NULL;
-//    htab_item *prev = NULL;
-    htab_item *item;
-    for (unsigned i = 0; i < table->htab_size; i++) {
-        tmp = table->ptr[i];
-        while (tmp != NULL) {
-            if ((item = htab_insert_item(result, tmp->key)) == NULL) {
-                return NULL;
-            }
-//            if (prev != NULL) {
-//                prev->next_item = item;
-//            }
-//            prev = item;
-            item->data_type = tmp->data_type;
-            item->func_or_var = 1;
-//            item->data = NULL;
-//            item->initialized = 0;
-//            item->number_of_arguments = 0;
-//            item->local_table = NULL;
-//            item->instruction_tape = NULL;
-//            item->next_item = NULL;
-            tmp = tmp->next_item;
-        }
-    }
-    return result;
-}
 
-void htab_clear_items(htab_t * T)
-{
-    T = T;
-    T = T;
-	return; // garbage collector
-
-/*	htab_item * item; // item that we will free
-	for (unsigned i = 0; i < T->htab_size; i++)
-	{
-		while (T->ptr[i] != NULL)
-		{
-			item = T->ptr[i];
-			T->ptr[i] = T->ptr[i]->next_item; // store next item
-			free(item->key);
-			free(item->data);
-			free(item);
-			item = NULL;
-		}
-	}
-*/
-}
-
-void htab_free_all(htab_t * T)
-{
-    T = T;
-	T = NULL;
-	return; // garbage collector
-
-/*	if (T != NULL)
-	{
-		htab_clear_items(T);
-		free(T->ptr);
-		free(T);
-		T = NULL;
-	}
-*/
-}
 
 
 htab_item * htab_find_item(htab_t * T, const char * key) // NULL if not there
@@ -471,6 +401,8 @@ htab_item * malloc_item(const char * key)
 	item->local_table = NULL;
 	item->instruction_tape = NULL;
 
+	item->argument_index = -1;
+
 	item->next_item = NULL;
 
 	return item;
@@ -495,4 +427,102 @@ htab_item * htab_insert_item(htab_t * T, const char * key)
 	item->next_item = malloc_item(key);
 	T->number_items++;
 	return item->next_item; // could be NULL
+}
+
+htab_t * htab_copy(htab_t * table)
+{
+	htab_t *result = htab_init(table->htab_size);
+    if (result == NULL) {
+        return NULL;
+    }
+    if (table->ptr == NULL) {
+        return result;
+    }
+    htab_item *tmp = NULL;
+//    htab_item *prev = NULL;
+    htab_item *item;
+    for (unsigned i = 0; i < table->htab_size; i++) {
+        tmp = table->ptr[i];
+        while (tmp != NULL) {
+            if ((item = htab_insert_item(result, tmp->key)) == NULL) {
+                return NULL;
+            }
+//            if (prev != NULL) {
+//                prev->next_item = item;
+//            }
+//            prev = item;
+            item->data_type = tmp->data_type;
+            item->func_or_var = 1;
+//            item->data = NULL;
+//            item->initialized = 0;
+//            item->number_of_arguments = 0;
+//            item->local_table = NULL;
+//            item->instruction_tape = NULL;
+//            item->next_item = NULL;
+			item->argument_index = tmp->item->argument_index; 
+            tmp = tmp->next_item;
+        }
+    }
+    return result;
+}
+
+htab_item * htab_find_item_by_argument_index(htab_t * T, int index); // NULL if not there
+{
+	if (index < 0)
+		return NULL;
+	if (T == NULL)
+		return NULL;
+
+	htab_item * item;
+
+	for (unsigned i = 0; i < T->htab_size; i++)
+	{
+		item = T->ptr[i];
+		while (item != NULL)
+		{
+			if (item->argument_index == index)
+				return item;
+			item = item->next_item;
+		}
+	}
+
+	return NULL;
+}
+
+void htab_clear_items(htab_t * T)
+{
+    T = T;
+    T = T;
+	return; // garbage collector
+
+/*	htab_item * item; // item that we will free
+	for (unsigned i = 0; i < T->htab_size; i++)
+	{
+		while (T->ptr[i] != NULL)
+		{
+			item = T->ptr[i];
+			T->ptr[i] = T->ptr[i]->next_item; // store next item
+			free(item->key);
+			free(item->data);
+			free(item);
+			item = NULL;
+		}
+	}
+*/
+}
+
+void htab_free_all(htab_t * T)
+{
+    T = T;
+	T = NULL;
+	return; // garbage collector
+
+/*	if (T != NULL)
+	{
+		htab_clear_items(T);
+		free(T->ptr);
+		free(T);
+		T = NULL;
+	}
+*/
 }
