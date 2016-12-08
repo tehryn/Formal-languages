@@ -231,3 +231,44 @@ void array_string_destroy(array_string *array) {
 	}
 	free(array->data);
 }
+
+
+int stack_instr_init(stack_instr *stack) {
+	stack->data = (I_Instr **) malloc(sizeof(I_Instr*)*STACK_INSTR_INIT_SIZE);
+	if (stack->data == NULL) {
+		stack->top = -1;
+		stack->size = 0;
+		return 1;
+	}
+	stack->top = -1;
+	stack->size = STACK_INSTR_INIT_SIZE;
+	return 0;
+}
+
+int stack_instr_push(stack_instr *stack, I_Instr *instr) {
+	if ((int) stack->size <= ++stack->top) {
+		stack->size *= 2;
+		void **tmp = (void **) realloc(stack->data, stack->size);
+		if (tmp == NULL || stack->size == 0) {
+			stack->size = 0;
+			free(stack->data);
+			return 1;
+		}
+		stack->data = (I_Instr **) tmp;
+	}
+	stack->data[stack->top] = instr;
+	return 0;
+}
+
+I_Instr *stack_instr_pop(stack_instr *stack) {
+	if (stack->top < 0) {
+		return NULL;
+	}
+	return stack->data[stack->top--];
+}
+
+void stack_instr_destroy(stack_instr *stack) {
+	free(stack->data);
+	stack->size = 0;
+	stack->top = -1;
+}

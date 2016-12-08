@@ -11,6 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ial.h"
+#include "interpret.h"
 
 /** @defgroup structures Structures*/
 /** @addtogroup structures
@@ -26,6 +27,9 @@
 
 /*! Default size for allocation memory for array of strings */
 #define ARRAY_STRING_INIT_SIZE 8
+
+/*! Default size for allocation memory of stack of instructions */
+#define STACK_INSTR_INIT_SIZE 8
 
 /**
  * Stack of hash tables
@@ -62,6 +66,19 @@ typedef struct array_string {
 	/** Array of hash tables */
 	char **data;
 } array_string;
+
+
+/**
+ * Stack of instructions
+ */
+typedef struct stack_instr {
+	/** Index of item on top of stack */
+	int top;
+	/** Maximum number of items after last allocation */
+	size_t size;
+	/** Array of hash tables */
+	I_Instr **data;
+} stack_instr;
 
 /**
  * Initialize stack
@@ -176,6 +193,11 @@ char *array_string_find(array_string *array, const char *str);
  */
 void array_string_destroy(array_string *array);
 
+
+int stack_instr_init(stack_instr *stack);
+int stack_instr_push(stack_instr *stack, I_Instr *instr);
+I_Instr *stack_instr_pop(stack_instr *stack);
+void stack_instr_destroy(stack_instr *stack);
 /** @} */
 
 #endif
