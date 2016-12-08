@@ -818,7 +818,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 				return new;
 			}
 
-			(*tmp_value)=(*((double *)tmp1.ptr))/(*((double *)tmp2.ptr));
+			(*tmp_value)=(*((int *)tmp1.ptr))/(*((int *)tmp2.ptr));
 
 		}
 
@@ -1132,6 +1132,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				{
 					new=malloc(sizeof(token));
 
+					//printf("I in do express: %d\n",(*((int*)item_tmp1->data)));
 					if (item_tmp1->data_type==S_STRING)
 						new->id=TYPE_STRING;
 					else if (item_tmp1->data_type==S_DOUBLE)
@@ -1246,6 +1247,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
+				
 				new=inter_arm_op(tmp1,tmp2,3);
 				if (new->id==-8)
 				{
@@ -1254,7 +1256,6 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					new_token->id=ERR_DIVISION_ZERO;
 					return new_token ;
 				}
-
 				stack_expression_push(S,*new);
 				break;
 
