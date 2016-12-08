@@ -15,7 +15,7 @@ enum {
 	I_IF,						//102
 	I_ELSE,						//103
 	I_WHILE,					//104
-	I_END, 						//105 
+	I_END, 						//105
 	I_FCE,						//106
 	I_RETURN,					//107
 	I_PRINT,					//108
@@ -23,20 +23,6 @@ enum {
 	I_ENDWHILE,					//110
 	I_ENDELSE					//111
 };
-
-typedef struct I_Instr
-{
-	int type_instr;
-	void *adr1;
-	void *adr2;
-	void *adr3;
-	struct I_Instr *next_instr;
-}I_Instr;
-
-typedef struct Instr_List{
-	I_Instr *Active;
-	I_Instr *Last;
-}Instr_List;
 
 int Add_Instr(Instr_List *L, I_Instr *new);
 

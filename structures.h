@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "ial.h"
-#include "interpret.h"
+//#include "interpret.h"
 
 /** @defgroup structures Structures*/
 /** @addtogroup structures
@@ -30,6 +30,21 @@
 
 /*! Default size for allocation memory of stack of instructions */
 #define STACK_INSTR_INIT_SIZE 8
+
+
+typedef struct I_Instr
+{
+	int type_instr;
+	void *adr1;
+	void *adr2;
+	void *adr3;
+	struct I_Instr *next_instr;
+}I_Instr;
+
+typedef struct Instr_List{
+	I_Instr *Active;
+	I_Instr *Last;
+}Instr_List;
 
 /**
  * Stack of hash tables
