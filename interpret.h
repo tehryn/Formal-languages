@@ -26,12 +26,12 @@ enum {
 
 int Add_Instr(Instr_List *L, I_Instr *new);
 
-token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_expresion *S,Instr_List *L);
+token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_expresion *S,Instr_List *L,int fce_flag);
 
 token *inter_plus(token a,token b);
 token *inter_arm_op(token tmp1,token tmp2, int i);
 token *inter_bool_op(token tmp1,token tmp2, int i);
-int inter(Instr_List *L, stack_htab *I_Htable);
+int inter(Instr_List *L, stack_htab *I_Htable,token *return_token);
 
 char *IntToString(int x);
 char *DoubleToString(double x);
