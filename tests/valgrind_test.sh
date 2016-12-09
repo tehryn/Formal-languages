@@ -24,6 +24,18 @@ do
 
 done
 
+for file in ./tests/diff_check/*.java
+do
+    var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
+
+    if [[ $var == *"$valide"* ]]
+    then
+        echo -e "${file}: ${GREEN}$var${NC}"
+    else
+        echo -e "${file}: ${RED}$var${NC}"
+    fi
+done
+
 for file in ./tests/invalid_lex/*.java
 do
     var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
