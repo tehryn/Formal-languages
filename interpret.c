@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "embedded_functions.h"
-#define I_STACKSIZE 20
+#define I_STACKSIZE 32
 
 /**
  * Search for item of local or global hash table in the stack
