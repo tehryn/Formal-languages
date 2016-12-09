@@ -34,9 +34,8 @@ htab_item * stack_htab_find_htab_item(stack_htab * stack, char * key)
 	return NULL;
 }
 
-int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
+int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 {
-						
 	struct stack_expresion *S=malloc(sizeof(struct stack_expresion));
 	if (S==NULL)
 		return ERR_INTERN_FAULT;
@@ -74,6 +73,11 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 				
 
 				new=do_expression(postfix_array,I_Htable,S,L,0);
+				if (new->id < 0)
+				{
+					return -(new->id);
+					
+				}
 				if(new->id==I_FCE)
 				{
 					stack_instr_push(&fce_stack,L->Active->next_instr);
@@ -134,7 +138,11 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 				k=0;
 				postfix_array=(token *)L->Active->adr1;
 				new=do_expression(postfix_array,I_Htable,S,L,0);
-
+				if (new->id < 0)
+				{
+					return -(new->id);
+					
+				}
 				if (new->id==S_FALSE)
 				{
 					int count=0;
@@ -160,6 +168,13 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 				k=0;
 				postfix_array=(token *)L->Active->adr1;
 				new=do_expression(postfix_array,I_Htable,S,L,0);
+				
+				if (new->id < 0)
+				{
+					return -(new->id);
+					
+				}
+				
 				if (new->id==S_FALSE)
 				{
 					int count=0;
@@ -205,8 +220,17 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 					char *help_tmp;
 					token *str_token=NULL;
 					
-					str_token=do_expression(postfix_array,I_Htable,S,L,1);
+					str_token=do_expression(postfix_array,I_Htable,S,L,0);
+					if (str_token==NULL)
+					{
+						L->Active=L->Active->next_instr;
+						break;
+					}
+					if (str_token->id < 0)
+					{
+					return -(new->id);
 					
+					}
 
 					//printf("str token id: %s\n",(char *)str_token->ptr);
 					
@@ -230,13 +254,27 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 			
 				
 			
-			
+				
 				htab_item *parametr;
 				int par_type;
-
+				int void_func_flag=0;
+				
+				
+				if(item_tmp1->data_type==S_VOID)
+					void_func_flag=1;
+				
+				
 				//stack_htab_push(I_Htable, loc_table);
-				new=do_expression(postfix_array,I_Htable,S,L,0);
-					
+				new=do_expression(postfix_array,I_Htable,S,L,void_func_flag);
+			
+				//printf("express vration :%d\n",new->id);
+				if (new->id < 0)
+				{
+					return -(new->id);
+				}	
+				
+			
+				
 				return 0;	
 				break;
 				
@@ -263,9 +301,13 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 				break;	
 				
 			case I_END:
-				return 0;
-				L->Active=L->Active->next_instr;
-				break;
+				
+				//printf("VOID FLAG U ENDU: %d\n",void_flag);
+				if (void_flag==1)
+					return 0;
+				else 
+					return -8;
+				
 				
 			case I_RETURN:
 				
@@ -274,6 +316,12 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 				postfix_array=L->Active->adr1;				
 				
 				new=do_expression(postfix_array,I_Htable,S,L,0);
+				if (new->id < 0)
+				{
+					return -(new->id);
+					
+				}
+				
 				if(fce_token->id==S_INT)
 				{
 					
@@ -341,6 +389,7 @@ int Add_Instr(Instr_List *L, I_Instr *new)
 
 int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_token)
 {
+
 	if (strcmp(item_tmp1->key,"ifj16.readInt")==0)
 	{
 		return_token->id=TYPE_INT;
@@ -349,7 +398,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->ptr=(int *)new_val;
 		return 1;
 	}	
-	if (strcmp(item_tmp1->key,"ifj16.readDouble")==0)
+	else if (strcmp(item_tmp1->key,"ifj16.readDouble")==0)
 	{
 		return_token->id=TYPE_DOUBLE;
 		double *new_val=malloc(sizeof(double));
@@ -357,7 +406,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->ptr=(double *)new_val;
 		return 1;
 	}	
-	if (strcmp(item_tmp1->key,"ifj16.readString")==0)
+	else if (strcmp(item_tmp1->key,"ifj16.readString")==0)
 	{
 		return_token->id=TYPE_STRING;
 		//free(return_token->ptr);
@@ -365,7 +414,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->ptr=(char *)new_val;
 		return 1;
 	}		
-	if (strcmp(item_tmp1->key,"ifj16.substr")==0)
+	else if (strcmp(item_tmp1->key,"ifj16.substr")==0)
 	{
 		return_token->id=TYPE_STRING;
 		token tmp1,tmp2,tmp3;
@@ -377,7 +426,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->ptr=(char *)s2;
 		return 1;
 	}	
-	if (strcmp(item_tmp1->key,"ifj16.compare")==0)
+	else if (strcmp(item_tmp1->key,"ifj16.compare")==0)
 	{
 		return_token->id=TYPE_INT;
 		token tmp1,tmp2;
@@ -397,7 +446,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		
 		
 	}
-	if (strcmp(item_tmp1->key,"ifj16.find")==0)
+	else if (strcmp(item_tmp1->key,"ifj16.find")==0)
 	{
 		return_token->id=TYPE_INT;
 		int *new_val=malloc(sizeof(int));
@@ -411,7 +460,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->ptr=(int *)new_val;
 		return 1;
 	}
-	if (strcmp(item_tmp1->key,"ifj16.sort")==0)
+	else if (strcmp(item_tmp1->key,"ifj16.sort")==0)
 	{
 		return_token->id=TYPE_STRING;
 				
@@ -423,6 +472,19 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		//free(return_token->ptr);
 		return_token->ptr=(char *)s2;	
 		return 1;
+	}
+	else if (strcmp(item_tmp1->key,"ifj16.print")==0)
+	{
+		token tmp1;
+		stack_expression_pop(S,&tmp1);
+		
+		if (tmp1.id==TYPE_INT || tmp1.id==S_INT )
+			printf("%d",(*(int*)tmp1.ptr));
+		else if (tmp1.id==TYPE_DOUBLE || tmp1.id==S_DOUBLE)
+			printf("%g",(*(double*)tmp1.ptr));
+		else if (tmp1.id==TYPE_STRING || tmp1.id==S_STRING)
+			printf("%s",((char*)tmp1.ptr));
+		return -1;
 	}
 	return 0;
 }
@@ -592,7 +654,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 		{
 			if ((*((double *)tmp2.ptr))==0.0)
 			{
-				free(tmp_value);
+				//free(tmp_value);
 				new->id=-8;
 				return new;
 			}
@@ -941,7 +1003,7 @@ void I_Instr_null_elements(I_Instr * Instruction)
 	Instruction->next_instr = NULL;
 }
 
-token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_expresion *S,Instr_List *L,int fce_flag)
+token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_expresion *S,Instr_List *L,int void_flag)
 {
 	token *new_token=malloc(sizeof(token));
 	token ptr,tmp1,tmp2;
@@ -960,10 +1022,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				//printf("full ident key: %s\n",(char *)ptr.ptr);
 			case S_SIMPLE_IDENT:
 				item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
-				if(fce_flag)
-					if (item_tmp1->func_or_var==2)
-						if (postfix_array[k].id==END_EXPR)
-							break;
+				
 				if (item_tmp1==NULL)
 				{
 					stack_expression_destroy(S);
@@ -977,10 +1036,15 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				{
 					new=malloc(sizeof(token));
 					int result=is_emb_fce(item_tmp1,S,new);
-					if (result)
+			
+					if (result>0)
 					{
 						stack_expression_push(S,*new);
 						break;
+					}
+					else if (result==-1)
+					{
+						return NULL;
 					}
 					htab_t *loc_table=htab_copy((htab_t *)item_tmp1->local_table);
 				
@@ -1034,7 +1098,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 
 					
 					stack_htab_push(I_Htable, loc_table);
-					
+					int result_of_interpret=0;
 					new=malloc(sizeof(token));
 					new->id=item_tmp1->data_type;
 					if (item_tmp1->data_type==S_INT)
@@ -1044,7 +1108,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 						new->ptr=new_data;
 						I_Instr *tmp=L->Active;
 						L->Active=item_tmp1->instruction_tape;
-						inter(L, I_Htable,new);
+						result_of_interpret=inter(L, I_Htable,new,void_flag);
 						L->Active=tmp;
 					}
 					else if (item_tmp1->data_type==S_DOUBLE)
@@ -1054,14 +1118,14 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 						new->ptr=new_data;
 						I_Instr *tmp=L->Active;
 						L->Active=item_tmp1->instruction_tape;
-						inter(L, I_Htable,new);
+						result_of_interpret=inter(L, I_Htable,new,void_flag);
 						L->Active=tmp;
 					}
 					else if (item_tmp1->data_type==S_STRING)
 					{
 						I_Instr *tmp=L->Active;
 						L->Active=item_tmp1->instruction_tape;
-						inter(L, I_Htable,new);
+						result_of_interpret=inter(L, I_Htable,new,void_flag);
 						
 						L->Active=tmp;
 					}
@@ -1069,11 +1133,17 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					{
 						I_Instr *tmp=L->Active;
 						L->Active=item_tmp1->instruction_tape;
-						inter(L, I_Htable,NULL);
+						result_of_interpret=inter(L, I_Htable,NULL,void_flag);
 						L->Active=tmp;						
 					}
 					stack_htab_pop(I_Htable);
 					stack_expression_push(S,*new);
+					
+					if (result_of_interpret!=0)
+					{
+						new->id=result_of_interpret;
+						return new;
+					}
 					
 					new_token=new;
 					
@@ -1084,7 +1154,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				{
 					fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
 					//freeALL();
-					new_token->id=ERR_UNINICIALIZED_VAR;
+					new_token->id=-ERR_UNINICIALIZED_VAR;
 					return new_token;
 				}
 				if (item_tmp1->func_or_var==1)
@@ -1116,15 +1186,18 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 			case S_FALSE:
 				
 				stack_expression_push(S,ptr);
+				
 				break;
 			
 			case S_EQUAL:
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 				new=inter_bool_op(tmp1,tmp2,1);
 				stack_expression_push(S,*new);
 				break;
 			case S_NOT_EQUAL:
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1133,6 +1206,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				break;
 
 			case S_GREATER_EQUAL:
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1141,6 +1215,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				break;
 
 			case S_GREATER:
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1149,6 +1224,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				break;
 
 			case S_LESS_EQUAL:
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1157,6 +1233,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				break;
 
 			case S_LESS:
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 				new=inter_bool_op(tmp1,tmp2,6);
@@ -1164,6 +1241,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				break;
 
 			case S_AND:
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1172,6 +1250,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				break;
 
 			case S_OR:
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1179,7 +1258,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				stack_expression_push(S,*new);
 				break;
 			case S_PLUS:					// ----------- PLUS
-
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 				new=inter_plus(tmp1,tmp2);
@@ -1187,6 +1266,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				break;
 
 			case S_MINUS:					//     ----------------------  MINUS
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1196,6 +1276,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 
 
 			case S_MUL:					//     ----------------------  Multiplication
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1205,6 +1286,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 
 
 			case S_DIV:					//     ----------------------  Division
+			
 				stack_expression_pop(S,&tmp2);
 				stack_expression_pop(S,&tmp1);
 
@@ -1214,7 +1296,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				{
 					fprintf(stderr, "Divison by zero!.\n");
 					//freeALL();
-					new_token->id=ERR_DIVISION_ZERO;
+					new_token->id=-ERR_DIVISION_ZERO;
 					return new_token ;
 				}
 				stack_expression_push(S,*new);
@@ -1223,8 +1305,13 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 
 		}
 	}
-	stack_expression_pop(S,&tmp1);
+	
+	if(stack_expression_pop(S,&tmp1))
+	{	
+		return NULL;
+	}	
 	new_token->id=tmp1.id;
+	
 	if (new_token->id==TYPE_INT)
 	{
 		int *new_val=malloc(sizeof(int));
@@ -1249,3 +1336,4 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 	return new_token;
 }
 
+ 
