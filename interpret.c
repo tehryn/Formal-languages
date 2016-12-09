@@ -36,10 +36,6 @@ htab_item * stack_htab_find_htab_item(stack_htab * stack, char * key)
 
 int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 {
-	printf("\n\n   NEW INTER  \n\n"	);
-	htab_item *found_item3=stack_htab_find_htab_item(I_Htable, "asd");
-					if (found_item3==NULL)
-						printf("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ovo je problem\n");
 						
 	struct stack_expresion *S=malloc(sizeof(struct stack_expresion));
 	if (S==NULL)
@@ -63,7 +59,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 	
 	while (L->Active!=NULL)
     {
-		printf("type of instr interpret: %d\n",L->Active->type_instr);
+		//printf("type of instr interpret: %d\n",L->Active->type_instr);
 		//if (L->Active->next_instr!=NULL)
 			//printf("type of next instr interpret: %d\n",L->Active->next_instr->type_instr);
 
@@ -198,13 +194,10 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 
 			case I_FCE:
 				item_tmp1=(htab_item *)L->Active->adr1;
-				if (item_tmp1==NULL)
-					printf("NULL JE\n");
-					
+							
 					
 					
 				k=0;	
-				printf("IN FCE\n");
 				postfix_array=(token *)L->Active->adr2;
 				
 				if (strcmp(item_tmp1->key,"ifj16.print")==0)
@@ -1009,19 +1002,12 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				//printf("full ident key: %s\n",(char *)ptr.ptr);
 			case S_SIMPLE_IDENT:
 				item_tmp1=stack_htab_find_htab_item(I_Htable, ptr.ptr);
-				printf("dostal jsem S_FUL NEBO S_SIMPLE\n");
 				if(fce_flag)
 					if (item_tmp1->func_or_var==2)
 						if (postfix_array[k].id==END_EXPR)
 							break;
-				printf("asdf\n");
 				if (item_tmp1==NULL)
 				{
-					htab_item *found_item1=stack_htab_find_htab_item(I_Htable, "asd");
-					if (found_item1==NULL)
-						printf("opaaaaaaaaa NEMAM POJMA GDE JE PROBLEM\n");
-						
-					printf("nije nasao ovo govno: %s\n",(char*)ptr.ptr);
 					stack_expression_destroy(S);
 					free(S);
 					fprintf(stderr,"Interpret: Item wasn't found.\n");
@@ -1031,28 +1017,20 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				
 				if (item_tmp1->func_or_var==2)
 				{
-					printf("Ted jsem dostal fce ! do_e\n"	);
 					
 					htab_t *loc_table=htab_copy((htab_t *)item_tmp1->local_table);
-					
-					printf("fce data type %d\n",item_tmp1->data_type);
-					
-					htab_item *found_item1=htab_find_item(loc_table,"asd");
-					if (found_item1==NULL)
-						printf("NEMAM POJMA GDE JE PROBLEM\n");
+				
 					
 					htab_item *parametr;
 					int par_type;
 					for (int i=item_tmp1->number_of_arguments;i>0;i--)
 					{
-						printf("NUMBER OF PARAMETERSSSSSSSSSSSSSSSS : %d\n",item_tmp1->number_of_arguments);
 						par_type=((int*)item_tmp1->data)[i-1];
 						parametr=htab_find_item_by_argument_index(loc_table, i-1); 
 						parametr->initialized=1;
 						
 						stack_expression_pop(S,&tmp2);
 						
-						printf("pop tmp2 value: %s\n", (char *)tmp2.ptr);
 						
 						if (par_type==S_DOUBLE)
 						{
@@ -1081,8 +1059,10 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 						else if (par_type==S_STRING)
 						{
 							char *new_val=malloc(sizeof(char)*strlen((char*)tmp2.ptr)+1);
-							memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp2.ptr)+1);
-							parametr->data=(char*)new_val;	
+							memcpy(new_val,(char*)tmp2.ptr,strlen((char*)tmp2.ptr)+1);
+							parametr->data=(char*)new_val;
+							
+								
 						}
 						
 				
@@ -1090,9 +1070,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 
 					
 					stack_htab_push(I_Htable, loc_table);
-					htab_item *found_item2=stack_htab_find_htab_item(I_Htable, "asd");
-					if (found_item2==NULL)
-						printf("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ovo je problem\n");
+					
 					new=malloc(sizeof(token));
 					new->id=item_tmp1->data_type;
 					if (item_tmp1->data_type==S_INT)
@@ -1125,17 +1103,12 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					}
 					else
 					{
-						printf("its ELSEEEEEEEEEEEEEEEEEEEEE\n");
 						I_Instr *tmp=L->Active;
 						L->Active=item_tmp1->instruction_tape;
 						inter(L, I_Htable,NULL);
-					htab_item *found_item3=stack_htab_find_htab_item(I_Htable, "asd");
-					if (found_item1==NULL)
-						printf("HOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO ovo je problem\n");	
 						L->Active=tmp;						
 					}
 					stack_htab_pop(I_Htable);
-					printf("POPNUL JSEM\n");
 					stack_expression_push(S,*new);
 					
 					new_token=new;
