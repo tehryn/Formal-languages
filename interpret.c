@@ -59,7 +59,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 	
 	while (L->Active!=NULL)
     {
-		//printf("type of instr interpret: %d\n",L->Active->type_instr);
+		printf("type of instr interpret: %d\n",L->Active->type_instr);
 		//if (L->Active->next_instr!=NULL)
 			//printf("type of next instr interpret: %d\n",L->Active->next_instr->type_instr);
 
@@ -193,11 +193,13 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 				break;
 
 			case I_FCE:
-				return_hitem=(htab_item *)L->Active->adr1;
+				item_tmp1=(htab_item *)L->Active->adr1;
+				if (item_tmp1==NULL)
+					printf("NULL JE\n");
 				k=0;	
 				postfix_array=(token *)L->Active->adr2;
 				
-				if (strcmp(return_hitem->key,"ifj16.print")==0)
+				if (strcmp(item_tmp1->key,"ifj16.print")==0)
 				{
 					char *help_tmp;
 					token *str_token=NULL;
@@ -223,171 +225,63 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 					//printf("%d\n",str
 					
 				}
-				
-				loc_table=(htab_t *)return_hitem->local_table;
-				
-				loc_table=htab_copy((htab_t *)return_hitem->local_table); 
-				
-				
-				k=0;	
-				if (L->Active->adr2!=NULL)
+				htab_t *loc_table=htab_copy((htab_t *)item_tmp1->local_table);
+			
+				htab_item *parametr;
+				int par_type;
+				for (int i=item_tmp1->number_of_arguments;i>0;i--)
 				{
-					while(postfix_array[k+1].id!=END_EXPR)
-					{	
-						ptr=postfix_array[k++];
-						switch (ptr.id)
-						{
-							case S_SIMPLE_IDENT:
-							case S_FULL_IDENT:
-								
-								item_tmp1=stack_htab_find_htab_item(I_Htable,(char*) ptr.ptr);
-								if (item_tmp1==return_hitem)
-									break;
-								if (item_tmp1==NULL)
-								{
-									stack_expression_destroy(S);
-									free(S);
-									fprintf(stderr,"Interpret: Item wasn't found.\n");
-									return ERR_OTHERS;
-								}
-								
-								if (item_tmp1->initialized==0)
-								{
-									fprintf(stderr, "In line %d variable is not initialized.\n", LINE_NUM);
-									//freeALL();
-									return ERR_UNINICIALIZED_VAR ;
-								}
-								if (item_tmp1->func_or_var==1)
-								{
-									new=malloc(sizeof(token));
-									if (new==NULL)
-										return ERR_INTERN_FAULT;
-									
-									
-									if (item_tmp1->data_type==S_STRING)
-										new->id=TYPE_STRING;
-									else if (item_tmp1->data_type==S_DOUBLE)
-										new->id=TYPE_DOUBLE;
-									else
-										new->id=TYPE_INT;							
-									
-									
-									new->ptr=item_tmp1->data;
-									stack_expression_push(S,*new);
-								}
-								//free(new);
-								break;
-
-							case TYPE_DOUBLE:
-							case TYPE_INT:
-							case TYPE_STRING:
-								stack_expression_push(S,ptr);
-								
-								break;
-
-							case S_PLUS:					// ----------- PLUS
-								stack_expression_pop(S,&tmp2);
-								stack_expression_pop(S,&tmp1);
-
-								new=inter_plus(tmp1,tmp2);
-								stack_expression_push(S,*new);
-								break;
-
-							case S_MINUS:					//     ----------------------  MINUS
-
-								stack_expression_pop(S,&tmp2);
-								stack_expression_pop(S,&tmp1);
-
-								new=inter_arm_op(tmp1,tmp2,1);
-								stack_expression_push(S,*new);
-								break;
-
-
-							case S_MUL:					//     ----------------------  Multiplication
-								stack_expression_pop(S,&tmp2);
-								stack_expression_pop(S,&tmp1);
-
-								new=inter_arm_op(tmp1,tmp2,2);
-								stack_expression_push(S,*new);
-								break;
-
-
-							case S_DIV:					//     ----------------------  Division
-								stack_expression_pop(S,&tmp2);
-								stack_expression_pop(S,&tmp1);
-
-								new=inter_arm_op(tmp1,tmp2,2);
-								if (new->id==-8)
-								{
-									fprintf(stderr, "Divison by zero!.\n");
-									//freeALL();
-									return ERR_DIVISION_ZERO ;
-								}
-
-								stack_expression_push(S,*new);
-								break;
-
-
-						}
-						
-					}
+					par_type=((int*)item_tmp1->data)[i-1];
+					parametr=htab_find_item_by_argument_index(loc_table, i-1); 
+					parametr->initialized=1;
 					
-					int i=return_hitem->number_of_arguments;
-					while (i>0)
+					stack_expression_pop(S,&tmp2);
+
+					if (par_type==S_DOUBLE)
 					{
-						i--;
-						char *tab_key=IntToString(i);
-						stack_expression_pop(S,&tmp1);
-						item_tmp1=htab_find_item(loc_table,tab_key);
-						int *par_types=(int *)item_tmp1->data;
-						
-						if (par_types[i]==S_INT)
+						double *par_value=malloc(sizeof(double));
+						if (tmp2.id==TYPE_DOUBLE)
 						{
-							if (tmp1.id==TYPE_INT)
-							{
-								int *variable=malloc(sizeof(int));
-								*variable=(*((int*)tmp1.ptr));
-								item_tmp1->data=(int *)variable;
-							}
-						}
-						else if (par_types[i]==S_DOUBLE)
-						{	
-							double *variable=malloc(sizeof(int));
-							if (tmp1.id==TYPE_INT)
-							{
-								*variable=(*((int*)tmp1.ptr));
-							}
-							else
-								*variable=(*((double*)tmp1.ptr));
-							item_tmp1->data=(double *)variable;
-						}
-						else 
-						{
+							*par_value=(*((double*)tmp2.ptr));
+							parametr->data=(double*)par_value;
 							
-							if (tmp1.id==TYPE_INT)
-							{
-								char *str_val=IntToString((*((int*)tmp1.ptr)));
-								item_tmp1->data=(char *)str_val;
-							}
-							else if (tmp1.id==TYPE_DOUBLE)
-							{
-								char *str_val=DoubleToString((*((int*)tmp1.ptr)));
-								item_tmp1->data=(char *)str_val;
-							}
-							else
-							{ 
-								char *str_val=mem_alloc(strlen("Main.run")+1);
-								strcpy((char*)str_val,((char *) tmp1.ptr));
-								item_tmp1->data=(char *)str_val;
-							}
-						}	
+						}
+						else
+						{
+							*par_value=(*((int*)tmp2.ptr));
+							parametr->data=(double*)par_value;
+							
+						}							
 					}
-					
-					
-				}	
+					else if (par_type==S_INT)
+					{
+						int *par_value=malloc(sizeof(int));
+						*par_value=(*((int*)tmp2.ptr));
+						parametr->data=(int*)par_value;
+					}
+					else if (par_type==S_BOOLEAN)
+						parametr->data_type=tmp2.id;
+					else
+					{
+						char *new_val=malloc(sizeof(char)*strlen((char*)tmp2.ptr)+1);
+						memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp2.ptr)+1);
+						parametr->data=(char*)new_val;	
+					}
+						
 				
+				}
+								
+									
+
 				stack_htab_push(I_Htable, loc_table);
-				L->Active=(I_Instr *)return_hitem->instruction_tape;
+				token *ret_t=NULL;
+				stack_htab_push(I_Htable, loc_table);
+				I_Instr *tmp=L->Active;
+				L->Active=item_tmp1->instruction_tape;
+				inter(L, I_Htable,ret_t);
+				
+				L->Active=tmp;
+					
 				break;
 				
 				
