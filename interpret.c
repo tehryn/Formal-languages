@@ -386,6 +386,12 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 			
 		int *val=malloc(sizeof(int));	
 		*val=strcmp(((char*)tmp1.ptr),((char*)tmp2.ptr));
+		
+		if (*val > 0 )
+			*val=1;
+		else if (*val < 0 )
+			*val=-1;
+		
 		return_token->ptr=(int *)val;
 		return 1;
 		
