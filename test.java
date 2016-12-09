@@ -1,6 +1,6 @@
-0xFFp-1
-0xFF.FFp-2
-0
-1
-0.5
-.5
+class Main {
+    static void run() {
+        double a = 0;
+        ifj16.print(0xFp-9 + "\n");
+    }
+}
