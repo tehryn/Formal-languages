@@ -339,12 +339,11 @@ int Add_Instr(Instr_List *L, I_Instr *new)
 	return 0;
 }
 
-
-int is_emb_fce(htab_item *item_tmp1,token *postfix_array,token *return_token, stack_htab *I_Htable)
+int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_token)
 {
 	if (strcmp(item_tmp1->key,"ifj16.readInt")==0)
 	{
-		free(return_token->ptr);
+		return_token->id=TYPE_INT;
 		int *new_val=malloc(sizeof(int));
 		*new_val=readInt();
 		return_token->ptr=(int *)new_val;
@@ -352,7 +351,7 @@ int is_emb_fce(htab_item *item_tmp1,token *postfix_array,token *return_token, st
 	}	
 	if (strcmp(item_tmp1->key,"ifj16.readDouble")==0)
 	{
-		free(return_token->ptr);
+		return_token->id=TYPE_DOUBLE;
 		double *new_val=malloc(sizeof(double));
 		*new_val=readInt();
 		return_token->ptr=(double *)new_val;
@@ -360,66 +359,33 @@ int is_emb_fce(htab_item *item_tmp1,token *postfix_array,token *return_token, st
 	}	
 	if (strcmp(item_tmp1->key,"ifj16.readString")==0)
 	{
-		free(return_token->ptr);
+		return_token->id=TYPE_STRING;
+		//free(return_token->ptr);
 		char *new_val=readString();
 		return_token->ptr=(char *)new_val;
 		return 1;
 	}		
 	if (strcmp(item_tmp1->key,"ifj16.substr")==0)
 	{
-		free(return_token->ptr);
-		char *s2,*s1;
-		int val1,val2;
-		if (postfix_array[0].id==S_STRING)
-		{
-			htab_item *s1_item=stack_htab_find_htab_item(I_Htable,(char *) postfix_array[0].ptr);
-			s1=s1_item->data;
-		}
-		else
-			s1=(char *)postfix_array[0].ptr;
+		return_token->id=TYPE_STRING;
+		token tmp1,tmp2,tmp3;
+		stack_expression_pop(S,&tmp3);
+		stack_expression_pop(S,&tmp2);
+		stack_expression_pop(S,&tmp1);
 		
-		if (postfix_array[1].id==S_INT)
-		{
-			htab_item *s2_item=stack_htab_find_htab_item(I_Htable,(char *) postfix_array[1].ptr);
-			val1=(*(int *)s2_item->data);
-		}
-		else
-			val1=(*(int *)postfix_array[1].ptr);	
-				
-		if (postfix_array[2].id==S_INT)
-		{
-			htab_item *s2_item=stack_htab_find_htab_item(I_Htable,(char *) postfix_array[1].ptr);
-			val2=(*(int *)s2_item->data);
-		}
-		else
-			val2=(*(int *)postfix_array[1].ptr);		
-		
-		s2=substring(s1,val1,val2);
+		char *s2=substring(((char*)tmp1.ptr),(*(int*)tmp2.ptr),(*(int*)tmp3.ptr));
 		return_token->ptr=(char *)s2;
 		return 1;
 	}	
 	if (strcmp(item_tmp1->key,"ifj16.compare")==0)
 	{
-		free(return_token->ptr);
-		char *s2,*s1;
-		if (postfix_array[0].id==S_STRING)
-		{
-			htab_item *s1_item=stack_htab_find_htab_item(I_Htable,(char *) postfix_array[0].ptr);
-			s1=s1_item->data;
-		}
-		else
-			s1=(char *)postfix_array[0].ptr;
-		
-		if (postfix_array[1].id==S_STRING)
-		{
-			htab_item *s2_item=stack_htab_find_htab_item(I_Htable,(char *) postfix_array[1].ptr);
-			s2=s2_item->data;
-		}
-		else
-			s2=(char *)postfix_array[1].ptr;
+		return_token->id=TYPE_INT;
+		token tmp1,tmp2;
+		stack_expression_pop(S,&tmp2);
+		stack_expression_pop(S,&tmp1);
 			
 		int *val=malloc(sizeof(int));	
-		*val=strcmp(s1,s2);
+		*val=strcmp(((char*)tmp1.ptr),((char*)tmp2.ptr));
 		return_token->ptr=(int *)val;
 		return 1;
 		
@@ -427,43 +393,28 @@ int is_emb_fce(htab_item *item_tmp1,token *postfix_array,token *return_token, st
 	}
 	if (strcmp(item_tmp1->key,"ifj16.find")==0)
 	{
-		free(return_token->ptr);
+		return_token->id=TYPE_INT;
 		int *new_val=malloc(sizeof(int));
-		char *s2,*s1;
-		if (postfix_array[0].id==S_STRING)
-		{
-			htab_item *s1_item=stack_htab_find_htab_item(I_Htable,(char *) postfix_array[0].ptr);
-			s1=s1_item->data;
-		}
-		else
-			s1=(char *)postfix_array[0].ptr;
 		
-		if (postfix_array[1].id==S_STRING)
-		{
-			htab_item *s2_item=stack_htab_find_htab_item(I_Htable,(char *) postfix_array[1].ptr);
-			s2=s2_item->data;
-		}
-		else
-			s2=(char *)postfix_array[1].ptr;		
+		token tmp1,tmp2;
+		stack_expression_pop(S,&tmp2);
+		stack_expression_pop(S,&tmp1);
+					
 		
-		*new_val=find(s1,s2);
+		*new_val=find((char*)tmp1.ptr,(char*)tmp2.ptr);
 		return_token->ptr=(int *)new_val;
 		return 1;
 	}
 	if (strcmp(item_tmp1->key,"ifj16.sort")==0)
 	{
-		char *s2,*s1;
-		if (postfix_array[0].id==S_STRING)
-		{
-			htab_item *s1_item=stack_htab_find_htab_item(I_Htable,(char *) postfix_array[0].ptr);
-			s1=s1_item->data;
-		}
-		else
-			s1=(char *)postfix_array[0].ptr;
-		
-		s2=shellsort(s1);	
+		return_token->id=TYPE_STRING;
+				
+		token tmp1;
+		stack_expression_pop(S,&tmp1);
+				
+		char *s2=shellsort((char*)tmp1.ptr);	
 			
-		free(return_token->ptr);
+		//free(return_token->ptr);
 		return_token->ptr=(char *)s2;	
 		return 1;
 	}
@@ -995,6 +946,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 	{	
 		
 		ptr=postfix_array[k++];
+		//printf("ptr.id: %d\n",ptr.id);
 		switch (ptr.id)
 		{
 			
@@ -1017,7 +969,13 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				
 				if (item_tmp1->func_or_var==2)
 				{
-					
+					new=malloc(sizeof(token));
+					int result=is_emb_fce(item_tmp1,S,new);
+					if (result)
+					{
+						stack_expression_push(S,*new);
+						break;
+					}
 					htab_t *loc_table=htab_copy((htab_t *)item_tmp1->local_table);
 				
 					
