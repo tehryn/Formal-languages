@@ -36,7 +36,9 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *return_token);
 char *IntToString(int x);
 char *DoubleToString(double x);
 char *Conc_Str(char *s1, char *s2);
-int is_emb_fce(htab_item *item_tmp1,token *postfix_array,token *return_token, stack_htab *I_Htable);
+
+int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_token);
+
 extern htab_t *stack_htab_get_first(stack_htab *stack);
 
 
