@@ -184,7 +184,7 @@ int find( char *s,  char *search)
         /* If the pattern is present at current shift, then index j
            will become -1 after the above loop */
         if (j < 0)
-            return shift+1;
+            return shift;
 
         else
             shift += max(charjump[(int)search[shift+s_len-1]], matchjump[j+1]);
