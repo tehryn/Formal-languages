@@ -201,7 +201,7 @@ int parser()
 
 	// call interpret
 	token *some_null=NULL;
-	int interpret_return = inter(InstructionTape, &stack_of_table_symbols,some_null);
+	int interpret_return = inter(InstructionTape, &stack_of_table_symbols,some_null,0);
 	if (interpret_return != 0)
 	{
 		stack_int_destroy(&s);
