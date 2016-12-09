@@ -297,6 +297,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_SEM_OTHERS);
 				}
+				
+				if ( input_token.id==S_SIMPLE_IDENT && tmp_table_item->initialized!=1 )
+				{
+					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
+					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.3\n", ERR_UNINICIALIZED_VAR);
+				}
+				
 				//input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
 
