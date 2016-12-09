@@ -58,7 +58,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 	
 	while (L->Active!=NULL)
     {
-		//printf("type of instr interpret: %d\n",L->Active->type_instr);
+		printf("type of instr interpret: %d\n",L->Active->type_instr);
 		//if (L->Active->next_instr!=NULL)
 			//printf("type of next instr interpret: %d\n",L->Active->next_instr->type_instr);
 
@@ -71,7 +71,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				postfix_array=(token *)L->Active->adr2;
 				ptr=postfix_array[k];
 				
-
+				
 				new=do_expression(postfix_array,I_Htable,S,L,0);
 				if (new->id < 0)
 				{
@@ -169,6 +169,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				postfix_array=(token *)L->Active->adr1;
 				new=do_expression(postfix_array,I_Htable,S,L,0);
 				
+				
 				if (new->id < 0)
 				{
 					return -(new->id);
@@ -219,13 +220,23 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				{
 					char *help_tmp;
 					token *str_token=NULL;
-					
 					str_token=do_expression(postfix_array,I_Htable,S,L,0);
+					
 					if (str_token==NULL)
 					{
 						L->Active=L->Active->next_instr;
 						break;
 					}
+					
+					
+					
+					if(str_token->id<0)
+					{
+						return -(str_token->id);
+					}
+					
+					
+					
 					if (str_token->id < 0)
 					{
 					return -(new->id);
@@ -266,7 +277,8 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				
 				//stack_htab_push(I_Htable, loc_table);
 				new=do_expression(postfix_array,I_Htable,S,L,void_func_flag);
-			
+				
+				
 				//printf("express vration :%d\n",new->id);
 				if (new->id < 0)
 				{
@@ -316,6 +328,8 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				postfix_array=L->Active->adr1;				
 				
 				new=do_expression(postfix_array,I_Htable,S,L,0);
+				
+				
 				if (new->id < 0)
 				{
 					return -(new->id);
@@ -402,7 +416,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 	{
 		return_token->id=TYPE_DOUBLE;
 		double *new_val=malloc(sizeof(double));
-		*new_val=readInt();
+		*new_val=readDouble();
 		return_token->ptr=(double *)new_val;
 		return 1;
 	}	
@@ -1028,7 +1042,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					stack_expression_destroy(S);
 					free(S);
 					fprintf(stderr,"Interpret: Item wasn't found.\n");
-					new_token->id=ERR_OTHERS;
+					new_token->id=-ERR_OTHERS;
 					return new_token;
 				}
 				
@@ -1141,7 +1155,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					
 					if (result_of_interpret!=0)
 					{
-						new->id=result_of_interpret;
+						new->id=-result_of_interpret;
 						return new;
 					}
 					
