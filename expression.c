@@ -586,13 +586,13 @@ int operator_priority (int op)
 	else if ( op==S_MINUS || op==S_PLUS )
 		return 4;
 
-	else if ( op==S_LESS_EQUAL || op==S_GREATER_EQUAL || op==S_LESS || op==S_GREATER || op==S_EQUAL || op==S_NOT_EQUAL)
+	else if ( op==S_COMMA )
 		return 3;
-
-	else if ( op==S_OR || op==S_AND )
+	
+	else if ( op==S_LESS_EQUAL || op==S_GREATER_EQUAL || op==S_LESS || op==S_GREATER || op==S_EQUAL || op==S_NOT_EQUAL)
 		return 2;
 
-	else if ( op==S_COMMA )
+	else if ( op==S_OR || op==S_AND )
 		return 1;
 
 	return -1;
