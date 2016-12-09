@@ -6,20 +6,6 @@ then
 	NC='\033[0m' # No Color
 fi
 
-for file in ./tests/valid_input/*.java
-do
-	./IFJ16 $file >tmp.txt 2>&1
-	ret=$?
-	if [[ $ret == 0 ]]; then
-		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
-	else
-		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 0"
-		echo -e "${NC}------------------------------------------------------------------------------------"
-		cat tmp.txt
-		echo "===================================================================================="
-	fi
-done
-
 for file in ./tests/invalid_lex/*.java
 do
 	./IFJ16 $file >tmp.txt 2>&1
@@ -84,6 +70,20 @@ do
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 8"
+		echo -e "${NC}------------------------------------------------------------------------------------"
+		cat tmp.txt
+		echo "===================================================================================="
+	fi
+done
+
+for file in ./tests/valid_input/*.java
+do
+	./IFJ16 $file 2>tmp.txt
+	ret=$?
+	if [[ $ret == 0 ]]; then
+		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
+	else
+		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 0"
 		echo -e "${NC}------------------------------------------------------------------------------------"
 		cat tmp.txt
 		echo "===================================================================================="
