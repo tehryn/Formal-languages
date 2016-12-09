@@ -1164,7 +1164,6 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 					}
 					if (runtime == 2)
 					{
-						token_got = false;
 						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
 						if(TableItem!=NULL) // local variable
 						{
@@ -1196,6 +1195,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							Instruction->adr3 = NULL;
 							Instruction->next_instr = NULL;
 
+							token_got = false;
 							if (stack_int_push(s, 1, P_GUIDANCE) < 0)
 							{
 								fprintf(stderr, "Intern fault. Parser cannot push item into stack.\n");
@@ -1211,6 +1211,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 								fprintf(stderr, "Intern fault. Parser cannot join strings.\n");
 								return ERR_INTERN_FAULT;
 							}
+
 							TableItem = htab_find_item(GlobalTableSymbols, local_func_var_name);
 							if (TableItem == NULL)
 							{
