@@ -196,7 +196,11 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 				item_tmp1=(htab_item *)L->Active->adr1;
 				if (item_tmp1==NULL)
 					printf("NULL JE\n");
+					
+					
+					
 				k=0;	
+				printf("IN FCE\n");
 				postfix_array=(token *)L->Active->adr2;
 				
 				if (strcmp(item_tmp1->key,"ifj16.print")==0)
@@ -229,48 +233,11 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 			
 				htab_item *parametr;
 				int par_type;
-				for (int i=item_tmp1->number_of_arguments;i>0;i--)
-				{
-					par_type=((int*)item_tmp1->data)[i-1];
-					parametr=htab_find_item_by_argument_index(loc_table, i-1); 
-					parametr->initialized=1;
-					
-					stack_expression_pop(S,&tmp2);
-
-					if (par_type==S_DOUBLE)
-					{
-						double *par_value=malloc(sizeof(double));
-						if (tmp2.id==TYPE_DOUBLE)
-						{
-							*par_value=(*((double*)tmp2.ptr));
-							parametr->data=(double*)par_value;
-							
-						}
-						else
-						{
-							*par_value=(*((int*)tmp2.ptr));
-							parametr->data=(double*)par_value;
-							
-						}							
-					}
-					else if (par_type==S_INT)
-					{
-						int *par_value=malloc(sizeof(int));
-						*par_value=(*((int*)tmp2.ptr));
-						parametr->data=(int*)par_value;
-					}
-					else if (par_type==S_BOOLEAN)
-						parametr->data_type=tmp2.id;
-					else
-					{
-						char *new_val=malloc(sizeof(char)*strlen((char*)tmp2.ptr)+1);
-						memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp2.ptr)+1);
-						parametr->data=(char*)new_val;	
-					}
-						
+				if (strcmp(item_tmp1->key,"Main.run")!=0)
+				return do_expression(postfix_array,I_Htable,S,L,0);
 				
-				}
-								
+				printf("prosao sammmm!\n");
+				
 									
 
 				stack_htab_push(I_Htable, loc_table);
@@ -307,6 +274,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token)
 				break;	
 				
 			case I_END:
+				return 0;
 				L->Active=L->Active->next_instr;
 				break;
 				
@@ -1060,6 +1028,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				
 				if (item_tmp1->func_or_var==2)
 				{
+					printf("Ted jsem dostal fce ! do_e\n"	);
 					
 					htab_t *loc_table=htab_copy((htab_t *)item_tmp1->local_table);
 					
@@ -1067,12 +1036,15 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					int par_type;
 					for (int i=item_tmp1->number_of_arguments;i>0;i--)
 					{
+						printf("NUMBER OF PARAMETERSSSSSSSSSSSSSSSS : %d\n",item_tmp1->number_of_arguments);
 						par_type=((int*)item_tmp1->data)[i-1];
 						parametr=htab_find_item_by_argument_index(loc_table, i-1); 
 						parametr->initialized=1;
 						
 						stack_expression_pop(S,&tmp2);
-
+						
+						printf("pop tmp2 value: %s\n", (char *)tmp2.ptr);
+						
 						if (par_type==S_DOUBLE)
 						{
 							double *par_value=malloc(sizeof(double));
@@ -1097,7 +1069,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 						}
 						else if (par_type==S_BOOLEAN)
 							parametr->data_type=tmp2.id;
-						else
+						else if (par_type==S_STRING)
 						{
 							char *new_val=malloc(sizeof(char)*strlen((char*)tmp2.ptr)+1);
 							memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp2.ptr)+1);
