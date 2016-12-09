@@ -161,6 +161,9 @@ int is_num_literal(char *word, unsigned len) {
 	else {
 		int e = 0, dot = 0, sign = 0;
 		for (unsigned i = 1; i < len; i++) {
+			if (word[i] == '_') {
+				continue;
+			}
 			if (sign && (word[i] == '+' || word[i] == '-')) {
 				sign = 0;
 				continue;
@@ -183,7 +186,7 @@ int is_num_literal(char *word, unsigned len) {
 				return 0;
 			}
 		}
-		if(!isdigit(word[len-1])) return 0;
+		if(!isdigit(word[len-1]) && word[len-1]!= '_') return 0;
 		if (dot) return TYPE_DOUBLE;
 		return TYPE_INT;
 	}
