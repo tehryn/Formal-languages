@@ -199,7 +199,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				bool_operation = 0;
 				e_type = -1;
 			}
-			else if ( operator_priority(input_token.id)==3 || operator_priority(input_token.id)==2 )
+			else if ( operator_priority(input_token.id)==2 || operator_priority(input_token.id)==1 )
 			{
 				bool_operation++;
 				e_type=S_BOOLEAN;
