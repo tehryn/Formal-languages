@@ -58,7 +58,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 	
 	while (L->Active!=NULL)
     {
-		printf("type of instr interpret: %d\n",L->Active->type_instr);
+		//printf("type of instr interpret: %d\n",L->Active->type_instr);
 		//if (L->Active->next_instr!=NULL)
 			//printf("type of next instr interpret: %d\n",L->Active->next_instr->type_instr);
 
@@ -552,15 +552,16 @@ char *Conc_Str(char *s1, char *s2)
 
 token *inter_plus(token tmp1,token tmp2)
 {
+	
 	token *new;
-	if ((tmp1.id==TYPE_STRING) || tmp2.id==TYPE_STRING)            //     STRING CONCATENATE
+	if ((tmp1.id==TYPE_STRING || tmp1.id==S_STRING) || (tmp2.id==TYPE_STRING || tmp2.id==S_STRING))            //     STRING CONCATENATE
 	{
 		char *str1,*str2;
-		if (tmp1.id == TYPE_DOUBLE)
+		if (tmp1.id == TYPE_DOUBLE || tmp1.id == S_DOUBLE)
 		{
 			str1=DoubleToString((*((double *)tmp1.ptr)));
 		}
-		else if (tmp1.id == TYPE_INT)
+		else if (tmp1.id == TYPE_INT || tmp1.id == S_INT)
 		{
 			str1=IntToString((*((int *)tmp1.ptr)));
 		}
@@ -568,12 +569,12 @@ token *inter_plus(token tmp1,token tmp2)
 			str1=(char *)tmp1.ptr;
 
 
-		if (tmp2.id == TYPE_DOUBLE)
+		if (tmp2.id == TYPE_DOUBLE || tmp2.id == S_DOUBLE)
 		{
 			str2=DoubleToString((*((double *)tmp2.ptr)));
 
 		}
-		else if (tmp2.id == TYPE_INT)
+		else if (tmp2.id == TYPE_INT || tmp2.id == S_INT)
 		{
 			str2=IntToString((*((int *)tmp2.ptr)));
 		}
@@ -588,7 +589,7 @@ token *inter_plus(token tmp1,token tmp2)
 		new->ptr=(char *)str3;
 		return new;
 	}
-	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
+	else if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==S_DOUBLE || tmp2.id==TYPE_DOUBLE))
 	{
 		new=malloc(sizeof(token));
 		if (new==NULL)
@@ -603,7 +604,7 @@ token *inter_plus(token tmp1,token tmp2)
 		new->ptr=(double *)tmp_value;
 		return new;
 	}
-	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_INT)
+	else if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==S_INT || tmp2.id==TYPE_INT))
 	{
 		new=malloc(sizeof(token));
 		if (new==NULL)
@@ -616,7 +617,7 @@ token *inter_plus(token tmp1,token tmp2)
 		new->ptr=(double *)tmp_value;
 		return new;
 	}
-	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_DOUBLE)
+	else if ((tmp1.id==S_INT || tmp1.id==TYPE_INT) && (tmp2.id==S_DOUBLE || tmp2.id==TYPE_DOUBLE))
 	{
 		new=malloc(sizeof(token));
 		if (new==NULL)
@@ -654,7 +655,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 	if (new==NULL)
 		return NULL;
 
-	if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
+	if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==TYPE_DOUBLE || tmp2.id==S_DOUBLE))
 	{
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
@@ -680,7 +681,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 		new->ptr=(double *)tmp_value;
 		return new;
 	}
-	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_INT)
+	else if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==TYPE_INT || tmp2.id==S_INT))
 	{
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
@@ -706,7 +707,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 		new->ptr=(double *)tmp_value;
 		return new;
 	}
-	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_DOUBLE)
+	else if ((tmp1.id==TYPE_INT || tmp1.id==S_INT) && (tmp2.id==TYPE_DOUBLE || tmp2.id==S_DOUBLE))
 	{
 		new->id=TYPE_DOUBLE;
 		double *tmp_value=malloc(sizeof(double));
@@ -767,7 +768,7 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 	token *new=malloc(sizeof(token));
 	if (new==NULL)
 		return NULL;
-	if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_DOUBLE)
+	if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==S_DOUBLE || tmp2.id==TYPE_DOUBLE))
 	{
 		if (i==1)
 			if((*((double *)tmp1.ptr))==(*((double *)tmp2.ptr)))
@@ -812,7 +813,7 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 		}
 
 	}
-	else if (tmp1.id==TYPE_DOUBLE && tmp2.id==TYPE_INT)
+	else if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==S_INT || tmp2.id==TYPE_INT))
 	{
 		if (i==1)
 			if((*((double *)tmp1.ptr))==(*((int *)tmp2.ptr)))
@@ -856,7 +857,7 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 				new->id=S_FALSE;
 		}
 	}
-	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_DOUBLE)
+	else if ((tmp1.id==S_INT || tmp1.id==TYPE_INT) && (tmp2.id==S_DOUBLE || tmp2.id==TYPE_DOUBLE))
 	{
 		if (i==1)
 			if((*((int *)tmp1.ptr))==(*((double *)tmp2.ptr)))
@@ -900,7 +901,7 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 				new->id=S_FALSE;
 		}
 	}
-	else if (tmp1.id==TYPE_INT && tmp2.id==TYPE_INT)
+	else if ((tmp1.id==S_INT || tmp1.id==TYPE_INT) && (tmp2.id==S_INT || tmp2.id==TYPE_INT))
 	{
 		if (i==1)
 			if((*((int *)tmp1.ptr))==(*((int *)tmp2.ptr)))
