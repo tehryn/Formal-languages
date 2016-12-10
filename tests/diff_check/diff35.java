@@ -11,7 +11,7 @@ class test2 {
 
         }
         else {
-            count = count - 1
+            count = count - 1;
             test.c = false;
             return;
         }
