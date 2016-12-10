@@ -198,6 +198,8 @@ do {
 				printf("| token id: =\n");
 			else if (t->id == S_EOF)
 				printf("| token id: EOF\n");
+			else if (t->id == S_NOT)
+				printf("| token id: !\n");
 			else
 				printf("WTF\n");
 			printf("| token ptr: NULL\n");
