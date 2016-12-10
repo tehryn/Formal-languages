@@ -50,6 +50,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	int string_forbidden=0;
 	int last_operand_string=0;
 	
+	int negation_last_operator=0;
+	
 	va_list al;
 	if (t_in.id==END_EXPR)
 	{
@@ -233,9 +235,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 		else if ( operator_priority(input_token.id) != -1)							// operator
 		{
-			if ( (syn_rules&2)!=0 && input_token.id!=S_NOT )
+			if ( (syn_rules&2)!=0 && negation_last_operator==1 && input_token.id!=S_NOT )
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
 
+			if (input_token.id==S_NOT)
+				negation_last_operator=1;
+			else
+				negation_last_operator=0;
+			
 			if ( input_token.id!=S_PLUS ) 	
 				string_forbidden=1; 			
 			else 			
@@ -247,9 +254,9 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( last_operand_string==1 && input_token.id!=S_PLUS )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.15\n", ERR_SEM_COMPATIBILITY); 
 			
-			if (input_token.id==S_AND || input_token.id==S_OR)
+			if (input_token.id==S_AND || input_token.id==S_OR || input_token.id==S_NOT )
 			{
-				if (e_type!=S_BOOLEAN)
+				if (e_type!=S_BOOLEAN && !(input_token.id==S_NOT && e_type==-1) )
 					FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.2\n", ERR_SEM_COMPATIBILITY);
 
 				return_type_bool=1;
@@ -269,7 +276,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
 
-			while( operator_priority(tmp_token.id) >= operator_priority(input_token.id) )
+			while( operator_priority(tmp_token.id) >= operator_priority(input_token.id) && tmp_token.id!=S_NOT && input_token.id!=S_NOT )
 			{
 				if (stack_expression_pop(&tmp_exp_stack, &tmp_token)!=0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 21\n", ERR_INTERN_FAULT);
