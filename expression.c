@@ -39,6 +39,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	//int ma1_top=0;			// memory1 number of pointers
 
 	int bool_operation = 0;
+	int old_bool_operation = 0; 
+	
 	int return_type_bool=0;
 	
 	int e_type = -1;
@@ -122,9 +124,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				old_e_type = e_type; 
 				e_type = -1; 
 			}
-				
+			
+			old_bool_operation = bool_operation;
+			bool_operation = 0; 
+			
 			last_operand_string--;
-			string_forbidden --;
+			string_forbidden--;
 			
 			left_bracket_count++;
 
@@ -179,6 +184,9 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				e_type = old_e_type; 
 				old_e_type = -1;
 			}
+			
+			bool_operation = old_bool_operation;
+			old_bool_operation = 0; 
 
 			last_operand_string ++; 
 			string_forbidden ++;
