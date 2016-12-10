@@ -34,14 +34,14 @@ char * substring(char * s, int i, int n)
     string = (char *) mem_alloc(sizeof(char)*(n+1));
     if (string==NULL)
     {
-        error_msg(99, "ERROR: Memory could not be allocated. (func. substring)\n");	// code 99 -> internal error
+        fprintf(stderr, "ERROR: Memory could not be allocated. (func. substring)\n");	// code 99 -> internal error
         return NULL;
     }
 
 	// strlen ???
 	if ( (i+n) > length(s) )
 	{
-		error_msg(10, "ERROR: Substring exceeds input string. (func. substring)\n");	// code 10 -> substring error
+		fprintf(stderr, "ERROR: Substring exceeds input string. (func. substring)\n");	// code 10 -> substring error
 		return NULL;
 	}
 
