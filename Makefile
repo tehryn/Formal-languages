@@ -13,7 +13,7 @@ IFJ16: main.o parser.o expression.o scanner.o ial.o structures.o garbage_collect
 %.o: %.c %.h
 	gcc $(CFLAGS) -c $< -o $@
 
-.PHONY: clean odevzdani test
+.PHONY: clean odevzdani test test-valgrind find find-valgrind sort sort-valgrind substr substr-valgrind
 clean:
 	rm *.o IFJ16
 
@@ -42,3 +42,17 @@ test-valgrind:
 	./tests/valgrind_test.sh
 	echo "memory leaks"
 	./tests/valgrind_test.sh check_leaks
+
+find-valgrind:
+	valgrind ./IFJ16 tests/valid_input/stdin/emban/find.java
+substr-valgrind:
+	valgrind ./IFJ16 tests/valid_input/stdin/emban/substr.java
+sort-valgrind:
+	valgrind ./IFJ16 tests/valid_input/stdin/emban/sort.java
+
+find:
+	./IFJ16 tests/valid_input/stdin/emban/find.java
+substr:
+	./IFJ16 tests/valid_input/stdin/emban/substr.java
+sort:
+	./IFJ16 tests/valid_input/stdin/emban/sort.java
