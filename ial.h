@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include <string.h>
+#include <stdio.h>
 #include <limits.h>
 #include "garbage_collector.h"
 #include "error.h"
