@@ -219,7 +219,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			else 			
 				string_forbidden=0; 
 			
-			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id==S_MINUS )
+			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id!=S_PLUS )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.1\n", ERR_SEM_COMPATIBILITY);
 
 			if (input_token.id==S_AND || input_token.id==S_OR)
