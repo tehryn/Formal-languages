@@ -8,12 +8,10 @@ class test2 {
     static int count = 20;
     static void run() {
         if (count > 5) {
-
+            count = count - 1;
         }
         else {
-            count = count - 1;
             test.c = false;
-            return;
         }
     }
 }

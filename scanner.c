@@ -108,7 +108,7 @@ int is_num_literal(char *word, unsigned len) {
 					sign = 0;
 					continue;
 				}
-				else if (!p && (word[i] == 'p' || word[i] == 'P') && (isdigit(word[i-1]) || (word[i-1] >= 'A' && word[i-1] <= 'F') || (word[i-1] >= 'a' && word[i-1] <= 'f'))) {
+				else if (!p && (word[i] == 'p' || word[i] == 'P') && (isdigit(word[i-1]) || (!p && ((word[i-1] >= 'A' && word[i-1] <= 'F') || (word[i-1] >= 'a' && word[i-1] <= 'f'))) )) {
 					p = dot = 1;
 					sign = 1;
 					continue;
