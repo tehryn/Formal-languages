@@ -117,6 +117,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&8) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 7\n", ERR_SYNTACTIC_ANALYSIS);
 
+			left_bracket_count++;
+			
 			if (stack_expression_push(&tmp_exp_stack, input_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 8\n", ERR_INTERN_FAULT);
 			ma1[0]=tmp_exp_stack.arr;
