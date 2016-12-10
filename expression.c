@@ -87,9 +87,6 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	ma1[0]=tmp_exp_stack.arr;
 	ma1[1]=postfix_exp_stack.arr;
 
-
-	int left_bracket_count=0, right_bracket_count=0;
-
 	token input_token, tmp_token;
 	input_token.id=END_EXPR;
 	if ( stack_expression_push(&tmp_exp_stack, input_token) != 0 )
@@ -102,7 +99,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 		if (input_token.id==S_SEMICOMMA || input_token.id==end_token)
 		{
-			if ( (syn_rules&2)!=0)
+			if ( (syn_rules&4)!=0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 6\n", ERR_SYNTACTIC_ANALYSIS);
 			else
 				break;
@@ -117,13 +114,59 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&8) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 7\n", ERR_SYNTACTIC_ANALYSIS);
 
-			left_bracket_count++;
+			int p_err_ret=-1;
+			token p_last_token;
+			token p_in_token;
+			token *p_arr=NULL;
+			int p_exp_count = -1;
+			int p_data_type = -1;
+			p_in_token.id=END_EXPR;
 			
-			if (stack_expression_push(&tmp_exp_stack, input_token) != 0)
-				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 8\n", ERR_INTERN_FAULT);
-			ma1[0]=tmp_exp_stack.arr;
+			
+			p_err_ret=expr_analyze(p_in_token, &p_last_token, class_name, error_6_flag, &p_arr, &p_exp_count, &p_data_type, global_table, local_table, S_RIGHT_PARE);
+			if (p_err_ret!=0)
+				FATAL_ERROR("EXPRESSION: Expression error. 8p\n", p_err_ret);
 
-			syn_rules=6;
+			
+			if (p_last_token.id!=S_RIGHT_PARE)
+			{
+				free(p_arr);
+				p_arr=NULL;
+				FATAL_ERROR("EXPRESSION: Expression missing \")\". 8.1p\n", ERR_SYNTACTIC_ANALYSIS);
+			}
+
+
+			for (int j=0; j<p_exp_count-1; j++ )
+			{
+				if (stack_expression_push(&postfix_exp_stack, p_arr[j]) != 0)
+					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 8.2p\n", ERR_INTERN_FAULT);
+				ma1[1]=postfix_exp_stack.arr;
+			}
+
+			if ( bool_operation>=2 && p_data_type!=type_name_convertion(TYPE_BOOLEAN) && p_data_type!=S_TRUE && p_data_type!=S_FALSE )
+				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 9.1p\n", ERR_SEM_COMPATIBILITY);
+
+			if ( bool_operation==1 && p_data_type!=type_name_convertion(p_data_type) && e_type!=S_DOUBLE && p_data_type!=TYPE_DOUBLE && e_type!=S_INT && p_data_type!=TYPE_INT )
+				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.2p\n", ERR_SEM_COMPATIBILITY);
+
+			if (type_priority(type_name_convertion(p_data_type)) > type_priority(e_type))
+				e_type = type_name_convertion(p_data_type);
+
+			if (p_data_type==TYPE_STRING)
+			{
+				if (string_forbidden==1)
+					FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value.10.1p\n", ERR_SEM_COMPATIBILITY); 
+
+				last_operand_string=1;
+			}
+			else 
+				 last_operand_string=0;
+
+			free(p_arr);
+			p_arr=NULL;
+			p_exp_count = -1;
+			p_data_type = -1; 
+			syn_rules=9;
 		}
 
 
@@ -167,29 +210,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&4)!=0 && !( end_token==S_COMMA && e_type==-1))
 					FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 14\n", ERR_SYNTACTIC_ANALYSIS);
 
-			right_bracket_count++;
-			if (right_bracket_count>left_bracket_count)
-				break;
-
-			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
-				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 15\n", ERR_INTERN_FAULT);
-
-			while( tmp_token.id != S_LEFT_PARE )
-			{
-				if (stack_expression_pop(&tmp_exp_stack, &tmp_token) != 0)
-					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 16\n", ERR_INTERN_FAULT);
-
-				if (stack_expression_push(&postfix_exp_stack, tmp_token) != 0)
-					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 17\n", ERR_INTERN_FAULT);
-				ma1[1]=postfix_exp_stack.arr;
-
-				if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
-					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 18\n", ERR_INTERN_FAULT);
-			}
-
-			stack_expression_pop(&tmp_exp_stack, NULL);										// Remove (
-
-			syn_rules=9;
+			break;
 		}
 
 
@@ -469,9 +490,6 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 		input_token=get_token();
 	}
 
-	if (left_bracket_count>right_bracket_count)
-		FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 41\n", ERR_SYNTACTIC_ANALYSIS);
-
 
 	*t_out = input_token;
 
@@ -499,7 +517,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			//FATAL_ERROR("EXPRESSION: Memory could not be allocated. 45\n", ERR_INTERN_FAULT);
 	}
 
-	if (end_token==S_COMMA)
+	if (end_token!=S_SEMICOMMA)
 		if ( stack_expression_pop(&postfix_exp_stack, NULL)!=0 )
 			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 43\n", ERR_INTERN_FAULT);
 
@@ -512,7 +530,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	for (int i=0; i<=postfix_exp_stack.top; i++)
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
 	
-//	if (end_token!=S_COMMA)
+//	if (end_token==S_SEMICOMMA)
 //		print_token_array( *postfix_token_array, 0);
 
 	if(ma1[0]!=NULL) free(ma1[0]);
