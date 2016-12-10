@@ -7,7 +7,7 @@ class Main {
                 foo(b);
                 b = b + 1;
             }
-            a = a + 1
+            a = a + 1;
         }
         ifj16.print("" + a + b + "\n");
     }
