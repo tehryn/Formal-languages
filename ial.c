@@ -122,85 +122,59 @@ char * shellsort(char * str)
     return arr;
 }
 
-// The preprocessing function for Boyer Moore's bad character heuristic
-void computeJumps( char *string, unsigned int str_size, int charjump[])
-{
-    unsigned int i;
 
+void computeJumps(char *search, int badchar[AlphabetArray])
+{
+    int size=strlen(search);
+ 
     // Initialize all occurrences as lenght of string
-    for (i = 0; i < NO_OF_CHARS; i++)
-         charjump[i] = str_size;
-
+    for (int i = 0; i < AlphabetArray; i++)
+         badchar[i] = size;
+ 
     // Fill the actual value of last occurrence of a character
-    for (i = 0; i < str_size; i++)
-         charjump[(int) string[i]] = str_size-i;
+    for (int i = 0; i < size; i++)
+         badchar[(int) search[i]] = size-i;
 }
-
-void computeMatchJumps(char *string, unsigned int str_size, int match_jump[])
-{
-    int pole[str_size+1];
-    for (unsigned i=0; i<=str_size; i++)
-    {
-        pole[i]=0;
-        match_jump[i]=0;
-    }
-
-    unsigned int k=str_size+1;
-
-    for (int i=str_size-1; i<=0; i--)
-    {
-        pole[i]=k;
-        while ((k <= str_size) && (string[i-1] != string[k-1]))
-        {
-            if (match_jump[k] == 0)
-                match_jump[k] = k - i;
-            k = pole[k];
-        }
-        k--;
-    }
-
-    k=pole[0];
-    for (unsigned i=0; i <= str_size; i++)
-    {
-        if (match_jump[i] == 0)
-            match_jump[i] = k;
-        if (i==k)
-            k=pole[k];
-    }
-}
-
-
+ 
 /* A pattern searching function that uses Bad Character Heuristic of
    Boyer Moore Algorithm */
 int find( char *s,  char *search)
 {
-    unsigned int search_len = strlen(search);
-    unsigned int s_len = strlen(s);
-
-    int charjump[NO_OF_CHARS];
-    int matchjump[s_len-1];
-
-
-    computeJumps(search, search_len, charjump);
-    computeMatchJumps(search, search_len, matchjump);
-
-    int unsigned shift = 0;  // s is shift of the pattern with respect to text
-    while(shift <= (s_len - search_len))
+    int m = strlen(search);
+    int n = strlen(s);
+ 
+    int badchar[AlphabetArray];
+ 
+    /* Fill the bad character array by calling the preprocessing
+       function badCharHeuristic() for given pattern */
+    computeJumps(search, badchar);
+ 
+    int shift = 0;  // s is shift of the pattern with respect to text
+    while(shift <= (n - m))
     {
-        int j = search_len-1;
-
+        int j = m-1;
+ 
         /* Keep reducing index j of pattern while characters of
            pattern and text are matching at this shift s */
         while(j >= 0 && search[j] == s[shift+j])
             j--;
-
+ 
         /* If the pattern is present at current shift, then index j
            will become -1 after the above loop */
         if (j < 0)
-            return shift;
-
+        {
+			return shift;
+ 
+        }
+ 
         else
-            shift += max(charjump[(int)search[shift+s_len-1]], matchjump[j+1]);
+            /* Shift the pattern so that the bad character in text
+               aligns with the last occurrence of it in pattern. The
+               max function is used to make sure that we get a positive
+               shift. We may get a negative shift if the last occurrence
+               of bad character in pattern is on the right side of the
+               current character. */
+            shift += MAX(1, (j - badchar[(int)s[shift+j]]));
     }
     return -1;
 }

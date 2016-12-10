@@ -19,10 +19,10 @@
 #include "error.h"
 
 /** */
-#define max(a,b) ((a)   > (b) ? a : b)
+#define MAX(a,b) ((a)   > (b) ? (a) : (b))
 
 /** */
-#define NO_OF_CHARS 256
+#define AlphabetArray 256
 
 /**
  * [length description]
@@ -56,20 +56,11 @@ char * shellsort(char * str);
 int find( char *s,  char *search);
 
 /**
- * [computeMatchJumps description]
- * @param string     [description]
- * @param str_size   [description]
- * @param match_jump [description]
- */
-void computeMatchJumps(char *string, unsigned int str_size, int match_jump[]);
-
-/**
  * [computeJumps description]
  * @param string   [description]
- * @param str_size [description]
- * @param charjump [description]
+ * @param badchar[AlphabetArray] [description]
  */
-void computeJumps( char *string, unsigned int str_size, int charjump[]);
+void computeJumps( char *string, int badchar[AlphabetArray]);
 
 /**
  *
