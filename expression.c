@@ -162,9 +162,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					
 				if (input_token.ptr==NULL)
 					FATAL_ERROR("EXPRESSION: String data are not allocated. 10.2\n", ERR_INTERN_FAULT);
-
+				last_operand_string=1;
 				STRDUP(input_token.ptr, input_token.ptr);
 			}
+			else 
+				 last_operand_string=0;
 
 			if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 13\n", ERR_INTERN_FAULT);
@@ -227,9 +229,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			else 			
 				string_forbidden=0; 
 			
-			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id!=S_PLUS )
+			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id==S_MINUS )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.1\n", ERR_SEM_COMPATIBILITY);
 
+			if ( last_operand_string==1 && input_token.id!=S_PLUS )
+				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.15\n", ERR_SEM_COMPATIBILITY); 
+			
 			if (input_token.id==S_AND || input_token.id==S_OR)
 			{
 				if (e_type!=S_BOOLEAN)
@@ -474,7 +479,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 			if (type_priority(ident_type) > type_priority(e_type))
 				e_type = ident_type;
-
+			
+			if (ident_type==TYPE_STRING || ident_type==S_STRING) 			
+				last_operand_string=1; 			
+			else 			
+				last_operand_string=0; 
 			
 			syn_rules=9;
 		}
