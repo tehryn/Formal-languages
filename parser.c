@@ -89,7 +89,7 @@ int parser()
 	}
 
 	Instr_List * InstructionTape = NULL;
-	InstructionTape = mem_alloc(sizeof(Instr_List));
+	InstructionTape = (Instr_List *) mem_alloc(sizeof(Instr_List));
 	if (InstructionTape == NULL)
 	{
 		fprintf(stderr, "Intern fault. Instruction tape allocation failed.\n");
@@ -757,7 +757,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						}
 						((int*)TableItem->data)[0] = S_EOF;
 						TableItem->number_of_arguments = number_arguments; // number_arguments = 0
-						
+
 					}
 					number_arguments = 0;
 					number_allocated_arguments = 0;
@@ -820,6 +820,13 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
 						if (TableItem == NULL)
 						{
+							local_func_var_name = join_strings(class_name, (char*) t.ptr);
+							TableItem = htab_find_item(GlobalTableSymbols, local_func_var_name);
+							if (TableItem != NULL && TableItem->func_or_var == 2)
+							{
+								fprintf(stderr, "PARSER: On line %u %s has been already defined in this function.\n", LINE_NUM, (char*)t.ptr);
+								return ERR_SEM_NDEF_REDEF;
+							}
 							TableItem = htab_insert_item(LocalTableSymbols, (char*)t.ptr);
 						}
 						else
@@ -953,6 +960,13 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
 						if (TableItem == NULL)
 						{
+							local_func_var_name = join_strings(class_name, (char*) t.ptr);
+							TableItem = htab_find_item(GlobalTableSymbols, local_func_var_name);
+							if (TableItem != NULL && TableItem->func_or_var == 2)
+							{
+								fprintf(stderr, "PARSER: On line %u %s has been already defined in this function.\n", LINE_NUM, (char*)t.ptr);
+								return ERR_SEM_NDEF_REDEF;
+							}
 							TableItem = htab_insert_item(LocalTableSymbols, (char*)t.ptr);
 						}
 						else
@@ -1029,7 +1043,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 							fprintf(stderr, "Intern fault. Parser cannot find a function that exists and should be there.\n");
 							return ERR_INTERN_FAULT;
 						}
-						I_Instr * tmp_ptr = TableItem->instruction_tape;
+						I_Instr * tmp_ptr = (I_Instr *) TableItem->instruction_tape;
 						if (tmp_ptr == NULL)
 						{
 							TableItem->instruction_tape = Instruction;
@@ -1080,6 +1094,13 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						TableItem = htab_find_item(LocalTableSymbols, (char*)t.ptr);
 						if (TableItem == NULL)
 						{
+							local_func_var_name = join_strings(class_name, (char*) t.ptr);
+							TableItem = htab_find_item(GlobalTableSymbols, local_func_var_name);
+							if (TableItem != NULL && TableItem->func_or_var == 2)
+							{
+								fprintf(stderr, "PARSER: On line %u %s has been already defined in this function.\n", LINE_NUM, (char*)t.ptr);
+								return ERR_SEM_NDEF_REDEF;
+							}
 							TableItem = htab_insert_item(LocalTableSymbols, (char*)t.ptr);
 						}
 						else
