@@ -394,7 +394,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					}
 
 
-					if (fparam_data_type!=((int *)(tmp_table_item->data))[i])
+					if ( fparam_data_type!=((int *)(tmp_table_item->data))[i] && fparam_data_type!=S_INT && ((int *)(tmp_table_item->data))[i]!=S_DOUBLE )
 					{
 						free(fun_param_arr);
 						fun_param_arr=NULL;
@@ -431,7 +431,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					FATAL_ERROR("EXPRESSION: Function missing \")\" or it has wrong number of parameters. 35\n", ERR_SEM_COMPATIBILITY);
 				}
 
-				if ( arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1] && strcmp("ifj16.print", (char *)input_token.ptr)!=0 )
+				if ( arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1] && fparam_data_type!=S_INT && ((int *)(tmp_table_item->data))[arg_count-1]!=S_DOUBLE && strcmp("ifj16.print", (char *)input_token.ptr)!=0 )
 				{
 					free(fun_param_arr);
 					fun_param_arr=NULL;
