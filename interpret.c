@@ -85,11 +85,11 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					
 				}
 
-				if(return_hitem->data_type==S_DOUBLE && new->id==TYPE_DOUBLE)
+				if(return_hitem->data_type==S_DOUBLE && (new->id==TYPE_DOUBLE || new->id==S_DOUBLE))
 				{
 					return_hitem->data=(double *)new->ptr;
 				}
-				else if (return_hitem->data_type==S_DOUBLE && new->id==TYPE_INT)
+				else if (return_hitem->data_type==S_DOUBLE && (new->id==TYPE_INT || new->id==S_INT))
 				{
 					double *new_val1=malloc(sizeof(double));
 					double help_val=(*((int*)new->ptr));
@@ -106,13 +106,13 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				}
 				else if(return_hitem->data_type==S_STRING)
 				{
-					if (new->id==TYPE_INT)
+					if (new->id==TYPE_INT || new->id==S_INT)
 					{
 						char *str_data=IntToString((*((int *)new->ptr)));
 						//(new->ptr);
 						return_hitem->data=(char *)str_data;
 					}
-					else if (new->id==TYPE_DOUBLE)
+					else if (new->id==TYPE_DOUBLE || new->id==S_DOUBLE)
 					{
 						char *str_data=DoubleToString((*((int *)new->ptr)));
 						//free(new->ptr);
@@ -343,9 +343,9 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					
 				
 				}
-				else if(fce_token->id==S_DOUBLE && new->id==S_DOUBLE)
+				else if(fce_token->id==S_DOUBLE && (new->id==S_DOUBLE || new->id==TYPE_DOUBLE))
 					*(double*)fce_token->ptr=(*(double*)new->ptr);
-				else if(fce_token->id==S_DOUBLE && new->id==S_INT)
+				else if(fce_token->id==S_DOUBLE && (new->id==S_INT || new->id==TYPE_INT))
 					*(double*)fce_token->ptr=(*(int*)new->ptr);
 				else if(fce_token->id==S_STRING)
 				{
@@ -1078,7 +1078,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 						if (par_type==S_DOUBLE)
 						{
 							double *par_value=malloc(sizeof(double));
-							if (tmp2.id==TYPE_DOUBLE)
+							if (tmp2.id==TYPE_DOUBLE  || tmp2.id==S_DOUBLE)
 							{
 								*par_value=(*((double*)tmp2.ptr));
 								parametr->data=(double*)par_value;
@@ -1327,19 +1327,19 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 	}	
 	new_token->id=tmp1.id;
 	
-	if (new_token->id==TYPE_INT)
+	if (new_token->id==TYPE_INT || new_token->id==S_INT)
 	{
 		int *new_val=malloc(sizeof(int));
 		*new_val=*((int*)tmp1.ptr);
 		new_token->ptr=(int *)new_val;
 	}
-	else if (new_token->id==TYPE_DOUBLE)
+	else if (new_token->id==TYPE_DOUBLE || new_token->id==S_INT)
 	{
 		double *new_val=malloc(sizeof(double));
 		*new_val=*((double*)tmp1.ptr);
 		new_token->ptr=(double *)new_val;
 	}
-	else if (new_token->id==TYPE_STRING)
+	else if (new_token->id==TYPE_STRING || new_token->id==S_STRING)
 	{
 		char *new_val=malloc(sizeof(char)*strlen((char*)tmp1.ptr)+1);
 		memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp1.ptr)+1);

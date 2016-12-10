@@ -3,7 +3,7 @@
 #include "ial.h"
 #include "scanner.h"
 #include "expression.h"
-
+#include "garbage_collector.h"
 
 #define ERR_WARNING 0
 #define ERR_LEXICAL_ANALYSIS 1
@@ -40,11 +40,17 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 	int bool_operation = 0;
 	int return_type_bool=0;
+	
 	int e_type = -1;
+	int old_e_type = -1;
+	
 	int syn_rules = 6;
 	int end_token = S_SEMICOMMA;
+	
+	int string_forbidden = 0;                        // new 	
+	int last_operand_string = 0;                // new 
+	
 	va_list al;
-
 	if (t_in.id==END_EXPR)
 	{
 		va_start(al, local_table);
@@ -111,6 +117,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&8) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 7\n", ERR_SYNTACTIC_ANALYSIS);
 
+			old_e_type = e_type; 
+			e_type = -1; 
+			
+			last_operand_string--;
+			string_forbidden --;
+			
 			left_bracket_count++;
 
 			if (stack_expression_push(&tmp_exp_stack, input_token) != 0)
@@ -137,8 +149,11 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 			if (input_token.id==TYPE_STRING)
 			{
+				if (string_forbidden==1)
+					FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value.10.1\n", ERR_SEM_COMPATIBILITY); 
+					
 				if (input_token.ptr==NULL)
-					FATAL_ERROR("EXPRESSION: String data are not allocated. 10\n", ERR_INTERN_FAULT);
+					FATAL_ERROR("EXPRESSION: String data are not allocated. 10.2\n", ERR_INTERN_FAULT);
 
 				STRDUP(input_token.ptr, input_token.ptr);
 			}
@@ -156,6 +171,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&4)!=0 && !( end_token==S_COMMA && e_type==-1))
 					FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 14\n", ERR_SYNTACTIC_ANALYSIS);
 
+			e_type = old_e_type; 
+			old_e_type = -1;
+			
+			last_operand_string ++; 
+			string_forbidden ++;
+			
 			right_bracket_count++;
 			if (right_bracket_count>left_bracket_count)
 				break;
@@ -187,7 +208,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&2) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
 
-			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id!=S_PLUS )
+			if ( input_token.id!=S_PLUS ) 	
+				string_forbidden=1; 			
+			else 			
+				string_forbidden=0; 
+			
+			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id==S_MINUS )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.1\n", ERR_SEM_COMPATIBILITY);
 
 			if (input_token.id==S_AND || input_token.id==S_OR)
