@@ -47,7 +47,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	int syn_rules = 6;
 	int end_token = S_SEMICOMMA;
 	
-	int string_forbidden = 0;                        // new 	
+	int string_forbidden = 0;                   // new 	
 	int last_operand_string = 0;                // new 
 	
 	va_list al;
@@ -117,9 +117,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&8) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 7\n", ERR_SYNTACTIC_ANALYSIS);
 
-			old_e_type = e_type; 
-			e_type = -1; 
-			
+			if (e_type != -1) 
+			{	
+				old_e_type = e_type; 
+				e_type = -1; 
+			}
+				
 			last_operand_string--;
 			string_forbidden --;
 			
@@ -170,10 +173,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 		{
 			if ( (syn_rules&4)!=0 && !( end_token==S_COMMA && e_type==-1))
 					FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 14\n", ERR_SYNTACTIC_ANALYSIS);
-
-			e_type = old_e_type; 
-			old_e_type = -1;
 			
+			if (old_e_type != -1) 
+			{
+				e_type = old_e_type; 
+				old_e_type = -1;
+			}
+
 			last_operand_string ++; 
 			string_forbidden ++;
 			
