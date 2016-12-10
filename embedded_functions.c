@@ -9,7 +9,7 @@ char * readString()
     char * string = (char *)mem_alloc(sizeof(char));
     if (string==NULL)
     {
-        error_msg(99, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
+        fprintf(stderr, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
         return NULL;
     }
 
@@ -29,7 +29,7 @@ char * readString()
             if (tmp==NULL)
             {
                 //free(string);
-		        error_msg(99, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
+		        fprintf(stderr, "ERROR: Memory could not be allocated. (func. readstring)\n");	// code 99 -> internal error
 		        return NULL;
             }
             else
@@ -78,7 +78,7 @@ int readInt()
     string = readString();
 	if (string == NULL)
 	{
-		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readdouble)\n");
+		fprintf(stderr, "ERROR: Number value could not be read from stdin. (func. readdouble)\n");
 		return -1;
 	}
 
@@ -145,7 +145,7 @@ double readDouble()
     string = readString();
 	if (string == NULL)
 	{
-		error_msg(7, "ERROR: Number value could not be read from stdin. (func. readdouble)\n");
+		fprintf(stderr, "ERROR: Number value could not be read from stdin. (func. readdouble)\n");
 		return -1;
 	}
 
