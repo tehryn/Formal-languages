@@ -2171,6 +2171,7 @@ bool token_wanted(token * t)
 	else if (t->id == S_LESS) return true;
 	else if (t->id == S_GREATER) return true;
 
+	else if (t->id == S_NOT) return true;
 	else if (t->id == S_OR) return true;
 	else if (t->id == S_AND) return true;
 	else if (t->id == S_NOT_EQUAL) return true;
