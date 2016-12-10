@@ -21,6 +21,14 @@ int length(char * string)
 
 char * substring(char * s, int i, int n)
 {
+	
+	if (s==NULL)
+	{
+        fprintf(stderr, "ERROR: input string is NULL!\n");
+        return NULL;
+    }
+	
+	
     char * string=NULL;
 
     string = (char *) mem_alloc(sizeof(char)*(n+1));
@@ -50,6 +58,12 @@ char * substring(char * s, int i, int n)
 
 char * shellsort(char * str)
 {
+	if (str==NULL)
+	{
+        fprintf(stderr, "ERROR: input string is NULL!\n");
+        return NULL;
+    }
+
     int num = strlen(str);
     char * arr=NULL;
     arr=(char *)mem_alloc( sizeof(char)*(num+1));
@@ -59,8 +73,7 @@ char * shellsort(char * str)
         return NULL;
     }
 
-    for (int zzz=0; zzz<num; zzz++)
-        arr[zzz]=str[zzz];
+    strcpy(arr, str);
 
     int i, j, k, tmp;
     for (i = num / 2; i > 0; i = i / 2)
