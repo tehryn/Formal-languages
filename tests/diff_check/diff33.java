@@ -1,6 +1,6 @@
 class Main {
     static void run() {
-        ifj16.print(p.power(2,10))
+        ifj16.print(p.power(2,10));
     }
 }
 
@@ -10,7 +10,7 @@ class p {
             return 1;
         }
         else {
-            return a * power(a, b-1)
+            return a * power(a, b-1);
         }
     }
 }
