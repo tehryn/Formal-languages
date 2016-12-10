@@ -11,7 +11,7 @@ do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 1 ]]; then
-		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
+		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret${NC}"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 1"
 		echo -e "${NC}------------------------------------------------------------------------------------"
@@ -25,7 +25,7 @@ do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 2 ]]; then
-		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
+		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret${NC}"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 2"
 		echo -e "${NC}------------------------------------------------------------------------------------"
@@ -39,7 +39,7 @@ do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 3 ]]; then
-		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
+		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret${NC}"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 3"
 		echo -e "${NC}------------------------------------------------------------------------------------"
@@ -53,7 +53,7 @@ do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 4 ]]; then
-		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
+		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret${NC}"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 4"
 		echo -e "${NC}------------------------------------------------------------------------------------"
@@ -67,7 +67,7 @@ do
 	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 8 ]]; then
-		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
+		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret${NC}"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 8"
 		echo -e "${NC}------------------------------------------------------------------------------------"
@@ -78,10 +78,10 @@ done
 
 for file in ./tests/valid_input/*.java
 do
-	./IFJ16 $file 2>tmp.txt
+	./IFJ16 $file
 	ret=$?
 	if [[ $ret == 0 ]]; then
-		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret"
+		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret${NC}"
 	else
 		echo -e "${RED}$file: ERROR - interpret returned with $ret but should have returned with 0"
 		echo -e "${NC}------------------------------------------------------------------------------------"
