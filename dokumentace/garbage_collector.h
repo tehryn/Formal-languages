@@ -1,18 +1,20 @@
 /**
-* Author: Matejka Jiri
-* Login: xmatej52
-* School: VUT FIT, BRNO
-* Project: Interpret for IFJ16
-* gcc version: 5.4.0 (ubuntu 16.04.2)
+* Author: Matejka Jiri <BR>
+* Login: xmatej52 <BR>
+* School: VUT FIT, BRNO <BR>
+* Project: Interpret for IFJ16 <BR>
+* gcc version: 5.4.0 (ubuntu 16.04.2) <BR>
 * Date: 2016-12-03
 **/
 #ifndef MEMORY
 #define MEMORY
 #include <stdio.h>
 #include <stdlib.h>
+#define END_EXPR -266
 /** @defgroup garbage_collector Garbage collector */
 /** @addtogroup garbage_collector
-  * @brief Garbage collector is group of functions that allocate memory and store pointers into list to prevent memory leaks
+  * @brief Garbage collector is group of functions that allocate memory and
+  * store pointers into list to prevent memory leaks
   * @{
   */
 

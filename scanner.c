@@ -82,6 +82,100 @@ int is_special_char(char c) {
 
 
 int is_num_literal(char *word, unsigned len) {
+	if (len == 0 || !isdigit(word[0])) {
+		return 0;
+	}
+	if (word[0] == '0') {
+		if (len == 1) {
+			return TYPE_INT;
+		}
+		else if (word[1] == 'b') {
+			for (unsigned i = 2; i < len; i++) {
+				if (word[i] == '1' || word[i] == '0' || word[i] == '_') {
+					continue;
+				}
+				else {
+					return 0;
+				}
+			}
+			return TYPE_INT_BIN;
+		}
+		else if (word[1] == 'x') {
+			int dot = 0, p = 0, sign = 0;;
+			for (unsigned i = 2; i < len; i++) {
+				if (word[i] == '.' && !p && !dot) {
+					dot = 1;
+					sign = 0;
+					continue;
+				}
+				else if (!p && (word[i] == 'p' || word[i] == 'P') && word[i-1] != '.' && word[i-1] != '_') {
+					p = dot = 1;
+					sign = 1;
+					continue;
+				}
+				else if (sign && (word[i] == '+' || word[i] == '-')) {
+					sign = 0;
+					continue;
+				}
+				else if (word[i] == '_' || (word[i] >= 'A' && word[i] <= 'F') || ((word[i] >= 'a' && word[i] <= 'f')) || (word[i] >= '0' && word[i] <= '9')) {
+					sign = 0;
+					continue;
+				}
+				else {
+					return 0;
+				}
+			}
+			if (dot && !p) {
+				return 0;
+			}
+			else if (p) {
+				return TYPE_DOUBLE_HEX;
+			}
+			else {
+				return TYPE_INT_HEX;
+			}
+		}
+		else if ((word[1] <= '7' && word[1] >= '0') || word[1] == '_') {
+			for(unsigned i = 2; i < len; i++) {
+				if (!((word[i] <= '7' && word[i] >= '0') || word[1] != '_')) {
+					return 0;
+				}
+			}
+			return TYPE_INT_OCTAL;
+		}
+	}
+	int sign = 0, e = 0, dot = 0;
+	for (unsigned i = 0; i < len; i++) {
+		if (isdigit(word[i]) || word[i] == '_') {
+			sign = 0;
+			continue;
+		}
+		else if (sign && (word[i] == '+' || word[i] == '-')) {
+			sign = 0;
+			continue;
+		}
+		else if (!e && !dot && (word[i] == 'E' || word[i] == 'e') && word[i-1] != '.' && word[i-1] != '_' ) {
+			dot = e = sign = 1;
+			continue;
+		}
+		else if (word[i] == '.' && word[i-1] != '_') {
+			dot = 1;
+			sign = 0;
+			continue;
+		}
+		else {
+			return 0;
+		}
+	}
+	if (dot || e) {
+		return TYPE_DOUBLE;
+	}
+	else {
+		return TYPE_INT;
+	}
+}
+/*
+int is_num_literal(char *word, unsigned len) {
 	if (word == NULL || len == 0) {
 		return 0;
 	}
@@ -192,38 +286,7 @@ int is_num_literal(char *word, unsigned len) {
 	}
 	return 0;
 }
-
-
-/*
-int is_num_literal(char *word, unsigned len) {
-	if (word == NULL || len == 0) return -1;
-	int e = 0, dot = 0, sign = 0;
-	if (!isdigit(word[0])) return 0;
-	for (unsigned i = 1; i < len; i++) {
-		if (sign && (word[i] == '+' || word[i] == '-')) {
-			sign = 0;
-			continue;
-		}
-		sign = 0;
-		if (word[i] == 'e' || word[i] == 'E') {
-			if (e) return 0;
-			sign = 1;
-			dot = e = 1;
-		}
-		else if (word[i] == '.') {
-			if (dot) return 0;
-			dot = 1;
-		}
-		else if ((!isdigit(word[i]))) {
-			return 0;
-		}
-	}
-	if(!isdigit(word[len-1])) return 0;
-	if (dot) return TYPE_DOUBLE;
-	return TYPE_INT;
-}
 */
-
 int is_simple_ident(char *word, unsigned len) {
 	if (word == NULL || len == 0) return 0;
 	if ((word[0] != '$' && word[0] < 'A') || word[0] > 'z' || (word[0] > 'Z' && word[0] < 'a' && word[0] != '_'))
@@ -289,111 +352,6 @@ int skip_comment(unsigned comment_type) {
 	}
 	return 1; // reached EOF
 }
-
-/*static char *write_back(char *word, int *num, unsigned *idx, unsigned *max, int *check) {
-	for (unsigned i = 0; num[i] != '\0'; i++) {
-		if (*idx >= *max) {
-			char *tmp = word;
-			*max *= 2;
-			tmp = (char *) realloc(word, *max);
-			if (tmp == NULL) {
-				//free(word);
-				*max = 0;
-				return NULL;
-			}
-			word = tmp;
-		}
-		if (num[i] == EOF) {
-			*check = EOF;
-		}
-		word[*idx] = num[i];
-		*idx += 1;
-	}
-	return word;
-}
-
-char *load_string(char *word, unsigned *max) {
-	int c, num[4] = {'\0',};
-	int check = '1';
-	unsigned i = 0;
-	while(((c = fgetc(f)) != EOF)) {
-		if (c == '\\') {
-			c = fgetc(f);
-			if (c == '\\') {
-				;
-			}
-			else if (c == 'n') {
-				c = '\n';
-			}
-			else if (c == '"') {
-				;
-			}
-			else if (c == '\'') {
-				;
-			}
-			else if (c == 't') {
-				c = '\t';
-			}
-			else if (isdigit(c) && c <= '4') {
-				num[0] = c;
-				num[1] = fgetc(f);
-				if (isdigit(num[1] && num[1] <= '7')) {
-					num[2] = fgetc(f);
-					if (isdigit(num[2]) && num[2] <= '7') {
-						c = (num[0] - '0')*64 + (num[1] - '0')*8 + (num[2] - '0');
-					}
-					else {
-						word = write_back(word, num, &i, max, &check);
-						if (word == NULL) {
-							return NULL;
-						}
-						if (check == EOF) {
-							break;
-						}
-					}
-				}
-				else {
-					num[2] = '\0';
-					word = write_back(word, num, &i, max, &check);
-					if (word == NULL) {
-						return NULL;
-					}
-					if (check == EOF) {
-						break;
-					}
-				}
-			}
-			else {
-				ungetc(c, f);
-				c = '\\';
-			}
-		}
-		else if (c == '"') {
-			c = '\0';
-		}
-		else if (c == '\n') {
-			*max = -1;
-			//free(word);
-			return 0;
-		}
-		if (i >= *max) {
-			char *tmp = word;
-			*max *= 2;
-			tmp = (char *) realloc(word, *max);
-			if (tmp == NULL) {
-				*max = 0;
-				//free(word);
-				return NULL;
-			}
-			word = tmp;
-		}
-		word[i++] = c;
-		if (c == '\0') {
-			return word;
-		}
-	}
-	return NULL;
-}*/
 
 char *load_string(char *word, int *max) {
 	int c, num[4] = {'\0',};
@@ -517,7 +475,7 @@ void bin2dec(char *str, int *result) {
 void octal2dec(char *str, int *result) {
 	int n = strlen(str)-1;
 	*result = 0;
-	for (int i = n; i >= 2; i--) {
+	for (int i = n; i >= 1; i--) {
 		*result += ((str[i] - '0') * (i<n?8:1 << (n - i)));
 	}
 }
@@ -550,7 +508,7 @@ void hex2dec_double(char *str, double *result) {
 			}
 		}
 		sscanf(&str[n+2], "%i", &exp);
-		*result *= make_power(16, exp);
+		*result *= make_power(2, exp);
 	}
 	else {
 		for (int i = n = n-1; i >= 2; i--) {
@@ -571,7 +529,7 @@ void hex2dec_double(char *str, double *result) {
 			}
 		}
 		sscanf(&str[n+2], "%i", &exp);
-		*result *= make_power(16, exp);
+		*result *= make_power(2, exp);
 	}
 }
 
@@ -581,6 +539,9 @@ void repair_num(char *str) {
 		if (str[i] != '_') {
 			str[j++] = str[i];
 		}
+		else if (str[i] >= 'a' && str[i] <= 'f') {
+			str[j++] = str[i] - 32;
+		}
 	}
 }
 
@@ -589,6 +550,7 @@ void *str2num(char *str, int type, int *valid) {
 		*valid = 2;
 		return NULL;
 	}
+	repair_num(str);
 	void *result = NULL;
 	*valid = 0;
 	if (type == TYPE_INT) {
@@ -615,8 +577,7 @@ void *str2num(char *str, int type, int *valid) {
 		}
 		return result;
 	}
-	repair_num(str);
-	if (type == TYPE_INT_BIN) {
+	else if (type == TYPE_INT_BIN) {
 		result = mem_alloc(sizeof(double));
 		if (result == NULL) {
 			*valid = 1;

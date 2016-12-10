@@ -45,9 +45,7 @@ char * readString()
 
 
 static int Int_convertor(char *str, int id) {
-    if (id == TYPE_INT_HEX || id == TYPE_INT_BIN || id == TYPE_INT_OCTAL || id == TYPE_DOUBLE_HEX) {
-        repair_num(str);
-    }
+    repair_num(str);
     if (id == TYPE_INT_BIN) {
         int num = 0;
         bin2dec(str, &num);
@@ -101,9 +99,7 @@ int readInt()
 
 
 static double Double_convertor(char *str, int id) {
-    if (id == TYPE_INT_HEX || id == TYPE_INT_BIN || id == TYPE_INT_OCTAL || id == TYPE_DOUBLE_HEX) {
-        repair_num(str);
-    }
+    repair_num(str);
     if (id == TYPE_INT_BIN) {
         int num = 0;
         bin2dec(str, &num);

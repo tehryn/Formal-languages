@@ -1,6 +1,8 @@
 class Main {
     static void run() {
-        double a = 0;
-        ifj16.print(0xFp-9 + "\n");
+        double a = ifj16.readDouble();
+        double b = ifj16.readDouble();
+        double result = ((((a/b)/1)/1) * 1);
+        ifj16.print(result + "\n");
     }
 }

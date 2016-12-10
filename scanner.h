@@ -27,7 +27,7 @@
 /*! Macro that set offset at the beginning of file */
 #define reset_scanner() (fseek(f, LINE_NUM = 0, SEEK_SET))
 
-/*! Macro that return number how much will be offset returned */
+/*! Macro that tells how much will be offset returned */
 #define SPEC_CHAR_FSEEK(spec) (((spec) == S_EQUAL || (spec) == S_LESS_EQUAL || (spec) == S_GREATER_EQUAL || (spec) == S_NOT_EQUAL)?-2:-1)
 
 /**
