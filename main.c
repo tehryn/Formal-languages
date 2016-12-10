@@ -1,15 +1,34 @@
 #include "scanner.h"
 #include "garbage_collector.h"
-#include "error.h"
 #include "parser.h"
 #include "ial.h"
 #include "structures.h"
-#define TEST_PARSER
+FILE *f;
+extern char* SCANNER_WORD;
+int main(int argc, char const *argv[]) {
+	int return_value = 0;
+	if (argc != 2) {
+		fprintf(stderr, "Invalid arguments\n");
+		return 99;
+	}
+	f = fopen(argv[1], "r");
+	if (f == NULL) {
+		fprintf(stderr, "Could not open file '%s'\n", argv[1]);
+		return 99;
+	}
+	mem_list_t_init();
+	return_value = parser();
+	free_memory();
+	fclose(f);
+	return return_value;
+}
+
+//#define TEST_PARSER
 //#define TEST_TABLE
 //#define TEST_STRUCTURES
 //#define TEST_SCANNER
 
-FILE *f;
+
 
 /*
 (fprintf[ ]*\(stderr, ["])([a-z| |\.|:|%|'|{|\\|(|}|)|;|_|]+["])(,[ ]*LINE_NUM\))
@@ -23,6 +42,7 @@ $1 In %s on line %u: $2, __FILE__, __LINE__$3
  *             equal to a string after first dot otherwise return copy of input string
  * @post       Return value is not NULL
  */
+/*
 char *full_ident2simple(char *str) {
 	unsigned i = 0;
 	while (str[i] && str[i++] != '.');
@@ -42,8 +62,6 @@ char *full_ident2simple(char *str) {
 }
 
 int ERROR_CHECK = 0;
-
-extern char* SCANNER_WORD;
 
 int main (int argc, char **argv) {
 	int return_value = 0;
@@ -212,3 +230,4 @@ do {
 	fclose(f);
 	return return_value;
 }
+*/
