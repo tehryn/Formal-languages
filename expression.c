@@ -94,6 +94,23 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	ma1[0]=tmp_exp_stack.arr;
 
 	input_token=t_in;
+	
+	if ( input_token.id==S_NOT )
+	{
+		if (stack_expression_push(&tmp_exp_stack, input_token)!=0)
+			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 24\n", ERR_INTERN_FAULT);
+		ma1[0]=tmp_exp_stack.arr;
+		
+		return_type_bool=1;
+		bool_operation = 0;
+		e_type = -1;
+		
+		syn_rules=6;
+		
+		input_token=get_token();
+	}
+	
+	
 	while(1)
 	{
 
@@ -136,7 +153,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			}
 
 
-			for (int j=0; j<p_exp_count-1; j++ )
+			for (int j=0; j<p_exp_count; j++ )
 			{
 				if (stack_expression_push(&postfix_exp_stack, p_arr[j]) != 0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 8.2p\n", ERR_INTERN_FAULT);
@@ -644,7 +661,7 @@ int operator_priority (int op)
 	else if ( op==S_LESS_EQUAL || op==S_GREATER_EQUAL || op==S_LESS || op==S_GREATER || op==S_EQUAL || op==S_NOT_EQUAL)
 		return 2;
 
-	else if ( op==S_OR || op==S_AND )
+	else if ( op==S_OR || op==S_AND ||  op==S_NOT)
 		return 1;
 
 	return -1;
@@ -734,6 +751,8 @@ void print_token(token t, int id_flag)
 		fprintf(stderr, "true");
 	else if (t.id == S_FALSE)
 		fprintf(stderr, "false");
+	else if (t.id == S_NOT)
+		fprintf(stderr, "!");
 	else
 		fprintf(stderr, ";");
 	
