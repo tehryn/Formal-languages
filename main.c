@@ -18,6 +18,7 @@ int main(int argc, char const *argv[]) {
 	}
 	mem_list_t_init();
 	return_value = parser();
+	free(SCANNER_WORD);
 	free_memory();
 	fclose(f);
 	return return_value;

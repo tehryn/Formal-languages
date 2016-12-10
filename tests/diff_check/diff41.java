@@ -12,7 +12,7 @@ class Main {
         ifj16.print("" + a + b + "\n");
     }
     static void foo (int a) {
-        while (a != 10) {
+        while (a <= 10) {
             a = a + 1;
             foo(a);
         }
