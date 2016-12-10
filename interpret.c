@@ -976,21 +976,21 @@ token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>
 		}
 		else if (i==6)
 		{
-			if ((tmp1.id=S_FALSE) && (tmp2.id==S_TRUE))
+			if ((tmp1.id==S_FALSE) && (tmp2.id==S_TRUE))
 				new->id=S_TRUE;
 			else
 				new->id=S_FALSE;
 		}
 		else if (i==7)
 		{
-			if ((tmp1.id=S_TRUE) && (tmp2.id==S_TRUE))
+			if ((tmp1.id==S_TRUE) && (tmp2.id==S_TRUE))
 				new->id=S_TRUE;
 			else
 				new->id=S_FALSE;
 		}
 		else if (i==8)
 		{
-			if ((tmp1.id=S_TRUE) || (tmp2.id==S_TRUE))
+			if ((tmp1.id==S_TRUE) || (tmp2.id==S_TRUE))
 				new->id=S_TRUE;
 			else
 				new->id=S_FALSE;
