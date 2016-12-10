@@ -65,7 +65,7 @@ int is_special_char(char c) {
 				case 1: return S_EQUAL;
 				case 2: return S_LESS_EQUAL;
 				case 3: return S_GREATER_EQUAL;
-				default: return S_NOT_EQUAL;
+				case 4: return S_NOT_EQUAL;
 			}
 		}
 		else {
@@ -74,7 +74,7 @@ int is_special_char(char c) {
 				case 1: return S_ASSIGNMENT;
 				case 2: return S_LESS;
 				case 3: return S_GREATER;
-				default: return 0;
+				case 4: return S_NOT;
 			}
 		}
 		return 0;
@@ -177,119 +177,7 @@ int is_num_literal(char *word, unsigned len) {
 		return TYPE_INT;
 	}
 }
-/*
-int is_num_literal(char *word, unsigned len) {
-	if (word == NULL || len == 0) {
-		return 0;
-	}
-	if (!isdigit(word[0])) {
-		return 0;
-	}
-	int is_base = 1;
-	if (word[0] == '0') {
-		if (len == 1) {
-			return TYPE_INT;
-		}
-		else if (len > 1 && word[1] == '.') {
-			is_base = 0;
-		}
-	}
-	else {
-		is_base = 0;
-	}
 
-	if (is_base) {
-		if (word[1] == 'x') {
-			if (len == 2) {
-				return 0;
-			}
-			int p = 0;
-			int dot = 0;
-			int sign = 0;
-			for (unsigned i = 2; i < len; i++) {
-				if (sign && (word[i] == '+' || word[i] == '-')) {
-					sign = 0;
-					continue;
-				}
-				sign = 0;
-				if (i > 2 && (word[i] == 'p' || word[i] == 'P') && !p && word[i-1] != '.') {
-					p = dot = sign = 1;
-					continue;
-				}
-				if (i > 2 && word[i] == '.' && !dot) {
-					dot = 1;
-					continue;
-				}
-				if (word[i] != '_' && (word[i] < 'A' || word[i] > 'F') && (word[i] < '0' || word[i] > '9')) {
-					return 0;
-				}
-			}
-			//0xFF.FFp-1
-			if (dot && !p) {
-				return 0;
-			}
-			else if (dot && p) {
-				return TYPE_DOUBLE_HEX;
-			}
-			else {
-				return TYPE_INT_HEX;
-			}
-		}
-		else if (word[1] == 'b') {
-			if (len <= 2) {
-				return 0;
-			}
-			for (unsigned i = 2; i < len; i++) {
-				if (word[i] != '_' && word[i] != '0' && word[i] != '1') {
-					return 0;
-				}
-			}
-			return TYPE_INT_BIN;
-		}
-		else {
-			for (unsigned i = 1; i < len; i++) {
-				if (word[i] != '_' && (word[i] < '0' || word[i] > '7')) {
-					return 0;
-				}
-			}
-			return TYPE_INT_OCTAL;
-		}
-	}
-	else {
-		int e = 0, dot = 0, sign = 0;
-		for (unsigned i = 1; i < len; i++) {
-			if (word[i] == '_') {
-				continue;
-			}
-			if (sign && (word[i] == '+' || word[i] == '-')) {
-				sign = 0;
-				continue;
-			}
-			sign = 0;
-			if (word[i] == 'e' || word[i] == 'E') {
-				if (e || word[i-1] == '.') {
-					return 0;
-				}
-				sign = 1;
-				dot = e = 1;
-			}
-			else if (word[i] == '.') {
-				if (dot || e) {
-					return 0;
-				}
-				dot = 1;
-			}
-			else if ((!isdigit(word[i]))) {
-				return 0;
-			}
-		}
-		if(!isdigit(word[len-1]) && word[len-1]!= '_') return 0;
-		if (dot) return TYPE_DOUBLE;
-		return TYPE_INT;
-	}
-	return 0;
-}
-*/
 int is_simple_ident(char *word, unsigned len) {
 	if (word == NULL || len == 0) return 0;
 	if ((word[0] != '$' && word[0] < 'A') || word[0] > 'z' || (word[0] > 'Z' && word[0] < 'a' && word[0] != '_'))

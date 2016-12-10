@@ -76,6 +76,7 @@ S_GREATER, /*!< stands for > */
 S_OR, /*!< stands for || */
 S_AND, /*!< stands for && */
 S_NOT_EQUAL, /*!< stands for != */
+S_NOT, /*!< stands for ! */
 S_LEFT_PARE, /*!< stands for ( */
 S_RIGHT_PARE, /*!< stands for ) */
 S_LEFT_BRACE, /*!< stands for { */

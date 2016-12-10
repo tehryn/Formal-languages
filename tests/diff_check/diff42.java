@@ -4,7 +4,7 @@ class Main {
         int a = 0;
         while(test) {
             ifj16.print("true\n");
-            test = (1 < 2 && 8 < 3) || a > 1;
+            test = (1 < 2 && 8 < 3) || a < 2;
             a = a + 1;
         }
     }
