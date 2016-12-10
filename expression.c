@@ -47,6 +47,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	int syn_rules = 6;
 	int end_token = S_SEMICOMMA;
 
+	int string_forbidden=0;
+	last_operand_string=0;
 	
 	va_list al;
 	if (t_in.id==END_EXPR)
