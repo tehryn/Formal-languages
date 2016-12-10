@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "embedded_functions.h"
+#include "garbage_collector.h"
 #define I_STACKSIZE 32
 
 /**
@@ -36,7 +37,7 @@ htab_item * stack_htab_find_htab_item(stack_htab * stack, char * key)
 
 int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 {
-	struct stack_expresion *S=malloc(sizeof(struct stack_expresion));
+	struct stack_expresion *S=mem_alloc(sizeof(struct stack_expresion));
 	if (S==NULL)
 		return ERR_INTERN_FAULT;
 
@@ -48,11 +49,9 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 	stack_expression_init(S,I_STACKSIZE);
 	htab_item * item_tmp1;
 	htab_item * return_hitem;
-	htab_t *loc_table;
 	token *return_token;
-	int k=0;
 	token *postfix_array;
-	token ptr, tmp1, tmp2, *new;
+	token *new;
 	
 
 	
@@ -67,9 +66,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 			case I_ASSIGMENT:
 				return_token=(token *)L->Active->adr1;
 				return_hitem=stack_htab_find_htab_item(I_Htable,(char *) return_token->ptr);
-				k=0;
 				postfix_array=(token *)L->Active->adr2;
-				ptr=postfix_array[k];
 				
 				
 				new=do_expression(postfix_array,I_Htable,S,L,0);
@@ -91,10 +88,10 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				}
 				else if (return_hitem->data_type==S_DOUBLE && (new->id==TYPE_INT || new->id==S_INT))
 				{
-					double *new_val1=malloc(sizeof(double));
+					double *new_val1=mem_alloc(sizeof(double));
 					double help_val=(*((int*)new->ptr));
 					*new_val1=help_val;
-					free(new->ptr);
+					//free(new->ptr);
 					return_hitem->data=(double *)new_val1;
 					
 					
@@ -135,7 +132,6 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				break;
 
 			case I_IF:
-				k=0;
 				postfix_array=(token *)L->Active->adr1;
 				new=do_expression(postfix_array,I_Htable,S,L,0);
 				if (new->id < 0)
@@ -165,7 +161,6 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				break;
 
 			case I_WHILE:
-				k=0;
 				postfix_array=(token *)L->Active->adr1;
 				new=do_expression(postfix_array,I_Htable,S,L,0);
 				
@@ -211,9 +206,6 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 			case I_FCE:
 				item_tmp1=(htab_item *)L->Active->adr1;
 							
-					
-					
-				k=0;	
 				postfix_array=(token *)L->Active->adr2;
 				
 				if (strcmp(item_tmp1->key,"ifj16.print")==0)
@@ -254,8 +246,8 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					
 					print(help_tmp);
 //					print("\n");
-					free(str_token->ptr);
-					free(str_token);
+					//free(str_token->ptr);
+					//free(str_token);
 					L->Active=L->Active->next_instr;
 					break;
 					//printf("%d\n",str
@@ -266,8 +258,6 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				
 			
 				
-				htab_item *parametr;
-				int par_type;
 				int void_func_flag=0;
 				
 				
@@ -336,7 +326,11 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					
 				}
 				
-				if(fce_token->id==S_INT)
+				if (new->id==S_FALSE || new->id==S_TRUE)
+				{
+					fce_token->id=new->id;
+				}
+				else if(fce_token->id==S_INT)
 				{
 					
 					*(int*)fce_token->ptr=(*(int*)new->ptr);
@@ -349,13 +343,11 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					*(double*)fce_token->ptr=(*(int*)new->ptr);
 				else if(fce_token->id==S_STRING)
 				{
-					char *new_val=malloc(sizeof(char)*strlen((char*)new->ptr)+1);
+					char *new_val=mem_alloc(sizeof(char)*strlen((char*)new->ptr)+1);
 					memcpy(new_val,(char*)new->ptr,strlen((char*)new->ptr)+1);
 					fce_token->ptr=(char*)new_val;	
 				}
-				else 
-					fce_token->id=new->id;
-				
+
 				return 0;
 				
 			case I_ELSE:
@@ -370,7 +362,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 	}
 
 	stack_expression_destroy(S);
-	free(S);
+	//free(S);
 	return 0;
 }
 
@@ -407,7 +399,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 	if (strcmp(item_tmp1->key,"ifj16.readInt")==0)
 	{
 		return_token->id=TYPE_INT;
-		int *new_val=malloc(sizeof(int));
+		int *new_val=mem_alloc(sizeof(int));
 		*new_val=readInt();
 		return_token->ptr=(int *)new_val;
 		return 1;
@@ -415,7 +407,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 	else if (strcmp(item_tmp1->key,"ifj16.readDouble")==0)
 	{
 		return_token->id=TYPE_DOUBLE;
-		double *new_val=malloc(sizeof(double));
+		double *new_val=mem_alloc(sizeof(double));
 		*new_val=readDouble();
 		return_token->ptr=(double *)new_val;
 		return 1;
@@ -447,7 +439,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		stack_expression_pop(S,&tmp2);
 		stack_expression_pop(S,&tmp1);
 			
-		int *val=malloc(sizeof(int));	
+		int *val=mem_alloc(sizeof(int));	
 		*val=strcmp(((char*)tmp1.ptr),((char*)tmp2.ptr));
 		
 		if (*val > 0 )
@@ -463,7 +455,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 	else if (strcmp(item_tmp1->key,"ifj16.find")==0)
 	{
 		return_token->id=TYPE_INT;
-		int *new_val=malloc(sizeof(int));
+		int *new_val=mem_alloc(sizeof(int));
 		
 		token tmp1,tmp2;
 		stack_expression_pop(S,&tmp2);
@@ -505,7 +497,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 char *DoubleToString(double x)
 {
     int req_size=8*sizeof(double)+3;
-	char *str=malloc(req_size);
+	char *str=mem_alloc(req_size);
 	if (str==NULL)
 		return str;
 	snprintf(str, req_size, "%g", x);
@@ -515,7 +507,7 @@ char *DoubleToString(double x)
 char *IntToString(int x)
 {
     int req_size=8*sizeof(int)+3;
-	char *str=malloc(req_size);
+	char *str=mem_alloc(req_size);
 	if (str==NULL)
 		return str;
 	snprintf(str, req_size, "%d", x);
@@ -525,7 +517,7 @@ char *IntToString(int x)
 char *Conc_Str(char *s1, char *s2)
 {
     int req_size=strlen(s1)+strlen(s2);
-    char *str=malloc(req_size+1);
+    char *str=mem_alloc(req_size+1);
    	if (str==NULL)
 		return str;
     int k=strlen(s1)-1;
@@ -582,7 +574,7 @@ token *inter_plus(token tmp1,token tmp2)
 			str2=(char *)tmp2.ptr;
 
 		char *str3=Conc_Str(str1,str2);
-		new=malloc(sizeof(token));
+		new=mem_alloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
 		new->id=TYPE_STRING;
@@ -591,12 +583,12 @@ token *inter_plus(token tmp1,token tmp2)
 	}
 	else if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==S_DOUBLE || tmp2.id==TYPE_DOUBLE))
 	{
-		new=malloc(sizeof(token));
+		new=mem_alloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
 
 		new->id=TYPE_DOUBLE;
-		double *tmp_value=malloc(sizeof(double));
+		double *tmp_value=mem_alloc(sizeof(double));
 		if (tmp_value==NULL)
 			return NULL;
 
@@ -606,11 +598,11 @@ token *inter_plus(token tmp1,token tmp2)
 	}
 	else if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==S_INT || tmp2.id==TYPE_INT))
 	{
-		new=malloc(sizeof(token));
+		new=mem_alloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
 		new->id=TYPE_DOUBLE;
-		double *tmp_value=malloc(sizeof(double));
+		double *tmp_value=mem_alloc(sizeof(double));
 		if (tmp_value==NULL)
 			return NULL;
 		(*tmp_value)=(*((double *)tmp1.ptr))+(*((int *)tmp2.ptr));
@@ -619,12 +611,12 @@ token *inter_plus(token tmp1,token tmp2)
 	}
 	else if ((tmp1.id==S_INT || tmp1.id==TYPE_INT) && (tmp2.id==S_DOUBLE || tmp2.id==TYPE_DOUBLE))
 	{
-		new=malloc(sizeof(token));
+		new=mem_alloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
 
 		new->id=TYPE_DOUBLE;
-		double *tmp_value=malloc(sizeof(double));
+		double *tmp_value=mem_alloc(sizeof(double));
 		if (tmp_value==NULL)
 			return NULL;
 
@@ -634,12 +626,12 @@ token *inter_plus(token tmp1,token tmp2)
 	}
 	else
 	{
-		new=malloc(sizeof(token));
+		new=mem_alloc(sizeof(token));
 		if (new==NULL)
 			return NULL;
 
 		new->id=TYPE_INT;
-		int *tmp_value=malloc(sizeof(int));
+		int *tmp_value=mem_alloc(sizeof(int));
 		if (tmp_value==NULL)
 			return NULL;
 
@@ -651,14 +643,14 @@ token *inter_plus(token tmp1,token tmp2)
 
 token *inter_arm_op(token tmp1,token tmp2, int i)
 {
-	token *new=malloc(sizeof(token));
+	token *new=mem_alloc(sizeof(token));
 	if (new==NULL)
 		return NULL;
 
 	if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==TYPE_DOUBLE || tmp2.id==S_DOUBLE))
 	{
 		new->id=TYPE_DOUBLE;
-		double *tmp_value=malloc(sizeof(double));
+		double *tmp_value=mem_alloc(sizeof(double));
 		if (tmp_value==NULL)
 			return NULL;
 		if (i==1)
@@ -684,7 +676,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 	else if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==TYPE_INT || tmp2.id==S_INT))
 	{
 		new->id=TYPE_DOUBLE;
-		double *tmp_value=malloc(sizeof(double));
+		double *tmp_value=mem_alloc(sizeof(double));
 		if (tmp_value==NULL)
 			return NULL;
 		if (i==1)
@@ -695,7 +687,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 		{
 			if ((*((int *)tmp2.ptr)==0))
 			{
-				free(tmp_value);
+				//free(tmp_value);
 				new->id=-8;
 				return new;
 			}
@@ -710,7 +702,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 	else if ((tmp1.id==TYPE_INT || tmp1.id==S_INT) && (tmp2.id==TYPE_DOUBLE || tmp2.id==S_DOUBLE))
 	{
 		new->id=TYPE_DOUBLE;
-		double *tmp_value=malloc(sizeof(double));
+		double *tmp_value=mem_alloc(sizeof(double));
 		if (tmp_value==NULL)
 			return NULL;
 		if (i==1)
@@ -721,7 +713,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 		{
 			if ((*((double *)tmp2.ptr)==0.0))
 			{
-				free(tmp_value);
+				//free(tmp_value);
 				new->id=-8;
 				return new;
 			}
@@ -737,7 +729,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 	else
 	{
 		new->id=TYPE_INT;
-		int *tmp_value=malloc(sizeof(int));
+		int *tmp_value=mem_alloc(sizeof(int));
 		if (tmp_value==NULL)
 			return NULL;
 		if (i==1)
@@ -748,7 +740,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 		{
 			if ((*((int *)tmp2.ptr)==0))
 			{
-				free(tmp_value);
+				//free(tmp_value);
 				new->id=-8;
 				return new;
 			}
@@ -765,7 +757,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 
 token *inter_bool_op(token tmp1,token tmp2, int i)     // i- 1 (==)  2 (!=) 3 (>=) 4 (<=)
 {
-	token *new=malloc(sizeof(token));
+	token *new=mem_alloc(sizeof(token));
 	if (new==NULL)
 		return NULL;
 	if ((tmp1.id==S_DOUBLE || tmp1.id==TYPE_DOUBLE) && (tmp2.id==S_DOUBLE || tmp2.id==TYPE_DOUBLE))
@@ -1020,7 +1012,7 @@ void I_Instr_null_elements(I_Instr * Instruction)
 
 token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_expresion *S,Instr_List *L,int void_flag)
 {
-	token *new_token=malloc(sizeof(token));
+	token *new_token=mem_alloc(sizeof(token));
 	token ptr,tmp1,tmp2;
 	token *new;
 	int k=0;
@@ -1041,7 +1033,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				if (item_tmp1==NULL)
 				{
 					stack_expression_destroy(S);
-					free(S);
+					//free(S);
 					fprintf(stderr,"Interpret: Item wasn't found.\n");
 					new_token->id=-ERR_OTHERS;
 					return new_token;
@@ -1049,7 +1041,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				
 				if (item_tmp1->func_or_var==2)
 				{
-					new=malloc(sizeof(token));
+					new=mem_alloc(sizeof(token));
 					int result=is_emb_fce(item_tmp1,S,new);
 			
 					if (result>0)
@@ -1077,7 +1069,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 						
 						if (par_type==S_DOUBLE)
 						{
-							double *par_value=malloc(sizeof(double));
+							double *par_value=mem_alloc(sizeof(double));
 							if (tmp2.id==TYPE_DOUBLE  || tmp2.id==S_DOUBLE)
 							{
 								*par_value=(*((double*)tmp2.ptr));
@@ -1093,7 +1085,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 						}
 						else if (par_type==S_INT)
 						{
-							int *par_value=malloc(sizeof(int));
+							int *par_value=mem_alloc(sizeof(int));
 							*par_value=(*((int*)tmp2.ptr));
 							parametr->data=(int*)par_value;
 						}
@@ -1101,7 +1093,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 							parametr->data_type=tmp2.id;
 						else if (par_type==S_STRING)
 						{
-							char *new_val=malloc(sizeof(char)*strlen((char*)tmp2.ptr)+1);
+							char *new_val=mem_alloc(sizeof(char)*strlen((char*)tmp2.ptr)+1);
 							memcpy(new_val,(char*)tmp2.ptr,strlen((char*)tmp2.ptr)+1);
 							parametr->data=(char*)new_val;
 							
@@ -1114,12 +1106,12 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					
 					stack_htab_push(I_Htable, loc_table);
 					int result_of_interpret=0;
-					new=malloc(sizeof(token));
+					new=mem_alloc(sizeof(token));
 					new->id=item_tmp1->data_type;
 					if (item_tmp1->data_type==S_INT)
 					{
 						
-						int *new_data=malloc(sizeof(int));
+						int *new_data=mem_alloc(sizeof(int));
 						new->ptr=new_data;
 						I_Instr *tmp=L->Active;
 						L->Active=item_tmp1->instruction_tape;
@@ -1129,7 +1121,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					else if (item_tmp1->data_type==S_DOUBLE)
 					{
 						
-						double *new_data=malloc(sizeof(double));
+						double *new_data=mem_alloc(sizeof(double));
 						new->ptr=new_data;
 						I_Instr *tmp=L->Active;
 						L->Active=item_tmp1->instruction_tape;
@@ -1148,7 +1140,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 					{
 						I_Instr *tmp=L->Active;
 						L->Active=item_tmp1->instruction_tape;
-						result_of_interpret=inter(L, I_Htable,NULL,void_flag);
+						result_of_interpret=inter(L, I_Htable,new,void_flag);
 						L->Active=tmp;						
 					}
 					stack_htab_pop(I_Htable);
@@ -1174,7 +1166,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				}
 				if (item_tmp1->func_or_var==1)
 				{
-					new=malloc(sizeof(token));
+					new=mem_alloc(sizeof(token));
 					//printf("I in do express: %d\n",(*((int*)item_tmp1->data)));
 					if (item_tmp1->data_type==S_STRING)
 						new->id=TYPE_STRING;
@@ -1329,19 +1321,19 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 	
 	if (new_token->id==TYPE_INT || new_token->id==S_INT)
 	{
-		int *new_val=malloc(sizeof(int));
+		int *new_val=mem_alloc(sizeof(int));
 		*new_val=*((int*)tmp1.ptr);
 		new_token->ptr=(int *)new_val;
 	}
 	else if (new_token->id==TYPE_DOUBLE || new_token->id==S_INT)
 	{
-		double *new_val=malloc(sizeof(double));
+		double *new_val=mem_alloc(sizeof(double));
 		*new_val=*((double*)tmp1.ptr);
 		new_token->ptr=(double *)new_val;
 	}
 	else if (new_token->id==TYPE_STRING || new_token->id==S_STRING)
 	{
-		char *new_val=malloc(sizeof(char)*strlen((char*)tmp1.ptr)+1);
+		char *new_val=mem_alloc(sizeof(char)*strlen((char*)tmp1.ptr)+1);
 		memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp1.ptr)+1);
 		new_token->ptr=(char *)new_val;		
 	}
