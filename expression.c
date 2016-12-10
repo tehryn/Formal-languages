@@ -40,7 +40,10 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 	int bool_operation = 0;
 	int return_type_bool=0;
+	
 	int e_type = -1;
+	int old_e_type = -1;
+	
 	int syn_rules = 6;
 	int end_token = S_SEMICOMMA;
 	
