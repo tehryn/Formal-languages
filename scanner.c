@@ -108,7 +108,7 @@ int is_num_literal(char *word, unsigned len) {
 					sign = 0;
 					continue;
 				}
-				else if (!p && (word[i] == 'p' || word[i] == 'P') && word[i-1] != '.' && word[i-1] != '_') {
+				else if (!p && (word[i] == 'p' || word[i] == 'P') && (isdigit(word[i-1]) || (word[i] >= 'A' && word[i] <= 'F') || (word[i] >= 'a' && word[i] <= 'f'))) {
 					p = dot = 1;
 					sign = 1;
 					continue;
@@ -137,7 +137,7 @@ int is_num_literal(char *word, unsigned len) {
 		}
 		else if ((word[1] <= '7' && word[1] >= '0') || word[1] == '_') {
 			for(unsigned i = 2; i < len; i++) {
-				if (!((word[i] <= '7' && word[i] >= '0') || word[1] != '_')) {
+				if (!((word[i] <= '7' && word[i] >= '0') || word[1] == '_')) {
 					return 0;
 				}
 			}
@@ -154,11 +154,11 @@ int is_num_literal(char *word, unsigned len) {
 			sign = 0;
 			continue;
 		}
-		else if (!e && !dot && (word[i] == 'E' || word[i] == 'e') && word[i-1] != '.' && word[i-1] != '_' ) {
+		else if (!e && !dot && (word[i] == 'E' || word[i] == 'e') && isdigit(word[i-1])) {
 			dot = e = sign = 1;
 			continue;
 		}
-		else if (word[i] == '.' && word[i-1] != '_') {
+		else if (word[i] == '.' && !dot && !e && word[i-1] != '_') {
 			dot = 1;
 			sign = 0;
 			continue;
