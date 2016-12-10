@@ -11,7 +11,7 @@ RED='\033[1;31m'
 NC='\033[0m' # No Color
 valide="ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)"
 
-for file in ./tests/valid_input/*.java
+for file in ./tests/valid_input/auto/*.java
 do
     var=$(valgrind $leak ./IFJ16 $file 2>&1 | tail -1)
 
