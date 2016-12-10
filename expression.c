@@ -400,10 +400,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					fp_exp_count = -1;
 					fparam_data_type = -1;
 				}
-
-				err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, error_6_flag, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
-				if (err_ret!=0)
-					FATAL_ERROR("EXPRESSION: Expression error. 34\n", err_ret);
+				if (arg_count!=0)
+				{
+					err_ret=expr_analyze(fun_in_token, &fun_last_token, class_name, error_6_flag, &fun_param_arr, &fp_exp_count, &fparam_data_type, global_table, local_table, S_COMMA);
+					if (err_ret!=0)
+						FATAL_ERROR("EXPRESSION: Expression error. 34\n", err_ret);
+				}
+				else
+					fun_last_token = get_token();
 
 				if ( fun_last_token.id!=S_RIGHT_PARE )
 				{
