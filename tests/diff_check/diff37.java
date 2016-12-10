@@ -16,3 +16,7 @@ class Main {
         }
     }
 }
+/*
+if (!false) // its funny becouse its true
+
+ */
