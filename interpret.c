@@ -277,7 +277,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				
 			
 				
-				return 0;	
+				L->Active=L->Active->next_instr;
 				break;
 				
 				
