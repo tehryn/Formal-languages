@@ -144,7 +144,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( bool_operation>=2 && input_token.id!=TYPE_BOOLEAN && input_token.id!=S_TRUE && input_token.id!=S_FALSE )
 				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 9.1\n", ERR_SEM_COMPATIBILITY);
 
-			if ( bool_operation==1 && e_type!=input_token.id && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
+			if ( bool_operation==1 && e_type!=type_name_convertion(input_token.id) && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.2\n", ERR_SEM_COMPATIBILITY);
 
 			if (type_priority(type_name_convertion(input_token.id)) > type_priority(e_type))
