@@ -160,7 +160,7 @@ int parser()
 	Instruction->adr3 = NULL;
 	Instruction->next_instr = NULL;
 
-	token * t_tmp = (token*) mem_alloc(2*sizeof(token));
+	token * t_tmp = (token*) malloc(2*sizeof(token));
 	if (t_tmp == NULL)
 	{
 		stack_int_destroy(&s);
