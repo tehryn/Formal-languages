@@ -1,6 +1,6 @@
 class Main {
     static void run() {
-        ifj16.print("program ukoncete pomoci ctrl+c\n")
+        ifj16.print("program ukoncete pomoci ctrl+c\n");
         ifj16.print("Zadejte retezec ve kterem se bude hledat\n");
         String str_find = ifj16.readString();
         String str_seek;
