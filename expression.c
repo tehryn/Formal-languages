@@ -231,7 +231,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (input_token.id==S_AND || input_token.id==S_OR || input_token.id==S_NOT )
 			{
 				if (e_type!=S_BOOLEAN && !(input_token.id==S_NOT && e_type==-1) )
-					FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.2\n", ERR_SYNTACTIC_ANALYSIS);
+					FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.2\n", ERR_SEM_COMPATIBILITY);
 
 				return_type_bool=1;
 				bool_operation = 0;
