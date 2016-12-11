@@ -16,6 +16,12 @@
 #include <string.h>
 #include <stdbool.h>    // bool
 
+/** @defgroup parser Parser*/
+/** @addtogroup parser
+  * @brief Detect syntax and semantic errors, generate code and load items into hash tables
+  * @{
+  */
+
 /** Error codes */
 #define ERR_LEXICAL_ANALYSIS 1
 #define ERR_SYNTACTIC_ANALYSIS 2
@@ -89,8 +95,9 @@ bool token_wanted(token * t);
  * Adds embended function into hash table
  * @param  global_table_symbols Hash table where functions will be stored
  * @param  all_class_names      Array with names of all functions
- * @return In case of succes returns 0, otherwise return some error code                     
+ * @return In case of succes returns 0, otherwise return some error code
  */
 int embedded_functions_into_hash_table(htab_t * global_table_symbols, array_string* all_class_names);
 
+/** @} */
 #endif
