@@ -50,7 +50,7 @@ char * substring(char * s, int i, int n)
     for ( j=0; j<n; j++)
         string[j]=s[j+i];
 
-    string[j]='\0';
+    string[j+1]='\0';
     return string;
 }
 
@@ -295,8 +295,8 @@ int stack_int_is_full( struct t_stack_int * stack )
 {
 	return (stack->top == (stack->size-1));
 }
-
-unsigned hash_function(const char *str, unsigned htab_size)
+// -------------------------------------------------------------------------------------------
+unsigned hash_function(const char *str, unsigned htab_size) // prevzato ze zadani projektu IJC
 {
 	unsigned int h=0;
 	const unsigned char *p;
@@ -304,8 +304,6 @@ unsigned hash_function(const char *str, unsigned htab_size)
 		h = 65599*h + *p;
 	return h % htab_size;
 }
-
-// ------------------------------------------------------------------------------------------
 
 htab_t * htab_init(unsigned size)
 {
@@ -341,9 +339,6 @@ htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsign
 		htab->ptr[i] = NULL;
 	return htab;
 }
-
-
-
 
 htab_item * htab_find_item(htab_t * T, const char * key) // NULL if not there
 {
