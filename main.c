@@ -1,8 +1,5 @@
-#include "scanner.h"
 #include "garbage_collector.h"
 #include "parser.h"
-#include "ial.h"
-#include "structures.h"
 FILE *f;
 extern char* SCANNER_WORD;
 int main(int argc, char const *argv[]) {
@@ -24,6 +21,9 @@ int main(int argc, char const *argv[]) {
 	return return_value;
 }
 
+//#include "scanner.h"
+//#include "ial.h"
+//#include "structures.h"
 //#define TEST_PARSER
 //#define TEST_TABLE
 //#define TEST_STRUCTURES
