@@ -218,7 +218,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 		else if ( operator_priority(input_token.id) != -1)							// operator
 		{
-			if ( (syn_rules&2)!=0 && negation_last_operator==1 && input_token.id!=S_NOT )
+			if ( (syn_rules&2)!=0 && (! (negation_last_operator==1 && input_token.id==S_NOT)) )
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 19\n", ERR_SYNTACTIC_ANALYSIS);
 
 			if (input_token.id==S_NOT)
