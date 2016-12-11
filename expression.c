@@ -79,6 +79,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 24\n", ERR_INTERN_FAULT);
 		ma1[0]=tmp_exp_stack.arr;
 		
+		negation_last_operator=1;
 		return_type_bool=1;
 		bool_operation = 0;
 		e_type = -1;
