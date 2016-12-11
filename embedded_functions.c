@@ -39,7 +39,7 @@ char * readString()
         c = getc(stdin);
     }
 
-    string[size-1]='\0';
+    string[index]='\0';
     return string;
 }
 

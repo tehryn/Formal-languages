@@ -1354,7 +1354,7 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 	{
 		char *new_val=mem_alloc(sizeof(char)*strlen((char*)tmp1.ptr)+1);
 		memcpy(new_val,(char*)tmp1.ptr,strlen((char*)tmp1.ptr)+1);
-		new_token->ptr=(char *)new_val;		
+		new_token->ptr=(char *)tmp1.ptr;		
 	}
 	
 	
