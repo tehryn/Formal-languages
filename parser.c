@@ -1584,6 +1584,12 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 				}
 				else
 				{
+					if (t.id == S_RIGHT_BRACE)
+					{
+						fprintf(stderr, "PARSER:  On line %u expected semicomma after return in void function.\n", LINE_NUM);
+						return ERR_SYNTACTIC_ANALYSIS;
+					}
+
 					if (t.id != S_SEMICOMMA)
 					{
 						fprintf(stderr, "PARSER:  On line %u expected semicomma after return in void function.\n", LINE_NUM);
