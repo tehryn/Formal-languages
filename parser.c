@@ -1,8 +1,14 @@
+/**
+* Author: Miroslava Misova <BR>
+* Login: xmisov00 <BR>
+* School: VUT FIT, BRNO <BR>
+* Project: interpreter for IFJ16 <BR>
+* gcc version: 5.4.0 (ubuntu 16.04.2) <BR>
+* Date: 2016-12-11
+**/
 #include "parser.h"
 #include "expression.h"
 #include "interpret.h"
-
-//#define DEBUG
 
 char *join_strings(char *str1, char *str2) {
 	size_t len[2] = {strlen(str1), strlen(str2)};
@@ -1050,7 +1056,7 @@ int analysis (stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols
 						 		tmp_ptr = tmp_ptr->next_instr;
 							tmp_ptr->next_instr = Instruction;
 						}
-						
+
 						Instruction = NULL;
 					}
 
