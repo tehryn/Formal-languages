@@ -784,7 +784,7 @@ token *inter_arm_op(token tmp1,token tmp2, int i)
 				return new;
 			}
 
-			(*tmp_value)=(*((double *)tmp1.ptr))/(*((double *)tmp2.ptr));
+			(*tmp_value)=(*((int *)tmp1.ptr))/(*((double *)tmp2.ptr));
 
 
 		}
