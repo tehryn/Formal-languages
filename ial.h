@@ -16,10 +16,10 @@
 #include "garbage_collector.h"
 #include "error.h"
 
-/** */
+/** Finds maximum*/
 #define MAX(a,b) ((a)   > (b) ? (a) : (b))
 
-/** */
+/** Represents number of chars in alphabet */
 #define ALPHABET_ARRAY 256
 
 /**
@@ -67,7 +67,7 @@ int find( char *s,  char *search);
  * Preprocessing for find.
  * Fill the bad character array by given pattern
  * @param string   pattern
- * @param badchar[AlphabetArray] alphabet array of integers
+ * @param badchar[ALPHABET_ARRAY] alphabet array of integers
  */
 void computeJumps( char *string, int badchar[ALPHABET_ARRAY]);
 
