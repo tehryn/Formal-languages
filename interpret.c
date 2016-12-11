@@ -411,6 +411,8 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->id=TYPE_INT;
 		int *new_val=mem_alloc(sizeof(int));
 		*new_val=readInt();
+		if (*new_val<0)
+			return -ERR_INPUT_NUMBER;
 		return_token->ptr=(int *)new_val;
 		return 1;
 	}	
@@ -419,6 +421,8 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->id=TYPE_DOUBLE;
 		double *new_val=mem_alloc(sizeof(double));
 		*new_val=readDouble();
+		if (*new_val<0)
+			return -ERR_INPUT_NUMBER;
 		return_token->ptr=(double *)new_val;
 		return 1;
 	}	
@@ -427,6 +431,8 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->id=TYPE_STRING;
 		//free(return_token->ptr);
 		char *new_val=readString();
+		if (*new_val<0)
+			return -ERR_INPUT_NUMBER;
 		return_token->ptr=(char *)new_val;
 		return 1;
 	}		
@@ -1053,6 +1059,13 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				{
 					new=mem_alloc(sizeof(token));
 					int result=is_emb_fce(item_tmp1,S,new);
+						
+					if (result==-ERR_INPUT_NUMBER)
+					{
+						new->id=-ERR_INPUT_NUMBER;
+						return new;
+						
+					}
 			
 					if (result>0)
 					{
