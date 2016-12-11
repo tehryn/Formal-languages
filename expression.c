@@ -5,32 +5,6 @@
 #include "expression.h"
 #include "garbage_collector.h"
 
-#define ERR_WARNING 0
-#define ERR_LEXICAL_ANALYSIS 1
-#define ERR_SYNTACTIC_ANALYSIS 2
-#define ERR_SEM_NDEF_REDEF 3
-#define ERR_SEM_COMPATIBILITY 4
-#define ERR_SEM_OTHERS 6
-#define ERR_INPUT_NUMBER 7
-#define ERR_UNINICIALIZED_VAR 8
-#define ERR_DIVISION_ZERO 9
-#define ERR_OTHERS 10
-#define ERR_INTERN_FAULT 99
-
-#define FATAL_ERROR(message, error_code) do { 	if(ma1[0]!=NULL) free(ma1[0]); if(ma1[1]!=NULL) free(ma1[1]); 	\
-												fputs((message), stderr); 										\
-												return (error_code); } while(0)
-
-
-#define STRDUP(l, s) do {	char *tmp = (char *)mem_alloc( sizeof(char) * ( strlen((char *)(s)) + 1 ) );				\
-							if (tmp == NULL)																			\
-								FATAL_ERROR("EXPRESSION: Memory could not be allocated. 11\n", ERR_INTERN_FAULT); 		\
-							else																						\
-							{																							\
-								strcpy(tmp, (char *)(s));																\
-								(l) = tmp;																				\
-							} 																							\
-						} while(0)
 
 
 int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag, token **postfix_token_array, int *token_count, int *expr_data_type, htab_t *global_table, htab_t *local_table, ...)
