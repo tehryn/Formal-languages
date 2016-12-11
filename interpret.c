@@ -430,7 +430,7 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		return_token->id=TYPE_STRING;
 		//free(return_token->ptr);
 		char *new_val=readString();
-		if (*new_val<0)
+		if (*new_val==NULL)
 			return -ERR_INPUT_NUMBER;
 		return_token->ptr=(char *)new_val;
 		return 1;
@@ -444,6 +444,8 @@ int is_emb_fce(htab_item *item_tmp1,struct stack_expresion *S,token *return_toke
 		stack_expression_pop(S,&tmp1);
 		
 		char *s2=substring(((char*)tmp1.ptr),(*(int*)tmp2.ptr),(*(int*)tmp3.ptr));
+		if(s2==NULL)
+			return -ERR_INPUT_NUMBER;
 		return_token->ptr=(char *)s2;
 		return 1;
 	}	
