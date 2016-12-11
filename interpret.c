@@ -304,11 +304,10 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 			case I_END:
 				stack_instr_destroy(&while_stack);
 				stack_expression_destroy(S);
-				//printf("VOID FLAG U ENDU: %d\n",void_flag);
 				if (void_flag==1)
 					return 0;
 				else 
-					return -8;
+					return 8;
 				
 				
 			case I_RETURN:
