@@ -5,7 +5,7 @@ class Main {
         String str_find = ifj16.readString();
         while(true) {
             ifj16.print("Zadejte oba indexy:\n");
-            ifj16.print("Navratova hodnota: " + ifj16.substr(str_find, readInt(), readInt()) + "\n");
+            ifj16.print("Navratova hodnota: " + ifj16.substr(str_find, ifj16.readInt(), ifj16.readInt()) + "\n");
         }
     }
 }
