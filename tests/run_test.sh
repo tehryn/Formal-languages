@@ -76,7 +76,7 @@ do
 	fi
 done
 
-for file in ./tests/valid_input/*.java
+for file in ./tests/valid_input/auto/*.java
 do
 	./IFJ16 $file
 	ret=$?
