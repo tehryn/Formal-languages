@@ -1,6 +1,7 @@
 /**
  * \file   embedded_functions.h
- * \author Sava Nedeljkovic
+ * \author Sava Nedeljkovic, xnedel08
+ * \project interpreter for IFJ16
  * \date   11.12.2016
  * \brief  Documentation for embeded functions
  */
@@ -21,25 +22,25 @@
 #include <limits.h>
 #include "garbage_collector.h"
 
-/** 
+/**
  * \brief Function reads a string from STDIN.
  * \return array of chars (string) read from STDIN.
  */
 char * readString();
 
-/** 
+/**
  * \brief Function reads an integer value from STDIN.
  * \return integer value read from STDIN.
  */
 int readInt();
 
-/** 
+/**
  * \brief Function reads a number in double format from STDIN.
  * \return number in double format read from STDIN.
  */
 double readDouble();
 
-/** 
+/**
  * \brief Function prints string to STDOUT.
  */
 void print(char * string);

@@ -1,9 +1,11 @@
 /**
  * \file   embedded_functions.h
- * \author Sava Nedeljkovic
+ * \author Sava Nedeljkovic, xnedel08
+ * \project interpreter for IFJ16
  * \date   11.12.2016
  * \brief  Documentation for embeded functions
  */
+
 #include "embedded_functions.h"
 #include "garbage_collector.h"
 #include "error.h"
