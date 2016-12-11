@@ -24,6 +24,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	int string_forbidden=0;
 	int last_operand_string=0;
 	
+	int string_rquired=0;
+	
 	int negation_last_operator=0;
 	
 	va_list al;
@@ -168,11 +170,18 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if ( (syn_rules&1) != 0)
 				FATAL_ERROR("EXPRESSION: Unallowed combination of operands and operators. 9\n", ERR_SYNTACTIC_ANALYSIS);
 
+			if (string_rquired == 1 && input_token.id!=TYPE_STRING)
+				FATAL_ERROR("EXPRESSION: Invalid operand data type. 9.5\n", ERR_SEM_COMPATIBILITY);
+				
+
 			if ( bool_operation>=2 && input_token.id!=TYPE_BOOLEAN && input_token.id!=S_TRUE && input_token.id!=S_FALSE )
 				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 9.1\n", ERR_SEM_COMPATIBILITY);
 
 			if ( bool_operation==1 && e_type!=type_name_convertion(input_token.id) && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.2\n", ERR_SEM_COMPATIBILITY);
+				
+			//if ( bool_operation==0 && e_type!=type_name_convertion(input_token.id) && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
+				//FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.2\n", ERR_SEM_COMPATIBILITY);
 
 			if (type_priority(type_name_convertion(input_token.id)) > type_priority(e_type))
 				e_type = type_name_convertion(input_token.id);
@@ -244,9 +253,15 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			}
 			else if (bool_operation>=2)
 				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.3\n", ERR_SEM_COMPATIBILITY);
-			else if ( bool_operation==0 && e_type==S_BOOLEAN )
+			else if ( bool_operation==0 && e_type==S_BOOLEAN && input_token.id!=S_PLUS )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.4\n", ERR_SEM_COMPATIBILITY);
-
+				
+			if ( bool_operation==0 && e_type==S_BOOLEAN && input_token.id==S_PLUS )
+				string_rquired = 1;
+			else
+				string_rquired = 0;
+			
+			
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
 
@@ -528,8 +543,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	for (int i=0; i<=postfix_exp_stack.top; i++)
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
 	
-//	if (end_token==S_SEMICOMMA)
-//		print_token_array( *postfix_token_array, 0);
+	if (end_token==S_SEMICOMMA)
+		print_token_array( *postfix_token_array, 0);
 
 	if(ma1[0]!=NULL) free(ma1[0]);
 	if(ma1[1]!=NULL) free(ma1[1]);
@@ -652,10 +667,10 @@ int operator_priority (int op)
 int type_priority (int type)
 {
 	if (type==TYPE_BOOLEAN || type==S_BOOLEAN)
-		return 6;
+		return 5;
 
 	else if (type==TYPE_STRING || type==S_STRING)
-		return 5;
+		return 6;
 
 	else if (type==TYPE_DOUBLE || type==S_DOUBLE)
 		return 4;
