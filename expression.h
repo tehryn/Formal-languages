@@ -131,7 +131,7 @@ int stack_expression_empty 		( const struct stack_expresion* s );
 
 
 /** 
- * \brief Function checks whether stack is empty.
+ * \brief Function checks whether stack is full.
  * \param[in] s pointer to a stack.
  * \pre s!=NULL
  * \return integer value which tells, if the stack is full, 0 -> not full, !=0 -> full.
@@ -172,7 +172,7 @@ int stack_expression_pop 		( struct stack_expresion* s, token* t );
 /** 
  * \brief Function pushes given element to the stack.
  * \param[in] s pointer to a stack.
- * \param[out] t top which should be pushed to the stack.
+ * \param[out] t token which should be pushed to the stack.
  * \pre s!=NULL
  * \pre s is not full
  * \post s->size == s->size+1
