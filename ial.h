@@ -20,7 +20,7 @@
 #define MAX(a,b) ((a)   > (b) ? (a) : (b))
 
 /** */
-#define AlphabetArray 256
+#define ALPHABET_ARRAY 256
 
 /**
  * Function returns length of 0 terminated string.
@@ -55,19 +55,21 @@ char * substring(char * s, int i, int n);
 char * shellsort(char * str);
 
 /**
- * [find description]
- * @param  s      [description]
- * @param  search [description]
- * @return        [description]
+ * Finds substring in given string.
+ * Function uses Boyer-Moore string algorithm.
+ * @param  s      text
+ * @param  search patent
+ * @return        index where substring is found, -1 if substring is not found.
  */
 int find( char *s,  char *search);
 
 /**
- * [computeJumps description]
- * @param string   [description]
- * @param badchar[AlphabetArray] [description]
+ * Preprocessing for find.
+ * Fill the bad character array by given pattern
+ * @param string   pattern
+ * @param badchar[AlphabetArray] alphabet array of integers
  */
-void computeJumps( char *string, int badchar[AlphabetArray]);
+void computeJumps( char *string, int badchar[ALPHABET_ARRAY]);
 
 /**  \struct t_stack_int
  * \brief Structure for stack of integers
