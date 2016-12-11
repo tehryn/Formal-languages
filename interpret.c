@@ -1206,6 +1206,15 @@ token *do_expression(token *postfix_array, stack_htab *I_Htable,struct stack_exp
 				
 				break;
 			
+			case S_NOT:
+				stack_expression_pop(S,&tmp1);
+				if(tmp1.id==S_TRUE)
+					tmp1.id=S_FALSE;
+				else 
+					tmp1.id=S_TRUE;
+				
+				stack_expression_push(S,tmp1);	
+				break;
 			case S_EQUAL:
 			
 				stack_expression_pop(S,&tmp2);
