@@ -80,12 +80,12 @@ int analysis(stack_int_t *s, unsigned runtime, stack_htab Stack_of_TableSymbols,
 /**
  * Skip expresions (used in first call of function analusis)
  * @param  t
- * @return   [description]
+ * @return   on succes return 0, otherwise returns some error code
  */
 int skip_expr(token * t);
 
 /**
- * [token_wanted description]
+ * Tells there is valid token in expresion
  * @param  t First token in expresion
  * @return   In case of succes returns 0, otherwise return some error code
  */
