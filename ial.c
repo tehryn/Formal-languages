@@ -50,7 +50,7 @@ char * substring(char * s, int i, int n)
     for ( j=0; j<n; j++)
         string[j]=s[j+i];
 
-    string[j+1]='\0';
+    string[j]='\0';
     return string;
 }
 
