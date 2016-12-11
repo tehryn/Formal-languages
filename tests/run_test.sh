@@ -78,7 +78,7 @@ done
 
 for file in ./tests/valid_input/auto/*.java
 do
-	./IFJ16 $file
+	./IFJ16 $file >tmp.txt 2>&1
 	ret=$?
 	if [[ $ret == 0 ]]; then
 		echo -e "${GREEN}$file: SUCCES - interpret returned with $ret${NC}"
