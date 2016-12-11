@@ -1,5 +1,5 @@
 /**
- * \file   expression.h
+ * \file   interpret.h
  * \author Nemanja Vasiljevic, xvasil03
  * \date   11.12.2016
  * \brief  Documentation for interpret processing
