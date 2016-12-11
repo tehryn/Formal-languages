@@ -478,6 +478,10 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 				FATAL_ERROR("EXPRESSION: Unknown symbol definition. 39\n", ERR_SEM_NDEF_REDEF);
 			}
+			
+			
+			if (string_rquired == 1 && ident_type!=TYPE_STRING && ident_type!=S_STRING)
+				FATAL_ERROR("EXPRESSION: Invalid operand data type. 9.5\n", ERR_SEM_COMPATIBILITY);
 
 			if ( bool_operation>=2 && ident_type!=TYPE_BOOLEAN && ident_type!=S_BOOLEAN )
 				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 39.1\n", ERR_SEM_COMPATIBILITY);
@@ -544,7 +548,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
 	
 //	if (end_token==S_SEMICOMMA)
-//		print_token_array( *postfix_token_array, 0);
+	//	print_token_array( *postfix_token_array, 0);
 
 	if(ma1[0]!=NULL) free(ma1[0]);
 	if(ma1[1]!=NULL) free(ma1[1]);
