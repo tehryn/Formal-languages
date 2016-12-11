@@ -1,0 +1,629 @@
+\begin{theindex}
+
+  \item {A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}
+    \subitem {Functions for string processing}, \hyperpage{20}
+  \item {A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}
+    \subitem {Structures}, \hyperpage{44}
+  \item {A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}
+    \subitem {Structures}, \hyperpage{44}
+  \item {Add\+\_\+\+Instr}
+    \subitem {Interpret processing}, \hyperpage{30}
+  \item {argument\+\_\+index}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+  \item {array\+\_\+htab}, \hyperpage{51}
+    \subitem {data}, \hyperpage{51}
+    \subitem {idx}, \hyperpage{51}
+    \subitem {size}, \hyperpage{51}
+    \subitem {Structures}, \hyperpage{44}
+  \item {array\+\_\+htab\+\_\+destroy}
+    \subitem {Structures}, \hyperpage{44}
+  \item {array\+\_\+htab\+\_\+get\+\_\+item}
+    \subitem {Structures}, \hyperpage{46}
+  \item {array\+\_\+htab\+\_\+init}
+    \subitem {Structures}, \hyperpage{46}
+  \item {array\+\_\+htab\+\_\+insert}
+    \subitem {Structures}, \hyperpage{46}
+  \item {array\+\_\+string}, \hyperpage{51}
+    \subitem {data}, \hyperpage{52}
+    \subitem {idx}, \hyperpage{52}
+    \subitem {size}, \hyperpage{52}
+    \subitem {Structures}, \hyperpage{44}
+  \item {array\+\_\+string\+\_\+destroy}
+    \subitem {Structures}, \hyperpage{46}
+  \item {array\+\_\+string\+\_\+find}
+    \subitem {Structures}, \hyperpage{47}
+  \item {array\+\_\+string\+\_\+init}
+    \subitem {Structures}, \hyperpage{47}
+  \item {array\+\_\+string\+\_\+insert}
+    \subitem {Structures}, \hyperpage{47}
+
+  \indexspace
+
+  \item {B\+L\+O\+C\+K\+\_\+\+C\+O\+M\+M\+E\+N\+T}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {bin2dec}
+    \subitem {Lexical analysis}, \hyperpage{37}
+
+  \indexspace
+
+  \item {compute\+Jumps}
+    \subitem {Functions for string processing}, \hyperpage{20}
+  \item {Conc\+\_\+\+Str}
+    \subitem {Interpret processing}, \hyperpage{31}
+
+  \indexspace
+
+  \item {data}
+    \subitem {array\+\_\+htab}, \hyperpage{51}
+    \subitem {array\+\_\+string}, \hyperpage{52}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+    \subitem {stack\+\_\+htab}, \hyperpage{57}
+    \subitem {stack\+\_\+instr}, \hyperpage{57}
+    \subitem {t\+\_\+stack\+\_\+int}, \hyperpage{58}
+  \item {data\+\_\+type}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+  \item {do\+\_\+expression}
+    \subitem {Interpret processing}, \hyperpage{31}
+  \item {Double\+To\+String}
+    \subitem {Interpret processing}, \hyperpage{31}
+
+  \indexspace
+
+  \item {E\+R\+R\+\_\+\+W\+A\+R\+N\+I\+N\+G}
+    \subitem {Expression processing}, \hyperpage{10}
+  \item {embedded\+\_\+functions.\+h}, \hyperpage{61}
+  \item {Embeded functions}, \hyperpage{7}
+    \subitem {read\+Double}, \hyperpage{7}
+    \subitem {read\+Int}, \hyperpage{7}
+    \subitem {read\+String}, \hyperpage{7}
+  \item {expr\+\_\+analyze}
+    \subitem {Expression processing}, \hyperpage{10}
+  \item {Expression processing}, \hyperpage{9}
+    \subitem {E\+R\+R\+\_\+\+W\+A\+R\+N\+I\+N\+G}, \hyperpage{10}
+    \subitem {expr\+\_\+analyze}, \hyperpage{10}
+    \subitem {F\+A\+T\+A\+L\+\_\+\+E\+R\+R\+O\+R}, \hyperpage{10}
+    \subitem {operator\+\_\+priority}, \hyperpage{11}
+    \subitem {print\+\_\+token}, \hyperpage{11}
+    \subitem {print\+\_\+token\+\_\+array}, \hyperpage{12}
+    \subitem {S\+T\+R\+D\+U\+P}, \hyperpage{10}
+    \subitem {stack\+\_\+expression\+\_\+destroy}, \hyperpage{12}
+    \subitem {stack\+\_\+expression\+\_\+empty}, \hyperpage{12}
+    \subitem {stack\+\_\+expression\+\_\+full}, \hyperpage{12}
+    \subitem {stack\+\_\+expression\+\_\+init}, \hyperpage{13}
+    \subitem {stack\+\_\+expression\+\_\+pop}, \hyperpage{13}
+    \subitem {stack\+\_\+expression\+\_\+push}, \hyperpage{13}
+    \subitem {stack\+\_\+expression\+\_\+top}, \hyperpage{15}
+    \subitem {type\+\_\+name\+\_\+convertion}, \hyperpage{15}
+    \subitem {type\+\_\+priority}, \hyperpage{15}
+  \item {expression.\+h}, \hyperpage{61}
+
+  \indexspace
+
+  \item {F\+A\+T\+A\+L\+\_\+\+E\+R\+R\+O\+R}
+    \subitem {Expression processing}, \hyperpage{10}
+  \item {find}
+    \subitem {Functions for string processing}, \hyperpage{20}
+  \item {first}
+    \subitem {mem\+\_\+list\+\_\+t}, \hyperpage{56}
+  \item {free\+\_\+memory}
+    \subitem {Garbage collector}, \hyperpage{17}
+  \item {func\+\_\+or\+\_\+var}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+  \item {Functions for string processing}, \hyperpage{20}
+    \subitem {A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}, 
+		\hyperpage{20}
+    \subitem {compute\+Jumps}, \hyperpage{20}
+    \subitem {find}, \hyperpage{20}
+    \subitem {length}, \hyperpage{21}
+    \subitem {M\+A\+X}, \hyperpage{20}
+    \subitem {shellsort}, \hyperpage{21}
+    \subitem {substring}, \hyperpage{21}
+
+  \indexspace
+
+  \item {G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}
+    \subitem {Garbage collector}, \hyperpage{19}
+  \item {Garbage collector}, \hyperpage{17}
+    \subitem {free\+\_\+memory}, \hyperpage{17}
+    \subitem {G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}, 
+		\hyperpage{19}
+    \subitem {mem\+\_\+alloc}, \hyperpage{17}
+    \subitem {mem\+\_\+item\+\_\+t}, \hyperpage{17}
+    \subitem {mem\+\_\+list\+\_\+t}, \hyperpage{17}
+    \subitem {mem\+\_\+realloc}, \hyperpage{19}
+  \item {get\+\_\+token}
+    \subitem {Lexical analysis}, \hyperpage{38}
+
+  \indexspace
+
+  \item {Hash table}, \hyperpage{26}
+    \subitem {htab\+\_\+clear\+\_\+items}, \hyperpage{26}
+    \subitem {htab\+\_\+copy}, \hyperpage{26}
+    \subitem {htab\+\_\+find\+\_\+item}, \hyperpage{27}
+    \subitem {htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index}, 
+		\hyperpage{27}
+    \subitem {htab\+\_\+free\+\_\+all}, \hyperpage{27}
+    \subitem {htab\+\_\+init}, \hyperpage{27}
+    \subitem {htab\+\_\+init2}, \hyperpage{27}
+    \subitem {htab\+\_\+insert\+\_\+item}, \hyperpage{29}
+    \subitem {htab\+\_\+item}, \hyperpage{26}
+    \subitem {htab\+\_\+t}, \hyperpage{26}
+  \item {hash\+\_\+fun\+\_\+ptr}
+    \subitem {htab\+\_\+t}, \hyperpage{54}
+  \item {hex2dec\+\_\+double}
+    \subitem {Lexical analysis}, \hyperpage{38}
+  \item {hex2dec\+\_\+int}
+    \subitem {Lexical analysis}, \hyperpage{38}
+  \item {htab\+\_\+clear\+\_\+items}
+    \subitem {Hash table}, \hyperpage{26}
+  \item {htab\+\_\+copy}
+    \subitem {Hash table}, \hyperpage{26}
+  \item {htab\+\_\+find\+\_\+item}
+    \subitem {Hash table}, \hyperpage{27}
+  \item {htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index}
+    \subitem {Hash table}, \hyperpage{27}
+  \item {htab\+\_\+free\+\_\+all}
+    \subitem {Hash table}, \hyperpage{27}
+  \item {htab\+\_\+init}
+    \subitem {Hash table}, \hyperpage{27}
+  \item {htab\+\_\+init2}
+    \subitem {Hash table}, \hyperpage{27}
+  \item {htab\+\_\+insert\+\_\+item}
+    \subitem {Hash table}, \hyperpage{29}
+  \item {htab\+\_\+item}, \hyperpage{52}
+    \subitem {argument\+\_\+index}, \hyperpage{53}
+    \subitem {data}, \hyperpage{53}
+    \subitem {data\+\_\+type}, \hyperpage{53}
+    \subitem {func\+\_\+or\+\_\+var}, \hyperpage{53}
+    \subitem {Hash table}, \hyperpage{26}
+    \subitem {initialized}, \hyperpage{53}
+    \subitem {instruction\+\_\+tape}, \hyperpage{53}
+    \subitem {key}, \hyperpage{53}
+    \subitem {local\+\_\+table}, \hyperpage{53}
+    \subitem {next\+\_\+item}, \hyperpage{53}
+    \subitem {number\+\_\+of\+\_\+arguments}, \hyperpage{53}
+  \item {htab\+\_\+size}
+    \subitem {htab\+\_\+t}, \hyperpage{54}
+  \item {htab\+\_\+t}, \hyperpage{53}
+    \subitem {Hash table}, \hyperpage{26}
+    \subitem {hash\+\_\+fun\+\_\+ptr}, \hyperpage{54}
+    \subitem {htab\+\_\+size}, \hyperpage{54}
+    \subitem {number\+\_\+items}, \hyperpage{54}
+    \subitem {ptr}, \hyperpage{54}
+
+  \indexspace
+
+  \item {I\+\_\+\+Instr}, \hyperpage{54}
+  \item {id}
+    \subitem {token}, \hyperpage{59}
+  \item {idx}
+    \subitem {array\+\_\+htab}, \hyperpage{51}
+    \subitem {array\+\_\+string}, \hyperpage{52}
+  \item {initialized}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+  \item {Instr\+\_\+\+List}, \hyperpage{55}
+  \item {instruction\+\_\+tape}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+  \item {Int\+To\+String}
+    \subitem {Interpret processing}, \hyperpage{33}
+  \item {inter}
+    \subitem {Interpret processing}, \hyperpage{32}
+  \item {inter\+\_\+arm\+\_\+op}
+    \subitem {Interpret processing}, \hyperpage{32}
+  \item {inter\+\_\+bool\+\_\+op}
+    \subitem {Interpret processing}, \hyperpage{32}
+  \item {inter\+\_\+plus}
+    \subitem {Interpret processing}, \hyperpage{33}
+  \item {Interpret processing}, \hyperpage{30}
+    \subitem {Add\+\_\+\+Instr}, \hyperpage{30}
+    \subitem {Conc\+\_\+\+Str}, \hyperpage{31}
+    \subitem {do\+\_\+expression}, \hyperpage{31}
+    \subitem {Double\+To\+String}, \hyperpage{31}
+    \subitem {Int\+To\+String}, \hyperpage{33}
+    \subitem {inter}, \hyperpage{32}
+    \subitem {inter\+\_\+arm\+\_\+op}, \hyperpage{32}
+    \subitem {inter\+\_\+bool\+\_\+op}, \hyperpage{32}
+    \subitem {inter\+\_\+plus}, \hyperpage{33}
+    \subitem {stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item}, 
+		\hyperpage{33}
+  \item {interpret.\+h}, \hyperpage{63}
+  \item {is\+\_\+full\+\_\+ident}
+    \subitem {Lexical analysis}, \hyperpage{38}
+  \item {is\+\_\+keyword}
+    \subitem {Lexical analysis}, \hyperpage{38}
+  \item {is\+\_\+num\+\_\+literal}
+    \subitem {Lexical analysis}, \hyperpage{40}
+  \item {is\+\_\+simple\+\_\+ident}
+    \subitem {Lexical analysis}, \hyperpage{40}
+  \item {is\+\_\+special\+\_\+char}
+    \subitem {Lexical analysis}, \hyperpage{40}
+
+  \indexspace
+
+  \item {key}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+
+  \indexspace
+
+  \item {L\+I\+N\+E\+\_\+\+C\+O\+M\+M\+E\+N\+T}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {last}
+    \subitem {mem\+\_\+list\+\_\+t}, \hyperpage{56}
+  \item {length}
+    \subitem {Functions for string processing}, \hyperpage{21}
+  \item {Lexical analysis}, \hyperpage{35}
+    \subitem {B\+L\+O\+C\+K\+\_\+\+C\+O\+M\+M\+E\+N\+T}, \hyperpage{37}
+    \subitem {bin2dec}, \hyperpage{37}
+    \subitem {get\+\_\+token}, \hyperpage{38}
+    \subitem {hex2dec\+\_\+double}, \hyperpage{38}
+    \subitem {hex2dec\+\_\+int}, \hyperpage{38}
+    \subitem {is\+\_\+full\+\_\+ident}, \hyperpage{38}
+    \subitem {is\+\_\+keyword}, \hyperpage{38}
+    \subitem {is\+\_\+num\+\_\+literal}, \hyperpage{40}
+    \subitem {is\+\_\+simple\+\_\+ident}, \hyperpage{40}
+    \subitem {is\+\_\+special\+\_\+char}, \hyperpage{40}
+    \subitem {L\+I\+N\+E\+\_\+\+C\+O\+M\+M\+E\+N\+T}, \hyperpage{37}
+    \subitem {load\+\_\+string}, \hyperpage{41}
+    \subitem {make\+\_\+power}, \hyperpage{41}
+    \subitem {octal2dec}, \hyperpage{41}
+    \subitem {repair\+\_\+num}, \hyperpage{42}
+    \subitem {reset\+\_\+scanner}, \hyperpage{36}
+    \subitem {S\+\_\+\+A\+N\+D}, \hyperpage{37}
+    \subitem {S\+\_\+\+A\+S\+S\+I\+G\+N\+M\+E\+N\+T}, \hyperpage{37}
+    \subitem {S\+\_\+\+B\+O\+O\+L\+E\+A\+N}, \hyperpage{36}
+    \subitem {S\+\_\+\+B\+R\+E\+A\+K}, \hyperpage{36}
+    \subitem {S\+\_\+\+C\+L\+A\+S\+S}, \hyperpage{36}
+    \subitem {S\+\_\+\+C\+O\+M\+M\+A}, \hyperpage{37}
+    \subitem {S\+\_\+\+C\+O\+N\+T\+I\+N\+U\+E}, \hyperpage{36}
+    \subitem {S\+\_\+\+D\+I\+V}, \hyperpage{37}
+    \subitem {S\+\_\+\+D\+O}, \hyperpage{36}
+    \subitem {S\+\_\+\+D\+O\+U\+B\+L\+E}, \hyperpage{36}
+    \subitem {S\+\_\+\+E\+L\+S\+E}, \hyperpage{36}
+    \subitem {S\+\_\+\+E\+O\+F}, \hyperpage{37}
+    \subitem {S\+\_\+\+E\+Q\+U\+A\+L}, \hyperpage{37}
+    \subitem {S\+\_\+\+F\+A\+L\+S\+E}, \hyperpage{36}
+    \subitem {S\+\_\+\+F\+O\+R}, \hyperpage{36}
+    \subitem {S\+\_\+\+F\+U\+L\+L\+\_\+\+I\+D\+E\+N\+T}, \hyperpage{37}
+    \subitem {S\+\_\+\+G\+R\+E\+A\+T\+E\+R}, \hyperpage{37}
+    \subitem {S\+\_\+\+G\+R\+E\+A\+T\+E\+R\+\_\+\+E\+Q\+U\+A\+L}, 
+		\hyperpage{37}
+    \subitem {S\+\_\+\+I\+F}, \hyperpage{37}
+    \subitem {S\+\_\+\+I\+N\+T}, \hyperpage{37}
+    \subitem {S\+\_\+\+L\+E\+F\+T\+\_\+\+B\+R\+A\+C\+E}, \hyperpage{37}
+    \subitem {S\+\_\+\+L\+E\+F\+T\+\_\+\+P\+A\+R\+E}, \hyperpage{37}
+    \subitem {S\+\_\+\+L\+E\+S\+S}, \hyperpage{37}
+    \subitem {S\+\_\+\+L\+E\+S\+S\+\_\+\+E\+Q\+U\+A\+L}, \hyperpage{37}
+    \subitem {S\+\_\+\+M\+I\+N\+U\+S}, \hyperpage{37}
+    \subitem {S\+\_\+\+M\+U\+L}, \hyperpage{37}
+    \subitem {S\+\_\+\+N\+O\+T}, \hyperpage{37}
+    \subitem {S\+\_\+\+N\+O\+T\+\_\+\+E\+Q\+U\+A\+L}, \hyperpage{37}
+    \subitem {S\+\_\+\+O\+R}, \hyperpage{37}
+    \subitem {S\+\_\+\+P\+L\+U\+S}, \hyperpage{37}
+    \subitem {S\+\_\+\+R\+E\+T\+U\+R\+N}, \hyperpage{37}
+    \subitem {S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+B\+R\+A\+C\+E}, 
+		\hyperpage{37}
+    \subitem {S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+P\+A\+R\+E}, \hyperpage{37}
+    \subitem {S\+\_\+\+S\+E\+M\+I\+C\+O\+M\+M\+A}, \hyperpage{37}
+    \subitem {S\+\_\+\+S\+I\+M\+P\+L\+E\+\_\+\+I\+D\+E\+N\+T}, 
+		\hyperpage{37}
+    \subitem {S\+\_\+\+S\+I\+Z\+E}, \hyperpage{36}
+    \subitem {S\+\_\+\+S\+T\+A\+T\+I\+C}, \hyperpage{37}
+    \subitem {S\+\_\+\+S\+T\+R\+I\+N\+G}, \hyperpage{37}
+    \subitem {S\+\_\+\+T\+R\+U\+E}, \hyperpage{37}
+    \subitem {S\+\_\+\+V\+O\+I\+D}, \hyperpage{37}
+    \subitem {S\+\_\+\+W\+H\+I\+L\+E}, \hyperpage{37}
+    \subitem {S\+P\+E\+C\+\_\+\+C\+H\+A\+R\+\_\+\+F\+S\+E\+E\+K}, 
+		\hyperpage{36}
+    \subitem {skip\+\_\+comment}, \hyperpage{42}
+    \subitem {str2num}, \hyperpage{42}
+    \subitem {T\+Y\+P\+E\+\_\+\+B\+O\+O\+L\+E\+A\+N}, \hyperpage{37}
+    \subitem {T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E}, \hyperpage{37}
+    \subitem {T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+H\+E\+X}, 
+		\hyperpage{37}
+    \subitem {T\+Y\+P\+E\+\_\+\+I\+N\+T}, \hyperpage{37}
+    \subitem {T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+B\+I\+N}, \hyperpage{37}
+    \subitem {T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+H\+E\+X}, \hyperpage{37}
+    \subitem {T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+O\+C\+T\+A\+L}, 
+		\hyperpage{37}
+    \subitem {T\+Y\+P\+E\+\_\+\+S\+T\+R\+I\+N\+G}, \hyperpage{37}
+    \subitem {token}, \hyperpage{36}
+  \item {load\+\_\+string}
+    \subitem {Lexical analysis}, \hyperpage{41}
+  \item {local\+\_\+table}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+
+  \indexspace
+
+  \item {M\+A\+X}
+    \subitem {Functions for string processing}, \hyperpage{20}
+  \item {make\+\_\+power}
+    \subitem {Lexical analysis}, \hyperpage{41}
+  \item {mem\+\_\+alloc}
+    \subitem {Garbage collector}, \hyperpage{17}
+  \item {mem\+\_\+item\+\_\+t}, \hyperpage{55}
+    \subitem {Garbage collector}, \hyperpage{17}
+    \subitem {next}, \hyperpage{55}
+    \subitem {ptr}, \hyperpage{55}
+  \item {mem\+\_\+list\+\_\+t}, \hyperpage{55}
+    \subitem {first}, \hyperpage{56}
+    \subitem {Garbage collector}, \hyperpage{17}
+    \subitem {last}, \hyperpage{56}
+  \item {mem\+\_\+realloc}
+    \subitem {Garbage collector}, \hyperpage{19}
+
+  \indexspace
+
+  \item {next}
+    \subitem {mem\+\_\+item\+\_\+t}, \hyperpage{55}
+  \item {next\+\_\+item}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+  \item {number\+\_\+items}
+    \subitem {htab\+\_\+t}, \hyperpage{54}
+  \item {number\+\_\+of\+\_\+arguments}
+    \subitem {htab\+\_\+item}, \hyperpage{53}
+
+  \indexspace
+
+  \item {octal2dec}
+    \subitem {Lexical analysis}, \hyperpage{41}
+  \item {operator\+\_\+priority}
+    \subitem {Expression processing}, \hyperpage{11}
+
+  \indexspace
+
+  \item {print\+\_\+token}
+    \subitem {Expression processing}, \hyperpage{11}
+  \item {print\+\_\+token\+\_\+array}
+    \subitem {Expression processing}, \hyperpage{12}
+  \item {ptr}
+    \subitem {htab\+\_\+t}, \hyperpage{54}
+    \subitem {mem\+\_\+item\+\_\+t}, \hyperpage{55}
+    \subitem {token}, \hyperpage{59}
+
+  \indexspace
+
+  \item {read\+Double}
+    \subitem {Embeded functions}, \hyperpage{7}
+  \item {read\+Int}
+    \subitem {Embeded functions}, \hyperpage{7}
+  \item {read\+String}
+    \subitem {Embeded functions}, \hyperpage{7}
+  \item {repair\+\_\+num}
+    \subitem {Lexical analysis}, \hyperpage{42}
+  \item {reset\+\_\+scanner}
+    \subitem {Lexical analysis}, \hyperpage{36}
+
+  \indexspace
+
+  \item {S\+\_\+\+A\+N\+D}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+A\+S\+S\+I\+G\+N\+M\+E\+N\+T}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+B\+O\+O\+L\+E\+A\+N}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+B\+R\+E\+A\+K}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+C\+L\+A\+S\+S}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+C\+O\+M\+M\+A}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+C\+O\+N\+T\+I\+N\+U\+E}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+D\+I\+V}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+D\+O}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+D\+O\+U\+B\+L\+E}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+E\+L\+S\+E}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+E\+O\+F}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+E\+Q\+U\+A\+L}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+F\+A\+L\+S\+E}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+F\+O\+R}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+F\+U\+L\+L\+\_\+\+I\+D\+E\+N\+T}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+G\+R\+E\+A\+T\+E\+R}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+G\+R\+E\+A\+T\+E\+R\+\_\+\+E\+Q\+U\+A\+L}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+I\+F}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+I\+N\+T}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+L\+E\+F\+T\+\_\+\+B\+R\+A\+C\+E}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+L\+E\+F\+T\+\_\+\+P\+A\+R\+E}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+L\+E\+S\+S}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+L\+E\+S\+S\+\_\+\+E\+Q\+U\+A\+L}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+M\+I\+N\+U\+S}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+M\+U\+L}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+N\+O\+T}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+N\+O\+T\+\_\+\+E\+Q\+U\+A\+L}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+O\+R}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+P\+L\+U\+S}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+R\+E\+T\+U\+R\+N}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+B\+R\+A\+C\+E}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+P\+A\+R\+E}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+S\+E\+M\+I\+C\+O\+M\+M\+A}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+S\+I\+M\+P\+L\+E\+\_\+\+I\+D\+E\+N\+T}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+S\+I\+Z\+E}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+\_\+\+S\+T\+A\+T\+I\+C}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+S\+T\+R\+I\+N\+G}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+T\+R\+U\+E}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+V\+O\+I\+D}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+\_\+\+W\+H\+I\+L\+E}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {S\+P\+E\+C\+\_\+\+C\+H\+A\+R\+\_\+\+F\+S\+E\+E\+K}
+    \subitem {Lexical analysis}, \hyperpage{36}
+  \item {S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}
+    \subitem {Structures}, \hyperpage{44}
+  \item {S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}
+    \subitem {Structures}, \hyperpage{44}
+  \item {S\+T\+R\+D\+U\+P}
+    \subitem {Expression processing}, \hyperpage{10}
+  \item {shellsort}
+    \subitem {Functions for string processing}, \hyperpage{21}
+  \item {size}
+    \subitem {array\+\_\+htab}, \hyperpage{51}
+    \subitem {array\+\_\+string}, \hyperpage{52}
+    \subitem {stack\+\_\+htab}, \hyperpage{57}
+    \subitem {stack\+\_\+instr}, \hyperpage{57}
+    \subitem {t\+\_\+stack\+\_\+int}, \hyperpage{58}
+  \item {skip\+\_\+comment}
+    \subitem {Lexical analysis}, \hyperpage{42}
+  \item {Stack of integers}, \hyperpage{23}
+    \subitem {stack\+\_\+int\+\_\+clean}, \hyperpage{23}
+    \subitem {stack\+\_\+int\+\_\+create}, \hyperpage{23}
+    \subitem {stack\+\_\+int\+\_\+destroy}, \hyperpage{24}
+    \subitem {stack\+\_\+int\+\_\+is\+\_\+empty}, \hyperpage{24}
+    \subitem {stack\+\_\+int\+\_\+is\+\_\+full}, \hyperpage{24}
+    \subitem {stack\+\_\+int\+\_\+pop}, \hyperpage{24}
+    \subitem {stack\+\_\+int\+\_\+push}, \hyperpage{25}
+    \subitem {stack\+\_\+int\+\_\+top}, \hyperpage{25}
+  \item {stack\+\_\+expresion}, \hyperpage{56}
+  \item {stack\+\_\+expression\+\_\+destroy}
+    \subitem {Expression processing}, \hyperpage{12}
+  \item {stack\+\_\+expression\+\_\+empty}
+    \subitem {Expression processing}, \hyperpage{12}
+  \item {stack\+\_\+expression\+\_\+full}
+    \subitem {Expression processing}, \hyperpage{12}
+  \item {stack\+\_\+expression\+\_\+init}
+    \subitem {Expression processing}, \hyperpage{13}
+  \item {stack\+\_\+expression\+\_\+pop}
+    \subitem {Expression processing}, \hyperpage{13}
+  \item {stack\+\_\+expression\+\_\+push}
+    \subitem {Expression processing}, \hyperpage{13}
+  \item {stack\+\_\+expression\+\_\+top}
+    \subitem {Expression processing}, \hyperpage{15}
+  \item {stack\+\_\+htab}, \hyperpage{56}
+    \subitem {data}, \hyperpage{57}
+    \subitem {size}, \hyperpage{57}
+    \subitem {Structures}, \hyperpage{44}
+    \subitem {top}, \hyperpage{57}
+  \item {stack\+\_\+htab\+\_\+destroy}
+    \subitem {Structures}, \hyperpage{47}
+  \item {stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item}
+    \subitem {Interpret processing}, \hyperpage{33}
+  \item {stack\+\_\+htab\+\_\+get\+\_\+first}
+    \subitem {Structures}, \hyperpage{49}
+  \item {stack\+\_\+htab\+\_\+get\+\_\+item}
+    \subitem {Structures}, \hyperpage{49}
+  \item {stack\+\_\+htab\+\_\+init}
+    \subitem {Structures}, \hyperpage{49}
+  \item {stack\+\_\+htab\+\_\+pop}
+    \subitem {Structures}, \hyperpage{49}
+  \item {stack\+\_\+htab\+\_\+push}
+    \subitem {Structures}, \hyperpage{50}
+  \item {stack\+\_\+instr}, \hyperpage{57}
+    \subitem {data}, \hyperpage{57}
+    \subitem {size}, \hyperpage{57}
+    \subitem {Structures}, \hyperpage{44}
+    \subitem {top}, \hyperpage{57}
+  \item {stack\+\_\+int\+\_\+clean}
+    \subitem {Stack of integers}, \hyperpage{23}
+  \item {stack\+\_\+int\+\_\+create}
+    \subitem {Stack of integers}, \hyperpage{23}
+  \item {stack\+\_\+int\+\_\+destroy}
+    \subitem {Stack of integers}, \hyperpage{24}
+  \item {stack\+\_\+int\+\_\+is\+\_\+empty}
+    \subitem {Stack of integers}, \hyperpage{24}
+  \item {stack\+\_\+int\+\_\+is\+\_\+full}
+    \subitem {Stack of integers}, \hyperpage{24}
+  \item {stack\+\_\+int\+\_\+pop}
+    \subitem {Stack of integers}, \hyperpage{24}
+  \item {stack\+\_\+int\+\_\+push}
+    \subitem {Stack of integers}, \hyperpage{25}
+  \item {stack\+\_\+int\+\_\+top}
+    \subitem {Stack of integers}, \hyperpage{25}
+  \item {str2num}
+    \subitem {Lexical analysis}, \hyperpage{42}
+  \item {Structures}, \hyperpage{43}
+    \subitem {A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}, 
+		\hyperpage{44}
+    \subitem {A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}, 
+		\hyperpage{44}
+    \subitem {array\+\_\+htab}, \hyperpage{44}
+    \subitem {array\+\_\+htab\+\_\+destroy}, \hyperpage{44}
+    \subitem {array\+\_\+htab\+\_\+get\+\_\+item}, \hyperpage{46}
+    \subitem {array\+\_\+htab\+\_\+init}, \hyperpage{46}
+    \subitem {array\+\_\+htab\+\_\+insert}, \hyperpage{46}
+    \subitem {array\+\_\+string}, \hyperpage{44}
+    \subitem {array\+\_\+string\+\_\+destroy}, \hyperpage{46}
+    \subitem {array\+\_\+string\+\_\+find}, \hyperpage{47}
+    \subitem {array\+\_\+string\+\_\+init}, \hyperpage{47}
+    \subitem {array\+\_\+string\+\_\+insert}, \hyperpage{47}
+    \subitem {S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}, 
+		\hyperpage{44}
+    \subitem {S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}, 
+		\hyperpage{44}
+    \subitem {stack\+\_\+htab}, \hyperpage{44}
+    \subitem {stack\+\_\+htab\+\_\+destroy}, \hyperpage{47}
+    \subitem {stack\+\_\+htab\+\_\+get\+\_\+first}, \hyperpage{49}
+    \subitem {stack\+\_\+htab\+\_\+get\+\_\+item}, \hyperpage{49}
+    \subitem {stack\+\_\+htab\+\_\+init}, \hyperpage{49}
+    \subitem {stack\+\_\+htab\+\_\+pop}, \hyperpage{49}
+    \subitem {stack\+\_\+htab\+\_\+push}, \hyperpage{50}
+    \subitem {stack\+\_\+instr}, \hyperpage{44}
+  \item {substring}
+    \subitem {Functions for string processing}, \hyperpage{21}
+
+  \indexspace
+
+  \item {t\+\_\+stack\+\_\+int}, \hyperpage{58}
+    \subitem {data}, \hyperpage{58}
+    \subitem {size}, \hyperpage{58}
+    \subitem {top}, \hyperpage{58}
+  \item {T\+Y\+P\+E\+\_\+\+B\+O\+O\+L\+E\+A\+N}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+H\+E\+X}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {T\+Y\+P\+E\+\_\+\+I\+N\+T}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+B\+I\+N}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+H\+E\+X}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+O\+C\+T\+A\+L}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {T\+Y\+P\+E\+\_\+\+S\+T\+R\+I\+N\+G}
+    \subitem {Lexical analysis}, \hyperpage{37}
+  \item {token}, \hyperpage{58}
+    \subitem {id}, \hyperpage{59}
+    \subitem {Lexical analysis}, \hyperpage{36}
+    \subitem {ptr}, \hyperpage{59}
+  \item {top}
+    \subitem {stack\+\_\+htab}, \hyperpage{57}
+    \subitem {stack\+\_\+instr}, \hyperpage{57}
+    \subitem {t\+\_\+stack\+\_\+int}, \hyperpage{58}
+  \item {type\+\_\+name\+\_\+convertion}
+    \subitem {Expression processing}, \hyperpage{15}
+  \item {type\+\_\+priority}
+    \subitem {Expression processing}, \hyperpage{15}
+
+\end{theindex}

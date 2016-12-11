@@ -1,0 +1,390 @@
+\hypertarget{group__structures}{}\section{Structures}
+\label{group__structures}\index{Structures@{Structures}}
+
+
+Structures is group of structures and functions upon them.  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structI__Instr}{I\+\_\+\+Instr}
+\item 
+struct \hyperlink{structInstr__List}{Instr\+\_\+\+List}
+\item 
+struct \hyperlink{structstack__htab}{stack\+\_\+htab}
+\item 
+struct \hyperlink{structarray__htab}{array\+\_\+htab}
+\item 
+struct \hyperlink{structarray__string}{array\+\_\+string}
+\item 
+struct \hyperlink{structstack__instr}{stack\+\_\+instr}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__structures_gaacafe24c4bd0e04c93bd17e8c669f47a}{S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}~16
+\item 
+\#define \hyperlink{group__structures_ga883c53765dfed4030e94f8f0d06aa126}{A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}~64
+\item 
+\#define \hyperlink{group__structures_ga188b77e9f97cdfd9919e4270f26a5f0f}{A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}~8
+\item 
+\#define \hyperlink{group__structures_ga132b2787e64d54f69abb3d2f6efa5378}{S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}~8
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__structures_gadfc08cf22bec87cfe209d4921155d12d}{}typedef struct \hyperlink{structI__Instr}{I\+\_\+\+Instr} {\bfseries I\+\_\+\+Instr}\label{group__structures_gadfc08cf22bec87cfe209d4921155d12d}
+
+\item 
+\hypertarget{group__structures_ga5045b797aa91051c0510688714632408}{}typedef struct \hyperlink{structInstr__List}{Instr\+\_\+\+List} {\bfseries Instr\+\_\+\+List}\label{group__structures_ga5045b797aa91051c0510688714632408}
+
+\item 
+typedef struct \hyperlink{structstack__htab}{stack\+\_\+htab} \hyperlink{group__structures_ga2942b6731254b98ce39056197f5d171a}{stack\+\_\+htab}
+\item 
+typedef struct \hyperlink{structarray__htab}{array\+\_\+htab} \hyperlink{group__structures_gafa5247cb58c9cbc3aacc8616d3bd3406}{array\+\_\+htab}
+\item 
+typedef struct \hyperlink{structarray__string}{array\+\_\+string} \hyperlink{group__structures_gae454366e089196c48b5339fb91a9c7e4}{array\+\_\+string}
+\item 
+typedef struct \hyperlink{structstack__instr}{stack\+\_\+instr} \hyperlink{group__structures_ga8644786468172a68ec450346ae4d6522}{stack\+\_\+instr}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__structures_gade1063ec3225ad67340e2e8478e09020}{stack\+\_\+htab\+\_\+init} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack)
+\item 
+int \hyperlink{group__structures_gac3515ca766541c1c138b16b9bde589af}{stack\+\_\+htab\+\_\+push} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack, \hyperlink{structhtab__t}{htab\+\_\+t} $\ast$table)
+\item 
+\hyperlink{structhtab__t}{htab\+\_\+t} $\ast$ \hyperlink{group__structures_ga2153cd165d28f12214e1661ffa42f0a5}{stack\+\_\+htab\+\_\+pop} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack)
+\item 
+\hyperlink{structhtab__t}{htab\+\_\+t} $\ast$ \hyperlink{group__structures_gaf791ea14a19e536affdb313d0181c465}{stack\+\_\+htab\+\_\+get\+\_\+item} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack, unsigned bactrack)
+\item 
+\hyperlink{structhtab__t}{htab\+\_\+t} $\ast$ \hyperlink{group__structures_gac4f958bd4a853211be38f7cbab86247e}{stack\+\_\+htab\+\_\+get\+\_\+first} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack)
+\item 
+void \hyperlink{group__structures_ga4e4c99ae118c48d62f64ab5282a96617}{stack\+\_\+htab\+\_\+destroy} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack)
+\item 
+int \hyperlink{group__structures_ga7b5873a1360a6d32b37093f6f82a6962}{array\+\_\+htab\+\_\+init} (\hyperlink{structarray__htab}{array\+\_\+htab} $\ast$array)
+\item 
+int \hyperlink{group__structures_ga309020a95495960a1e5d1474ae372146}{array\+\_\+htab\+\_\+insert} (\hyperlink{structarray__htab}{array\+\_\+htab} $\ast$array, \hyperlink{structhtab__t}{htab\+\_\+t} $\ast$htab)
+\item 
+\hyperlink{structhtab__t}{htab\+\_\+t} $\ast$ \hyperlink{group__structures_ga20e1cf3f284314ec0c9f754e13c88c45}{array\+\_\+htab\+\_\+get\+\_\+item} (\hyperlink{structarray__htab}{array\+\_\+htab} $\ast$array, unsigned idx)
+\item 
+void \hyperlink{group__structures_ga07bc96c68068ad789ad44a84041dfadf}{array\+\_\+htab\+\_\+destroy} (\hyperlink{structarray__htab}{array\+\_\+htab} $\ast$array)
+\item 
+int \hyperlink{group__structures_ga003cb42993ea69300701cbbd424ec9d7}{array\+\_\+string\+\_\+init} (\hyperlink{structarray__string}{array\+\_\+string} $\ast$array)
+\item 
+int \hyperlink{group__structures_ga7d9cf58a02819262c3b5013a0123407a}{array\+\_\+string\+\_\+insert} (\hyperlink{structarray__string}{array\+\_\+string} $\ast$array, const char $\ast$str)
+\item 
+char $\ast$ \hyperlink{group__structures_ga2f60bd4192abb5c7055bd60d27e833f1}{array\+\_\+string\+\_\+find} (\hyperlink{structarray__string}{array\+\_\+string} $\ast$array, const char $\ast$str)
+\item 
+void \hyperlink{group__structures_gafa9efea7fd8eca46fb047e80200447c5}{array\+\_\+string\+\_\+destroy} (\hyperlink{structarray__string}{array\+\_\+string} $\ast$array)
+\item 
+\hypertarget{group__structures_ga3d80fa25c9bfc5c70b1e44df07d8855d}{}int {\bfseries stack\+\_\+instr\+\_\+init} (\hyperlink{structstack__instr}{stack\+\_\+instr} $\ast$stack)\label{group__structures_ga3d80fa25c9bfc5c70b1e44df07d8855d}
+
+\item 
+\hypertarget{group__structures_ga864541f1cb8efc46c86a9bc17389165a}{}int {\bfseries stack\+\_\+instr\+\_\+push} (\hyperlink{structstack__instr}{stack\+\_\+instr} $\ast$stack, \hyperlink{structI__Instr}{I\+\_\+\+Instr} $\ast$instr)\label{group__structures_ga864541f1cb8efc46c86a9bc17389165a}
+
+\item 
+\hypertarget{group__structures_gae6627e4630a7c9c1e9c3d3deb4b600e1}{}\hyperlink{structI__Instr}{I\+\_\+\+Instr} $\ast$ {\bfseries stack\+\_\+instr\+\_\+pop} (\hyperlink{structstack__instr}{stack\+\_\+instr} $\ast$stack)\label{group__structures_gae6627e4630a7c9c1e9c3d3deb4b600e1}
+
+\item 
+\hypertarget{group__structures_ga1708d1d64f1dfce8fa57d0c6e55bc03b}{}void {\bfseries stack\+\_\+instr\+\_\+destroy} (\hyperlink{structstack__instr}{stack\+\_\+instr} $\ast$stack)\label{group__structures_ga1708d1d64f1dfce8fa57d0c6e55bc03b}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Structures is group of structures and functions upon them. 
+
+Author\+: Matejka Jiri ~\newline
+ Login\+: xmatej52 ~\newline
+ School\+: V\+U\+T F\+I\+T, B\+R\+N\+O ~\newline
+ Project\+: Interpret for I\+F\+J16 ~\newline
+ gcc version\+: 5.\+4.\+0 (ubuntu 16.\+04.\+2) ~\newline
+ Date\+: 2016-\/12-\/03 
+
+\subsection{Macro Definition Documentation}
+\hypertarget{group__structures_ga883c53765dfed4030e94f8f0d06aa126}{}\index{Structures@{Structures}!A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}}
+\index{A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}!Structures@{Structures}}
+\subsubsection[{A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E~64}\label{group__structures_ga883c53765dfed4030e94f8f0d06aa126}
+Default size for allocation memory for array of hash tables \hypertarget{group__structures_ga188b77e9f97cdfd9919e4270f26a5f0f}{}\index{Structures@{Structures}!A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}}
+\index{A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}!Structures@{Structures}}
+\subsubsection[{A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E~8}\label{group__structures_ga188b77e9f97cdfd9919e4270f26a5f0f}
+Default size for allocation memory for array of strings \hypertarget{group__structures_gaacafe24c4bd0e04c93bd17e8c669f47a}{}\index{Structures@{Structures}!S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}}
+\index{S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}!Structures@{Structures}}
+\subsubsection[{S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E~16}\label{group__structures_gaacafe24c4bd0e04c93bd17e8c669f47a}
+Default size for allocation memory for Stack of hash tables \hypertarget{group__structures_ga132b2787e64d54f69abb3d2f6efa5378}{}\index{Structures@{Structures}!S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}}
+\index{S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}!Structures@{Structures}}
+\subsubsection[{S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E~8}\label{group__structures_ga132b2787e64d54f69abb3d2f6efa5378}
+Default size for allocation memory of stack of instructions 
+
+\subsection{Typedef Documentation}
+\hypertarget{group__structures_gafa5247cb58c9cbc3aacc8616d3bd3406}{}\index{Structures@{Structures}!array\+\_\+htab@{array\+\_\+htab}}
+\index{array\+\_\+htab@{array\+\_\+htab}!Structures@{Structures}}
+\subsubsection[{array\+\_\+htab}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf array\+\_\+htab}  {\bf array\+\_\+htab}}\label{group__structures_gafa5247cb58c9cbc3aacc8616d3bd3406}
+Array of hash tables \hypertarget{group__structures_gae454366e089196c48b5339fb91a9c7e4}{}\index{Structures@{Structures}!array\+\_\+string@{array\+\_\+string}}
+\index{array\+\_\+string@{array\+\_\+string}!Structures@{Structures}}
+\subsubsection[{array\+\_\+string}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf array\+\_\+string}  {\bf array\+\_\+string}}\label{group__structures_gae454366e089196c48b5339fb91a9c7e4}
+Array of strings \hypertarget{group__structures_ga2942b6731254b98ce39056197f5d171a}{}\index{Structures@{Structures}!stack\+\_\+htab@{stack\+\_\+htab}}
+\index{stack\+\_\+htab@{stack\+\_\+htab}!Structures@{Structures}}
+\subsubsection[{stack\+\_\+htab}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf stack\+\_\+htab}  {\bf stack\+\_\+htab}}\label{group__structures_ga2942b6731254b98ce39056197f5d171a}
+Stack of hash tables \hypertarget{group__structures_ga8644786468172a68ec450346ae4d6522}{}\index{Structures@{Structures}!stack\+\_\+instr@{stack\+\_\+instr}}
+\index{stack\+\_\+instr@{stack\+\_\+instr}!Structures@{Structures}}
+\subsubsection[{stack\+\_\+instr}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf stack\+\_\+instr}  {\bf stack\+\_\+instr}}\label{group__structures_ga8644786468172a68ec450346ae4d6522}
+Stack of instructions 
+
+\subsection{Function Documentation}
+\hypertarget{group__structures_ga07bc96c68068ad789ad44a84041dfadf}{}\index{Structures@{Structures}!array\+\_\+htab\+\_\+destroy@{array\+\_\+htab\+\_\+destroy}}
+\index{array\+\_\+htab\+\_\+destroy@{array\+\_\+htab\+\_\+destroy}!Structures@{Structures}}
+\subsubsection[{array\+\_\+htab\+\_\+destroy}]{\setlength{\rightskip}{0pt plus 5cm}void array\+\_\+htab\+\_\+destroy (
+\begin{DoxyParamCaption}
+\item[{{\bf array\+\_\+htab} $\ast$}]{array}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga07bc96c68068ad789ad44a84041dfadf}
+Free all memory allocated by array and all memory allocated by all hash tables in array 
+\begin{DoxyParams}{Parameters}
+{\em array} & Array that shall be freed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+Array was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_ga20e1cf3f284314ec0c9f754e13c88c45}{}\index{Structures@{Structures}!array\+\_\+htab\+\_\+get\+\_\+item@{array\+\_\+htab\+\_\+get\+\_\+item}}
+\index{array\+\_\+htab\+\_\+get\+\_\+item@{array\+\_\+htab\+\_\+get\+\_\+item}!Structures@{Structures}}
+\subsubsection[{array\+\_\+htab\+\_\+get\+\_\+item}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ array\+\_\+htab\+\_\+get\+\_\+item (
+\begin{DoxyParamCaption}
+\item[{{\bf array\+\_\+htab} $\ast$}]{array, }
+\item[{unsigned}]{idx}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga20e1cf3f284314ec0c9f754e13c88c45}
+Retrive specific item from array 
+\begin{DoxyParams}{Parameters}
+{\em array} & Array with items \\
+\hline
+{\em idx} & Index in array \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to specific item or N\+U\+L\+L if item on index is not initializated 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Array was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_ga7b5873a1360a6d32b37093f6f82a6962}{}\index{Structures@{Structures}!array\+\_\+htab\+\_\+init@{array\+\_\+htab\+\_\+init}}
+\index{array\+\_\+htab\+\_\+init@{array\+\_\+htab\+\_\+init}!Structures@{Structures}}
+\subsubsection[{array\+\_\+htab\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}int array\+\_\+htab\+\_\+init (
+\begin{DoxyParamCaption}
+\item[{{\bf array\+\_\+htab} $\ast$}]{array}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga7b5873a1360a6d32b37093f6f82a6962}
+Initialize array 
+\begin{DoxyParams}{Parameters}
+{\em array} & array for initialization \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, 1 if memory allocation failed 
+\end{DoxyReturn}
+\hypertarget{group__structures_ga309020a95495960a1e5d1474ae372146}{}\index{Structures@{Structures}!array\+\_\+htab\+\_\+insert@{array\+\_\+htab\+\_\+insert}}
+\index{array\+\_\+htab\+\_\+insert@{array\+\_\+htab\+\_\+insert}!Structures@{Structures}}
+\subsubsection[{array\+\_\+htab\+\_\+insert}]{\setlength{\rightskip}{0pt plus 5cm}int array\+\_\+htab\+\_\+insert (
+\begin{DoxyParamCaption}
+\item[{{\bf array\+\_\+htab} $\ast$}]{array, }
+\item[{{\bf htab\+\_\+t} $\ast$}]{htab}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga309020a95495960a1e5d1474ae372146}
+Insert item into array and also reallocate memory if array is full 
+\begin{DoxyParams}{Parameters}
+{\em array} & Array where item will be inserted \\
+\hline
+{\em htab} & Item (pointer to hash table) that will be inserted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on success, 1 when reallocation failed 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Array was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_gafa9efea7fd8eca46fb047e80200447c5}{}\index{Structures@{Structures}!array\+\_\+string\+\_\+destroy@{array\+\_\+string\+\_\+destroy}}
+\index{array\+\_\+string\+\_\+destroy@{array\+\_\+string\+\_\+destroy}!Structures@{Structures}}
+\subsubsection[{array\+\_\+string\+\_\+destroy}]{\setlength{\rightskip}{0pt plus 5cm}void array\+\_\+string\+\_\+destroy (
+\begin{DoxyParamCaption}
+\item[{{\bf array\+\_\+string} $\ast$}]{array}
+\end{DoxyParamCaption}
+)}\label{group__structures_gafa9efea7fd8eca46fb047e80200447c5}
+Free all memory allocated by array 
+\begin{DoxyParams}{Parameters}
+{\em array} & Array that will be freed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+Array was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_ga2f60bd4192abb5c7055bd60d27e833f1}{}\index{Structures@{Structures}!array\+\_\+string\+\_\+find@{array\+\_\+string\+\_\+find}}
+\index{array\+\_\+string\+\_\+find@{array\+\_\+string\+\_\+find}!Structures@{Structures}}
+\subsubsection[{array\+\_\+string\+\_\+find}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ array\+\_\+string\+\_\+find (
+\begin{DoxyParamCaption}
+\item[{{\bf array\+\_\+string} $\ast$}]{array, }
+\item[{const char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga2f60bd4192abb5c7055bd60d27e833f1}
+Find string in array 
+\begin{DoxyParams}{Parameters}
+{\em array} & Array where string will be sought \\
+\hline
+{\em str} & String that will be sought \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+N\+U\+L\+L is string was not found, pointer to string if string was found 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Array was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_ga003cb42993ea69300701cbbd424ec9d7}{}\index{Structures@{Structures}!array\+\_\+string\+\_\+init@{array\+\_\+string\+\_\+init}}
+\index{array\+\_\+string\+\_\+init@{array\+\_\+string\+\_\+init}!Structures@{Structures}}
+\subsubsection[{array\+\_\+string\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}int array\+\_\+string\+\_\+init (
+\begin{DoxyParamCaption}
+\item[{{\bf array\+\_\+string} $\ast$}]{array}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga003cb42993ea69300701cbbd424ec9d7}
+Inicialize new array of strings 
+\begin{DoxyParams}{Parameters}
+{\em array} & array that will be initializated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 in case of success, 1 in case of error in memory allocation 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+input pointer points to allocated space 
+
+Array was inicializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_ga7d9cf58a02819262c3b5013a0123407a}{}\index{Structures@{Structures}!array\+\_\+string\+\_\+insert@{array\+\_\+string\+\_\+insert}}
+\index{array\+\_\+string\+\_\+insert@{array\+\_\+string\+\_\+insert}!Structures@{Structures}}
+\subsubsection[{array\+\_\+string\+\_\+insert}]{\setlength{\rightskip}{0pt plus 5cm}int array\+\_\+string\+\_\+insert (
+\begin{DoxyParamCaption}
+\item[{{\bf array\+\_\+string} $\ast$}]{array, }
+\item[{const char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga7d9cf58a02819262c3b5013a0123407a}
+Make deep copy of string and insert copy into array 
+\begin{DoxyParams}{Parameters}
+{\em array} & array where string will be inserted \\
+\hline
+{\em str} & string that will be copied \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 in case of success, 1 in case of error while allocating memory 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Array was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_ga4e4c99ae118c48d62f64ab5282a96617}{}\index{Structures@{Structures}!stack\+\_\+htab\+\_\+destroy@{stack\+\_\+htab\+\_\+destroy}}
+\index{stack\+\_\+htab\+\_\+destroy@{stack\+\_\+htab\+\_\+destroy}!Structures@{Structures}}
+\subsubsection[{stack\+\_\+htab\+\_\+destroy}]{\setlength{\rightskip}{0pt plus 5cm}void stack\+\_\+htab\+\_\+destroy (
+\begin{DoxyParamCaption}
+\item[{{\bf stack\+\_\+htab} $\ast$}]{stack}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga4e4c99ae118c48d62f64ab5282a96617}
+Free all memory allocated by stack 
+\begin{DoxyParams}{Parameters}
+{\em stack} & Stack that shall be freed \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+Stack was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_gac4f958bd4a853211be38f7cbab86247e}{}\index{Structures@{Structures}!stack\+\_\+htab\+\_\+get\+\_\+first@{stack\+\_\+htab\+\_\+get\+\_\+first}}
+\index{stack\+\_\+htab\+\_\+get\+\_\+first@{stack\+\_\+htab\+\_\+get\+\_\+first}!Structures@{Structures}}
+\subsubsection[{stack\+\_\+htab\+\_\+get\+\_\+first}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ stack\+\_\+htab\+\_\+get\+\_\+first (
+\begin{DoxyParamCaption}
+\item[{{\bf stack\+\_\+htab} $\ast$}]{stack}
+\end{DoxyParamCaption}
+)}\label{group__structures_gac4f958bd4a853211be38f7cbab86247e}
+Return item that is at the bottom of stack 
+\begin{DoxyParams}{Parameters}
+{\em stack} & Stack where item is stored \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Item that is stored on the bottom, N\+U\+L\+L if stack is empty 
+\end{DoxyReturn}
+\hypertarget{group__structures_gaf791ea14a19e536affdb313d0181c465}{}\index{Structures@{Structures}!stack\+\_\+htab\+\_\+get\+\_\+item@{stack\+\_\+htab\+\_\+get\+\_\+item}}
+\index{stack\+\_\+htab\+\_\+get\+\_\+item@{stack\+\_\+htab\+\_\+get\+\_\+item}!Structures@{Structures}}
+\subsubsection[{stack\+\_\+htab\+\_\+get\+\_\+item}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ stack\+\_\+htab\+\_\+get\+\_\+item (
+\begin{DoxyParamCaption}
+\item[{{\bf stack\+\_\+htab} $\ast$}]{stack, }
+\item[{unsigned}]{bactrack}
+\end{DoxyParamCaption}
+)}\label{group__structures_gaf791ea14a19e536affdb313d0181c465}
+Retrive specific item from stack 
+\begin{DoxyParams}{Parameters}
+{\em stack} & Stack with items \\
+\hline
+{\em bactrack} & How far from top item is stored \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to specific item or N\+U\+L\+L if bactrack is too big 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Stack was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_gade1063ec3225ad67340e2e8478e09020}{}\index{Structures@{Structures}!stack\+\_\+htab\+\_\+init@{stack\+\_\+htab\+\_\+init}}
+\index{stack\+\_\+htab\+\_\+init@{stack\+\_\+htab\+\_\+init}!Structures@{Structures}}
+\subsubsection[{stack\+\_\+htab\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+htab\+\_\+init (
+\begin{DoxyParamCaption}
+\item[{{\bf stack\+\_\+htab} $\ast$}]{stack}
+\end{DoxyParamCaption}
+)}\label{group__structures_gade1063ec3225ad67340e2e8478e09020}
+Initialize stack 
+\begin{DoxyParams}{Parameters}
+{\em stack} & Stack for initialization \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on succes, 1 when memory allocation failed 
+\end{DoxyReturn}
+\hypertarget{group__structures_ga2153cd165d28f12214e1661ffa42f0a5}{}\index{Structures@{Structures}!stack\+\_\+htab\+\_\+pop@{stack\+\_\+htab\+\_\+pop}}
+\index{stack\+\_\+htab\+\_\+pop@{stack\+\_\+htab\+\_\+pop}!Structures@{Structures}}
+\subsubsection[{stack\+\_\+htab\+\_\+pop}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ stack\+\_\+htab\+\_\+pop (
+\begin{DoxyParamCaption}
+\item[{{\bf stack\+\_\+htab} $\ast$}]{stack}
+\end{DoxyParamCaption}
+)}\label{group__structures_ga2153cd165d28f12214e1661ffa42f0a5}
+Delete item on top 
+\begin{DoxyParams}{Parameters}
+{\em stack} & Stack where item will be deleted \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to poped table on success if stack is already empty (before pop), return N\+U\+L\+L 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Stack was initializated 
+\end{DoxyPrecond}
+\hypertarget{group__structures_gac3515ca766541c1c138b16b9bde589af}{}\index{Structures@{Structures}!stack\+\_\+htab\+\_\+push@{stack\+\_\+htab\+\_\+push}}
+\index{stack\+\_\+htab\+\_\+push@{stack\+\_\+htab\+\_\+push}!Structures@{Structures}}
+\subsubsection[{stack\+\_\+htab\+\_\+push}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+htab\+\_\+push (
+\begin{DoxyParamCaption}
+\item[{{\bf stack\+\_\+htab} $\ast$}]{stack, }
+\item[{{\bf htab\+\_\+t} $\ast$}]{table}
+\end{DoxyParamCaption}
+)}\label{group__structures_gac3515ca766541c1c138b16b9bde589af}
+Push new item into stack. Reallocate itself if stack is full 
+\begin{DoxyParams}{Parameters}
+{\em stack} & Stack where item will be pushed \\
+\hline
+{\em table} & Pointer to hash table that will be pushed into stack \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+0 on succes 1 if reallocation failed (memory will not be freed) 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Stack was initializated 
+\end{DoxyPrecond}

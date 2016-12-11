@@ -1,0 +1,70 @@
+\hypertarget{structhtab__item}{}\section{htab\+\_\+item Struct Reference}
+\label{structhtab__item}\index{htab\+\_\+item@{htab\+\_\+item}}
+
+
+{\ttfamily \#include $<$ial.\+h$>$}
+
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+char $\ast$ \hyperlink{structhtab__item_a66b265819081d3527ad1941f8bcb09d6}{key}
+\item 
+unsigned \hyperlink{structhtab__item_a884c03e9b59149a95829a71901276a8b}{data\+\_\+type}
+\item 
+unsigned \hyperlink{structhtab__item_a646c1a75cab8e90247c082d080782803}{func\+\_\+or\+\_\+var}
+\item 
+void $\ast$ \hyperlink{structhtab__item_aa1b7ec267e7ba427e04f1c2f36fd12b6}{data}
+\item 
+unsigned \hyperlink{structhtab__item_a7a297ff53beac4e5bd00982369fee710}{initialized}
+\item 
+unsigned \hyperlink{structhtab__item_a3f6b7b1fb06bd1a500375bd68a26685d}{number\+\_\+of\+\_\+arguments}
+\item 
+void $\ast$ \hyperlink{structhtab__item_ab925f22b6d466d9d5c6e3099b79dfb58}{local\+\_\+table}
+\item 
+void $\ast$ \hyperlink{structhtab__item_a88ce186940697b2875ed88bdaca2db12}{instruction\+\_\+tape}
+\item 
+int \hyperlink{structhtab__item_a890983537face39050d82ef9087c12ff}{argument\+\_\+index}
+\item 
+struct \hyperlink{structhtab__item}{htab\+\_\+item} $\ast$ \hyperlink{structhtab__item_a8fe0d8f000c284334b0d939982239030}{next\+\_\+item}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Abstract data type that represents item of hash table 
+
+\subsection{Member Data Documentation}
+\hypertarget{structhtab__item_a890983537face39050d82ef9087c12ff}{}\index{htab\+\_\+item@{htab\+\_\+item}!argument\+\_\+index@{argument\+\_\+index}}
+\index{argument\+\_\+index@{argument\+\_\+index}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{argument\+\_\+index}]{\setlength{\rightskip}{0pt plus 5cm}int htab\+\_\+item\+::argument\+\_\+index}\label{structhtab__item_a890983537face39050d82ef9087c12ff}
+If item is argument of function, it tells which it is argument \hypertarget{structhtab__item_aa1b7ec267e7ba427e04f1c2f36fd12b6}{}\index{htab\+\_\+item@{htab\+\_\+item}!data@{data}}
+\index{data@{data}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{data}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ htab\+\_\+item\+::data}\label{structhtab__item_aa1b7ec267e7ba427e04f1c2f36fd12b6}
+pointer to the place with data, for function it is int$\ast$ (int array of data\+\_\+types of parametres) \hypertarget{structhtab__item_a884c03e9b59149a95829a71901276a8b}{}\index{htab\+\_\+item@{htab\+\_\+item}!data\+\_\+type@{data\+\_\+type}}
+\index{data\+\_\+type@{data\+\_\+type}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{data\+\_\+type}]{\setlength{\rightskip}{0pt plus 5cm}unsigned htab\+\_\+item\+::data\+\_\+type}\label{structhtab__item_a884c03e9b59149a95829a71901276a8b}
+Data type for variable or returns type of function \hypertarget{structhtab__item_a646c1a75cab8e90247c082d080782803}{}\index{htab\+\_\+item@{htab\+\_\+item}!func\+\_\+or\+\_\+var@{func\+\_\+or\+\_\+var}}
+\index{func\+\_\+or\+\_\+var@{func\+\_\+or\+\_\+var}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{func\+\_\+or\+\_\+var}]{\setlength{\rightskip}{0pt plus 5cm}unsigned htab\+\_\+item\+::func\+\_\+or\+\_\+var}\label{structhtab__item_a646c1a75cab8e90247c082d080782803}
+Tells if item represents function or variable (0 -\/ not defined, 1 -\/ variable, 2 -\/ function) \hypertarget{structhtab__item_a7a297ff53beac4e5bd00982369fee710}{}\index{htab\+\_\+item@{htab\+\_\+item}!initialized@{initialized}}
+\index{initialized@{initialized}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{initialized}]{\setlength{\rightskip}{0pt plus 5cm}unsigned htab\+\_\+item\+::initialized}\label{structhtab__item_a7a297ff53beac4e5bd00982369fee710}
+0 -\/ not initialized, 1 -\/ initialized \hypertarget{structhtab__item_a88ce186940697b2875ed88bdaca2db12}{}\index{htab\+\_\+item@{htab\+\_\+item}!instruction\+\_\+tape@{instruction\+\_\+tape}}
+\index{instruction\+\_\+tape@{instruction\+\_\+tape}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{instruction\+\_\+tape}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ htab\+\_\+item\+::instruction\+\_\+tape}\label{structhtab__item_a88ce186940697b2875ed88bdaca2db12}
+Pointer to instruction tabe of function \hypertarget{structhtab__item_a66b265819081d3527ad1941f8bcb09d6}{}\index{htab\+\_\+item@{htab\+\_\+item}!key@{key}}
+\index{key@{key}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{key}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ htab\+\_\+item\+::key}\label{structhtab__item_a66b265819081d3527ad1941f8bcb09d6}
+String I\+D \hypertarget{structhtab__item_ab925f22b6d466d9d5c6e3099b79dfb58}{}\index{htab\+\_\+item@{htab\+\_\+item}!local\+\_\+table@{local\+\_\+table}}
+\index{local\+\_\+table@{local\+\_\+table}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{local\+\_\+table}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ htab\+\_\+item\+::local\+\_\+table}\label{structhtab__item_ab925f22b6d466d9d5c6e3099b79dfb58}
+Pointer to local symbol table \hypertarget{structhtab__item_a8fe0d8f000c284334b0d939982239030}{}\index{htab\+\_\+item@{htab\+\_\+item}!next\+\_\+item@{next\+\_\+item}}
+\index{next\+\_\+item@{next\+\_\+item}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{next\+\_\+item}]{\setlength{\rightskip}{0pt plus 5cm}struct {\bf htab\+\_\+item}$\ast$ htab\+\_\+item\+::next\+\_\+item}\label{structhtab__item_a8fe0d8f000c284334b0d939982239030}
+Pointer to next item \hypertarget{structhtab__item_a3f6b7b1fb06bd1a500375bd68a26685d}{}\index{htab\+\_\+item@{htab\+\_\+item}!number\+\_\+of\+\_\+arguments@{number\+\_\+of\+\_\+arguments}}
+\index{number\+\_\+of\+\_\+arguments@{number\+\_\+of\+\_\+arguments}!htab\+\_\+item@{htab\+\_\+item}}
+\subsubsection[{number\+\_\+of\+\_\+arguments}]{\setlength{\rightskip}{0pt plus 5cm}unsigned htab\+\_\+item\+::number\+\_\+of\+\_\+arguments}\label{structhtab__item_a3f6b7b1fb06bd1a500375bd68a26685d}
+Number of arguments in function 
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+ial.\+h\end{DoxyCompactItemize}

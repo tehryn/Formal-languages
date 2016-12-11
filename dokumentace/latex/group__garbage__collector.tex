@@ -1,0 +1,113 @@
+\hypertarget{group__garbage__collector}{}\section{Garbage collector}
+\label{group__garbage__collector}\index{Garbage collector@{Garbage collector}}
+
+
+Garbage collector is group of functions that allocate memory and store pointers into list to prevent memory leaks.  
+
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structmem__list__t}{mem\+\_\+list\+\_\+t}
+\item 
+struct \hyperlink{structmem__item__t}{mem\+\_\+item\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef struct \hyperlink{structmem__list__t}{mem\+\_\+list\+\_\+t} \hyperlink{group__garbage__collector_ga36b1703faf3c854ab706e2d1565d0675}{mem\+\_\+list\+\_\+t}
+\item 
+typedef struct \hyperlink{structmem__item__t}{mem\+\_\+item\+\_\+t} \hyperlink{group__garbage__collector_ga45f8d443bc7a0cc8c6fd0c12d59626b0}{mem\+\_\+item\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{group__garbage__collector_ga6fbe32445893d321b600470e950ee540}{}void {\bfseries mem\+\_\+list\+\_\+t\+\_\+init} ()\label{group__garbage__collector_ga6fbe32445893d321b600470e950ee540}
+
+\item 
+void $\ast$ \hyperlink{group__garbage__collector_gafc112ff977fb81bd172f5bb58bbcf19a}{mem\+\_\+alloc} (size\+\_\+t size)
+\item 
+void \hyperlink{group__garbage__collector_ga9f81a9a3690fcba7180fa860e0c2422f}{free\+\_\+memory} ()
+\item 
+void $\ast$ \hyperlink{group__garbage__collector_ga5f27a409c8a3e15b2288de524163687b}{mem\+\_\+realloc} (void $\ast$ptr, size\+\_\+t size)
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structmem__list__t}{mem\+\_\+list\+\_\+t} \hyperlink{group__garbage__collector_ga8aa3a6ffdd5d503b42049f17fe0c23a2}{G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Garbage collector is group of functions that allocate memory and store pointers into list to prevent memory leaks. 
+
+
+
+\subsection{Typedef Documentation}
+\hypertarget{group__garbage__collector_ga45f8d443bc7a0cc8c6fd0c12d59626b0}{}\index{Garbage collector@{Garbage collector}!mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}}
+\index{mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}!Garbage collector@{Garbage collector}}
+\subsubsection[{mem\+\_\+item\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf mem\+\_\+item\+\_\+t}  {\bf mem\+\_\+item\+\_\+t}}\label{group__garbage__collector_ga45f8d443bc7a0cc8c6fd0c12d59626b0}
+Item that holds one pointer to allocated memory \hypertarget{group__garbage__collector_ga36b1703faf3c854ab706e2d1565d0675}{}\index{Garbage collector@{Garbage collector}!mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}}
+\index{mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}!Garbage collector@{Garbage collector}}
+\subsubsection[{mem\+\_\+list\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf mem\+\_\+list\+\_\+t}  {\bf mem\+\_\+list\+\_\+t}}\label{group__garbage__collector_ga36b1703faf3c854ab706e2d1565d0675}
+List of items, that holds allocated memory 
+
+\subsection{Function Documentation}
+\hypertarget{group__garbage__collector_ga9f81a9a3690fcba7180fa860e0c2422f}{}\index{Garbage collector@{Garbage collector}!free\+\_\+memory@{free\+\_\+memory}}
+\index{free\+\_\+memory@{free\+\_\+memory}!Garbage collector@{Garbage collector}}
+\subsubsection[{free\+\_\+memory}]{\setlength{\rightskip}{0pt plus 5cm}void free\+\_\+memory (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{group__garbage__collector_ga9f81a9a3690fcba7180fa860e0c2422f}
+Free all memory allocated with this module \begin{DoxyPrecond}{Precondition}
+Function mem\+\_\+list\+\_\+t\+\_\+init was called before 
+\end{DoxyPrecond}
+\hypertarget{group__garbage__collector_gafc112ff977fb81bd172f5bb58bbcf19a}{}\index{Garbage collector@{Garbage collector}!mem\+\_\+alloc@{mem\+\_\+alloc}}
+\index{mem\+\_\+alloc@{mem\+\_\+alloc}!Garbage collector@{Garbage collector}}
+\subsubsection[{mem\+\_\+alloc}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ mem\+\_\+alloc (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{size}
+\end{DoxyParamCaption}
+)}\label{group__garbage__collector_gafc112ff977fb81bd172f5bb58bbcf19a}
+Allocate memory 
+\begin{DoxyParams}{Parameters}
+{\em size} & Number of memory that will be allocated in bytes \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to allocated memory, N\+U\+L\+L when allocation fails 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Function mem\+\_\+list\+\_\+t\+\_\+init was called before 
+\end{DoxyPrecond}
+\hypertarget{group__garbage__collector_ga5f27a409c8a3e15b2288de524163687b}{}\index{Garbage collector@{Garbage collector}!mem\+\_\+realloc@{mem\+\_\+realloc}}
+\index{mem\+\_\+realloc@{mem\+\_\+realloc}!Garbage collector@{Garbage collector}}
+\subsubsection[{mem\+\_\+realloc}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ mem\+\_\+realloc (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{ptr, }
+\item[{size\+\_\+t}]{size}
+\end{DoxyParamCaption}
+)}\label{group__garbage__collector_ga5f27a409c8a3e15b2288de524163687b}
+Reallocate memory for new size 
+\begin{DoxyParams}{Parameters}
+{\em ptr} & Pointer to memory that will be reallocated \\
+\hline
+{\em size} & New size of memory for allocation \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Pointer to allocated memory, N\+U\+L\+L when allocation fails 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+Function mem\+\_\+list\+\_\+t\+\_\+init was called before 
+\end{DoxyPrecond}
+
+
+\subsection{Variable Documentation}
+\hypertarget{group__garbage__collector_ga8aa3a6ffdd5d503b42049f17fe0c23a2}{}\index{Garbage collector@{Garbage collector}!G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R@{G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}}
+\index{G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R@{G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}!Garbage collector@{Garbage collector}}
+\subsubsection[{G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}]{\setlength{\rightskip}{0pt plus 5cm}G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}\label{group__garbage__collector_ga8aa3a6ffdd5d503b42049f17fe0c23a2}
+Global list of items that holds allocated memory
+
+Initialize 

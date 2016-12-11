@@ -1,0 +1,74 @@
+\hypertarget{interpret_8h}{}\section{interpret.\+h File Reference}
+\label{interpret_8h}\index{interpret.\+h@{interpret.\+h}}
+
+
+Documentation for interpret processing.  
+
+
+{\ttfamily \#include $<$string.\+h$>$}\\*
+{\ttfamily \#include $<$stdbool.\+h$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}scanner.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}structures.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}expression.\+h\char`\"{}}\\*
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \\*
+{\bfseries I\+\_\+\+A\+S\+S\+I\+G\+M\+E\+N\+T} = 100+1, 
+{\bfseries I\+\_\+\+I\+F}, 
+{\bfseries I\+\_\+\+E\+L\+S\+E}, 
+{\bfseries I\+\_\+\+W\+H\+I\+L\+E}, 
+\\*
+{\bfseries I\+\_\+\+E\+N\+D}, 
+{\bfseries I\+\_\+\+F\+C\+E}, 
+{\bfseries I\+\_\+\+R\+E\+T\+U\+R\+N}, 
+{\bfseries I\+\_\+\+P\+R\+I\+N\+T}, 
+\\*
+{\bfseries I\+\_\+\+E\+N\+D\+I\+F}, 
+{\bfseries I\+\_\+\+E\+N\+D\+W\+H\+I\+L\+E}, 
+{\bfseries I\+\_\+\+E\+N\+D\+E\+L\+S\+E}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__interpret__processing_gadade5a9b656f2be2400ad5077f5eb2b8}{Add\+\_\+\+Instr} (\hyperlink{structInstr__List}{Instr\+\_\+\+List} $\ast$L, \hyperlink{structI__Instr}{I\+\_\+\+Instr} $\ast$new)
+\begin{DoxyCompactList}\small\item\em Function add instruction at end of instruction tape. \end{DoxyCompactList}\item 
+\hyperlink{structtoken}{token} $\ast$ \hyperlink{group__interpret__processing_gadcc3f1cf66a07231171cb3f9daf62f16}{do\+\_\+expression} (\hyperlink{structtoken}{token} $\ast$postfix\+\_\+array, \hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$I\+\_\+\+Htable, struct \hyperlink{structstack__expresion}{stack\+\_\+expresion} $\ast$S, \hyperlink{structInstr__List}{Instr\+\_\+\+List} $\ast$L, int void\+\_\+flag)
+\begin{DoxyCompactList}\small\item\em Interpret calls this function when instruction has expression. Function process postfix array, manage all aritmetic and bool operation and calls interpret. \end{DoxyCompactList}\item 
+\hyperlink{structtoken}{token} $\ast$ \hyperlink{group__interpret__processing_ga233bf069b8c22da3c02972ab1f239f08}{inter\+\_\+plus} (\hyperlink{structtoken}{token} a, \hyperlink{structtoken}{token} b)
+\begin{DoxyCompactList}\small\item\em Function adds tokens data or concatenate tokens data if one of operands is string. \end{DoxyCompactList}\item 
+\hyperlink{structtoken}{token} $\ast$ \hyperlink{group__interpret__processing_ga7b340f15ae1fe3489a2039e861ce7c1c}{inter\+\_\+arm\+\_\+op} (\hyperlink{structtoken}{token} tmp1, \hyperlink{structtoken}{token} tmp2, int i)
+\begin{DoxyCompactList}\small\item\em Function does aritmetic operation beetween two tokens data. \end{DoxyCompactList}\item 
+\hyperlink{structtoken}{token} $\ast$ \hyperlink{group__interpret__processing_ga661009ab992da6605dcd89536330eaf2}{inter\+\_\+bool\+\_\+op} (\hyperlink{structtoken}{token} tmp1, \hyperlink{structtoken}{token} tmp2, int i)
+\begin{DoxyCompactList}\small\item\em Function does boolean operation beetween two tokens data. \end{DoxyCompactList}\item 
+int \hyperlink{group__interpret__processing_ga2136ced932cb2368bc956490eae226f1}{inter} (\hyperlink{structInstr__List}{Instr\+\_\+\+List} $\ast$L, \hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$I\+\_\+\+Htable, \hyperlink{structtoken}{token} $\ast$return\+\_\+token, int void\+\_\+flag)
+\begin{DoxyCompactList}\small\item\em Function does boolean operation beetween two tokens data. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{group__interpret__processing_ga5a0d1d664d0cfcc31c26179dd554bf4b}{Int\+To\+String} (int x)
+\begin{DoxyCompactList}\small\item\em Function translates integer to string. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{group__interpret__processing_gab20c49a9d5c0ef5f59a1cf32a5fdccba}{Double\+To\+String} (double x)
+\begin{DoxyCompactList}\small\item\em Function translates double to string. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{group__interpret__processing_ga932aeaa028a630ebe4e84383ff45008d}{Conc\+\_\+\+Str} (char $\ast$s1, char $\ast$s2)
+\begin{DoxyCompactList}\small\item\em Function concatenates two strings. \end{DoxyCompactList}\item 
+\hyperlink{structhtab__item}{htab\+\_\+item} $\ast$ \hyperlink{group__interpret__processing_ga600ab694c698a92ed71e4f88340e8870}{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack, char $\ast$key)
+\item 
+\hypertarget{group__interpret__processing_gac4f958bd4a853211be38f7cbab86247e}{}\hyperlink{structhtab__t}{htab\+\_\+t} $\ast$ {\bfseries stack\+\_\+htab\+\_\+get\+\_\+first} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack)\label{group__interpret__processing_gac4f958bd4a853211be38f7cbab86247e}
+
+\item 
+\hypertarget{group__interpret__processing_gaa203349334ef66843a8ace3d31edf124}{}void {\bfseries I\+\_\+\+Instr\+\_\+null\+\_\+elements} (\hyperlink{structI__Instr}{I\+\_\+\+Instr} $\ast$Instruction)\label{group__interpret__processing_gaa203349334ef66843a8ace3d31edf124}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Documentation for interpret processing. 
+
+\begin{DoxyAuthor}{Author}
+Nemanja Vasiljevic, xvasil03 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+11.\+12.\+2016
+\end{DoxyDate}
+This module is used for processing Instruction list made of 3\+A\+C. 

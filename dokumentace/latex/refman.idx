@@ -1,0 +1,397 @@
+\indexentry{Embeded functions@{Embeded functions}|hyperpage}{7}
+\indexentry{Embeded functions@{Embeded functions}!read\+Double@{read\+Double}|hyperpage}{7}
+\indexentry{read\+Double@{read\+Double}!Embeded functions@{Embeded functions}|hyperpage}{7}
+\indexentry{Embeded functions@{Embeded functions}!read\+Int@{read\+Int}|hyperpage}{7}
+\indexentry{read\+Int@{read\+Int}!Embeded functions@{Embeded functions}|hyperpage}{7}
+\indexentry{Embeded functions@{Embeded functions}!read\+String@{read\+String}|hyperpage}{7}
+\indexentry{read\+String@{read\+String}!Embeded functions@{Embeded functions}|hyperpage}{7}
+\indexentry{Expression processing@{Expression processing}|hyperpage}{9}
+\indexentry{Expression processing@{Expression processing}!E\+R\+R\+\_\+\+W\+A\+R\+N\+I\+N\+G@{E\+R\+R\+\_\+\+W\+A\+R\+N\+I\+N\+G}|hyperpage}{10}
+\indexentry{E\+R\+R\+\_\+\+W\+A\+R\+N\+I\+N\+G@{E\+R\+R\+\_\+\+W\+A\+R\+N\+I\+N\+G}!Expression processing@{Expression processing}|hyperpage}{10}
+\indexentry{Expression processing@{Expression processing}!F\+A\+T\+A\+L\+\_\+\+E\+R\+R\+O\+R@{F\+A\+T\+A\+L\+\_\+\+E\+R\+R\+O\+R}|hyperpage}{10}
+\indexentry{F\+A\+T\+A\+L\+\_\+\+E\+R\+R\+O\+R@{F\+A\+T\+A\+L\+\_\+\+E\+R\+R\+O\+R}!Expression processing@{Expression processing}|hyperpage}{10}
+\indexentry{Expression processing@{Expression processing}!S\+T\+R\+D\+U\+P@{S\+T\+R\+D\+U\+P}|hyperpage}{10}
+\indexentry{S\+T\+R\+D\+U\+P@{S\+T\+R\+D\+U\+P}!Expression processing@{Expression processing}|hyperpage}{10}
+\indexentry{Expression processing@{Expression processing}!expr\+\_\+analyze@{expr\+\_\+analyze}|hyperpage}{10}
+\indexentry{expr\+\_\+analyze@{expr\+\_\+analyze}!Expression processing@{Expression processing}|hyperpage}{10}
+\indexentry{Expression processing@{Expression processing}!operator\+\_\+priority@{operator\+\_\+priority}|hyperpage}{11}
+\indexentry{operator\+\_\+priority@{operator\+\_\+priority}!Expression processing@{Expression processing}|hyperpage}{11}
+\indexentry{Expression processing@{Expression processing}!print\+\_\+token@{print\+\_\+token}|hyperpage}{11}
+\indexentry{print\+\_\+token@{print\+\_\+token}!Expression processing@{Expression processing}|hyperpage}{11}
+\indexentry{Expression processing@{Expression processing}!print\+\_\+token\+\_\+array@{print\+\_\+token\+\_\+array}|hyperpage}{12}
+\indexentry{print\+\_\+token\+\_\+array@{print\+\_\+token\+\_\+array}!Expression processing@{Expression processing}|hyperpage}{12}
+\indexentry{Expression processing@{Expression processing}!stack\+\_\+expression\+\_\+destroy@{stack\+\_\+expression\+\_\+destroy}|hyperpage}{12}
+\indexentry{stack\+\_\+expression\+\_\+destroy@{stack\+\_\+expression\+\_\+destroy}!Expression processing@{Expression processing}|hyperpage}{12}
+\indexentry{Expression processing@{Expression processing}!stack\+\_\+expression\+\_\+empty@{stack\+\_\+expression\+\_\+empty}|hyperpage}{12}
+\indexentry{stack\+\_\+expression\+\_\+empty@{stack\+\_\+expression\+\_\+empty}!Expression processing@{Expression processing}|hyperpage}{12}
+\indexentry{Expression processing@{Expression processing}!stack\+\_\+expression\+\_\+full@{stack\+\_\+expression\+\_\+full}|hyperpage}{12}
+\indexentry{stack\+\_\+expression\+\_\+full@{stack\+\_\+expression\+\_\+full}!Expression processing@{Expression processing}|hyperpage}{12}
+\indexentry{Expression processing@{Expression processing}!stack\+\_\+expression\+\_\+init@{stack\+\_\+expression\+\_\+init}|hyperpage}{13}
+\indexentry{stack\+\_\+expression\+\_\+init@{stack\+\_\+expression\+\_\+init}!Expression processing@{Expression processing}|hyperpage}{13}
+\indexentry{Expression processing@{Expression processing}!stack\+\_\+expression\+\_\+pop@{stack\+\_\+expression\+\_\+pop}|hyperpage}{13}
+\indexentry{stack\+\_\+expression\+\_\+pop@{stack\+\_\+expression\+\_\+pop}!Expression processing@{Expression processing}|hyperpage}{13}
+\indexentry{Expression processing@{Expression processing}!stack\+\_\+expression\+\_\+push@{stack\+\_\+expression\+\_\+push}|hyperpage}{13}
+\indexentry{stack\+\_\+expression\+\_\+push@{stack\+\_\+expression\+\_\+push}!Expression processing@{Expression processing}|hyperpage}{13}
+\indexentry{Expression processing@{Expression processing}!stack\+\_\+expression\+\_\+top@{stack\+\_\+expression\+\_\+top}|hyperpage}{15}
+\indexentry{stack\+\_\+expression\+\_\+top@{stack\+\_\+expression\+\_\+top}!Expression processing@{Expression processing}|hyperpage}{15}
+\indexentry{Expression processing@{Expression processing}!type\+\_\+name\+\_\+convertion@{type\+\_\+name\+\_\+convertion}|hyperpage}{15}
+\indexentry{type\+\_\+name\+\_\+convertion@{type\+\_\+name\+\_\+convertion}!Expression processing@{Expression processing}|hyperpage}{15}
+\indexentry{Expression processing@{Expression processing}!type\+\_\+priority@{type\+\_\+priority}|hyperpage}{15}
+\indexentry{type\+\_\+priority@{type\+\_\+priority}!Expression processing@{Expression processing}|hyperpage}{15}
+\indexentry{Garbage collector@{Garbage collector}|hyperpage}{17}
+\indexentry{Garbage collector@{Garbage collector}!mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}|hyperpage}{17}
+\indexentry{mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}!Garbage collector@{Garbage collector}|hyperpage}{17}
+\indexentry{Garbage collector@{Garbage collector}!mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}|hyperpage}{17}
+\indexentry{mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}!Garbage collector@{Garbage collector}|hyperpage}{17}
+\indexentry{Garbage collector@{Garbage collector}!free\+\_\+memory@{free\+\_\+memory}|hyperpage}{17}
+\indexentry{free\+\_\+memory@{free\+\_\+memory}!Garbage collector@{Garbage collector}|hyperpage}{17}
+\indexentry{Garbage collector@{Garbage collector}!mem\+\_\+alloc@{mem\+\_\+alloc}|hyperpage}{17}
+\indexentry{mem\+\_\+alloc@{mem\+\_\+alloc}!Garbage collector@{Garbage collector}|hyperpage}{17}
+\indexentry{Garbage collector@{Garbage collector}!mem\+\_\+realloc@{mem\+\_\+realloc}|hyperpage}{19}
+\indexentry{mem\+\_\+realloc@{mem\+\_\+realloc}!Garbage collector@{Garbage collector}|hyperpage}{19}
+\indexentry{Garbage collector@{Garbage collector}!G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R@{G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}|hyperpage}{19}
+\indexentry{G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R@{G\+A\+R\+B\+A\+G\+E\+\_\+\+C\+O\+L\+L\+E\+C\+T\+O\+R}!Garbage collector@{Garbage collector}|hyperpage}{19}
+\indexentry{Functions for string processing@{Functions for string processing}|hyperpage}{20}
+\indexentry{Functions for string processing@{Functions for string processing}!A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y@{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}|hyperpage}{20}
+\indexentry{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y@{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}!Functions for string processing@{Functions for string processing}|hyperpage}{20}
+\indexentry{Functions for string processing@{Functions for string processing}!M\+A\+X@{M\+A\+X}|hyperpage}{20}
+\indexentry{M\+A\+X@{M\+A\+X}!Functions for string processing@{Functions for string processing}|hyperpage}{20}
+\indexentry{Functions for string processing@{Functions for string processing}!compute\+Jumps@{compute\+Jumps}|hyperpage}{20}
+\indexentry{compute\+Jumps@{compute\+Jumps}!Functions for string processing@{Functions for string processing}|hyperpage}{20}
+\indexentry{Functions for string processing@{Functions for string processing}!find@{find}|hyperpage}{20}
+\indexentry{find@{find}!Functions for string processing@{Functions for string processing}|hyperpage}{20}
+\indexentry{Functions for string processing@{Functions for string processing}!length@{length}|hyperpage}{21}
+\indexentry{length@{length}!Functions for string processing@{Functions for string processing}|hyperpage}{21}
+\indexentry{Functions for string processing@{Functions for string processing}!shellsort@{shellsort}|hyperpage}{21}
+\indexentry{shellsort@{shellsort}!Functions for string processing@{Functions for string processing}|hyperpage}{21}
+\indexentry{Functions for string processing@{Functions for string processing}!substring@{substring}|hyperpage}{21}
+\indexentry{substring@{substring}!Functions for string processing@{Functions for string processing}|hyperpage}{21}
+\indexentry{Stack of integers@{Stack of integers}|hyperpage}{23}
+\indexentry{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+clean@{stack\+\_\+int\+\_\+clean}|hyperpage}{23}
+\indexentry{stack\+\_\+int\+\_\+clean@{stack\+\_\+int\+\_\+clean}!Stack of integers@{Stack of integers}|hyperpage}{23}
+\indexentry{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+create@{stack\+\_\+int\+\_\+create}|hyperpage}{23}
+\indexentry{stack\+\_\+int\+\_\+create@{stack\+\_\+int\+\_\+create}!Stack of integers@{Stack of integers}|hyperpage}{23}
+\indexentry{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+destroy@{stack\+\_\+int\+\_\+destroy}|hyperpage}{24}
+\indexentry{stack\+\_\+int\+\_\+destroy@{stack\+\_\+int\+\_\+destroy}!Stack of integers@{Stack of integers}|hyperpage}{24}
+\indexentry{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+is\+\_\+empty@{stack\+\_\+int\+\_\+is\+\_\+empty}|hyperpage}{24}
+\indexentry{stack\+\_\+int\+\_\+is\+\_\+empty@{stack\+\_\+int\+\_\+is\+\_\+empty}!Stack of integers@{Stack of integers}|hyperpage}{24}
+\indexentry{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+is\+\_\+full@{stack\+\_\+int\+\_\+is\+\_\+full}|hyperpage}{24}
+\indexentry{stack\+\_\+int\+\_\+is\+\_\+full@{stack\+\_\+int\+\_\+is\+\_\+full}!Stack of integers@{Stack of integers}|hyperpage}{24}
+\indexentry{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+pop@{stack\+\_\+int\+\_\+pop}|hyperpage}{24}
+\indexentry{stack\+\_\+int\+\_\+pop@{stack\+\_\+int\+\_\+pop}!Stack of integers@{Stack of integers}|hyperpage}{24}
+\indexentry{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+push@{stack\+\_\+int\+\_\+push}|hyperpage}{25}
+\indexentry{stack\+\_\+int\+\_\+push@{stack\+\_\+int\+\_\+push}!Stack of integers@{Stack of integers}|hyperpage}{25}
+\indexentry{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+top@{stack\+\_\+int\+\_\+top}|hyperpage}{25}
+\indexentry{stack\+\_\+int\+\_\+top@{stack\+\_\+int\+\_\+top}!Stack of integers@{Stack of integers}|hyperpage}{25}
+\indexentry{Hash table@{Hash table}|hyperpage}{26}
+\indexentry{Hash table@{Hash table}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{26}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!Hash table@{Hash table}|hyperpage}{26}
+\indexentry{Hash table@{Hash table}!htab\+\_\+t@{htab\+\_\+t}|hyperpage}{26}
+\indexentry{htab\+\_\+t@{htab\+\_\+t}!Hash table@{Hash table}|hyperpage}{26}
+\indexentry{Hash table@{Hash table}!htab\+\_\+clear\+\_\+items@{htab\+\_\+clear\+\_\+items}|hyperpage}{26}
+\indexentry{htab\+\_\+clear\+\_\+items@{htab\+\_\+clear\+\_\+items}!Hash table@{Hash table}|hyperpage}{26}
+\indexentry{Hash table@{Hash table}!htab\+\_\+copy@{htab\+\_\+copy}|hyperpage}{26}
+\indexentry{htab\+\_\+copy@{htab\+\_\+copy}!Hash table@{Hash table}|hyperpage}{26}
+\indexentry{Hash table@{Hash table}!htab\+\_\+find\+\_\+item@{htab\+\_\+find\+\_\+item}|hyperpage}{27}
+\indexentry{htab\+\_\+find\+\_\+item@{htab\+\_\+find\+\_\+item}!Hash table@{Hash table}|hyperpage}{27}
+\indexentry{Hash table@{Hash table}!htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index@{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index}|hyperpage}{27}
+\indexentry{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index@{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index}!Hash table@{Hash table}|hyperpage}{27}
+\indexentry{Hash table@{Hash table}!htab\+\_\+free\+\_\+all@{htab\+\_\+free\+\_\+all}|hyperpage}{27}
+\indexentry{htab\+\_\+free\+\_\+all@{htab\+\_\+free\+\_\+all}!Hash table@{Hash table}|hyperpage}{27}
+\indexentry{Hash table@{Hash table}!htab\+\_\+init@{htab\+\_\+init}|hyperpage}{27}
+\indexentry{htab\+\_\+init@{htab\+\_\+init}!Hash table@{Hash table}|hyperpage}{27}
+\indexentry{Hash table@{Hash table}!htab\+\_\+init2@{htab\+\_\+init2}|hyperpage}{28}
+\indexentry{htab\+\_\+init2@{htab\+\_\+init2}!Hash table@{Hash table}|hyperpage}{28}
+\indexentry{Hash table@{Hash table}!htab\+\_\+insert\+\_\+item@{htab\+\_\+insert\+\_\+item}|hyperpage}{28}
+\indexentry{htab\+\_\+insert\+\_\+item@{htab\+\_\+insert\+\_\+item}!Hash table@{Hash table}|hyperpage}{28}
+\indexentry{Interpret processing@{Interpret processing}|hyperpage}{29}
+\indexentry{Interpret processing@{Interpret processing}!Add\+\_\+\+Instr@{Add\+\_\+\+Instr}|hyperpage}{29}
+\indexentry{Add\+\_\+\+Instr@{Add\+\_\+\+Instr}!Interpret processing@{Interpret processing}|hyperpage}{29}
+\indexentry{Interpret processing@{Interpret processing}!Conc\+\_\+\+Str@{Conc\+\_\+\+Str}|hyperpage}{30}
+\indexentry{Conc\+\_\+\+Str@{Conc\+\_\+\+Str}!Interpret processing@{Interpret processing}|hyperpage}{30}
+\indexentry{Interpret processing@{Interpret processing}!do\+\_\+expression@{do\+\_\+expression}|hyperpage}{30}
+\indexentry{do\+\_\+expression@{do\+\_\+expression}!Interpret processing@{Interpret processing}|hyperpage}{30}
+\indexentry{Interpret processing@{Interpret processing}!Double\+To\+String@{Double\+To\+String}|hyperpage}{30}
+\indexentry{Double\+To\+String@{Double\+To\+String}!Interpret processing@{Interpret processing}|hyperpage}{30}
+\indexentry{Interpret processing@{Interpret processing}!inter@{inter}|hyperpage}{31}
+\indexentry{inter@{inter}!Interpret processing@{Interpret processing}|hyperpage}{31}
+\indexentry{Interpret processing@{Interpret processing}!inter\+\_\+arm\+\_\+op@{inter\+\_\+arm\+\_\+op}|hyperpage}{31}
+\indexentry{inter\+\_\+arm\+\_\+op@{inter\+\_\+arm\+\_\+op}!Interpret processing@{Interpret processing}|hyperpage}{31}
+\indexentry{Interpret processing@{Interpret processing}!inter\+\_\+bool\+\_\+op@{inter\+\_\+bool\+\_\+op}|hyperpage}{31}
+\indexentry{inter\+\_\+bool\+\_\+op@{inter\+\_\+bool\+\_\+op}!Interpret processing@{Interpret processing}|hyperpage}{31}
+\indexentry{Interpret processing@{Interpret processing}!inter\+\_\+plus@{inter\+\_\+plus}|hyperpage}{32}
+\indexentry{inter\+\_\+plus@{inter\+\_\+plus}!Interpret processing@{Interpret processing}|hyperpage}{32}
+\indexentry{Interpret processing@{Interpret processing}!Int\+To\+String@{Int\+To\+String}|hyperpage}{32}
+\indexentry{Int\+To\+String@{Int\+To\+String}!Interpret processing@{Interpret processing}|hyperpage}{32}
+\indexentry{Interpret processing@{Interpret processing}!stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item@{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item}|hyperpage}{32}
+\indexentry{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item@{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item}!Interpret processing@{Interpret processing}|hyperpage}{32}
+\indexentry{Lexical analysis@{Lexical analysis}|hyperpage}{34}
+\indexentry{Lexical analysis@{Lexical analysis}!reset\+\_\+scanner@{reset\+\_\+scanner}|hyperpage}{35}
+\indexentry{reset\+\_\+scanner@{reset\+\_\+scanner}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+S\+I\+Z\+E@{S\+\_\+\+S\+I\+Z\+E}|hyperpage}{35}
+\indexentry{S\+\_\+\+S\+I\+Z\+E@{S\+\_\+\+S\+I\+Z\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+P\+E\+C\+\_\+\+C\+H\+A\+R\+\_\+\+F\+S\+E\+E\+K@{S\+P\+E\+C\+\_\+\+C\+H\+A\+R\+\_\+\+F\+S\+E\+E\+K}|hyperpage}{35}
+\indexentry{S\+P\+E\+C\+\_\+\+C\+H\+A\+R\+\_\+\+F\+S\+E\+E\+K@{S\+P\+E\+C\+\_\+\+C\+H\+A\+R\+\_\+\+F\+S\+E\+E\+K}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!token@{token}|hyperpage}{35}
+\indexentry{token@{token}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{S\+\_\+\+B\+O\+O\+L\+E\+A\+N@{S\+\_\+\+B\+O\+O\+L\+E\+A\+N}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+B\+O\+O\+L\+E\+A\+N@{S\+\_\+\+B\+O\+O\+L\+E\+A\+N}|hyperpage}{35}
+\indexentry{S\+\_\+\+B\+R\+E\+A\+K@{S\+\_\+\+B\+R\+E\+A\+K}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+B\+R\+E\+A\+K@{S\+\_\+\+B\+R\+E\+A\+K}|hyperpage}{35}
+\indexentry{S\+\_\+\+C\+L\+A\+S\+S@{S\+\_\+\+C\+L\+A\+S\+S}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+C\+L\+A\+S\+S@{S\+\_\+\+C\+L\+A\+S\+S}|hyperpage}{35}
+\indexentry{S\+\_\+\+C\+O\+N\+T\+I\+N\+U\+E@{S\+\_\+\+C\+O\+N\+T\+I\+N\+U\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+C\+O\+N\+T\+I\+N\+U\+E@{S\+\_\+\+C\+O\+N\+T\+I\+N\+U\+E}|hyperpage}{35}
+\indexentry{S\+\_\+\+D\+O@{S\+\_\+\+D\+O}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+D\+O@{S\+\_\+\+D\+O}|hyperpage}{35}
+\indexentry{S\+\_\+\+D\+O\+U\+B\+L\+E@{S\+\_\+\+D\+O\+U\+B\+L\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+D\+O\+U\+B\+L\+E@{S\+\_\+\+D\+O\+U\+B\+L\+E}|hyperpage}{35}
+\indexentry{S\+\_\+\+E\+L\+S\+E@{S\+\_\+\+E\+L\+S\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+E\+L\+S\+E@{S\+\_\+\+E\+L\+S\+E}|hyperpage}{35}
+\indexentry{S\+\_\+\+F\+A\+L\+S\+E@{S\+\_\+\+F\+A\+L\+S\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+F\+A\+L\+S\+E@{S\+\_\+\+F\+A\+L\+S\+E}|hyperpage}{35}
+\indexentry{S\+\_\+\+F\+O\+R@{S\+\_\+\+F\+O\+R}!Lexical analysis@{Lexical analysis}|hyperpage}{35}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+F\+O\+R@{S\+\_\+\+F\+O\+R}|hyperpage}{35}
+\indexentry{S\+\_\+\+I\+F@{S\+\_\+\+I\+F}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+I\+F@{S\+\_\+\+I\+F}|hyperpage}{36}
+\indexentry{S\+\_\+\+I\+N\+T@{S\+\_\+\+I\+N\+T}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+I\+N\+T@{S\+\_\+\+I\+N\+T}|hyperpage}{36}
+\indexentry{S\+\_\+\+R\+E\+T\+U\+R\+N@{S\+\_\+\+R\+E\+T\+U\+R\+N}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+R\+E\+T\+U\+R\+N@{S\+\_\+\+R\+E\+T\+U\+R\+N}|hyperpage}{36}
+\indexentry{S\+\_\+\+S\+T\+R\+I\+N\+G@{S\+\_\+\+S\+T\+R\+I\+N\+G}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+S\+T\+R\+I\+N\+G@{S\+\_\+\+S\+T\+R\+I\+N\+G}|hyperpage}{36}
+\indexentry{S\+\_\+\+S\+T\+A\+T\+I\+C@{S\+\_\+\+S\+T\+A\+T\+I\+C}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+S\+T\+A\+T\+I\+C@{S\+\_\+\+S\+T\+A\+T\+I\+C}|hyperpage}{36}
+\indexentry{S\+\_\+\+T\+R\+U\+E@{S\+\_\+\+T\+R\+U\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+T\+R\+U\+E@{S\+\_\+\+T\+R\+U\+E}|hyperpage}{36}
+\indexentry{S\+\_\+\+V\+O\+I\+D@{S\+\_\+\+V\+O\+I\+D}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+V\+O\+I\+D@{S\+\_\+\+V\+O\+I\+D}|hyperpage}{36}
+\indexentry{S\+\_\+\+W\+H\+I\+L\+E@{S\+\_\+\+W\+H\+I\+L\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+W\+H\+I\+L\+E@{S\+\_\+\+W\+H\+I\+L\+E}|hyperpage}{36}
+\indexentry{T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E@{T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E@{T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E}|hyperpage}{36}
+\indexentry{T\+Y\+P\+E\+\_\+\+I\+N\+T@{T\+Y\+P\+E\+\_\+\+I\+N\+T}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!T\+Y\+P\+E\+\_\+\+I\+N\+T@{T\+Y\+P\+E\+\_\+\+I\+N\+T}|hyperpage}{36}
+\indexentry{T\+Y\+P\+E\+\_\+\+S\+T\+R\+I\+N\+G@{T\+Y\+P\+E\+\_\+\+S\+T\+R\+I\+N\+G}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!T\+Y\+P\+E\+\_\+\+S\+T\+R\+I\+N\+G@{T\+Y\+P\+E\+\_\+\+S\+T\+R\+I\+N\+G}|hyperpage}{36}
+\indexentry{T\+Y\+P\+E\+\_\+\+B\+O\+O\+L\+E\+A\+N@{T\+Y\+P\+E\+\_\+\+B\+O\+O\+L\+E\+A\+N}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!T\+Y\+P\+E\+\_\+\+B\+O\+O\+L\+E\+A\+N@{T\+Y\+P\+E\+\_\+\+B\+O\+O\+L\+E\+A\+N}|hyperpage}{36}
+\indexentry{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+B\+I\+N@{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+B\+I\+N}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+B\+I\+N@{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+B\+I\+N}|hyperpage}{36}
+\indexentry{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+O\+C\+T\+A\+L@{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+O\+C\+T\+A\+L}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+O\+C\+T\+A\+L@{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+O\+C\+T\+A\+L}|hyperpage}{36}
+\indexentry{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+H\+E\+X@{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+H\+E\+X}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+H\+E\+X@{T\+Y\+P\+E\+\_\+\+I\+N\+T\+\_\+\+H\+E\+X}|hyperpage}{36}
+\indexentry{T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+H\+E\+X@{T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+H\+E\+X}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+H\+E\+X@{T\+Y\+P\+E\+\_\+\+D\+O\+U\+B\+L\+E\+\_\+\+H\+E\+X}|hyperpage}{36}
+\indexentry{B\+L\+O\+C\+K\+\_\+\+C\+O\+M\+M\+E\+N\+T@{B\+L\+O\+C\+K\+\_\+\+C\+O\+M\+M\+E\+N\+T}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!B\+L\+O\+C\+K\+\_\+\+C\+O\+M\+M\+E\+N\+T@{B\+L\+O\+C\+K\+\_\+\+C\+O\+M\+M\+E\+N\+T}|hyperpage}{36}
+\indexentry{L\+I\+N\+E\+\_\+\+C\+O\+M\+M\+E\+N\+T@{L\+I\+N\+E\+\_\+\+C\+O\+M\+M\+E\+N\+T}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!L\+I\+N\+E\+\_\+\+C\+O\+M\+M\+E\+N\+T@{L\+I\+N\+E\+\_\+\+C\+O\+M\+M\+E\+N\+T}|hyperpage}{36}
+\indexentry{S\+\_\+\+S\+I\+M\+P\+L\+E\+\_\+\+I\+D\+E\+N\+T@{S\+\_\+\+S\+I\+M\+P\+L\+E\+\_\+\+I\+D\+E\+N\+T}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+S\+I\+M\+P\+L\+E\+\_\+\+I\+D\+E\+N\+T@{S\+\_\+\+S\+I\+M\+P\+L\+E\+\_\+\+I\+D\+E\+N\+T}|hyperpage}{36}
+\indexentry{S\+\_\+\+F\+U\+L\+L\+\_\+\+I\+D\+E\+N\+T@{S\+\_\+\+F\+U\+L\+L\+\_\+\+I\+D\+E\+N\+T}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+F\+U\+L\+L\+\_\+\+I\+D\+E\+N\+T@{S\+\_\+\+F\+U\+L\+L\+\_\+\+I\+D\+E\+N\+T}|hyperpage}{36}
+\indexentry{S\+\_\+\+E\+Q\+U\+A\+L@{S\+\_\+\+E\+Q\+U\+A\+L}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+E\+Q\+U\+A\+L@{S\+\_\+\+E\+Q\+U\+A\+L}|hyperpage}{36}
+\indexentry{S\+\_\+\+L\+E\+S\+S\+\_\+\+E\+Q\+U\+A\+L@{S\+\_\+\+L\+E\+S\+S\+\_\+\+E\+Q\+U\+A\+L}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+L\+E\+S\+S\+\_\+\+E\+Q\+U\+A\+L@{S\+\_\+\+L\+E\+S\+S\+\_\+\+E\+Q\+U\+A\+L}|hyperpage}{36}
+\indexentry{S\+\_\+\+G\+R\+E\+A\+T\+E\+R\+\_\+\+E\+Q\+U\+A\+L@{S\+\_\+\+G\+R\+E\+A\+T\+E\+R\+\_\+\+E\+Q\+U\+A\+L}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+G\+R\+E\+A\+T\+E\+R\+\_\+\+E\+Q\+U\+A\+L@{S\+\_\+\+G\+R\+E\+A\+T\+E\+R\+\_\+\+E\+Q\+U\+A\+L}|hyperpage}{36}
+\indexentry{S\+\_\+\+L\+E\+S\+S@{S\+\_\+\+L\+E\+S\+S}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+L\+E\+S\+S@{S\+\_\+\+L\+E\+S\+S}|hyperpage}{36}
+\indexentry{S\+\_\+\+G\+R\+E\+A\+T\+E\+R@{S\+\_\+\+G\+R\+E\+A\+T\+E\+R}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+G\+R\+E\+A\+T\+E\+R@{S\+\_\+\+G\+R\+E\+A\+T\+E\+R}|hyperpage}{36}
+\indexentry{S\+\_\+\+O\+R@{S\+\_\+\+O\+R}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+O\+R@{S\+\_\+\+O\+R}|hyperpage}{36}
+\indexentry{S\+\_\+\+A\+N\+D@{S\+\_\+\+A\+N\+D}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+A\+N\+D@{S\+\_\+\+A\+N\+D}|hyperpage}{36}
+\indexentry{S\+\_\+\+N\+O\+T\+\_\+\+E\+Q\+U\+A\+L@{S\+\_\+\+N\+O\+T\+\_\+\+E\+Q\+U\+A\+L}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+N\+O\+T\+\_\+\+E\+Q\+U\+A\+L@{S\+\_\+\+N\+O\+T\+\_\+\+E\+Q\+U\+A\+L}|hyperpage}{36}
+\indexentry{S\+\_\+\+N\+O\+T@{S\+\_\+\+N\+O\+T}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+N\+O\+T@{S\+\_\+\+N\+O\+T}|hyperpage}{36}
+\indexentry{S\+\_\+\+L\+E\+F\+T\+\_\+\+P\+A\+R\+E@{S\+\_\+\+L\+E\+F\+T\+\_\+\+P\+A\+R\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+L\+E\+F\+T\+\_\+\+P\+A\+R\+E@{S\+\_\+\+L\+E\+F\+T\+\_\+\+P\+A\+R\+E}|hyperpage}{36}
+\indexentry{S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+P\+A\+R\+E@{S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+P\+A\+R\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+P\+A\+R\+E@{S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+P\+A\+R\+E}|hyperpage}{36}
+\indexentry{S\+\_\+\+L\+E\+F\+T\+\_\+\+B\+R\+A\+C\+E@{S\+\_\+\+L\+E\+F\+T\+\_\+\+B\+R\+A\+C\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+L\+E\+F\+T\+\_\+\+B\+R\+A\+C\+E@{S\+\_\+\+L\+E\+F\+T\+\_\+\+B\+R\+A\+C\+E}|hyperpage}{36}
+\indexentry{S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+B\+R\+A\+C\+E@{S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+B\+R\+A\+C\+E}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+B\+R\+A\+C\+E@{S\+\_\+\+R\+I\+G\+H\+T\+\_\+\+B\+R\+A\+C\+E}|hyperpage}{36}
+\indexentry{S\+\_\+\+C\+O\+M\+M\+A@{S\+\_\+\+C\+O\+M\+M\+A}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+C\+O\+M\+M\+A@{S\+\_\+\+C\+O\+M\+M\+A}|hyperpage}{36}
+\indexentry{S\+\_\+\+S\+E\+M\+I\+C\+O\+M\+M\+A@{S\+\_\+\+S\+E\+M\+I\+C\+O\+M\+M\+A}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+S\+E\+M\+I\+C\+O\+M\+M\+A@{S\+\_\+\+S\+E\+M\+I\+C\+O\+M\+M\+A}|hyperpage}{36}
+\indexentry{S\+\_\+\+P\+L\+U\+S@{S\+\_\+\+P\+L\+U\+S}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+P\+L\+U\+S@{S\+\_\+\+P\+L\+U\+S}|hyperpage}{36}
+\indexentry{S\+\_\+\+M\+I\+N\+U\+S@{S\+\_\+\+M\+I\+N\+U\+S}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+M\+I\+N\+U\+S@{S\+\_\+\+M\+I\+N\+U\+S}|hyperpage}{36}
+\indexentry{S\+\_\+\+D\+I\+V@{S\+\_\+\+D\+I\+V}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+D\+I\+V@{S\+\_\+\+D\+I\+V}|hyperpage}{36}
+\indexentry{S\+\_\+\+M\+U\+L@{S\+\_\+\+M\+U\+L}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+M\+U\+L@{S\+\_\+\+M\+U\+L}|hyperpage}{36}
+\indexentry{S\+\_\+\+A\+S\+S\+I\+G\+N\+M\+E\+N\+T@{S\+\_\+\+A\+S\+S\+I\+G\+N\+M\+E\+N\+T}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+A\+S\+S\+I\+G\+N\+M\+E\+N\+T@{S\+\_\+\+A\+S\+S\+I\+G\+N\+M\+E\+N\+T}|hyperpage}{36}
+\indexentry{S\+\_\+\+E\+O\+F@{S\+\_\+\+E\+O\+F}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!S\+\_\+\+E\+O\+F@{S\+\_\+\+E\+O\+F}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!bin2dec@{bin2dec}|hyperpage}{36}
+\indexentry{bin2dec@{bin2dec}!Lexical analysis@{Lexical analysis}|hyperpage}{36}
+\indexentry{Lexical analysis@{Lexical analysis}!get\+\_\+token@{get\+\_\+token}|hyperpage}{37}
+\indexentry{get\+\_\+token@{get\+\_\+token}!Lexical analysis@{Lexical analysis}|hyperpage}{37}
+\indexentry{Lexical analysis@{Lexical analysis}!hex2dec\+\_\+double@{hex2dec\+\_\+double}|hyperpage}{37}
+\indexentry{hex2dec\+\_\+double@{hex2dec\+\_\+double}!Lexical analysis@{Lexical analysis}|hyperpage}{37}
+\indexentry{Lexical analysis@{Lexical analysis}!hex2dec\+\_\+int@{hex2dec\+\_\+int}|hyperpage}{37}
+\indexentry{hex2dec\+\_\+int@{hex2dec\+\_\+int}!Lexical analysis@{Lexical analysis}|hyperpage}{37}
+\indexentry{Lexical analysis@{Lexical analysis}!is\+\_\+full\+\_\+ident@{is\+\_\+full\+\_\+ident}|hyperpage}{37}
+\indexentry{is\+\_\+full\+\_\+ident@{is\+\_\+full\+\_\+ident}!Lexical analysis@{Lexical analysis}|hyperpage}{37}
+\indexentry{Lexical analysis@{Lexical analysis}!is\+\_\+keyword@{is\+\_\+keyword}|hyperpage}{37}
+\indexentry{is\+\_\+keyword@{is\+\_\+keyword}!Lexical analysis@{Lexical analysis}|hyperpage}{37}
+\indexentry{Lexical analysis@{Lexical analysis}!is\+\_\+num\+\_\+literal@{is\+\_\+num\+\_\+literal}|hyperpage}{39}
+\indexentry{is\+\_\+num\+\_\+literal@{is\+\_\+num\+\_\+literal}!Lexical analysis@{Lexical analysis}|hyperpage}{39}
+\indexentry{Lexical analysis@{Lexical analysis}!is\+\_\+simple\+\_\+ident@{is\+\_\+simple\+\_\+ident}|hyperpage}{39}
+\indexentry{is\+\_\+simple\+\_\+ident@{is\+\_\+simple\+\_\+ident}!Lexical analysis@{Lexical analysis}|hyperpage}{39}
+\indexentry{Lexical analysis@{Lexical analysis}!is\+\_\+special\+\_\+char@{is\+\_\+special\+\_\+char}|hyperpage}{39}
+\indexentry{is\+\_\+special\+\_\+char@{is\+\_\+special\+\_\+char}!Lexical analysis@{Lexical analysis}|hyperpage}{39}
+\indexentry{Lexical analysis@{Lexical analysis}!load\+\_\+string@{load\+\_\+string}|hyperpage}{40}
+\indexentry{load\+\_\+string@{load\+\_\+string}!Lexical analysis@{Lexical analysis}|hyperpage}{40}
+\indexentry{Lexical analysis@{Lexical analysis}!make\+\_\+power@{make\+\_\+power}|hyperpage}{40}
+\indexentry{make\+\_\+power@{make\+\_\+power}!Lexical analysis@{Lexical analysis}|hyperpage}{40}
+\indexentry{Lexical analysis@{Lexical analysis}!octal2dec@{octal2dec}|hyperpage}{40}
+\indexentry{octal2dec@{octal2dec}!Lexical analysis@{Lexical analysis}|hyperpage}{40}
+\indexentry{Lexical analysis@{Lexical analysis}!repair\+\_\+num@{repair\+\_\+num}|hyperpage}{41}
+\indexentry{repair\+\_\+num@{repair\+\_\+num}!Lexical analysis@{Lexical analysis}|hyperpage}{41}
+\indexentry{Lexical analysis@{Lexical analysis}!skip\+\_\+comment@{skip\+\_\+comment}|hyperpage}{41}
+\indexentry{skip\+\_\+comment@{skip\+\_\+comment}!Lexical analysis@{Lexical analysis}|hyperpage}{41}
+\indexentry{Lexical analysis@{Lexical analysis}!str2num@{str2num}|hyperpage}{41}
+\indexentry{str2num@{str2num}!Lexical analysis@{Lexical analysis}|hyperpage}{41}
+\indexentry{Structures@{Structures}|hyperpage}{42}
+\indexentry{Structures@{Structures}!A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}|hyperpage}{43}
+\indexentry{A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{A\+R\+R\+A\+Y\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}|hyperpage}{43}
+\indexentry{A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{A\+R\+R\+A\+Y\+\_\+\+S\+T\+R\+I\+N\+G\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}|hyperpage}{43}
+\indexentry{S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{S\+T\+A\+C\+K\+\_\+\+H\+T\+A\+B\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}|hyperpage}{43}
+\indexentry{S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E@{S\+T\+A\+C\+K\+\_\+\+I\+N\+S\+T\+R\+\_\+\+I\+N\+I\+T\+\_\+\+S\+I\+Z\+E}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!array\+\_\+htab@{array\+\_\+htab}|hyperpage}{43}
+\indexentry{array\+\_\+htab@{array\+\_\+htab}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!array\+\_\+string@{array\+\_\+string}|hyperpage}{43}
+\indexentry{array\+\_\+string@{array\+\_\+string}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!stack\+\_\+htab@{stack\+\_\+htab}|hyperpage}{43}
+\indexentry{stack\+\_\+htab@{stack\+\_\+htab}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!stack\+\_\+instr@{stack\+\_\+instr}|hyperpage}{43}
+\indexentry{stack\+\_\+instr@{stack\+\_\+instr}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!array\+\_\+htab\+\_\+destroy@{array\+\_\+htab\+\_\+destroy}|hyperpage}{43}
+\indexentry{array\+\_\+htab\+\_\+destroy@{array\+\_\+htab\+\_\+destroy}!Structures@{Structures}|hyperpage}{43}
+\indexentry{Structures@{Structures}!array\+\_\+htab\+\_\+get\+\_\+item@{array\+\_\+htab\+\_\+get\+\_\+item}|hyperpage}{45}
+\indexentry{array\+\_\+htab\+\_\+get\+\_\+item@{array\+\_\+htab\+\_\+get\+\_\+item}!Structures@{Structures}|hyperpage}{45}
+\indexentry{Structures@{Structures}!array\+\_\+htab\+\_\+init@{array\+\_\+htab\+\_\+init}|hyperpage}{45}
+\indexentry{array\+\_\+htab\+\_\+init@{array\+\_\+htab\+\_\+init}!Structures@{Structures}|hyperpage}{45}
+\indexentry{Structures@{Structures}!array\+\_\+htab\+\_\+insert@{array\+\_\+htab\+\_\+insert}|hyperpage}{45}
+\indexentry{array\+\_\+htab\+\_\+insert@{array\+\_\+htab\+\_\+insert}!Structures@{Structures}|hyperpage}{45}
+\indexentry{Structures@{Structures}!array\+\_\+string\+\_\+destroy@{array\+\_\+string\+\_\+destroy}|hyperpage}{45}
+\indexentry{array\+\_\+string\+\_\+destroy@{array\+\_\+string\+\_\+destroy}!Structures@{Structures}|hyperpage}{45}
+\indexentry{Structures@{Structures}!array\+\_\+string\+\_\+find@{array\+\_\+string\+\_\+find}|hyperpage}{46}
+\indexentry{array\+\_\+string\+\_\+find@{array\+\_\+string\+\_\+find}!Structures@{Structures}|hyperpage}{46}
+\indexentry{Structures@{Structures}!array\+\_\+string\+\_\+init@{array\+\_\+string\+\_\+init}|hyperpage}{46}
+\indexentry{array\+\_\+string\+\_\+init@{array\+\_\+string\+\_\+init}!Structures@{Structures}|hyperpage}{46}
+\indexentry{Structures@{Structures}!array\+\_\+string\+\_\+insert@{array\+\_\+string\+\_\+insert}|hyperpage}{46}
+\indexentry{array\+\_\+string\+\_\+insert@{array\+\_\+string\+\_\+insert}!Structures@{Structures}|hyperpage}{46}
+\indexentry{Structures@{Structures}!stack\+\_\+htab\+\_\+destroy@{stack\+\_\+htab\+\_\+destroy}|hyperpage}{46}
+\indexentry{stack\+\_\+htab\+\_\+destroy@{stack\+\_\+htab\+\_\+destroy}!Structures@{Structures}|hyperpage}{46}
+\indexentry{Structures@{Structures}!stack\+\_\+htab\+\_\+get\+\_\+first@{stack\+\_\+htab\+\_\+get\+\_\+first}|hyperpage}{48}
+\indexentry{stack\+\_\+htab\+\_\+get\+\_\+first@{stack\+\_\+htab\+\_\+get\+\_\+first}!Structures@{Structures}|hyperpage}{48}
+\indexentry{Structures@{Structures}!stack\+\_\+htab\+\_\+get\+\_\+item@{stack\+\_\+htab\+\_\+get\+\_\+item}|hyperpage}{48}
+\indexentry{stack\+\_\+htab\+\_\+get\+\_\+item@{stack\+\_\+htab\+\_\+get\+\_\+item}!Structures@{Structures}|hyperpage}{48}
+\indexentry{Structures@{Structures}!stack\+\_\+htab\+\_\+init@{stack\+\_\+htab\+\_\+init}|hyperpage}{48}
+\indexentry{stack\+\_\+htab\+\_\+init@{stack\+\_\+htab\+\_\+init}!Structures@{Structures}|hyperpage}{48}
+\indexentry{Structures@{Structures}!stack\+\_\+htab\+\_\+pop@{stack\+\_\+htab\+\_\+pop}|hyperpage}{48}
+\indexentry{stack\+\_\+htab\+\_\+pop@{stack\+\_\+htab\+\_\+pop}!Structures@{Structures}|hyperpage}{48}
+\indexentry{Structures@{Structures}!stack\+\_\+htab\+\_\+push@{stack\+\_\+htab\+\_\+push}|hyperpage}{49}
+\indexentry{stack\+\_\+htab\+\_\+push@{stack\+\_\+htab\+\_\+push}!Structures@{Structures}|hyperpage}{49}
+\indexentry{array\+\_\+htab@{array\+\_\+htab}|hyperpage}{51}
+\indexentry{array\+\_\+htab@{array\+\_\+htab}!data@{data}|hyperpage}{51}
+\indexentry{data@{data}!array\+\_\+htab@{array\+\_\+htab}|hyperpage}{51}
+\indexentry{array\+\_\+htab@{array\+\_\+htab}!idx@{idx}|hyperpage}{51}
+\indexentry{idx@{idx}!array\+\_\+htab@{array\+\_\+htab}|hyperpage}{51}
+\indexentry{array\+\_\+htab@{array\+\_\+htab}!size@{size}|hyperpage}{51}
+\indexentry{size@{size}!array\+\_\+htab@{array\+\_\+htab}|hyperpage}{51}
+\indexentry{array\+\_\+string@{array\+\_\+string}|hyperpage}{51}
+\indexentry{array\+\_\+string@{array\+\_\+string}!data@{data}|hyperpage}{52}
+\indexentry{data@{data}!array\+\_\+string@{array\+\_\+string}|hyperpage}{52}
+\indexentry{array\+\_\+string@{array\+\_\+string}!idx@{idx}|hyperpage}{52}
+\indexentry{idx@{idx}!array\+\_\+string@{array\+\_\+string}|hyperpage}{52}
+\indexentry{array\+\_\+string@{array\+\_\+string}!size@{size}|hyperpage}{52}
+\indexentry{size@{size}!array\+\_\+string@{array\+\_\+string}|hyperpage}{52}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}|hyperpage}{52}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!argument\+\_\+index@{argument\+\_\+index}|hyperpage}{53}
+\indexentry{argument\+\_\+index@{argument\+\_\+index}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!data@{data}|hyperpage}{53}
+\indexentry{data@{data}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!data\+\_\+type@{data\+\_\+type}|hyperpage}{53}
+\indexentry{data\+\_\+type@{data\+\_\+type}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!func\+\_\+or\+\_\+var@{func\+\_\+or\+\_\+var}|hyperpage}{53}
+\indexentry{func\+\_\+or\+\_\+var@{func\+\_\+or\+\_\+var}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!initialized@{initialized}|hyperpage}{53}
+\indexentry{initialized@{initialized}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!instruction\+\_\+tape@{instruction\+\_\+tape}|hyperpage}{53}
+\indexentry{instruction\+\_\+tape@{instruction\+\_\+tape}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!key@{key}|hyperpage}{53}
+\indexentry{key@{key}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!local\+\_\+table@{local\+\_\+table}|hyperpage}{53}
+\indexentry{local\+\_\+table@{local\+\_\+table}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!next\+\_\+item@{next\+\_\+item}|hyperpage}{53}
+\indexentry{next\+\_\+item@{next\+\_\+item}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+item@{htab\+\_\+item}!number\+\_\+of\+\_\+arguments@{number\+\_\+of\+\_\+arguments}|hyperpage}{53}
+\indexentry{number\+\_\+of\+\_\+arguments@{number\+\_\+of\+\_\+arguments}!htab\+\_\+item@{htab\+\_\+item}|hyperpage}{53}
+\indexentry{htab\+\_\+t@{htab\+\_\+t}|hyperpage}{53}
+\indexentry{htab\+\_\+t@{htab\+\_\+t}!hash\+\_\+fun\+\_\+ptr@{hash\+\_\+fun\+\_\+ptr}|hyperpage}{54}
+\indexentry{hash\+\_\+fun\+\_\+ptr@{hash\+\_\+fun\+\_\+ptr}!htab\+\_\+t@{htab\+\_\+t}|hyperpage}{54}
+\indexentry{htab\+\_\+t@{htab\+\_\+t}!htab\+\_\+size@{htab\+\_\+size}|hyperpage}{54}
+\indexentry{htab\+\_\+size@{htab\+\_\+size}!htab\+\_\+t@{htab\+\_\+t}|hyperpage}{54}
+\indexentry{htab\+\_\+t@{htab\+\_\+t}!number\+\_\+items@{number\+\_\+items}|hyperpage}{54}
+\indexentry{number\+\_\+items@{number\+\_\+items}!htab\+\_\+t@{htab\+\_\+t}|hyperpage}{54}
+\indexentry{htab\+\_\+t@{htab\+\_\+t}!ptr@{ptr}|hyperpage}{54}
+\indexentry{ptr@{ptr}!htab\+\_\+t@{htab\+\_\+t}|hyperpage}{54}
+\indexentry{I\+\_\+\+Instr@{I\+\_\+\+Instr}|hyperpage}{54}
+\indexentry{Instr\+\_\+\+List@{Instr\+\_\+\+List}|hyperpage}{55}
+\indexentry{mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}|hyperpage}{55}
+\indexentry{mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}!next@{next}|hyperpage}{55}
+\indexentry{next@{next}!mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}|hyperpage}{55}
+\indexentry{mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}!ptr@{ptr}|hyperpage}{55}
+\indexentry{ptr@{ptr}!mem\+\_\+item\+\_\+t@{mem\+\_\+item\+\_\+t}|hyperpage}{55}
+\indexentry{mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}|hyperpage}{55}
+\indexentry{mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}!first@{first}|hyperpage}{56}
+\indexentry{first@{first}!mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}|hyperpage}{56}
+\indexentry{mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}!last@{last}|hyperpage}{56}
+\indexentry{last@{last}!mem\+\_\+list\+\_\+t@{mem\+\_\+list\+\_\+t}|hyperpage}{56}
+\indexentry{stack\+\_\+expresion@{stack\+\_\+expresion}|hyperpage}{56}
+\indexentry{stack\+\_\+htab@{stack\+\_\+htab}|hyperpage}{56}
+\indexentry{stack\+\_\+htab@{stack\+\_\+htab}!data@{data}|hyperpage}{57}
+\indexentry{data@{data}!stack\+\_\+htab@{stack\+\_\+htab}|hyperpage}{57}
+\indexentry{stack\+\_\+htab@{stack\+\_\+htab}!size@{size}|hyperpage}{57}
+\indexentry{size@{size}!stack\+\_\+htab@{stack\+\_\+htab}|hyperpage}{57}
+\indexentry{stack\+\_\+htab@{stack\+\_\+htab}!top@{top}|hyperpage}{57}
+\indexentry{top@{top}!stack\+\_\+htab@{stack\+\_\+htab}|hyperpage}{57}
+\indexentry{stack\+\_\+instr@{stack\+\_\+instr}|hyperpage}{57}
+\indexentry{stack\+\_\+instr@{stack\+\_\+instr}!data@{data}|hyperpage}{57}
+\indexentry{data@{data}!stack\+\_\+instr@{stack\+\_\+instr}|hyperpage}{57}
+\indexentry{stack\+\_\+instr@{stack\+\_\+instr}!size@{size}|hyperpage}{57}
+\indexentry{size@{size}!stack\+\_\+instr@{stack\+\_\+instr}|hyperpage}{57}
+\indexentry{stack\+\_\+instr@{stack\+\_\+instr}!top@{top}|hyperpage}{57}
+\indexentry{top@{top}!stack\+\_\+instr@{stack\+\_\+instr}|hyperpage}{57}
+\indexentry{t\+\_\+stack\+\_\+int@{t\+\_\+stack\+\_\+int}|hyperpage}{58}
+\indexentry{t\+\_\+stack\+\_\+int@{t\+\_\+stack\+\_\+int}!data@{data}|hyperpage}{58}
+\indexentry{data@{data}!t\+\_\+stack\+\_\+int@{t\+\_\+stack\+\_\+int}|hyperpage}{58}
+\indexentry{t\+\_\+stack\+\_\+int@{t\+\_\+stack\+\_\+int}!size@{size}|hyperpage}{58}
+\indexentry{size@{size}!t\+\_\+stack\+\_\+int@{t\+\_\+stack\+\_\+int}|hyperpage}{58}
+\indexentry{t\+\_\+stack\+\_\+int@{t\+\_\+stack\+\_\+int}!top@{top}|hyperpage}{58}
+\indexentry{top@{top}!t\+\_\+stack\+\_\+int@{t\+\_\+stack\+\_\+int}|hyperpage}{58}
+\indexentry{token@{token}|hyperpage}{58}
+\indexentry{token@{token}!id@{id}|hyperpage}{59}
+\indexentry{id@{id}!token@{token}|hyperpage}{59}
+\indexentry{token@{token}!ptr@{ptr}|hyperpage}{59}
+\indexentry{ptr@{ptr}!token@{token}|hyperpage}{59}
+\indexentry{embedded\+\_\+functions.\+h@{embedded\+\_\+functions.\+h}|hyperpage}{61}
+\indexentry{expression.\+h@{expression.\+h}|hyperpage}{61}
+\indexentry{interpret.\+h@{interpret.\+h}|hyperpage}{63}

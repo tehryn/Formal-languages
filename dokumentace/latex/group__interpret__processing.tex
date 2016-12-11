@@ -1,0 +1,327 @@
+\hypertarget{group__interpret__processing}{}\section{Interpret processing}
+\label{group__interpret__processing}\index{Interpret processing@{Interpret processing}}
+
+
+Interpret processing instruction tape made for language I\+F\+J16.  
+
+
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ \\*
+{\bfseries I\+\_\+\+A\+S\+S\+I\+G\+M\+E\+N\+T} = 100+1, 
+{\bfseries I\+\_\+\+I\+F}, 
+{\bfseries I\+\_\+\+E\+L\+S\+E}, 
+{\bfseries I\+\_\+\+W\+H\+I\+L\+E}, 
+\\*
+{\bfseries I\+\_\+\+E\+N\+D}, 
+{\bfseries I\+\_\+\+F\+C\+E}, 
+{\bfseries I\+\_\+\+R\+E\+T\+U\+R\+N}, 
+{\bfseries I\+\_\+\+P\+R\+I\+N\+T}, 
+\\*
+{\bfseries I\+\_\+\+E\+N\+D\+I\+F}, 
+{\bfseries I\+\_\+\+E\+N\+D\+W\+H\+I\+L\+E}, 
+{\bfseries I\+\_\+\+E\+N\+D\+E\+L\+S\+E}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__interpret__processing_gadade5a9b656f2be2400ad5077f5eb2b8}{Add\+\_\+\+Instr} (\hyperlink{structInstr__List}{Instr\+\_\+\+List} $\ast$L, \hyperlink{structI__Instr}{I\+\_\+\+Instr} $\ast$new)
+\begin{DoxyCompactList}\small\item\em Function add instruction at end of instruction tape. \end{DoxyCompactList}\item 
+\hyperlink{structtoken}{token} $\ast$ \hyperlink{group__interpret__processing_gadcc3f1cf66a07231171cb3f9daf62f16}{do\+\_\+expression} (\hyperlink{structtoken}{token} $\ast$postfix\+\_\+array, \hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$I\+\_\+\+Htable, struct \hyperlink{structstack__expresion}{stack\+\_\+expresion} $\ast$S, \hyperlink{structInstr__List}{Instr\+\_\+\+List} $\ast$L, int void\+\_\+flag)
+\begin{DoxyCompactList}\small\item\em Interpret calls this function when instruction has expression. Function process postfix array, manage all aritmetic and bool operation and calls interpret. \end{DoxyCompactList}\item 
+\hyperlink{structtoken}{token} $\ast$ \hyperlink{group__interpret__processing_ga233bf069b8c22da3c02972ab1f239f08}{inter\+\_\+plus} (\hyperlink{structtoken}{token} a, \hyperlink{structtoken}{token} b)
+\begin{DoxyCompactList}\small\item\em Function adds tokens data or concatenate tokens data if one of operands is string. \end{DoxyCompactList}\item 
+\hyperlink{structtoken}{token} $\ast$ \hyperlink{group__interpret__processing_ga7b340f15ae1fe3489a2039e861ce7c1c}{inter\+\_\+arm\+\_\+op} (\hyperlink{structtoken}{token} tmp1, \hyperlink{structtoken}{token} tmp2, int i)
+\begin{DoxyCompactList}\small\item\em Function does aritmetic operation beetween two tokens data. \end{DoxyCompactList}\item 
+\hyperlink{structtoken}{token} $\ast$ \hyperlink{group__interpret__processing_ga661009ab992da6605dcd89536330eaf2}{inter\+\_\+bool\+\_\+op} (\hyperlink{structtoken}{token} tmp1, \hyperlink{structtoken}{token} tmp2, int i)
+\begin{DoxyCompactList}\small\item\em Function does boolean operation beetween two tokens data. \end{DoxyCompactList}\item 
+int \hyperlink{group__interpret__processing_ga2136ced932cb2368bc956490eae226f1}{inter} (\hyperlink{structInstr__List}{Instr\+\_\+\+List} $\ast$L, \hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$I\+\_\+\+Htable, \hyperlink{structtoken}{token} $\ast$return\+\_\+token, int void\+\_\+flag)
+\begin{DoxyCompactList}\small\item\em Function does boolean operation beetween two tokens data. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{group__interpret__processing_ga5a0d1d664d0cfcc31c26179dd554bf4b}{Int\+To\+String} (int x)
+\begin{DoxyCompactList}\small\item\em Function translates integer to string. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{group__interpret__processing_gab20c49a9d5c0ef5f59a1cf32a5fdccba}{Double\+To\+String} (double x)
+\begin{DoxyCompactList}\small\item\em Function translates double to string. \end{DoxyCompactList}\item 
+char $\ast$ \hyperlink{group__interpret__processing_ga932aeaa028a630ebe4e84383ff45008d}{Conc\+\_\+\+Str} (char $\ast$s1, char $\ast$s2)
+\begin{DoxyCompactList}\small\item\em Function concatenates two strings. \end{DoxyCompactList}\item 
+\hyperlink{structhtab__item}{htab\+\_\+item} $\ast$ \hyperlink{group__interpret__processing_ga600ab694c698a92ed71e4f88340e8870}{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack, char $\ast$key)
+\item 
+\hypertarget{group__interpret__processing_gac4f958bd4a853211be38f7cbab86247e}{}\hyperlink{structhtab__t}{htab\+\_\+t} $\ast$ {\bfseries stack\+\_\+htab\+\_\+get\+\_\+first} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack)\label{group__interpret__processing_gac4f958bd4a853211be38f7cbab86247e}
+
+\item 
+\hypertarget{group__interpret__processing_gaa203349334ef66843a8ace3d31edf124}{}void {\bfseries I\+\_\+\+Instr\+\_\+null\+\_\+elements} (\hyperlink{structI__Instr}{I\+\_\+\+Instr} $\ast$Instruction)\label{group__interpret__processing_gaa203349334ef66843a8ace3d31edf124}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Interpret processing instruction tape made for language I\+F\+J16. 
+
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{group__interpret__processing_ga06fc87d81c62e9abb8790b6e5713c55b}{}\subsubsection[{anonymous enum}]{\setlength{\rightskip}{0pt plus 5cm}anonymous enum}\label{group__interpret__processing_ga06fc87d81c62e9abb8790b6e5713c55b}
+Enumator for type of instructions 
+
+\subsection{Function Documentation}
+\hypertarget{group__interpret__processing_gadade5a9b656f2be2400ad5077f5eb2b8}{}\index{Interpret processing@{Interpret processing}!Add\+\_\+\+Instr@{Add\+\_\+\+Instr}}
+\index{Add\+\_\+\+Instr@{Add\+\_\+\+Instr}!Interpret processing@{Interpret processing}}
+\subsubsection[{Add\+\_\+\+Instr}]{\setlength{\rightskip}{0pt plus 5cm}int Add\+\_\+\+Instr (
+\begin{DoxyParamCaption}
+\item[{{\bf Instr\+\_\+\+List} $\ast$}]{L, }
+\item[{{\bf I\+\_\+\+Instr} $\ast$}]{new}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_gadade5a9b656f2be2400ad5077f5eb2b8}
+
+
+Function add instruction at end of instruction tape. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in,out}  & {\em L} & pointer to instruction tape. \\
+\hline
+\mbox{\tt in}  & {\em new} & pointer to instruction. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+new!=N\+U\+L\+L 
+
+size!=0 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+integer value which tells, how the whole process has been executed, 0 -\/$>$ no error, -\/1 -\/$>$ error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_ga932aeaa028a630ebe4e84383ff45008d}{}\index{Interpret processing@{Interpret processing}!Conc\+\_\+\+Str@{Conc\+\_\+\+Str}}
+\index{Conc\+\_\+\+Str@{Conc\+\_\+\+Str}!Interpret processing@{Interpret processing}}
+\subsubsection[{Conc\+\_\+\+Str}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ Conc\+\_\+\+Str (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s1, }
+\item[{char $\ast$}]{s2}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_ga932aeaa028a630ebe4e84383ff45008d}
+
+
+Function concatenates two strings. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em s1} & first operand. \\
+\hline
+\mbox{\tt in}  & {\em s2} & second operand. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+concatenated string, N\+U\+L\+L for error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_gadcc3f1cf66a07231171cb3f9daf62f16}{}\index{Interpret processing@{Interpret processing}!do\+\_\+expression@{do\+\_\+expression}}
+\index{do\+\_\+expression@{do\+\_\+expression}!Interpret processing@{Interpret processing}}
+\subsubsection[{do\+\_\+expression}]{\setlength{\rightskip}{0pt plus 5cm}{\bf token}$\ast$ do\+\_\+expression (
+\begin{DoxyParamCaption}
+\item[{{\bf token} $\ast$}]{postfix\+\_\+array, }
+\item[{{\bf stack\+\_\+htab} $\ast$}]{I\+\_\+\+Htable, }
+\item[{struct {\bf stack\+\_\+expresion} $\ast$}]{S, }
+\item[{{\bf Instr\+\_\+\+List} $\ast$}]{L, }
+\item[{int}]{void\+\_\+flag}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_gadcc3f1cf66a07231171cb3f9daf62f16}
+
+
+Interpret calls this function when instruction has expression. Function process postfix array, manage all aritmetic and bool operation and calls interpret. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em postfix\+\_\+array} & array of postfix tokens. \\
+\hline
+\mbox{\tt in}  & {\em I\+\_\+\+Htable} & pointer to stack of tables. \\
+\hline
+\mbox{\tt in}  & {\em S} & pointer to stack for tokens. \\
+\hline
+\mbox{\tt in}  & {\em L} & pointer to instruction tape. \\
+\hline
+\mbox{\tt in}  & {\em void\+\_\+flag} & flag for void function, 1 represent that interpret is in void function, 0 for non-\/void function. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+I\+\_\+\+Htable!=N\+U\+L\+L 
+
+L!=N\+U\+L\+L 
+
+S!=N\+U\+L\+L 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+token as result of expression, token-\/$>$id tells how the whole process has been executed, token-\/$>$id $>$= 0 -\/$>$ no error, $<$0 or N\+U\+L\+L -\/$>$ error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_gab20c49a9d5c0ef5f59a1cf32a5fdccba}{}\index{Interpret processing@{Interpret processing}!Double\+To\+String@{Double\+To\+String}}
+\index{Double\+To\+String@{Double\+To\+String}!Interpret processing@{Interpret processing}}
+\subsubsection[{Double\+To\+String}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ Double\+To\+String (
+\begin{DoxyParamCaption}
+\item[{double}]{x}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_gab20c49a9d5c0ef5f59a1cf32a5fdccba}
+
+
+Function translates double to string. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em x} & double that is going to be converted. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+converted string, N\+U\+L\+L for error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_ga2136ced932cb2368bc956490eae226f1}{}\index{Interpret processing@{Interpret processing}!inter@{inter}}
+\index{inter@{inter}!Interpret processing@{Interpret processing}}
+\subsubsection[{inter}]{\setlength{\rightskip}{0pt plus 5cm}int inter (
+\begin{DoxyParamCaption}
+\item[{{\bf Instr\+\_\+\+List} $\ast$}]{L, }
+\item[{{\bf stack\+\_\+htab} $\ast$}]{I\+\_\+\+Htable, }
+\item[{{\bf token} $\ast$}]{return\+\_\+token, }
+\item[{int}]{void\+\_\+flag}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_ga2136ced932cb2368bc956490eae226f1}
+
+
+Function does boolean operation beetween two tokens data. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em L} & pointer to instruction tape. \\
+\hline
+\mbox{\tt in}  & {\em I\+\_\+\+Htable} & pointer to stack of tables. \\
+\hline
+\mbox{\tt out}  & {\em return\+\_\+token} & is result of function on instruction tape. Used if function is called by indirect recursion from do\+\_\+expression. \\
+\hline
+\mbox{\tt in}  & {\em void\+\_\+flag} & flag for void function, 1 represent that interpret is in void function, 0 for non-\/void function. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+I\+\_\+\+Htable!=N\+U\+L\+L; 
+
+return\+\_\+token!=N\+U\+L\+L; 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+integer value which tells, how the whole processed has been executed, 0 -\/$>$ no error, !=0 -\/$>$ error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_ga7b340f15ae1fe3489a2039e861ce7c1c}{}\index{Interpret processing@{Interpret processing}!inter\+\_\+arm\+\_\+op@{inter\+\_\+arm\+\_\+op}}
+\index{inter\+\_\+arm\+\_\+op@{inter\+\_\+arm\+\_\+op}!Interpret processing@{Interpret processing}}
+\subsubsection[{inter\+\_\+arm\+\_\+op}]{\setlength{\rightskip}{0pt plus 5cm}{\bf token}$\ast$ inter\+\_\+arm\+\_\+op (
+\begin{DoxyParamCaption}
+\item[{{\bf token}}]{tmp1, }
+\item[{{\bf token}}]{tmp2, }
+\item[{int}]{i}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_ga7b340f15ae1fe3489a2039e861ce7c1c}
+
+
+Function does aritmetic operation beetween two tokens data. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em tmp1} & is first operand. \\
+\hline
+\mbox{\tt in}  & {\em tmp2} & is second operand. \\
+\hline
+\mbox{\tt in}  & {\em i} & stand for type of aritmetic operation. 1 minus, 2 multiply, 3 div \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+0 $<$ i $<$ 4 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+token, token-\/$>$ptr is pointer to result of aritmetic operation of two tokens data. token-\/$>$id $>$= 0 -\/$>$ no error, $<$0 or N\+U\+L\+L -\/$>$ error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_ga661009ab992da6605dcd89536330eaf2}{}\index{Interpret processing@{Interpret processing}!inter\+\_\+bool\+\_\+op@{inter\+\_\+bool\+\_\+op}}
+\index{inter\+\_\+bool\+\_\+op@{inter\+\_\+bool\+\_\+op}!Interpret processing@{Interpret processing}}
+\subsubsection[{inter\+\_\+bool\+\_\+op}]{\setlength{\rightskip}{0pt plus 5cm}{\bf token}$\ast$ inter\+\_\+bool\+\_\+op (
+\begin{DoxyParamCaption}
+\item[{{\bf token}}]{tmp1, }
+\item[{{\bf token}}]{tmp2, }
+\item[{int}]{i}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_ga661009ab992da6605dcd89536330eaf2}
+
+
+Function does boolean operation beetween two tokens data. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em tmp1} & is first operand. \\
+\hline
+\mbox{\tt in}  & {\em tmp2} & is second operand. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+0 $<$ i $<$ 8 
+\end{DoxyPrecond}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em i} & stand for type of aritmetic operation. 1-\/$>$ ==, 2-\/$>$ !=, 3-\/$>$ $>$=, 4-\/$>$ $>$, 5-\/$>$ $<$=, 6-\/$>$ $<$, 7-\/$>$ !(only for boolean) \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+token, token-\/$>$ptr is pointer to result of boolean operation of two tokens data. token-\/$>$id $>$= 0 -\/$>$ no error, $<$0 or N\+U\+L\+L -\/$>$ error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_ga233bf069b8c22da3c02972ab1f239f08}{}\index{Interpret processing@{Interpret processing}!inter\+\_\+plus@{inter\+\_\+plus}}
+\index{inter\+\_\+plus@{inter\+\_\+plus}!Interpret processing@{Interpret processing}}
+\subsubsection[{inter\+\_\+plus}]{\setlength{\rightskip}{0pt plus 5cm}{\bf token}$\ast$ inter\+\_\+plus (
+\begin{DoxyParamCaption}
+\item[{{\bf token}}]{a, }
+\item[{{\bf token}}]{b}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_ga233bf069b8c22da3c02972ab1f239f08}
+
+
+Function adds tokens data or concatenate tokens data if one of operands is string. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em a} & is first operand. \\
+\hline
+\mbox{\tt in}  & {\em b} & is second operand. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+token, token-\/$>$ptr is pointer to result of addition / concatenate of two tokens data. token-\/$>$id $>$= 0 -\/$>$ no error, $<$0 or N\+U\+L\+L -\/$>$ error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_ga5a0d1d664d0cfcc31c26179dd554bf4b}{}\index{Interpret processing@{Interpret processing}!Int\+To\+String@{Int\+To\+String}}
+\index{Int\+To\+String@{Int\+To\+String}!Interpret processing@{Interpret processing}}
+\subsubsection[{Int\+To\+String}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ Int\+To\+String (
+\begin{DoxyParamCaption}
+\item[{int}]{x}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_ga5a0d1d664d0cfcc31c26179dd554bf4b}
+
+
+Function translates integer to string. 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em x} & integer that is going to be converted. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+converted string, N\+U\+L\+L for error. 
+\end{DoxyReturn}
+\hypertarget{group__interpret__processing_ga600ab694c698a92ed71e4f88340e8870}{}\index{Interpret processing@{Interpret processing}!stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item@{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item}}
+\index{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item@{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item}!Interpret processing@{Interpret processing}}
+\subsubsection[{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+item}$\ast$ stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item (
+\begin{DoxyParamCaption}
+\item[{{\bf stack\+\_\+htab} $\ast$}]{stack, }
+\item[{char $\ast$}]{key}
+\end{DoxyParamCaption}
+)}\label{group__interpret__processing_ga600ab694c698a92ed71e4f88340e8870}
+Search for item of local or global hash table in the stack 
+\begin{DoxyParams}{Parameters}
+{\em stack} & stack where item will be searched \\
+\hline
+{\em key} & name of variable or function which will be searched \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+pointer to item of hash. table where searched thing is, or N\+U\+L\+L if the search was not successful 
+\end{DoxyReturn}
+\begin{DoxyPrecond}{Precondition}
+stack has been inicializated 
+\end{DoxyPrecond}

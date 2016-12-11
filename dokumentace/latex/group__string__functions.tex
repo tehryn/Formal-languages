@@ -1,0 +1,148 @@
+\hypertarget{group__string__functions}{}\section{Functions for string processing}
+\label{group__string__functions}\index{Functions for string processing@{Functions for string processing}}
+
+
+Functions for string processing.  
+
+
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{group__string__functions_gafa99ec4acc4ecb2dc3c2d05da15d0e3f}{M\+A\+X}(a,  b)~((a)   $>$ (b) ? (a) \+: (b))
+\item 
+\#define \hyperlink{group__string__functions_ga365663a53db95d4a05469a135a8cb3f3}{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}~256
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{group__string__functions_ga84261984e4b1bc441dcbf4dfef6f46fd}{length} (char $\ast$string)
+\item 
+char $\ast$ \hyperlink{group__string__functions_gab1e0741be6d2932577a358795bfaff5b}{substring} (char $\ast$s, int i, int n)
+\item 
+char $\ast$ \hyperlink{group__string__functions_ga1244cd9a8538e43d4a96e3d8c7f1e896}{shellsort} (char $\ast$str)
+\item 
+int \hyperlink{group__string__functions_ga97d8398ed0576999669759e6aaf326f2}{find} (char $\ast$s, char $\ast$search)
+\item 
+void \hyperlink{group__string__functions_ga63253522e27ba6f973bd3e8d049af997}{compute\+Jumps} (char $\ast$string, int badchar\mbox{[}\hyperlink{group__string__functions_ga365663a53db95d4a05469a135a8cb3f3}{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}\mbox{]})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Functions for string processing. 
+
+Authors\+: Miroslava Misova, Nemanja Vasiljevic, Jiri Matejka, Sava Nedeljkovic School\+: V\+U\+T F\+I\+T, B\+R\+N\+O Project\+: Interpret for I\+F\+J16 gcc version\+: 5.\+4.\+0 (ubuntu 16.\+04.\+2) 
+
+\subsection{Macro Definition Documentation}
+\hypertarget{group__string__functions_ga365663a53db95d4a05469a135a8cb3f3}{}\index{Functions for string processing@{Functions for string processing}!A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y@{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}}
+\index{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y@{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}!Functions for string processing@{Functions for string processing}}
+\subsubsection[{A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y~256}\label{group__string__functions_ga365663a53db95d4a05469a135a8cb3f3}
+Represents number of chars in alphabet \hypertarget{group__string__functions_gafa99ec4acc4ecb2dc3c2d05da15d0e3f}{}\index{Functions for string processing@{Functions for string processing}!M\+A\+X@{M\+A\+X}}
+\index{M\+A\+X@{M\+A\+X}!Functions for string processing@{Functions for string processing}}
+\subsubsection[{M\+A\+X}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+X(
+\begin{DoxyParamCaption}
+\item[{}]{a, }
+\item[{}]{b}
+\end{DoxyParamCaption}
+)~((a)   $>$ (b) ? (a) \+: (b))}\label{group__string__functions_gafa99ec4acc4ecb2dc3c2d05da15d0e3f}
+Finds maximum 
+
+\subsection{Function Documentation}
+\hypertarget{group__string__functions_ga63253522e27ba6f973bd3e8d049af997}{}\index{Functions for string processing@{Functions for string processing}!compute\+Jumps@{compute\+Jumps}}
+\index{compute\+Jumps@{compute\+Jumps}!Functions for string processing@{Functions for string processing}}
+\subsubsection[{compute\+Jumps}]{\setlength{\rightskip}{0pt plus 5cm}void compute\+Jumps (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{string, }
+\item[{int}]{badchar\mbox{[}\+A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y\mbox{]}}
+\end{DoxyParamCaption}
+)}\label{group__string__functions_ga63253522e27ba6f973bd3e8d049af997}
+Preprocessing for find. Fill the bad character array by given pattern 
+\begin{DoxyParams}{Parameters}
+{\em string} & pattern \\
+\hline
+{\em badchar\mbox{[}\+A\+L\+P\+H\+A\+B\+E\+T\+\_\+\+A\+R\+R\+A\+Y\mbox{]}} & alphabet array of integers \\
+\hline
+\end{DoxyParams}
+\hypertarget{group__string__functions_ga97d8398ed0576999669759e6aaf326f2}{}\index{Functions for string processing@{Functions for string processing}!find@{find}}
+\index{find@{find}!Functions for string processing@{Functions for string processing}}
+\subsubsection[{find}]{\setlength{\rightskip}{0pt plus 5cm}int find (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s, }
+\item[{char $\ast$}]{search}
+\end{DoxyParamCaption}
+)}\label{group__string__functions_ga97d8398ed0576999669759e6aaf326f2}
+Finds substring in given string. Function uses Boyer-\/\+Moore string algorithm. 
+\begin{DoxyParams}{Parameters}
+{\em s} & text \\
+\hline
+{\em search} & patent \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+index where substring is found, -\/1 if substring is not found. 
+\end{DoxyReturn}
+\hypertarget{group__string__functions_ga84261984e4b1bc441dcbf4dfef6f46fd}{}\index{Functions for string processing@{Functions for string processing}!length@{length}}
+\index{length@{length}!Functions for string processing@{Functions for string processing}}
+\subsubsection[{length}]{\setlength{\rightskip}{0pt plus 5cm}int length (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{string}
+\end{DoxyParamCaption}
+)}\label{group__string__functions_ga84261984e4b1bc441dcbf4dfef6f46fd}
+Function returns length of 0 terminated string. 
+\begin{DoxyParams}{Parameters}
+{\em string} & array of chars \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+string!=N\+U\+L\+L 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+integer value, length of string. 
+\end{DoxyReturn}
+\hypertarget{group__string__functions_ga1244cd9a8538e43d4a96e3d8c7f1e896}{}\index{Functions for string processing@{Functions for string processing}!shellsort@{shellsort}}
+\index{shellsort@{shellsort}!Functions for string processing@{Functions for string processing}}
+\subsubsection[{shellsort}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ shellsort (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{str}
+\end{DoxyParamCaption}
+)}\label{group__string__functions_ga1244cd9a8538e43d4a96e3d8c7f1e896}
+Returns sorted array of a chars. Function uses Shell sort algorithm. Function allocates new memory for a return array of chars. 
+\begin{DoxyParams}{Parameters}
+{\em str} & input string \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+s != N\+U\+L\+L 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+sorted array of a chars. 
+\end{DoxyReturn}
+\hypertarget{group__string__functions_gab1e0741be6d2932577a358795bfaff5b}{}\index{Functions for string processing@{Functions for string processing}!substring@{substring}}
+\index{substring@{substring}!Functions for string processing@{Functions for string processing}}
+\subsubsection[{substring}]{\setlength{\rightskip}{0pt plus 5cm}char$\ast$ substring (
+\begin{DoxyParamCaption}
+\item[{char $\ast$}]{s, }
+\item[{int}]{i, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+)}\label{group__string__functions_gab1e0741be6d2932577a358795bfaff5b}
+Returns substring of a given length, beginning at a given position of a given string Function allocates new memory for a substring 
+\begin{DoxyParams}{Parameters}
+{\em s} & input string \\
+\hline
+{\em i} & index where the substring begins \\
+\hline
+{\em n} & length of a substring \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPrecond}{Precondition}
+s != N\+U\+L\+L 
+
+n $>$ 0 
+
+i =$>$ 0 
+
+strlen(s) $>$= n+i 
+\end{DoxyPrecond}
+\begin{DoxyReturn}{Returns}
+array of chars containing found substring 
+\end{DoxyReturn}
