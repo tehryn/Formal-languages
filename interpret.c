@@ -5,13 +5,6 @@
 #include "garbage_collector.h"
 #define I_STACKSIZE 32
 
-/**
- * Search for item of local or global hash table in the stack
- * @param  stack	stack where item will be searched
- * @param  key		name of variable or function which will be searched
- * @return			pointer to item of hash. table where searched thing is, or NULL if the search was not successful
- * @pre				stack has been inicializated
- */
 htab_item * stack_htab_find_htab_item(stack_htab * stack, char * key)
 {
 	htab_t * Table = NULL;
