@@ -3,6 +3,7 @@
  * \author Sava Nedeljkovic, xnedel08
  * \date   11.12.2016
  * \brief  Documentation for expression processing
+ * \project interpreter for IFJ16
  * \details This module is used for processing expressions.
  *  It checks whether expressions follows allowed rules.
  *  Final expression is converted to postfix format.

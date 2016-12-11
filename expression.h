@@ -3,6 +3,7 @@
  * \author Sava Nedeljkovic, xnedel08
  * \date   11.12.2016
  * \brief  Documentation for expression processing
+ * \project interpreter for IFJ16
  * \details This module is used for processing expressions.
  *  It checks whether expressions follows allowed rules.
  *  Final expression is converted to postfix format.
@@ -29,7 +30,7 @@
   * @{
   */
 
-  
+
 /*! Error constants */
 #define ERR_WARNING 0
 #define ERR_LEXICAL_ANALYSIS 1
@@ -74,7 +75,7 @@ struct stack_expresion
 };
 
 
-/** 
+/**
  * \brief Function analyzes precedence and converts expression to postfix format.
  * \param[in] t_in first token in an expression.
  * \param[out] t_out last token red by the function, which is not contained in a final expression.
@@ -99,7 +100,7 @@ int expr_analyze 				( token t_in, token *t_out, char* class_name, int error_6_f
 
 
 
-/** 
+/**
  * \brief Function initializes a stack, allocates required memory and sets its variables.
  * \param[in, out] s pointer to a stack.
  * \param[in] size max. number of tokens which stack could contain.
@@ -112,7 +113,7 @@ int stack_expression_init 		( struct stack_expresion* s, int size );
 
 
 
-/** 
+/**
  * \brief Function destroys a stack, frees its memory and sets its variables.
  * \param[in, out] s pointer to a stack.
  * \pre s!=NULL
@@ -122,7 +123,7 @@ int stack_expression_destroy	( struct stack_expresion* s );
 
 
 
-/** 
+/**
  * \brief Function checks whether stack is empty.
  * \param[in] s pointer to a stack.
  * \pre s!=NULL
@@ -132,7 +133,7 @@ int stack_expression_empty 		( const struct stack_expresion* s );
 
 
 
-/** 
+/**
  * \brief Function checks whether stack is full.
  * \param[in] s pointer to a stack.
  * \pre s!=NULL
@@ -142,7 +143,7 @@ int stack_expression_full 		( const struct stack_expresion* s );
 
 
 
-/** 
+/**
  * \brief Function gives back top element from the stack.
  * \param[in] s pointer to a stack.
  * \param[out] t top element from the stack.
@@ -156,7 +157,7 @@ int stack_expression_top 		( struct stack_expresion* s, token* t );
 
 
 
-/** 
+/**
  * \brief Function pops and gives back top element from the stack.
  * \param[in] s pointer to a stack.
  * \param[out] t top element from the stack.
@@ -171,7 +172,7 @@ int stack_expression_pop 		( struct stack_expresion* s, token* t );
 
 
 
-/** 
+/**
  * \brief Function pushes given element to the stack.
  * \param[in] s pointer to a stack.
  * \param[out] t token which should be pushed to the stack.
@@ -185,7 +186,7 @@ int stack_expression_push		( struct stack_expresion* s, token t );
 
 
 
-/** 
+/**
  * \brief Function tells the priority of a given operator.
  * \param[in] op operator symbol.
  * \pre op>=0
@@ -195,7 +196,7 @@ int operator_priority 			(int op);
 
 
 
-/** 
+/**
  * \brief Function tells the priority of a given data type,
  *  which is later used for determining data type of the whole expression.
  * \param[in] type data type symbol.
@@ -206,7 +207,7 @@ int type_priority 				(int type);
 
 
 
-/** 
+/**
  * \brief Function converts names of the given data type,
  *  so it could be understood by the function expr_analyze().
  * \param[in] type data type symbol.
@@ -216,7 +217,7 @@ int type_name_convertion 		(int type);
 
 
 
-/** 
+/**
  * \brief Function prints token value (and its id) to STDERR.
  *  This function is only used for debugging.
  * \param[in] t token which should be printed.
@@ -227,7 +228,7 @@ void print_token				(token t, int id_flag);
 
 
 
-/** 
+/**
  * \brief Function prints array of tokens (and their ids) to STDERR.
  *  This function is only used for debugging.
  * \param[in] arr array of tokens which should be printed.
