@@ -135,105 +135,111 @@ int stack_int_is_empty( struct t_stack_int * stack );
  */
 int stack_int_is_full( struct t_stack_int * stack );
 
+/** @defgroup hash_table Hash table */
+/** @addtogroup hash_table
+  * @brief Group of structure hash table where is stored variables, functions and classes and functions that operate upon it
+  * @{
+  */
+
 /**
- *
+ * Abstract data type that represents item of hash table
  */
 typedef struct htab_item {
 
-	/** */
-	char* key; 				// string ID
-	/** */
-	unsigned data_type; 	// 0 - not defined, data type for variable or returns type of function
-	/** */
-	unsigned func_or_var; 	// 0 - not defined, 1 - variable, 2 - function
-	/** */
-	void* data; 			// pointer to the place with data, for function it is int* (int array of data_types of parametres)
-	/** */
-	unsigned initialized; 		// 0 - not initialized, 1 - initialized
-	/** */
-	unsigned number_of_arguments; // for function
-	/** */
-	void * local_table;		// htab_t* // TODO - zde bude predvyplnena lokalni tabulka s noninitialized variable
-	/** */
-	void * instruction_tape;	// for function
-	/** */
-	int argument_index;		// for variable which is argument of some function, -1 by default for non-argument variable
-	/** */
-	struct htab_item* next_item; // next variable
+	/** String ID */
+	char* key;
+	/** Data type for variable or returns type of function */
+	unsigned data_type;
+	/** Tells if item represents function or variable (0 - not defined, 1 - variable, 2 - function) */
+	unsigned func_or_var;
+	/** pointer to the place with data, for function it is int* (int array of data_types of parametres) */
+	void* data;
+	/** 0 - not initialized, 1 - initialized */
+	unsigned initialized;
+	/** Number of arguments in function */
+	unsigned number_of_arguments;
+	/** Pointer to local symbol table */
+	void * local_table;
+	/** Pointer to instruction tabe of function */
+	void * instruction_tape;
+	/** If item is argument of function, it tells which it is argument */
+	int argument_index;
+	/** Pointer to next item */
+	struct htab_item* next_item;
 } htab_item;
 
 
 /**
- *
+ * Abstract data type that represents hash table
  */
 typedef struct htab_t {
-	/** */
-	unsigned (*hash_fun_ptr) (const char * str, unsigned htab_size); // pointer to hash function, &hash_function by default
-	/** */
-	unsigned htab_size; // number of lines
-	/** */
-	unsigned number_items; // real number of items
-	/** */
-	htab_item **ptr; // lines
+	/** Pointer to hash function, &hash_function by default */
+	unsigned (*hash_fun_ptr) (const char * str, unsigned htab_size);
+	/** Size of table (number of lines) */
+	unsigned htab_size;
+	/** Real number of items */
+	unsigned number_items;
+	/** Array of pointers to items */
+	htab_item **ptr;
 } htab_t;
 
 /**
- * [htab_init description]
- * @param  size [description]
- * @return      [description]
+ * Creates new table with default hash function
+ * @param  size Size of new table
+ * @return      Pointer to new table
  */
 htab_t * htab_init(unsigned size);
 
 /**
- * [htab_init2 description]
- * @param  size     [description]
- * @param  hash_fun [description]
- * @return          [description]
+ * Creates new table with specific hash function
+ * @param  size     Size of new table
+ * @param  hash_fun Pointer to hash function
+ * @return          Pointer to new table
  */
 htab_t * htab_init2(unsigned size, unsigned (*hash_fun)(const char * str, unsigned htab_size));
 
 /**
- * [htab_find_item description]
- * @param  T   [description]
- * @param  key [description]
- * @return     [description]
+ * Finds item by key in table
+ * @param  T   Table where item will be sought
+ * @param  key Key of searched item
+ * @return     Pointer to searched item, if item will not be find, returns NULL
  */
 htab_item * htab_find_item(htab_t * T, const char * key); // NULL if not there
 
 /**
- * [htab_insert_item description]
- * @param  T   [description]
- * @param  key [description]
- * @return     [description]
+ * Creates new item and insert it into table
+ * @param  T   Table where item will be inserted
+ * @param  key Key of new item (key will be copied)
+ * @return     Pointer to new item
  */
 htab_item * htab_insert_item(htab_t * T, const char * key); // NULL if failed
 
 /**
- * [htab_copy description]
- * @param  T [description]
- * @return   [description]
+ * Makes copy of table (without pointers)
+ * @param  T Table that will be copied
+ * @return   Copy of table
  */
 htab_t * htab_copy(htab_t * T);
 
 /**
- * [htab_find_item_by_argument_index description]
- * @param  T     [description]
- * @param  index [description]
- * @return       [description]
+ * Finds arguments of functions
+ * @param  T     Table where function is stored
+ * @param  index Index of argument
+ * @return       Item where is argument stored
  * @pre index >= 0
  */
 htab_item * htab_find_item_by_argument_index(htab_t * T, int index); // NULL if not there
 
 /**
- * [htab_clear_items description]
- * @param T [description]
+ * Free memory allocated when inserting items but since we use garbage collector, it only sets pointers to NULL
+ * @param T Table where items will be freed
  */
 void htab_clear_items(htab_t * T);
 
 /**
- * [htab_free_all description]
- * @param T [description]
+ * Free allocated memory but since we use garbage collector, it only sets pointers to NULL
+ * @param T Table that will be freed
  */
 void htab_free_all(htab_t * T);
-
+/** @} */
 #endif
