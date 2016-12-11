@@ -44,8 +44,6 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 	I_Instr *while_instr;
 	stack_instr while_stack;
 	stack_instr_init(&while_stack);
-	stack_instr fce_stack;
-	stack_instr_init(&fce_stack);
 	stack_expression_init(S,I_STACKSIZE);
 	htab_item * item_tmp1;
 	htab_item * return_hitem;
@@ -72,13 +70,10 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				new=do_expression(postfix_array,I_Htable,S,L,0);
 				if (new->id < 0)
 				{
+					//free(postfix_array);
+					stack_instr_destroy(&while_stack);
+					stack_expression_destroy(S);
 					return -(new->id);
-					
-				}
-				if(new->id==I_FCE)
-				{
-					stack_instr_push(&fce_stack,L->Active->next_instr);
-					break;
 					
 				}
 
@@ -128,6 +123,8 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				
 				//printf("INITIALIZED ITEM var or fce value : %d\n",return_hitem->func_or_var);
 				return_hitem->initialized=1;
+				if(postfix_array!=NULL)
+					//free(postfix_array);
 				L->Active=L->Active->next_instr;
 				break;
 
@@ -136,6 +133,9 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				new=do_expression(postfix_array,I_Htable,S,L,0);
 				if (new->id < 0)
 				{
+					//free(postfix_array);
+					stack_instr_destroy(&while_stack);
+					stack_expression_destroy(S);
 					return -(new->id);
 					
 				}
@@ -146,7 +146,13 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					{
 						L->Active=L->Active->next_instr;
 						if (L->Active==NULL)
+						{
+							//free(postfix_array);
+							stack_instr_destroy(&while_stack);
+							stack_expression_destroy(S);						
 							return ERR_OTHERS;
+						
+						}
 						if (L->Active->type_instr==I_ENDIF)
 							count--;
 						if(count<0)
@@ -156,7 +162,9 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					}
 					if (L->Active->next_instr->type_instr==I_ELSE)
 						L->Active=L->Active->next_instr;
-				}				
+				}
+				if(postfix_array!=NULL)
+					//free(postfix_array);				
 				L->Active=L->Active->next_instr;
 				break;
 
@@ -167,6 +175,9 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				
 				if (new->id < 0)
 				{
+					//free(postfix_array);
+					stack_instr_destroy(&while_stack);
+					stack_expression_destroy(S);
 					return -(new->id);
 					
 				}
@@ -178,7 +189,13 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					{
 						L->Active=L->Active->next_instr;
 						if (L->Active==NULL)
+						{
+							//free(postfix_array);
+							stack_instr_destroy(&while_stack);
+							stack_expression_destroy(S);
 							return ERR_OTHERS;
+						
+						}
 						if (L->Active->type_instr==I_ENDWHILE)
 							count--;
 						else if (L->Active->type_instr==I_WHILE)
@@ -190,6 +207,8 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					stack_instr_push(&while_stack,L->Active);// TODO PUSH				
 										
 				}
+				if(postfix_array!=NULL)
+					//free(postfix_array);				
 				L->Active=L->Active->next_instr;
 				break;
 				
@@ -210,13 +229,14 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				
 				if (strcmp(item_tmp1->key,"ifj16.print")==0)
 				{
-					char *help_tmp;
 					token *str_token=NULL;
 					str_token=do_expression(postfix_array,I_Htable,S,L,0);
 					
 					if (str_token==NULL)
 					{
 						L->Active=L->Active->next_instr;
+						if(postfix_array!=NULL)
+							//free(postfix_array);
 						break;
 					}
 					
@@ -224,42 +244,16 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					
 					if(str_token->id<0)
 					{
+						//free(postfix_array);
+						stack_instr_destroy(&while_stack);
+						stack_expression_destroy(S);
+
 						return -(str_token->id);
 					}
 					
-					
-					
-					if (str_token->id < 0)
-					{
-					return -(new->id);
-					
-					}
-
-					//printf("str token id: %s\n",(char *)str_token->ptr);
-					
-					if (str_token->id==TYPE_DOUBLE || str_token->id==S_DOUBLE )
-						help_tmp=DoubleToString(*((double*)str_token->ptr));
-					else if (str_token->id==TYPE_INT || str_token->id==S_INT)
-						help_tmp=IntToString(*((int*)str_token->ptr));
-					else 
-						help_tmp=str_token->ptr;
-					
-					print(help_tmp);
-//					print("\n");
-					//free(str_token->ptr);
-					//free(str_token);
-					L->Active=L->Active->next_instr;
-					break;
-					//printf("%d\n",str
-					
 				}
-				//htab_t *loc_table=htab_copy((htab_t *)item_tmp1->local_table);
 			
-				
-			
-				
 				int void_func_flag=0;
-				
 				
 				if(item_tmp1->data_type==S_VOID)
 					void_func_flag=1;
@@ -272,11 +266,16 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				//printf("express vration :%d\n",new->id);
 				if (new->id < 0)
 				{
+					//free(postfix_array);
+					stack_instr_destroy(&while_stack);
+					stack_expression_destroy(S);
+
 					return -(new->id);
 				}	
 				
 			
-				
+				if(postfix_array!=NULL)
+					//free(postfix_array);
 				L->Active=L->Active->next_instr;
 				break;
 				
@@ -303,7 +302,8 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 				break;	
 				
 			case I_END:
-				
+				stack_instr_destroy(&while_stack);
+				stack_expression_destroy(S);
 				//printf("VOID FLAG U ENDU: %d\n",void_flag);
 				if (void_flag==1)
 					return 0;
@@ -314,14 +314,23 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 			case I_RETURN:
 				
 				if (L->Active->adr1==NULL)
+				{
+					stack_instr_destroy(&while_stack);
+					stack_expression_destroy(S);
 					return 0;
+				}
+				
 				postfix_array=L->Active->adr1;				
 				
 				new=do_expression(postfix_array,I_Htable,S,L,0);
-				
+
+				////free(postfix_array);
+				stack_instr_destroy(&while_stack);
+				stack_expression_destroy(S);
 				
 				if (new->id < 0)
 				{
+
 					return -(new->id);
 					
 				}
@@ -347,7 +356,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 					memcpy(new_val,(char*)new->ptr,strlen((char*)new->ptr)+1);
 					fce_token->ptr=(char*)new_val;	
 				}
-
+				
 				return 0;
 				
 			case I_ELSE:
@@ -361,6 +370,7 @@ int inter(Instr_List *L, stack_htab *I_Htable,token *fce_token, int void_flag)
 		}
 	}
 
+	stack_instr_destroy(&while_stack);
 	stack_expression_destroy(S);
 	//free(S);
 	return 0;

@@ -147,7 +147,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			
 			if (p_last_token.id!=S_RIGHT_PARE)
 			{
-				free(p_arr);
+				//free(p_arr);
 				p_arr=NULL;
 				FATAL_ERROR("EXPRESSION: Expression missing \")\". 8.1p\n", ERR_SYNTACTIC_ANALYSIS);
 			}
@@ -179,7 +179,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			else 
 				 last_operand_string=0;
 
-			free(p_arr);
+			//free(p_arr);
 			p_arr=NULL;
 			p_exp_count = -1;
 			p_data_type = -1; 
@@ -404,7 +404,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 					if (fun_last_token.id!=S_COMMA)
 					{
-						free(fun_param_arr);
+						//free(fun_param_arr);
 						fun_param_arr=NULL;
 						fprintf(stderr, "Function: %s, token id: %d.\n", (char *)input_token.ptr, fun_last_token.id);
 						FATAL_ERROR("EXPRESSION: Function missing \",\" or it has wrong number of parameters. 31\n", ERR_SEM_COMPATIBILITY);
@@ -413,7 +413,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 					if ( fparam_data_type!=((int *)(tmp_table_item->data))[i] && fparam_data_type!=S_INT && ((int *)(tmp_table_item->data))[i]!=S_DOUBLE )
 					{
-						free(fun_param_arr);
+						//free(fun_param_arr);
 						fun_param_arr=NULL;
 						fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", (char *)input_token.ptr, fparam_data_type, i+1);
 						FATAL_ERROR("EXPRESSION: Incompatible function parameter. 32\n", ERR_SEM_COMPATIBILITY);
@@ -426,7 +426,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 						ma1[1]=postfix_exp_stack.arr;
 					}
 
-					free(fun_param_arr);
+					//free(fun_param_arr);
 					fun_param_arr=NULL;
 					fp_exp_count = -1;
 					fparam_data_type = -1;
@@ -442,7 +442,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 				if ( fun_last_token.id!=S_RIGHT_PARE )
 				{
-					free(fun_param_arr);
+					//free(fun_param_arr);
 					fun_param_arr=NULL;
 					fprintf(stderr, "Function: %s, token id: %d.\n", (char *)input_token.ptr, fun_last_token.id);
 					FATAL_ERROR("EXPRESSION: Function missing \")\" or it has wrong number of parameters. 35\n", ERR_SEM_COMPATIBILITY);
@@ -450,7 +450,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 				if ( arg_count!=0 && fparam_data_type!=((int *)(tmp_table_item->data))[arg_count-1] && fparam_data_type!=S_INT && ((int *)(tmp_table_item->data))[arg_count-1]!=S_DOUBLE && strcmp("ifj16.print", (char *)input_token.ptr)!=0 )
 				{
-					free(fun_param_arr);
+					//free(fun_param_arr);
 					fun_param_arr=NULL;
 					fprintf(stderr, "Function: %s, parameter data type: %d, parameter position: %d.\n", (char *)input_token.ptr, fparam_data_type, arg_count-1+1);
 					FATAL_ERROR("EXPRESSION: Incompatible function parameter or wrong number of parameters. 36\n", ERR_SEM_COMPATIBILITY);
@@ -464,7 +464,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					ma1[1]=postfix_exp_stack.arr;
 				}
 
-				free(fun_param_arr);
+				//free(fun_param_arr);
 				fun_param_arr=NULL;
 
 				ident_type=tmp_table_item->data_type;
@@ -540,7 +540,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 	
 	*token_count=postfix_exp_stack.top+1;
-	*postfix_token_array = (token *)malloc(sizeof(token) * (postfix_exp_stack.top+1) );
+	*postfix_token_array = (token *)mem_alloc(sizeof(token) * (postfix_exp_stack.top+1) );
 	if (*postfix_token_array==NULL)
 		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 46\n", ERR_INTERN_FAULT);
 
