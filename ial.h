@@ -16,6 +16,12 @@
 #include "garbage_collector.h"
 #include "error.h"
 
+/** @defgroup string_functions Functions for string processing */
+/** @addtogroup string_functions
+  * @brief Functions for string processing
+  * @{
+  */
+
 /** Finds maximum*/
 #define MAX(a,b) ((a)   > (b) ? (a) : (b))
 
@@ -70,6 +76,15 @@ int find( char *s,  char *search);
  * @param badchar[ALPHABET_ARRAY] alphabet array of integers
  */
 void computeJumps( char *string, int badchar[ALPHABET_ARRAY]);
+/** @} */
+
+
+
+/** @defgroup integer_stack Stack of integers */
+/** @addtogroup integer_stack
+  * @brief Stack of integers
+  * @{
+  */
 
 /**  \struct t_stack_int
  * \brief Structure for stack of integers
@@ -147,6 +162,8 @@ int stack_int_is_empty( struct t_stack_int * stack );
  * @return integer value which tells, if the stack is full, 0 -> not full, !=0 -> full.
  */
 int stack_int_is_full( struct t_stack_int * stack );
+
+/** @} */
 
 /** @defgroup hash_table Hash table */
 /** @addtogroup hash_table
