@@ -1,7 +1,7 @@
 /**
  * \file   expression.h
  * \author Sava Nedeljkovic, xnedel08
- * \date   14.12.2015
+ * \date   11.12.2016
  * \brief  Documentation for expression processing
  * \details This module is used for processing expressions.
  *  It checks whether expressions follows allowed rules.
