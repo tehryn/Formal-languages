@@ -1,3 +1,12 @@
+/**
+ * \file   expression.h
+ * \author Sava Nedeljkovic, xnedel08
+ * \date   11.12.2016
+ * \brief  Documentation for expression processing
+ * \details This module is used for processing expressions.
+ *  It checks whether expressions follows allowed rules.
+ *  Final expression is converted to postfix format.
+ */
 #include <string.h>
 #include <stdarg.h>
 #include "ial.h"
@@ -13,21 +22,21 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	//int ma1_top=0;			// memory1 number of pointers
 
 	int bool_operation = 0;
-	
+
 	int return_type_bool=0;
-	
+
 	int e_type = -1;
-	
+
 	int syn_rules = 6;
 	int end_token = S_SEMICOMMA;
 
 	int string_forbidden=0;
 	int last_operand_string=0;
-	
+
 	int string_rquired=0;
-	
+
 	int negation_last_operator=0;
-	
+
 	va_list al;
 	if (t_in.id==END_EXPR)
 	{
@@ -72,24 +81,24 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	ma1[0]=tmp_exp_stack.arr;
 
 	input_token=t_in;
-	
+
 	if ( input_token.id==S_NOT )
 	{
 		if (stack_expression_push(&tmp_exp_stack, input_token)!=0)
 			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 24\n", ERR_INTERN_FAULT);
 		ma1[0]=tmp_exp_stack.arr;
-		
+
 		negation_last_operator=1;
 		return_type_bool=1;
 		bool_operation = 0;
 		e_type = -1;
-		
+
 		syn_rules=6;
-		
+
 		input_token=get_token();
 	}
-	
-	
+
+
 	while(1)
 	{
 
@@ -117,13 +126,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			int p_exp_count = -1;
 			int p_data_type = -1;
 			p_in_token.id=END_EXPR;
-			
-			
+
+
 			p_err_ret=expr_analyze(p_in_token, &p_last_token, class_name, error_6_flag, &p_arr, &p_exp_count, &p_data_type, global_table, local_table, S_RIGHT_PARE);
 			if (p_err_ret!=0)
 				FATAL_ERROR("EXPRESSION: Expression error. 8p\n", p_err_ret);
 
-			
+
 			if (p_last_token.id!=S_RIGHT_PARE)
 			{
 				//free(p_arr);
@@ -151,17 +160,17 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (p_data_type==TYPE_STRING)
 			{
 				if (string_forbidden==1)
-					FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value.10.1p\n", ERR_SEM_COMPATIBILITY); 
+					FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value.10.1p\n", ERR_SEM_COMPATIBILITY);
 
 				last_operand_string=1;
 			}
-			else 
+			else
 				 last_operand_string=0;
 
 			//free(p_arr);
 			p_arr=NULL;
 			p_exp_count = -1;
-			p_data_type = -1; 
+			p_data_type = -1;
 			syn_rules=9;
 		}
 
@@ -173,14 +182,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 			if (string_rquired == 1 && input_token.id!=TYPE_STRING)
 				FATAL_ERROR("EXPRESSION: Invalid operand data type. 9.5\n", ERR_SEM_COMPATIBILITY);
-				
+
 
 			if ( bool_operation>=2 && input_token.id!=TYPE_BOOLEAN && input_token.id!=S_TRUE && input_token.id!=S_FALSE )
 				FATAL_ERROR("EXPRESSION: Invalid operand data type in a boolean expression. 9.1\n", ERR_SEM_COMPATIBILITY);
 
 			if ( bool_operation==1 && e_type!=type_name_convertion(input_token.id) && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.2\n", ERR_SEM_COMPATIBILITY);
-				
+
 			//if ( bool_operation==0 && e_type!=type_name_convertion(input_token.id) && e_type!=S_DOUBLE && input_token.id!=TYPE_DOUBLE && e_type!=S_INT && input_token.id!=TYPE_INT )
 				//FATAL_ERROR("EXPRESSION: Unallowed operation in an boolean expression. 9.2\n", ERR_SEM_COMPATIBILITY);
 
@@ -190,14 +199,14 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			if (input_token.id==TYPE_STRING)
 			{
 				if (string_forbidden==1)
-					FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value.10.1\n", ERR_SEM_COMPATIBILITY); 
-					
+					FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value.10.1\n", ERR_SEM_COMPATIBILITY);
+
 				if (input_token.ptr==NULL)
 					FATAL_ERROR("EXPRESSION: String data are not allocated. 10.2\n", ERR_INTERN_FAULT);
 				last_operand_string=1;
 				STRDUP(input_token.ptr, input_token.ptr);
 			}
-			else 
+			else
 				 last_operand_string=0;
 
 			if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
@@ -226,18 +235,18 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				negation_last_operator=1;
 			else
 				negation_last_operator=0;
-			
-			if ( input_token.id!=S_PLUS ) 	
-				string_forbidden=1; 			
-			else 			
-				string_forbidden=0; 
-			
+
+			if ( input_token.id!=S_PLUS )
+				string_forbidden=1;
+			else
+				string_forbidden=0;
+
 			if ( (e_type==S_STRING||e_type==TYPE_STRING) && input_token.id==S_MINUS )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.1\n", ERR_SEM_COMPATIBILITY);
 
 			if ( last_operand_string==1 && input_token.id!=S_PLUS )
-				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.15\n", ERR_SEM_COMPATIBILITY); 
-			
+				FATAL_ERROR("EXPRESSION: Unallowed operation in an expression with string value. 19.15\n", ERR_SEM_COMPATIBILITY);
+
 			if (input_token.id==S_AND || input_token.id==S_OR || input_token.id==S_NOT )
 			{
 				if (e_type!=S_BOOLEAN && !(input_token.id==S_NOT && e_type==-1) )
@@ -256,13 +265,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.3\n", ERR_SEM_COMPATIBILITY);
 			else if ( bool_operation==0 && e_type==S_BOOLEAN && input_token.id!=S_PLUS )
 				FATAL_ERROR("EXPRESSION: Unallowed operation in a boolean expression. 19.4\n", ERR_SEM_COMPATIBILITY);
-				
+
 			if ( bool_operation==0 && e_type==S_BOOLEAN && input_token.id==S_PLUS )
 				string_rquired = 1;
 			else
 				string_rquired = 0;
-			
-			
+
+
 			if (stack_expression_top(&tmp_exp_stack, &tmp_token) != 0)
 				FATAL_ERROR("EXPRESSION: Memory could not be allocated. 20\n", ERR_INTERN_FAULT);
 
@@ -301,12 +310,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 			strcat(long_name, ".");
 			strcat(long_name, (char *)input_token.ptr);
 
-			
+
 			if (input_token.id==S_FULL_IDENT)
 			{
 				if (global_table!=NULL)
 					tmp_table_item = htab_find_item(global_table, (char *)input_token.ptr);	// find item in global table if there is global	table (table is not NULL)
-				else														
+				else
 					tmp_table_item=NULL;									// set item to NULL if there isn't a global	table (table is NULL)
 
 				if (tmp_table_item == NULL)									// if item is not found or there isn't a global table, exit with error
@@ -336,7 +345,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 						FATAL_ERROR("EXPRESSION: Symbol not defined. 27.1\n", ERR_SEM_NDEF_REDEF);
 					}
 					else
-						input_token.id=S_FULL_IDENT;								// if item is found in global table, allocate new memory for name of the identifier (function or variable name with class name)  
+						input_token.id=S_FULL_IDENT;								// if item is found in global table, allocate new memory for name of the identifier (function or variable name with class name)
 				}
 			}
 
@@ -351,13 +360,13 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.2\n", ERR_SEM_OTHERS);
 				}
-				
+
 				if ( input_token.id==S_SIMPLE_IDENT && tmp_table_item->initialized!=1 )
 				{
 					fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 					FATAL_ERROR("EXPRESSION: Expression with uninitialized variable. 27.3\n", ERR_UNINICIALIZED_VAR);
 				}
-				
+
 				//input_token.ptr=tmp_table_item;
 				ident_type=tmp_table_item->data_type;
 
@@ -470,8 +479,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				if (stack_expression_push(&postfix_exp_stack, input_token) != 0)
 					FATAL_ERROR("EXPRESSION: Memory could not be allocated. 38\n", ERR_INTERN_FAULT);
 				ma1[1]=postfix_exp_stack.arr;
-				
-				
+
+
 			}
 
 			else
@@ -479,8 +488,8 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 				fprintf(stderr, "Symbol: %s\n", (char *)input_token.ptr);
 				FATAL_ERROR("EXPRESSION: Unknown symbol definition. 39\n", ERR_SEM_NDEF_REDEF);
 			}
-			
-			
+
+
 			if (string_rquired == 1 && ident_type!=TYPE_STRING && ident_type!=S_STRING)
 				FATAL_ERROR("EXPRESSION: Invalid operand data type. 9.5\n", ERR_SEM_COMPATIBILITY);
 
@@ -492,12 +501,12 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 			if (type_priority(ident_type) > type_priority(e_type))
 				e_type = ident_type;
-			
-			if (ident_type==TYPE_STRING || ident_type==S_STRING) 			
-				last_operand_string=1; 			
-			else 			
-				last_operand_string=0; 
-			
+
+			if (ident_type==TYPE_STRING || ident_type==S_STRING)
+				last_operand_string=1;
+			else
+				last_operand_string=0;
+
 			syn_rules=9;
 		}
 
@@ -520,7 +529,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 	if (stack_expression_top(&tmp_exp_stack, &tmp_token) !=0)
 		FATAL_ERROR("EXPRESSION: Memory could not be allocated. 42\n", ERR_INTERN_FAULT);
 
-	
+
 	//while( tmp_token.id != -166)
 	while( !stack_expression_empty(&tmp_exp_stack) )
 	{
@@ -539,7 +548,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 		if ( stack_expression_pop(&postfix_exp_stack, NULL)!=0 )
 			FATAL_ERROR("EXPRESSION: Memory could not be allocated. 43\n", ERR_INTERN_FAULT);
 
-	
+
 	*token_count=postfix_exp_stack.top+1;
 	*postfix_token_array = (token *)mem_alloc(sizeof(token) * (postfix_exp_stack.top+1) );
 	if (*postfix_token_array==NULL)
@@ -547,7 +556,7 @@ int expr_analyze ( token t_in, token *t_out, char* class_name, int error_6_flag,
 
 	for (int i=0; i<=postfix_exp_stack.top; i++)
 		(*postfix_token_array)[i] = postfix_exp_stack.arr[i];
-	
+
 //	if (end_token==S_SEMICOMMA)
 	//	print_token_array( *postfix_token_array, 0);
 
@@ -658,7 +667,7 @@ int operator_priority (int op)
 
 	else if ( op==S_COMMA )
 		return 3;
-	
+
 	else if ( op==S_LESS_EQUAL || op==S_GREATER_EQUAL || op==S_LESS || op==S_GREATER || op==S_EQUAL || op==S_NOT_EQUAL)
 		return 2;
 
@@ -756,7 +765,7 @@ void print_token(token t, int id_flag)
 		fprintf(stderr, "!");
 	else
 		fprintf(stderr, ";");
-	
+
 	if (id_flag == 1)
 		fprintf(stderr, "[.id=%d] ", t.id);
 	else
@@ -770,7 +779,7 @@ void print_token_array(token * arr, int id_flag)
 	int i = 0;
 	for (i = 0; arr[i].id!=END_EXPR; i++)
 		print_token(arr[i], id_flag);
-	
+
 	print_token(arr[i], id_flag);
 	fprintf(stderr, "\n");
 

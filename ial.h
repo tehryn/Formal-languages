@@ -1,7 +1,7 @@
 /**
 * Authors: Miroslava Misova, Nemanja Vasiljevic, Jiri Matejka, Sava Nedeljkovic
 * School: VUT FIT, BRNO
-* Project: Interpret for IFJ16
+* Project: Interpreter for IFJ16
 * gcc version: 5.4.0 (ubuntu 16.04.2)
 **/
 
@@ -39,7 +39,7 @@ int length(char * string);
 /**
  * Returns substring of a given length, beginning at a given position of a given string
  * Function allocates new memory for a substring
- * @param  s input string 
+ * @param  s input string
  * @param  i index where the substring begins
  * @param  n length of a substring
  * @pre s != NULL
@@ -54,7 +54,7 @@ char * substring(char * s, int i, int n);
  * Returns sorted array of a chars.
  * Function uses Shell sort algorithm.
  * Function allocates new memory for a return array of chars.
- * @param  str input string 
+ * @param  str input string
  * @pre s != NULL
  * @return sorted array of a chars.
  */
@@ -99,7 +99,7 @@ typedef struct t_stack_int
 	int *data; // array
 } stack_int_t;
 
-/** 
+/**
  * \brief Function initializes a stack, allocates required memory and sets its variables.
  * \param[in, out] stack pointer to a stack.
  * \param[in] n max. number of elements which stack could contain.
@@ -110,7 +110,7 @@ typedef struct t_stack_int
  */
 int stack_int_create ( struct t_stack_int * stack, int n );
 
-/** 
+/**
  * \brief Function destroys a stack, frees its memory and sets its variables.
  * \param[in, out] s pointer to a stack.
  * \pre stack!=NULL
@@ -144,7 +144,7 @@ int stack_int_top(struct t_stack_int* stack, int* var);
 /**
  * Decrements stack pointer by given number of elements.
  * @param  stack pointer to a stack.
- * @param  n     number of elements which should be removed from stack. 
+ * @param  n     number of elements which should be removed from stack.
  * @return       integer value which tells, how the whole processed has been executed, 0 -> no error, !=0 -> error.
  */
 int stack_int_clean(struct t_stack_int* stack, int n);

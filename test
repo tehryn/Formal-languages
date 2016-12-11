@@ -1,0 +1,14 @@
+class Main {
+
+    static void run() {
+        ifj16.print(get(ifj16.readInt()));
+    }
+
+    static int get(int a) {
+    	if (a == 0) {
+    		return 0;
+    	}
+        return get(a - 1);
+    }
+
+}

@@ -1,3 +1,9 @@
+/**
+* Authors: Miroslava Misova, Nemanja Vasiljevic, Jiri Matejka, Sava Nedeljkovic
+* School: VUT FIT, BRNO
+* Project: Interpreter for IFJ16
+* gcc version: 5.4.0 (ubuntu 16.04.2)
+**/
 #include "ial.h"
 int length(char * string)
 {
@@ -21,14 +27,14 @@ int length(char * string)
 
 char * substring(char * s, int i, int n)
 {
-	
+
 	if (s==NULL)
 	{
         fprintf(stderr, "ERROR: input string is NULL!\n");
         return NULL;
     }
-	
-	
+
+
     char * string=NULL;
 
     string = (char *) mem_alloc(sizeof(char)*(n+1));
@@ -126,37 +132,37 @@ char * shellsort(char * str)
 void computeJumps(char *search, int badchar[ALPHABET_ARRAY])
 {
     int size=strlen(search);
- 
+
     for (int i = 0; i < ALPHABET_ARRAY; i++)
          badchar[i] = size;
- 
+
     for (int i = 0; i < size; i++)
          badchar[(int) search[i]] = size-i;
 }
- 
+
 int find( char *s,  char *search)
 {
     int m = strlen(search);
     int n = strlen(s);
- 
+
     int badchar[ALPHABET_ARRAY];
- 
+
     computeJumps(search, badchar);
- 
+
     int shift = 0;
     while(shift <= (n - m))
     {
         int j = m-1;
- 
+
         while(j >= 0 && search[j] == s[shift+j])
             j--;
- 
+
         if (j < 0)
         {
 			return shift;
- 
+
         }
- 
+
         else
             shift += MAX(1, (j - badchar[(int)s[shift+j]]));
     }
@@ -424,7 +430,7 @@ htab_t * htab_copy(htab_t * table)
 //            item->local_table = NULL;
 //            item->instruction_tape = NULL;
 //            item->next_item = NULL;
-			item->argument_index = tmp->argument_index; 
+			item->argument_index = tmp->argument_index;
             tmp = tmp->next_item;
         }
     }
