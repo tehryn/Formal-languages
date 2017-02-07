@@ -1,1 +1,0 @@
-gcc interpret.c  help.c -o prog -std=c99 -Wall -Wextra -pedantic
