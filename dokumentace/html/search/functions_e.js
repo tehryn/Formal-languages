@@ -2,6 +2,7 @@ var searchData=
 [
   ['shellsort',['shellsort',['../group__string__functions.html#ga1244cd9a8538e43d4a96e3d8c7f1e896',1,'ial.h']]],
   ['skip_5fcomment',['skip_comment',['../group__lexical__analysis.html#ga2edeff46aba998af936ac79fbc1a67d6',1,'scanner.h']]],
+  ['skip_5fexpr',['skip_expr',['../group__parser.html#ga4708debecfe97c6a62bda2efd2563cc5',1,'parser.h']]],
   ['stack_5fexpression_5fdestroy',['stack_expression_destroy',['../group__expression__processing.html#ga9fa5406eb5ecac559c4f4c6d36065fb6',1,'expression.h']]],
   ['stack_5fexpression_5fempty',['stack_expression_empty',['../group__expression__processing.html#ga938c2a69430813da1181adce149b6a5b',1,'expression.h']]],
   ['stack_5fexpression_5ffull',['stack_expression_full',['../group__expression__processing.html#gae241e2aa86c0b655cdeccdc6ad115631',1,'expression.h']]],

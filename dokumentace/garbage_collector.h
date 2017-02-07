@@ -2,7 +2,7 @@
 * Author: Matejka Jiri <BR>
 * Login: xmatej52 <BR>
 * School: VUT FIT, BRNO <BR>
-* Project: Interpret for IFJ16 <BR>
+* Project: Interpreter for IFJ16 <BR>
 * gcc version: 5.4.0 (ubuntu 16.04.2) <BR>
 * Date: 2016-12-03
 **/

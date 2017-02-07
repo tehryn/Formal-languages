@@ -2,7 +2,7 @@
 \label{expression_8h}\index{expression.\+h@{expression.\+h}}
 
 
-Documentation for expression processing.  
+Documentation for expression processing  interpreter for I\+F\+J16.  
 
 
 {\ttfamily \#include $<$stdio.\+h$>$}\\*
@@ -11,6 +11,10 @@ Documentation for expression processing.
 {\ttfamily \#include $<$stdarg.\+h$>$}\\*
 {\ttfamily \#include \char`\"{}ial.\+h\char`\"{}}\\*
 {\ttfamily \#include \char`\"{}scanner.\+h\char`\"{}}\\*
+Include dependency graph for expression.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
 \subsection*{Classes}
 \begin{DoxyCompactItemize}
 \item 
@@ -19,41 +23,31 @@ struct \hyperlink{structstack__expresion}{stack\+\_\+expresion}
 \subsection*{Macros}
 \begin{DoxyCompactItemize}
 \item 
-\#define \hyperlink{group__expression__processing_gad39ffaaf2f15904baf361c8a95eea23f}{E\+R\+R\+\_\+\+W\+A\+R\+N\+I\+N\+G}~0
+\#define \hyperlink{group__expression__processing_gad39ffaaf2f15904baf361c8a95eea23f}{E\+R\+R\+\_\+\+W\+A\+R\+N\+I\+NG}~0
 \item 
-\hypertarget{group__expression__processing_gae1b0d4386e23ff5b3e5a2f2d3bb2e595}{}\#define {\bfseries E\+R\+R\+\_\+\+L\+E\+X\+I\+C\+A\+L\+\_\+\+A\+N\+A\+L\+Y\+S\+I\+S}~1\label{group__expression__processing_gae1b0d4386e23ff5b3e5a2f2d3bb2e595}
-
+\#define {\bfseries E\+R\+R\+\_\+\+L\+E\+X\+I\+C\+A\+L\+\_\+\+A\+N\+A\+L\+Y\+S\+IS}~1
 \item 
-\hypertarget{group__expression__processing_ga65bbcacac1fab0692da94892852f763f}{}\#define {\bfseries E\+R\+R\+\_\+\+S\+Y\+N\+T\+A\+C\+T\+I\+C\+\_\+\+A\+N\+A\+L\+Y\+S\+I\+S}~2\label{group__expression__processing_ga65bbcacac1fab0692da94892852f763f}
-
+\#define {\bfseries E\+R\+R\+\_\+\+S\+Y\+N\+T\+A\+C\+T\+I\+C\+\_\+\+A\+N\+A\+L\+Y\+S\+IS}~2
 \item 
-\hypertarget{group__expression__processing_ga48c742e0bcd4765bff4dff57adaf4ea3}{}\#define {\bfseries E\+R\+R\+\_\+\+S\+E\+M\+\_\+\+N\+D\+E\+F\+\_\+\+R\+E\+D\+E\+F}~3\label{group__expression__processing_ga48c742e0bcd4765bff4dff57adaf4ea3}
-
+\#define {\bfseries E\+R\+R\+\_\+\+S\+E\+M\+\_\+\+N\+D\+E\+F\+\_\+\+R\+E\+D\+EF}~3
 \item 
-\hypertarget{group__expression__processing_ga8f52bafe7d43e6354bae75d2caa5a3e1}{}\#define {\bfseries E\+R\+R\+\_\+\+S\+E\+M\+\_\+\+C\+O\+M\+P\+A\+T\+I\+B\+I\+L\+I\+T\+Y}~4\label{group__expression__processing_ga8f52bafe7d43e6354bae75d2caa5a3e1}
-
+\#define {\bfseries E\+R\+R\+\_\+\+S\+E\+M\+\_\+\+C\+O\+M\+P\+A\+T\+I\+B\+I\+L\+I\+TY}~4
 \item 
-\hypertarget{group__expression__processing_ga1618901d33a81fae88c01635dc5cef54}{}\#define {\bfseries E\+R\+R\+\_\+\+S\+E\+M\+\_\+\+O\+T\+H\+E\+R\+S}~6\label{group__expression__processing_ga1618901d33a81fae88c01635dc5cef54}
-
+\#define {\bfseries E\+R\+R\+\_\+\+S\+E\+M\+\_\+\+O\+T\+H\+E\+RS}~6
 \item 
-\hypertarget{group__expression__processing_ga43ec102bd6ec2f2858cd4e1a4dbf6742}{}\#define {\bfseries E\+R\+R\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+U\+M\+B\+E\+R}~7\label{group__expression__processing_ga43ec102bd6ec2f2858cd4e1a4dbf6742}
-
+\#define {\bfseries E\+R\+R\+\_\+\+I\+N\+P\+U\+T\+\_\+\+N\+U\+M\+B\+ER}~7
 \item 
-\hypertarget{group__expression__processing_ga28cd80ee0db6b3d64692d4b0ec19a6c4}{}\#define {\bfseries E\+R\+R\+\_\+\+U\+N\+I\+N\+I\+C\+I\+A\+L\+I\+Z\+E\+D\+\_\+\+V\+A\+R}~8\label{group__expression__processing_ga28cd80ee0db6b3d64692d4b0ec19a6c4}
-
+\#define {\bfseries E\+R\+R\+\_\+\+U\+N\+I\+N\+I\+C\+I\+A\+L\+I\+Z\+E\+D\+\_\+\+V\+AR}~8
 \item 
-\hypertarget{group__expression__processing_ga7226d4889da856a935d6749b45778022}{}\#define {\bfseries E\+R\+R\+\_\+\+D\+I\+V\+I\+S\+I\+O\+N\+\_\+\+Z\+E\+R\+O}~9\label{group__expression__processing_ga7226d4889da856a935d6749b45778022}
-
+\#define {\bfseries E\+R\+R\+\_\+\+D\+I\+V\+I\+S\+I\+O\+N\+\_\+\+Z\+E\+RO}~9
 \item 
-\hypertarget{group__expression__processing_ga18dd2f4dc443436ec22915d1a2ff1667}{}\#define {\bfseries E\+R\+R\+\_\+\+O\+T\+H\+E\+R\+S}~10\label{group__expression__processing_ga18dd2f4dc443436ec22915d1a2ff1667}
-
+\#define {\bfseries E\+R\+R\+\_\+\+O\+T\+H\+E\+RS}~10
 \item 
-\hypertarget{group__expression__processing_ga81c0b2aff83c4ff667ff4fe7bb17fe26}{}\#define {\bfseries E\+R\+R\+\_\+\+I\+N\+T\+E\+R\+N\+\_\+\+F\+A\+U\+L\+T}~99\label{group__expression__processing_ga81c0b2aff83c4ff667ff4fe7bb17fe26}
-
+\#define {\bfseries E\+R\+R\+\_\+\+I\+N\+T\+E\+R\+N\+\_\+\+F\+A\+U\+LT}~99
 \item 
-\#define \hyperlink{group__expression__processing_gad00ce6a1d92b76fec757cc05ca401c20}{F\+A\+T\+A\+L\+\_\+\+E\+R\+R\+O\+R}(message,  error\+\_\+code)
+\#define \hyperlink{group__expression__processing_gad00ce6a1d92b76fec757cc05ca401c20}{F\+A\+T\+A\+L\+\_\+\+E\+R\+R\+OR}(message,  error\+\_\+code)
 \item 
-\#define \hyperlink{group__expression__processing_gaefbe6596bcbb11c624652e80c37ec88a}{S\+T\+R\+D\+U\+P}(l,  s)
+\#define \hyperlink{group__expression__processing_gaefbe6596bcbb11c624652e80c37ec88a}{S\+T\+R\+D\+UP}(l,  s)
 \end{DoxyCompactItemize}
 \subsection*{Functions}
 \begin{DoxyCompactItemize}
@@ -81,13 +75,13 @@ int \hyperlink{group__expression__processing_ga42a0cd1f1765216b8bc8eee79b80c06d}
 int \hyperlink{group__expression__processing_ga78080bfa249f5c45571dbab511d17cc9}{type\+\_\+name\+\_\+convertion} (int type)
 \begin{DoxyCompactList}\small\item\em Function converts names of the given data type, so it could be understood by the function \hyperlink{group__expression__processing_ga4c57a10caa30f485a261625f53528f37}{expr\+\_\+analyze()}. \end{DoxyCompactList}\item 
 void \hyperlink{group__expression__processing_ga6414f4c43feeb08c5a2a71d5b7f41363}{print\+\_\+token} (\hyperlink{structtoken}{token} t, int id\+\_\+flag)
-\begin{DoxyCompactList}\small\item\em Function prints token value (and its id) to S\+T\+D\+E\+R\+R. This function is only used for debugging. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Function prints token value (and its id) to S\+T\+D\+E\+RR. This function is only used for debugging. \end{DoxyCompactList}\item 
 void \hyperlink{group__expression__processing_ga9713b7493eade7529e743edaeafcc51c}{print\+\_\+token\+\_\+array} (\hyperlink{structtoken}{token} $\ast$arr, int id\+\_\+flag)
-\begin{DoxyCompactList}\small\item\em Function prints array of tokens (and their ids) to S\+T\+D\+E\+R\+R. This function is only used for debugging. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\begin{DoxyCompactList}\small\item\em Function prints array of tokens (and their ids) to S\+T\+D\+E\+RR. This function is only used for debugging. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \subsection{Detailed Description}
-Documentation for expression processing. 
+Documentation for expression processing  interpreter for I\+F\+J16. 
 
 \begin{DoxyAuthor}{Author}
 Sava Nedeljkovic, xnedel08 

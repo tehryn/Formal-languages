@@ -13,7 +13,7 @@ struct \hyperlink{structt__stack__int}{t\+\_\+stack\+\_\+int}
 \subsection*{Typedefs}
 \begin{DoxyCompactItemize}
 \item 
-\hypertarget{group__integer__stack_ga84e3a9a650bddbb74d7eb9d4eb61ebb7}{}typedef struct \hyperlink{structt__stack__int}{t\+\_\+stack\+\_\+int} {\bfseries stack\+\_\+int\+\_\+t}\label{group__integer__stack_ga84e3a9a650bddbb74d7eb9d4eb61ebb7}
+typedef struct \hyperlink{structt__stack__int}{t\+\_\+stack\+\_\+int} {\bfseries stack\+\_\+int\+\_\+t}\hypertarget{group__integer__stack_ga84e3a9a650bddbb74d7eb9d4eb61ebb7}{}\label{group__integer__stack_ga84e3a9a650bddbb74d7eb9d4eb61ebb7}
 
 \end{DoxyCompactItemize}
 \subsection*{Functions}
@@ -43,14 +43,14 @@ Stack of integers.
 
 
 \subsection{Function Documentation}
-\hypertarget{group__integer__stack_gaa01626cdb65346498926877f4655b741}{}\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+clean@{stack\+\_\+int\+\_\+clean}}
+\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+clean@{stack\+\_\+int\+\_\+clean}}
 \index{stack\+\_\+int\+\_\+clean@{stack\+\_\+int\+\_\+clean}!Stack of integers@{Stack of integers}}
-\subsubsection[{stack\+\_\+int\+\_\+clean}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+clean (
+\subsubsection[{\texorpdfstring{stack\+\_\+int\+\_\+clean(struct t\+\_\+stack\+\_\+int $\ast$stack, int n)}{stack_int_clean(struct t_stack_int *stack, int n)}}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+clean (
 \begin{DoxyParamCaption}
 \item[{struct {\bf t\+\_\+stack\+\_\+int} $\ast$}]{stack, }
 \item[{int}]{n}
 \end{DoxyParamCaption}
-)}\label{group__integer__stack_gaa01626cdb65346498926877f4655b741}
+)}\hypertarget{group__integer__stack_gaa01626cdb65346498926877f4655b741}{}\label{group__integer__stack_gaa01626cdb65346498926877f4655b741}
 Decrements stack pointer by given number of elements. 
 \begin{DoxyParams}{Parameters}
 {\em stack} & pointer to a stack. \\
@@ -61,14 +61,14 @@ Decrements stack pointer by given number of elements.
 \begin{DoxyReturn}{Returns}
 integer value which tells, how the whole processed has been executed, 0 -\/$>$ no error, !=0 -\/$>$ error. 
 \end{DoxyReturn}
-\hypertarget{group__integer__stack_ga93d256313df9cb4749578227e3c99934}{}\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+create@{stack\+\_\+int\+\_\+create}}
+\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+create@{stack\+\_\+int\+\_\+create}}
 \index{stack\+\_\+int\+\_\+create@{stack\+\_\+int\+\_\+create}!Stack of integers@{Stack of integers}}
-\subsubsection[{stack\+\_\+int\+\_\+create}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+create (
+\subsubsection[{\texorpdfstring{stack\+\_\+int\+\_\+create(struct t\+\_\+stack\+\_\+int $\ast$stack, int n)}{stack_int_create(struct t_stack_int *stack, int n)}}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+create (
 \begin{DoxyParamCaption}
 \item[{struct {\bf t\+\_\+stack\+\_\+int} $\ast$}]{stack, }
 \item[{int}]{n}
 \end{DoxyParamCaption}
-)}\label{group__integer__stack_ga93d256313df9cb4749578227e3c99934}
+)}\hypertarget{group__integer__stack_ga93d256313df9cb4749578227e3c99934}{}\label{group__integer__stack_ga93d256313df9cb4749578227e3c99934}
 
 
 Function initializes a stack, allocates required memory and sets its variables. 
@@ -81,23 +81,23 @@ Function initializes a stack, allocates required memory and sets its variables.
 \hline
 \end{DoxyParams}
 \begin{DoxyPrecond}{Precondition}
-stack!=N\+U\+L\+L 
+stack!=N\+U\+LL 
 
 n!=0 
 \end{DoxyPrecond}
 \begin{DoxyPostcond}{Postcondition}
-stack!=N\+U\+L\+L 
+stack!=N\+U\+LL 
 \end{DoxyPostcond}
 \begin{DoxyReturn}{Returns}
 integer value which tells, how the whole processed has been executed, 0 -\/$>$ no error, !=0 -\/$>$ error. 
 \end{DoxyReturn}
-\hypertarget{group__integer__stack_ga52ab40922767807e58ee524b3c20812f}{}\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+destroy@{stack\+\_\+int\+\_\+destroy}}
+\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+destroy@{stack\+\_\+int\+\_\+destroy}}
 \index{stack\+\_\+int\+\_\+destroy@{stack\+\_\+int\+\_\+destroy}!Stack of integers@{Stack of integers}}
-\subsubsection[{stack\+\_\+int\+\_\+destroy}]{\setlength{\rightskip}{0pt plus 5cm}void stack\+\_\+int\+\_\+destroy (
+\subsubsection[{\texorpdfstring{stack\+\_\+int\+\_\+destroy(struct t\+\_\+stack\+\_\+int $\ast$stack)}{stack_int_destroy(struct t_stack_int *stack)}}]{\setlength{\rightskip}{0pt plus 5cm}void stack\+\_\+int\+\_\+destroy (
 \begin{DoxyParamCaption}
 \item[{struct {\bf t\+\_\+stack\+\_\+int} $\ast$}]{stack}
 \end{DoxyParamCaption}
-)}\label{group__integer__stack_ga52ab40922767807e58ee524b3c20812f}
+)}\hypertarget{group__integer__stack_ga52ab40922767807e58ee524b3c20812f}{}\label{group__integer__stack_ga52ab40922767807e58ee524b3c20812f}
 
 
 Function destroys a stack, frees its memory and sets its variables. 
@@ -108,15 +108,15 @@ Function destroys a stack, frees its memory and sets its variables.
 \hline
 \end{DoxyParams}
 \begin{DoxyPrecond}{Precondition}
-stack!=N\+U\+L\+L 
+stack!=N\+U\+LL 
 \end{DoxyPrecond}
-\hypertarget{group__integer__stack_ga468825317b3ae111b2827a828584e487}{}\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+is\+\_\+empty@{stack\+\_\+int\+\_\+is\+\_\+empty}}
+\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+is\+\_\+empty@{stack\+\_\+int\+\_\+is\+\_\+empty}}
 \index{stack\+\_\+int\+\_\+is\+\_\+empty@{stack\+\_\+int\+\_\+is\+\_\+empty}!Stack of integers@{Stack of integers}}
-\subsubsection[{stack\+\_\+int\+\_\+is\+\_\+empty}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+is\+\_\+empty (
+\subsubsection[{\texorpdfstring{stack\+\_\+int\+\_\+is\+\_\+empty(struct t\+\_\+stack\+\_\+int $\ast$stack)}{stack_int_is_empty(struct t_stack_int *stack)}}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+is\+\_\+empty (
 \begin{DoxyParamCaption}
 \item[{struct {\bf t\+\_\+stack\+\_\+int} $\ast$}]{stack}
 \end{DoxyParamCaption}
-)}\label{group__integer__stack_ga468825317b3ae111b2827a828584e487}
+)}\hypertarget{group__integer__stack_ga468825317b3ae111b2827a828584e487}{}\label{group__integer__stack_ga468825317b3ae111b2827a828584e487}
 Function checks whether stack is empty. 
 \begin{DoxyParams}{Parameters}
 {\em stack} & pointer to a stack. \\
@@ -125,13 +125,13 @@ Function checks whether stack is empty.
 \begin{DoxyReturn}{Returns}
 integer value which tells, if the stack is empty, 0 -\/$>$ not empty, !=0 -\/$>$ empty. 
 \end{DoxyReturn}
-\hypertarget{group__integer__stack_gaa76eeba05823375b6372d41a6d64cb48}{}\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+is\+\_\+full@{stack\+\_\+int\+\_\+is\+\_\+full}}
+\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+is\+\_\+full@{stack\+\_\+int\+\_\+is\+\_\+full}}
 \index{stack\+\_\+int\+\_\+is\+\_\+full@{stack\+\_\+int\+\_\+is\+\_\+full}!Stack of integers@{Stack of integers}}
-\subsubsection[{stack\+\_\+int\+\_\+is\+\_\+full}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+is\+\_\+full (
+\subsubsection[{\texorpdfstring{stack\+\_\+int\+\_\+is\+\_\+full(struct t\+\_\+stack\+\_\+int $\ast$stack)}{stack_int_is_full(struct t_stack_int *stack)}}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+is\+\_\+full (
 \begin{DoxyParamCaption}
 \item[{struct {\bf t\+\_\+stack\+\_\+int} $\ast$}]{stack}
 \end{DoxyParamCaption}
-)}\label{group__integer__stack_gaa76eeba05823375b6372d41a6d64cb48}
+)}\hypertarget{group__integer__stack_gaa76eeba05823375b6372d41a6d64cb48}{}\label{group__integer__stack_gaa76eeba05823375b6372d41a6d64cb48}
 Function checks whether stack is full. 
 \begin{DoxyParams}{Parameters}
 {\em stack} & pointer to a stack. \\
@@ -140,13 +140,13 @@ Function checks whether stack is full.
 \begin{DoxyReturn}{Returns}
 integer value which tells, if the stack is full, 0 -\/$>$ not full, !=0 -\/$>$ full. 
 \end{DoxyReturn}
-\hypertarget{group__integer__stack_gab015ac6ee9989efd32ec449066b2de6a}{}\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+pop@{stack\+\_\+int\+\_\+pop}}
+\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+pop@{stack\+\_\+int\+\_\+pop}}
 \index{stack\+\_\+int\+\_\+pop@{stack\+\_\+int\+\_\+pop}!Stack of integers@{Stack of integers}}
-\subsubsection[{stack\+\_\+int\+\_\+pop}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+pop (
+\subsubsection[{\texorpdfstring{stack\+\_\+int\+\_\+pop(struct t\+\_\+stack\+\_\+int $\ast$stack)}{stack_int_pop(struct t_stack_int *stack)}}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+pop (
 \begin{DoxyParamCaption}
 \item[{struct {\bf t\+\_\+stack\+\_\+int} $\ast$}]{stack}
 \end{DoxyParamCaption}
-)}\label{group__integer__stack_gab015ac6ee9989efd32ec449066b2de6a}
+)}\hypertarget{group__integer__stack_gab015ac6ee9989efd32ec449066b2de6a}{}\label{group__integer__stack_gab015ac6ee9989efd32ec449066b2de6a}
 Function pops and gives back top element from the stack. 
 \begin{DoxyParams}{Parameters}
 {\em stack} & pointer to a stack. \\
@@ -155,35 +155,35 @@ Function pops and gives back top element from the stack.
 \begin{DoxyReturn}{Returns}
 integer value, top element from the stack. 
 \end{DoxyReturn}
-\hypertarget{group__integer__stack_gad17b71d019eada66040d7b5dc9559f16}{}\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+push@{stack\+\_\+int\+\_\+push}}
+\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+push@{stack\+\_\+int\+\_\+push}}
 \index{stack\+\_\+int\+\_\+push@{stack\+\_\+int\+\_\+push}!Stack of integers@{Stack of integers}}
-\subsubsection[{stack\+\_\+int\+\_\+push}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+push (
+\subsubsection[{\texorpdfstring{stack\+\_\+int\+\_\+push(struct t\+\_\+stack\+\_\+int $\ast$stack, int num,...)}{stack_int_push(struct t_stack_int *stack, int num,...)}}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+push (
 \begin{DoxyParamCaption}
 \item[{struct {\bf t\+\_\+stack\+\_\+int} $\ast$}]{stack, }
 \item[{int}]{num, }
 \item[{}]{...}
 \end{DoxyParamCaption}
-)}\label{group__integer__stack_gad17b71d019eada66040d7b5dc9559f16}
+)}\hypertarget{group__integer__stack_gad17b71d019eada66040d7b5dc9559f16}{}\label{group__integer__stack_gad17b71d019eada66040d7b5dc9559f16}
 Function pushes given elements to the stack. 
 \begin{DoxyParams}{Parameters}
 {\em stack} & pointer to a stack. \\
 \hline
 {\em num} & number of elements which should be pushed to the stack \\
 \hline
-{\em V\+A\+R\+A\+R\+G\+S} & integer values which should be oushed to the stack \\
+{\em V\+A\+R\+A\+R\+GS} & integer values which should be oushed to the stack \\
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
 integer value which tells, how the whole processed has been executed, 0 -\/$>$ no error, !=0 -\/$>$ error. 
 \end{DoxyReturn}
-\hypertarget{group__integer__stack_ga4471624bd2826b6451e7af9f36bf6345}{}\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+top@{stack\+\_\+int\+\_\+top}}
+\index{Stack of integers@{Stack of integers}!stack\+\_\+int\+\_\+top@{stack\+\_\+int\+\_\+top}}
 \index{stack\+\_\+int\+\_\+top@{stack\+\_\+int\+\_\+top}!Stack of integers@{Stack of integers}}
-\subsubsection[{stack\+\_\+int\+\_\+top}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+top (
+\subsubsection[{\texorpdfstring{stack\+\_\+int\+\_\+top(struct t\+\_\+stack\+\_\+int $\ast$stack, int $\ast$var)}{stack_int_top(struct t_stack_int *stack, int *var)}}]{\setlength{\rightskip}{0pt plus 5cm}int stack\+\_\+int\+\_\+top (
 \begin{DoxyParamCaption}
 \item[{struct {\bf t\+\_\+stack\+\_\+int} $\ast$}]{stack, }
 \item[{int $\ast$}]{var}
 \end{DoxyParamCaption}
-)}\label{group__integer__stack_ga4471624bd2826b6451e7af9f36bf6345}
+)}\hypertarget{group__integer__stack_ga4471624bd2826b6451e7af9f36bf6345}{}\label{group__integer__stack_ga4471624bd2826b6451e7af9f36bf6345}
 Function gives back top element from the stack. 
 \begin{DoxyParams}{Parameters}
 {\em stack} & pointer to a stack. \\

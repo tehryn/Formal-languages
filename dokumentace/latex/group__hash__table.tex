@@ -46,34 +46,34 @@ Group of structure hash table where is stored variables, functions and classes a
 
 
 \subsection{Typedef Documentation}
-\hypertarget{group__hash__table_gaba90fca6bc80e8adc4fde58e3c98796d}{}\index{Hash table@{Hash table}!htab\+\_\+item@{htab\+\_\+item}}
+\index{Hash table@{Hash table}!htab\+\_\+item@{htab\+\_\+item}}
 \index{htab\+\_\+item@{htab\+\_\+item}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+item}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf htab\+\_\+item}  {\bf htab\+\_\+item}}\label{group__hash__table_gaba90fca6bc80e8adc4fde58e3c98796d}
-Abstract data type that represents item of hash table \hypertarget{group__hash__table_ga9dd18346885fcbfba9565b383151a01d}{}\index{Hash table@{Hash table}!htab\+\_\+t@{htab\+\_\+t}}
+\subsubsection[{\texorpdfstring{htab\+\_\+item}{htab_item}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf htab\+\_\+item}  {\bf htab\+\_\+item}}\hypertarget{group__hash__table_gaba90fca6bc80e8adc4fde58e3c98796d}{}\label{group__hash__table_gaba90fca6bc80e8adc4fde58e3c98796d}
+Abstract data type that represents item of hash table \index{Hash table@{Hash table}!htab\+\_\+t@{htab\+\_\+t}}
 \index{htab\+\_\+t@{htab\+\_\+t}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf htab\+\_\+t}  {\bf htab\+\_\+t}}\label{group__hash__table_ga9dd18346885fcbfba9565b383151a01d}
+\subsubsection[{\texorpdfstring{htab\+\_\+t}{htab_t}}]{\setlength{\rightskip}{0pt plus 5cm}typedef struct {\bf htab\+\_\+t}  {\bf htab\+\_\+t}}\hypertarget{group__hash__table_ga9dd18346885fcbfba9565b383151a01d}{}\label{group__hash__table_ga9dd18346885fcbfba9565b383151a01d}
 Abstract data type that represents hash table 
 
 \subsection{Function Documentation}
-\hypertarget{group__hash__table_gaa52a7f716d200f95dfb312cabb564974}{}\index{Hash table@{Hash table}!htab\+\_\+clear\+\_\+items@{htab\+\_\+clear\+\_\+items}}
+\index{Hash table@{Hash table}!htab\+\_\+clear\+\_\+items@{htab\+\_\+clear\+\_\+items}}
 \index{htab\+\_\+clear\+\_\+items@{htab\+\_\+clear\+\_\+items}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+clear\+\_\+items}]{\setlength{\rightskip}{0pt plus 5cm}void htab\+\_\+clear\+\_\+items (
+\subsubsection[{\texorpdfstring{htab\+\_\+clear\+\_\+items(htab\+\_\+t $\ast$\+T)}{htab_clear_items(htab_t *T)}}]{\setlength{\rightskip}{0pt plus 5cm}void htab\+\_\+clear\+\_\+items (
 \begin{DoxyParamCaption}
 \item[{{\bf htab\+\_\+t} $\ast$}]{T}
 \end{DoxyParamCaption}
-)}\label{group__hash__table_gaa52a7f716d200f95dfb312cabb564974}
-Free memory allocated when inserting items but since we use garbage collector, it only sets pointers to N\+U\+L\+L 
+)}\hypertarget{group__hash__table_gaa52a7f716d200f95dfb312cabb564974}{}\label{group__hash__table_gaa52a7f716d200f95dfb312cabb564974}
+Free memory allocated when inserting items but since we use garbage collector, it only sets pointers to N\+U\+LL 
 \begin{DoxyParams}{Parameters}
 {\em T} & Table where items will be freed \\
 \hline
 \end{DoxyParams}
-\hypertarget{group__hash__table_gac7de0e31e2b7c6ed20a6862fefac6ae7}{}\index{Hash table@{Hash table}!htab\+\_\+copy@{htab\+\_\+copy}}
+\index{Hash table@{Hash table}!htab\+\_\+copy@{htab\+\_\+copy}}
 \index{htab\+\_\+copy@{htab\+\_\+copy}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+copy}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ htab\+\_\+copy (
+\subsubsection[{\texorpdfstring{htab\+\_\+copy(htab\+\_\+t $\ast$\+T)}{htab_copy(htab_t *T)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ htab\+\_\+copy (
 \begin{DoxyParamCaption}
 \item[{{\bf htab\+\_\+t} $\ast$}]{T}
 \end{DoxyParamCaption}
-)}\label{group__hash__table_gac7de0e31e2b7c6ed20a6862fefac6ae7}
+)}\hypertarget{group__hash__table_gac7de0e31e2b7c6ed20a6862fefac6ae7}{}\label{group__hash__table_gac7de0e31e2b7c6ed20a6862fefac6ae7}
 Makes copy of table (without pointers) 
 \begin{DoxyParams}{Parameters}
 {\em T} & Table that will be copied \\
@@ -82,14 +82,14 @@ Makes copy of table (without pointers)
 \begin{DoxyReturn}{Returns}
 Copy of table 
 \end{DoxyReturn}
-\hypertarget{group__hash__table_ga077c62e3e81dc1d8b3a540abe174deb6}{}\index{Hash table@{Hash table}!htab\+\_\+find\+\_\+item@{htab\+\_\+find\+\_\+item}}
+\index{Hash table@{Hash table}!htab\+\_\+find\+\_\+item@{htab\+\_\+find\+\_\+item}}
 \index{htab\+\_\+find\+\_\+item@{htab\+\_\+find\+\_\+item}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+find\+\_\+item}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+item}$\ast$ htab\+\_\+find\+\_\+item (
+\subsubsection[{\texorpdfstring{htab\+\_\+find\+\_\+item(htab\+\_\+t $\ast$\+T, const char $\ast$key)}{htab_find_item(htab_t *T, const char *key)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+item}$\ast$ htab\+\_\+find\+\_\+item (
 \begin{DoxyParamCaption}
 \item[{{\bf htab\+\_\+t} $\ast$}]{T, }
 \item[{const char $\ast$}]{key}
 \end{DoxyParamCaption}
-)}\label{group__hash__table_ga077c62e3e81dc1d8b3a540abe174deb6}
+)}\hypertarget{group__hash__table_ga077c62e3e81dc1d8b3a540abe174deb6}{}\label{group__hash__table_ga077c62e3e81dc1d8b3a540abe174deb6}
 Finds item by key in table 
 \begin{DoxyParams}{Parameters}
 {\em T} & Table where item will be sought \\
@@ -98,16 +98,16 @@ Finds item by key in table
 \hline
 \end{DoxyParams}
 \begin{DoxyReturn}{Returns}
-Pointer to searched item, if item will not be find, returns N\+U\+L\+L 
+Pointer to searched item, if item will not be find, returns N\+U\+LL 
 \end{DoxyReturn}
-\hypertarget{group__hash__table_ga37f3431054129d2eb752bdf3c95fefbb}{}\index{Hash table@{Hash table}!htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index@{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index}}
+\index{Hash table@{Hash table}!htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index@{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index}}
 \index{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index@{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+item}$\ast$ htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index (
+\subsubsection[{\texorpdfstring{htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index(htab\+\_\+t $\ast$\+T, int index)}{htab_find_item_by_argument_index(htab_t *T, int index)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+item}$\ast$ htab\+\_\+find\+\_\+item\+\_\+by\+\_\+argument\+\_\+index (
 \begin{DoxyParamCaption}
 \item[{{\bf htab\+\_\+t} $\ast$}]{T, }
 \item[{int}]{index}
 \end{DoxyParamCaption}
-)}\label{group__hash__table_ga37f3431054129d2eb752bdf3c95fefbb}
+)}\hypertarget{group__hash__table_ga37f3431054129d2eb752bdf3c95fefbb}{}\label{group__hash__table_ga37f3431054129d2eb752bdf3c95fefbb}
 Finds arguments of functions 
 \begin{DoxyParams}{Parameters}
 {\em T} & Table where function is stored \\
@@ -121,25 +121,25 @@ Item where is argument stored
 \begin{DoxyPrecond}{Precondition}
 index $>$= 0 
 \end{DoxyPrecond}
-\hypertarget{group__hash__table_gac185c139894f62be94926388b7173627}{}\index{Hash table@{Hash table}!htab\+\_\+free\+\_\+all@{htab\+\_\+free\+\_\+all}}
+\index{Hash table@{Hash table}!htab\+\_\+free\+\_\+all@{htab\+\_\+free\+\_\+all}}
 \index{htab\+\_\+free\+\_\+all@{htab\+\_\+free\+\_\+all}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+free\+\_\+all}]{\setlength{\rightskip}{0pt plus 5cm}void htab\+\_\+free\+\_\+all (
+\subsubsection[{\texorpdfstring{htab\+\_\+free\+\_\+all(htab\+\_\+t $\ast$\+T)}{htab_free_all(htab_t *T)}}]{\setlength{\rightskip}{0pt plus 5cm}void htab\+\_\+free\+\_\+all (
 \begin{DoxyParamCaption}
 \item[{{\bf htab\+\_\+t} $\ast$}]{T}
 \end{DoxyParamCaption}
-)}\label{group__hash__table_gac185c139894f62be94926388b7173627}
-Free allocated memory but since we use garbage collector, it only sets pointers to N\+U\+L\+L 
+)}\hypertarget{group__hash__table_gac185c139894f62be94926388b7173627}{}\label{group__hash__table_gac185c139894f62be94926388b7173627}
+Free allocated memory but since we use garbage collector, it only sets pointers to N\+U\+LL 
 \begin{DoxyParams}{Parameters}
 {\em T} & Table that will be freed \\
 \hline
 \end{DoxyParams}
-\hypertarget{group__hash__table_ga8da41f55d0119f728e29790644c76273}{}\index{Hash table@{Hash table}!htab\+\_\+init@{htab\+\_\+init}}
+\index{Hash table@{Hash table}!htab\+\_\+init@{htab\+\_\+init}}
 \index{htab\+\_\+init@{htab\+\_\+init}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+init}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ htab\+\_\+init (
+\subsubsection[{\texorpdfstring{htab\+\_\+init(unsigned size)}{htab_init(unsigned size)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ htab\+\_\+init (
 \begin{DoxyParamCaption}
 \item[{unsigned}]{size}
 \end{DoxyParamCaption}
-)}\label{group__hash__table_ga8da41f55d0119f728e29790644c76273}
+)}\hypertarget{group__hash__table_ga8da41f55d0119f728e29790644c76273}{}\label{group__hash__table_ga8da41f55d0119f728e29790644c76273}
 Creates new table with default hash function 
 \begin{DoxyParams}{Parameters}
 {\em size} & Size of new table \\
@@ -148,14 +148,14 @@ Creates new table with default hash function
 \begin{DoxyReturn}{Returns}
 Pointer to new table 
 \end{DoxyReturn}
-\hypertarget{group__hash__table_gaf815621effc0000f6111efd83658bc5d}{}\index{Hash table@{Hash table}!htab\+\_\+init2@{htab\+\_\+init2}}
+\index{Hash table@{Hash table}!htab\+\_\+init2@{htab\+\_\+init2}}
 \index{htab\+\_\+init2@{htab\+\_\+init2}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+init2}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ htab\+\_\+init2 (
+\subsubsection[{\texorpdfstring{htab\+\_\+init2(unsigned size, unsigned($\ast$hash\+\_\+fun)(const char $\ast$str, unsigned htab\+\_\+size))}{htab_init2(unsigned size, unsigned(*hash_fun)(const char *str, unsigned htab_size))}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+t}$\ast$ htab\+\_\+init2 (
 \begin{DoxyParamCaption}
 \item[{unsigned}]{size, }
 \item[{unsigned($\ast$)(const char $\ast$str, unsigned htab\+\_\+size)}]{hash\+\_\+fun}
 \end{DoxyParamCaption}
-)}\label{group__hash__table_gaf815621effc0000f6111efd83658bc5d}
+)}\hypertarget{group__hash__table_gaf815621effc0000f6111efd83658bc5d}{}\label{group__hash__table_gaf815621effc0000f6111efd83658bc5d}
 Creates new table with specific hash function 
 \begin{DoxyParams}{Parameters}
 {\em size} & Size of new table \\
@@ -166,14 +166,14 @@ Creates new table with specific hash function
 \begin{DoxyReturn}{Returns}
 Pointer to new table 
 \end{DoxyReturn}
-\hypertarget{group__hash__table_ga33dbf85315f98499118a1ac26341bd1c}{}\index{Hash table@{Hash table}!htab\+\_\+insert\+\_\+item@{htab\+\_\+insert\+\_\+item}}
+\index{Hash table@{Hash table}!htab\+\_\+insert\+\_\+item@{htab\+\_\+insert\+\_\+item}}
 \index{htab\+\_\+insert\+\_\+item@{htab\+\_\+insert\+\_\+item}!Hash table@{Hash table}}
-\subsubsection[{htab\+\_\+insert\+\_\+item}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+item}$\ast$ htab\+\_\+insert\+\_\+item (
+\subsubsection[{\texorpdfstring{htab\+\_\+insert\+\_\+item(htab\+\_\+t $\ast$\+T, const char $\ast$key)}{htab_insert_item(htab_t *T, const char *key)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf htab\+\_\+item}$\ast$ htab\+\_\+insert\+\_\+item (
 \begin{DoxyParamCaption}
 \item[{{\bf htab\+\_\+t} $\ast$}]{T, }
 \item[{const char $\ast$}]{key}
 \end{DoxyParamCaption}
-)}\label{group__hash__table_ga33dbf85315f98499118a1ac26341bd1c}
+)}\hypertarget{group__hash__table_ga33dbf85315f98499118a1ac26341bd1c}{}\label{group__hash__table_ga33dbf85315f98499118a1ac26341bd1c}
 Creates new item and insert it into table 
 \begin{DoxyParams}{Parameters}
 {\em T} & Table where item will be inserted \\

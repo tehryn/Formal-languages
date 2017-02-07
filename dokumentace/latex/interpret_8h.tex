@@ -12,23 +12,27 @@ Documentation for interpret processing.
 {\ttfamily \#include \char`\"{}scanner.\+h\char`\"{}}\\*
 {\ttfamily \#include \char`\"{}structures.\+h\char`\"{}}\\*
 {\ttfamily \#include \char`\"{}expression.\+h\char`\"{}}\\*
+Include dependency graph for interpret.\+h\+:
+% FIG 0
+This graph shows which files directly or indirectly include this file\+:
+% FIG 1
 \subsection*{Enumerations}
 \begin{DoxyCompactItemize}
 \item 
 enum \{ \\*
-{\bfseries I\+\_\+\+A\+S\+S\+I\+G\+M\+E\+N\+T} = 100+1, 
-{\bfseries I\+\_\+\+I\+F}, 
-{\bfseries I\+\_\+\+E\+L\+S\+E}, 
-{\bfseries I\+\_\+\+W\+H\+I\+L\+E}, 
+{\bfseries I\+\_\+\+A\+S\+S\+I\+G\+M\+E\+NT} = 100+1, 
+{\bfseries I\+\_\+\+IF}, 
+{\bfseries I\+\_\+\+E\+L\+SE}, 
+{\bfseries I\+\_\+\+W\+H\+I\+LE}, 
 \\*
-{\bfseries I\+\_\+\+E\+N\+D}, 
-{\bfseries I\+\_\+\+F\+C\+E}, 
-{\bfseries I\+\_\+\+R\+E\+T\+U\+R\+N}, 
-{\bfseries I\+\_\+\+P\+R\+I\+N\+T}, 
+{\bfseries I\+\_\+\+E\+ND}, 
+{\bfseries I\+\_\+\+F\+CE}, 
+{\bfseries I\+\_\+\+R\+E\+T\+U\+RN}, 
+{\bfseries I\+\_\+\+P\+R\+I\+NT}, 
 \\*
-{\bfseries I\+\_\+\+E\+N\+D\+I\+F}, 
-{\bfseries I\+\_\+\+E\+N\+D\+W\+H\+I\+L\+E}, 
-{\bfseries I\+\_\+\+E\+N\+D\+E\+L\+S\+E}
+{\bfseries I\+\_\+\+E\+N\+D\+IF}, 
+{\bfseries I\+\_\+\+E\+N\+D\+W\+H\+I\+LE}, 
+{\bfseries I\+\_\+\+E\+N\+D\+E\+L\+SE}
  \}
 \end{DoxyCompactItemize}
 \subsection*{Functions}
@@ -54,11 +58,9 @@ char $\ast$ \hyperlink{group__interpret__processing_ga932aeaa028a630ebe4e84383ff
 \begin{DoxyCompactList}\small\item\em Function concatenates two strings. \end{DoxyCompactList}\item 
 \hyperlink{structhtab__item}{htab\+\_\+item} $\ast$ \hyperlink{group__interpret__processing_ga600ab694c698a92ed71e4f88340e8870}{stack\+\_\+htab\+\_\+find\+\_\+htab\+\_\+item} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack, char $\ast$key)
 \item 
-\hypertarget{group__interpret__processing_gac4f958bd4a853211be38f7cbab86247e}{}\hyperlink{structhtab__t}{htab\+\_\+t} $\ast$ {\bfseries stack\+\_\+htab\+\_\+get\+\_\+first} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack)\label{group__interpret__processing_gac4f958bd4a853211be38f7cbab86247e}
-
+\hyperlink{structhtab__t}{htab\+\_\+t} $\ast$ {\bfseries stack\+\_\+htab\+\_\+get\+\_\+first} (\hyperlink{structstack__htab}{stack\+\_\+htab} $\ast$stack)
 \item 
-\hypertarget{group__interpret__processing_gaa203349334ef66843a8ace3d31edf124}{}void {\bfseries I\+\_\+\+Instr\+\_\+null\+\_\+elements} (\hyperlink{structI__Instr}{I\+\_\+\+Instr} $\ast$Instruction)\label{group__interpret__processing_gaa203349334ef66843a8ace3d31edf124}
-
+void {\bfseries I\+\_\+\+Instr\+\_\+null\+\_\+elements} (\hyperlink{structI__Instr}{I\+\_\+\+Instr} $\ast$Instruction)
 \end{DoxyCompactItemize}
 
 
@@ -71,4 +73,4 @@ Nemanja Vasiljevic, xvasil03
 \begin{DoxyDate}{Date}
 11.\+12.\+2016
 \end{DoxyDate}
-This module is used for processing Instruction list made of 3\+A\+C. 
+This module is used for processing Instruction list made of 3\+AC. 

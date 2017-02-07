@@ -2,7 +2,7 @@
 * Author: Matejka Jiri <BR>
 * Login: xmatej52 <BR>
 * School: VUT FIT, BRNO <BR>
-* Project: Interpret for IFJ16 <BR>
+* Project: interpreter for IFJ16 <BR>
 * gcc version: 5.4.0 (ubuntu 16.04.2) <BR>
 * Date: 2016-12-03
 **/
@@ -27,7 +27,7 @@
 /*! Macro that set offset at the beginning of file */
 #define reset_scanner() (fseek(f, LINE_NUM = 0, SEEK_SET))
 
-/*! Macro that return number how much will be offset returned */
+/*! Macro that tells how much will be offset returned */
 #define SPEC_CHAR_FSEEK(spec) (((spec) == S_EQUAL || (spec) == S_LESS_EQUAL || (spec) == S_GREATER_EQUAL || (spec) == S_NOT_EQUAL)?-2:-1)
 
 /**
@@ -76,6 +76,7 @@ S_GREATER, /*!< stands for > */
 S_OR, /*!< stands for || */
 S_AND, /*!< stands for && */
 S_NOT_EQUAL, /*!< stands for != */
+S_NOT, /*!< stands for ! */
 S_LEFT_PARE, /*!< stands for ( */
 S_RIGHT_PARE, /*!< stands for ) */
 S_LEFT_BRACE, /*!< stands for { */
